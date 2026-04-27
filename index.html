@@ -718,6 +718,87 @@
     .send-btn:hover { background: var(--sky); }
     .send-btn:disabled { background: var(--border); cursor: default; }
 
+    .speak-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 2px 4px;
+      margin-top: 4px;
+      opacity: 0.6;
+      transition: opacity 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .speak-btn:hover { opacity: 1; transform: scale(1.2); }
+    .speak-btn.speaking { opacity: 1; animation: pulse 0.8s infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+
+    .autospeak-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ocean);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--border);
+      border-radius: 99px;
+      transition: background 0.2s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      left: 3px; top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider { background: var(--ocean); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    .mic-btn {
+      width: 46px; height: 46px;
+      background: var(--sand);
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .mic-btn:hover { background: var(--border); }
+    .mic-btn.listening {
+      background: #FFE0E3;
+      border-color: var(--wrong);
+      animation: pulse 0.8s infinite;
+    }
+
     .convo-tips {
       background: var(--white);
       border-radius: var(--radius);
@@ -894,15 +975,43 @@
     </div>
 
     <div class="api-key-panel">
-      <label>API Key:</label>
-      <input type="password" id="api-key-input" class="api-input" placeholder="sk-ant-..." />
+      <label style="font-size:0.82rem;font-weight:700;color:var(--muted);white-space:nowrap;">🤖 Anthropic:</label>
+      <input type="password" id="api-key-input" class="api-input" placeholder="sk-ant-... (required for chat)" />
       <button class="api-save-btn" onclick="saveApiKey()">Save</button>
+    </div>
+
+    <div class="autospeak-row" style="flex-wrap:wrap; gap:10px;">
+      <span>🔊 Auto-speak</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="autospeak-toggle" onchange="toggleAutoSpeak()" />
+        <span class="toggle-slider"></span>
+      </label>
+      <span id="autospeak-label" style="color:var(--muted);font-weight:600;">Off</span>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+        <span style="font-size:0.82rem; color:var(--muted); font-weight:700;">🎙️ Voice:</span>
+        <select id="voice-select" onchange="setVoice(this.value)" style="
+          padding: 5px 10px;
+          border: 2px solid var(--border);
+          border-radius: 8px;
+          font-family: 'Nunito', sans-serif;
+          font-size: 0.82rem;
+          font-weight: 600;
+          color: var(--ocean);
+          background: var(--white);
+          cursor: pointer;
+          outline: none;
+          max-width: 180px;
+        ">
+          <option value="">Loading voices...</option>
+        </select>
+      </div>
     </div>
 
     <div class="chat-window" id="chat-window"></div>
 
     <div class="chat-input-row">
-      <input type="text" id="chat-input" class="chat-input" placeholder="Fla ku mi… (Talk to me…)" onkeydown="if(event.key==='Enter') sendMessage()" />
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak your message">🎤</button>
+      <input type="text" id="chat-input" class="chat-input" placeholder="Fla ku mi… (or tap 🎤 to speak)" onkeydown="if(event.key==='Enter') sendMessage()" />
       <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
     </div>
 
@@ -935,11 +1044,21 @@ const LESSONS = [
       { k: 'Bon tarde', e: 'Good afternoon', ex: 'Bon tarde, profesor!' },
       { k: 'Bon noti', e: 'Good night', ex: 'Bon noti, família.' },
       { k: 'Kuma bu sta?', e: 'How are you?', ex: 'Oi! Kuma bu sta, ami?' },
-      { k: 'N sta ben', e: "I'm fine", ex: 'N sta ben, obrigadu.' },
+      { k: 'N sta ben', e: "I'm fine / I'm well", ex: 'N sta ben, obrigadu.' },
+      { k: 'N sta dretu', e: "I'm good / I'm alright", ex: 'N sta dretu, obrigadu.' },
+      { k: 'N sta más o menos', e: "I'm so-so", ex: 'N sta más o menos oji.' },
+      { k: 'N sta txeu bem', e: "I'm very well", ex: 'N sta txeu bem, grasa a Deus!' },
       { k: 'Obrigadu', e: 'Thank you (said by male)', ex: 'Obrigadu pela djuda.' },
       { k: 'Obrigada', e: 'Thank you (said by female)', ex: 'Obrigada, sei ki bu fes.' },
       { k: 'Di nada', e: "You're welcome", ex: 'Di nada! E nada.' },
       { k: 'Purdon', e: 'Sorry / Excuse me', ex: 'Purdon, ka n intendi.' },
+      { k: 'Ate logo', e: 'See you later', ex: 'Ate logo, ami!' },
+      { k: 'Ate mañan', e: 'See you tomorrow', ex: 'Ate mañan, tchau!' },
+      { k: 'Tchau', e: 'Bye', ex: 'Tchau! Kuda ben.' },
+      { k: 'Bem-vindu', e: 'Welcome (to a male)', ex: 'Bem-vindu na nha kaza!' },
+      { k: 'Bem-vinda', e: 'Welcome (to a female)', ex: 'Bem-vinda na Kabu Verdi!' },
+      { k: 'Kuda ben', e: 'Take care', ex: 'Tchau! Kuda ben, ami.' },
+      { k: 'Grasa a Deus', e: 'Thanks be to God', ex: 'N sta ben, grasa a Deus!' },
     ]
   },
   {
@@ -948,12 +1067,21 @@ const LESSONS = [
       { k: 'Ki ki bu txoma?', e: "What's your name?", ex: 'Oi! Ki ki bu txoma?' },
       { k: 'N txoma...', e: 'My name is...', ex: 'N txoma Maria.' },
       { k: 'Prazer', e: 'Nice to meet you', ex: 'Prazer di konxi-bu.' },
+      { k: 'Prazer di konxi-bu', e: 'Pleased to meet you', ex: 'Prazer di konxi-bu, João.' },
       { k: 'Undi ki bu mora?', e: 'Where do you live?', ex: 'Undi ki bu mora?' },
       { k: 'N mora na...', e: 'I live in...', ex: 'N mora na Praia.' },
       { k: 'Kantu anu ki bu ten?', e: 'How old are you?', ex: 'Kantu anu ki bu ten?' },
       { k: 'N ten ... anu', e: 'I am ... years old', ex: 'N ten vinti anu.' },
       { k: 'Undi ki bu e di?', e: 'Where are you from?', ex: 'Undi ki bu e di?' },
       { k: 'N e di...', e: 'I am from...', ex: 'N e di Mindelo.' },
+      { k: 'Ki ki bu fazi?', e: 'What do you do? (job)', ex: 'Ki ki bu fazi na vida?' },
+      { k: 'N e profesor/a', e: 'I am a teacher', ex: 'N e professor na skola.' },
+      { k: 'N e studanti', e: 'I am a student', ex: 'N e studanti na universidade.' },
+      { k: 'N e médiku/a', e: 'I am a doctor', ex: 'N e médiku.' },
+      { k: 'Kel e nha amig/a', e: 'That is my friend', ex: 'Kel e nha amiga Maria.' },
+      { k: 'Fala Kriolu?', e: 'Do you speak Kriolu?', ex: 'Bu fala Kriolu?' },
+      { k: 'Un pokutim', e: 'A little bit', ex: 'N fala Kriolu un pokutim.' },
+      { k: 'N ta aprende Kriolu', e: 'I am learning Kriolu', ex: 'N ta aprende Kriolu tud dia.' },
     ]
   },
   {
@@ -969,8 +1097,20 @@ const LESSONS = [
       { k: 'Oitu', e: 'Eight (8)', ex: 'Oitu eskudu.' },
       { k: 'Novi', e: 'Nine (9)', ex: 'Novi pessoa.' },
       { k: 'Des', e: 'Ten (10)', ex: 'Des anu.' },
+      { k: 'Onzi', e: 'Eleven (11)', ex: 'Onzi ora di noti.' },
+      { k: 'Dozi', e: 'Twelve (12)', ex: 'Dozi mes na anu.' },
+      { k: 'Trezi', e: 'Thirteen (13)', ex: 'Trezi pessoa.' },
+      { k: 'Katórzi', e: 'Fourteen (14)', ex: 'Katórzi anu.' },
+      { k: 'Kinzi', e: 'Fifteen (15)', ex: 'Kinzi minuto.' },
       { k: 'Vinti', e: 'Twenty (20)', ex: 'Vinti eskudu.' },
+      { k: 'Trinta', e: 'Thirty (30)', ex: 'Trinta pessoa.' },
+      { k: 'Kuarenta', e: 'Forty (40)', ex: 'Kuarenta anu.' },
+      { k: 'Sinkuenta', e: 'Fifty (50)', ex: 'Sinkuenta eskudu.' },
       { k: 'Sen', e: 'One hundred (100)', ex: 'Sen pessoa.' },
+      { k: 'Mil', e: 'One thousand (1000)', ex: 'Mil eskudu.' },
+      { k: 'Primeru', e: 'First', ex: 'Primeru lugar.' },
+      { k: 'Sigundu', e: 'Second', ex: 'Sigundu ves.' },
+      { k: 'Terseiru', e: 'Third', ex: 'Terseiru andar.' },
     ]
   },
   {
@@ -981,11 +1121,27 @@ const LESSONS = [
       { k: 'Leiti', e: 'Milk', ex: 'N kre leiti ku sukru.' },
       { k: 'Pes', e: 'Fish', ex: 'Pes fresku.' },
       { k: 'Karne', e: 'Meat', ex: 'Karne di vaka.' },
+      { k: 'Frango', e: 'Chicken', ex: 'Frango grelhadu e saborozu.' },
       { k: 'Aroz', e: 'Rice', ex: 'Aroz ku fejon.' },
       { k: 'Fejon', e: 'Beans', ex: 'Fejon pretu e saborozu.' },
+      { k: 'Milhu', e: 'Corn / Maize', ex: 'Milhu e base di catchupa.' },
       { k: 'Pão', e: 'Bread', ex: 'Pão fresku di mañan.' },
+      { k: 'Manteiga', e: 'Butter', ex: 'Pão ku manteiga.' },
       { k: 'Kafé', e: 'Coffee', ex: 'N kre un kafé.' },
+      { k: 'Txá', e: 'Tea', ex: 'Txá di ervas.' },
+      { k: 'Sumo', e: 'Juice', ex: 'Sumo di laranja fresku.' },
       { k: 'Catchupa', e: 'Cachupa (national dish)', ex: 'Catchupa e kumida di Kabu Verdi.' },
+      { k: 'Lagosta', e: 'Lobster', ex: 'Lagosta di Kabu Verdi e famoza.' },
+      { k: 'Djagacida', e: 'Meat and bean stew', ex: 'Djagacida e gostosa.' },
+      { k: 'Pastel', e: 'Fried pastry with fish', ex: 'Pastel ku atum e txeu bon.' },
+      { k: 'Grogue', e: 'Cape Verdean rum', ex: 'Grogue e bebida tradisional.' },
+      { k: 'Pontxi', e: 'Ponche (mixed drink)', ex: 'Pontxi ku limão e fresku.' },
+      { k: 'Sukru', e: 'Sugar', ex: 'Kafé ku sukru.' },
+      { k: 'Sal', e: 'Salt', ex: 'Kumida preçiza sal.' },
+      { k: 'Azeiti', e: 'Olive oil', ex: 'Azeiti di boa kualidade.' },
+      { k: 'Fruta', e: 'Fruit', ex: 'Fruta freska di Kabu Verdi.' },
+      { k: 'Banana', e: 'Banana', ex: 'Banana di Santiago e dosi.' },
+      { k: 'Papaia', e: 'Papaya', ex: 'Papaia madura e dosi.' },
     ]
   },
   {
@@ -1002,6 +1158,17 @@ const LESSONS = [
       { k: 'Avó', e: 'Grandmother', ex: 'Nha avó e simpátika.' },
       { k: 'Maridu', e: 'Husband', ex: 'Nha maridu txoma Pedro.' },
       { k: 'Mudjer', e: 'Wife', ex: 'Nha mudjer trabadja na skola.' },
+      { k: 'Tiu', e: 'Uncle', ex: 'Nha tiu mora na Lisboa.' },
+      { k: 'Tia', e: 'Aunt', ex: 'Nha tia e kuzinhera.' },
+      { k: 'Primu', e: 'Male cousin', ex: 'Nha primu ten karru novu.' },
+      { k: 'Prima', e: 'Female cousin', ex: 'Nha prima e simpátika.' },
+      { k: 'Sobrinhu', e: 'Nephew', ex: 'Nha sobrinhu e pikinoti.' },
+      { k: 'Sobrinha', e: 'Niece', ex: 'Nha sobrinha ta bai skola.' },
+      { k: 'Sogru', e: 'Father-in-law', ex: 'Nha sogru e bon omi.' },
+      { k: 'Sogra', e: 'Mother-in-law', ex: 'Nha sogra kuzinha bem.' },
+      { k: 'Namoradu', e: 'Boyfriend', ex: 'Nha namoradu e di Mindelo.' },
+      { k: 'Namorada', e: 'Girlfriend', ex: 'Nha namorada e linda.' },
+      { k: 'Nha', e: 'My (possessive)', ex: 'Nha família e grandi.' },
     ]
   },
   {
@@ -1009,14 +1176,25 @@ const LESSONS = [
     vocab: [
       { k: 'Sim', e: 'Yes', ex: 'Sim, n sta de akurdu.' },
       { k: 'Ña', e: 'No', ex: 'Ña, n ka kre.' },
+      { k: 'Talbez', e: 'Maybe', ex: 'Talbez mañan.' },
       { k: 'N ka intendi', e: "I don't understand", ex: 'N ka intendi. Pudi repeti?' },
       { k: 'Fla-m di novu', e: 'Say that again', ex: 'Fla-m di novu, pur favor.' },
+      { k: 'Mais divasim', e: 'More slowly', ex: 'Fla mais divasim, pur favor.' },
       { k: 'Pur favor', e: 'Please', ex: 'Pur favor, djuda-m.' },
       { k: 'Djuda-m', e: 'Help me', ex: 'Djuda-m, pur favor!' },
       { k: 'Undi?', e: 'Where?', ex: 'Undi ki e banhu?' },
       { k: 'Kantu kusta?', e: 'How much does it cost?', ex: 'Kantu kusta es sapatu?' },
       { k: 'N preçiza...', e: 'I need...', ex: 'N preçiza un médiku.' },
       { k: 'Txoma pulisia!', e: 'Call the police!', ex: 'Txoma pulisia, pur favor!' },
+      { k: 'N ka sei', e: "I don't know", ex: 'N ka sei undi ki e.' },
+      { k: 'Klaru', e: 'Of course / Clear', ex: 'Klaru! N ta djuda-bu.' },
+      { k: 'Ta bon', e: "It's okay / No problem", ex: 'Ta bon, ka preokupa.' },
+      { k: 'Kuze?', e: 'What?', ex: 'Kuze ki bu fla?' },
+      { k: 'Kel e bon', e: 'That is good', ex: 'Kel e bon, obrigadu.' },
+      { k: 'Kel e mau', e: 'That is bad', ex: 'Kel e mau notísia.' },
+      { k: 'N kre...', e: 'I want...', ex: 'N kre un kafé, pur favor.' },
+      { k: 'N gosta di...', e: 'I like...', ex: 'N gosta di Kriolu.' },
+      { k: 'N ka gosta di...', e: "I don't like...", ex: 'N ka gosta di kal.' },
     ]
   },
   {
@@ -1025,6 +1203,8 @@ const LESSONS = [
       { k: 'Oji', e: 'Today', ex: 'Oji e bon dia.' },
       { k: 'Mañan', e: 'Tomorrow', ex: 'Mañan n vai trabadja.' },
       { k: 'Onti', e: 'Yesterday', ex: 'Onti n fika na kaza.' },
+      { k: 'Simana ki ben', e: 'Next week', ex: 'Simana ki ben n bai Mindelo.' },
+      { k: 'Simana pasadu', e: 'Last week', ex: 'Simana pasadu n trabadja muntu.' },
       { k: 'Sigunda-fera', e: 'Monday', ex: 'N trabadja na sigunda-fera.' },
       { k: 'Tersa-fera', e: 'Tuesday', ex: 'Merkadu na tersa-fera.' },
       { k: 'Kuarta-fera', e: 'Wednesday', ex: 'Eskola ta sata na kuarta-fera.' },
@@ -1032,6 +1212,18 @@ const LESSONS = [
       { k: 'Sesta-fera', e: 'Friday', ex: 'Festa na sesta-fera!' },
       { k: 'Sabadu', e: 'Saturday', ex: 'Sabadu e dia di diskansa.' },
       { k: 'Dumingu', e: 'Sunday', ex: 'Dumingu e sagrado.' },
+      { k: 'Ora', e: 'Hour / Time', ex: 'Ki ora ki e?' },
+      { k: 'Minuto', e: 'Minute', ex: 'Sinku minuto.' },
+      { k: 'Mañansiña', e: 'Morning', ex: 'Na mañansiña n bebe kafé.' },
+      { k: 'Merdia', e: 'Noon / Midday', ex: 'Na merdia n kume.' },
+      { k: 'Tardi', e: 'Afternoon / Evening', ex: 'Na tardi n diskansa.' },
+      { k: 'Noti', e: 'Night', ex: 'Na noti n durmi sedu.' },
+      { k: 'Sempri', e: 'Always', ex: 'N sempri bebe kafé.' },
+      { k: 'Nunka', e: 'Never', ex: 'N nunka fuma.' },
+      { k: 'Às vezes', e: 'Sometimes', ex: 'Às vezes n ta kanta.' },
+      { k: 'Agora', e: 'Now', ex: 'Bai agora!' },
+      { k: 'Dipus', e: 'Later / After', ex: 'Dipus n ta bai.' },
+      { k: 'Antes', e: 'Before', ex: 'Antes di durmi, n ta lê.' },
     ]
   },
   {
@@ -1044,12 +1236,887 @@ const LESSONS = [
       { k: 'Verdi', e: 'Green', ex: 'Folha verdi.' },
       { k: 'Marelu', e: 'Yellow', ex: 'Sol marelu.' },
       { k: 'Laranja', e: 'Orange', ex: 'Fruta laranja.' },
+      { k: 'Roza', e: 'Pink', ex: 'Flor roza.' },
+      { k: 'Roxu', e: 'Purple', ex: 'Kamisola roxu.' },
+      { k: 'Maron', e: 'Brown', ex: 'Tera maron.' },
+      { k: 'Sinzento', e: 'Grey', ex: 'Nuvem sinzento.' },
       { k: 'Grandi', e: 'Big / Large', ex: 'Kaza grandi.' },
       { k: 'Pikinoti', e: 'Small', ex: 'Pikinoti kriança.' },
+      { k: 'Bunitu/a', e: 'Beautiful / Pretty', ex: 'Kabu Verdi e bunitu.' },
+      { k: 'Feiu/a', e: 'Ugly', ex: 'Kel kaza e feia.' },
       { k: 'Saborozu', e: 'Delicious', ex: 'Catchupa e saborozu.' },
+      { k: 'Nobu/a', e: 'New', ex: 'Karru nobu.' },
+      { k: 'Bedju/a', e: 'Old', ex: 'Omi bedju.' },
+      { k: 'Kenti', e: 'Hot', ex: 'Agu kenti.' },
+      { k: 'Friu', e: 'Cold', ex: 'Agu friu.' },
+      { k: 'Rapidu', e: 'Fast', ex: 'Karru rapidu.' },
+      { k: 'Divasim', e: 'Slow', ex: 'Fla divasim.' },
+      { k: 'Bon', e: 'Good', ex: 'Kel e bon.' },
+      { k: 'Mau', e: 'Bad', ex: 'Kel e mau.' },
+    ]
+  },
+  {
+    id: 'travel', title: 'Travel & Directions', titleKriolu: 'Viagem & Direson', icon: '✈️', color: '#0077B6',
+    vocab: [
+      { k: 'Undi ki e...?', e: 'Where is...?', ex: 'Undi ki e hotel?' },
+      { k: 'Banku', e: 'Bank', ex: 'Undi ki e banku?' },
+      { k: 'Ospital', e: 'Hospital', ex: 'N preçiza ir na ospital.' },
+      { k: 'Farmásia', e: 'Pharmacy', ex: 'Undi ki e farmásia?' },
+      { k: 'Merkadu', e: 'Market', ex: 'Merkadu e grandi.' },
+      { k: 'Supermerkadu', e: 'Supermarket', ex: 'N bai supermerkadu.' },
+      { k: 'Aeroportu', e: 'Airport', ex: 'Aeroportu e longi.' },
+      { k: 'Porto', e: 'Port / Harbor', ex: 'Porto di Mindelo e famazu.' },
+      { k: 'Praia', e: 'Beach', ex: 'Praia di Kabu Verdi e bunita.' },
+      { k: 'Hotel', e: 'Hotel', ex: 'N mora na hotel.' },
+      { k: 'Restauranti', e: 'Restaurant', ex: 'Restauranti e bon.' },
+      { k: 'Karru', e: 'Car', ex: 'N ten karru nobu.' },
+      { k: 'Otokarro', e: 'Bus', ex: 'N ta bai di otokarro.' },
+      { k: 'Táksi', e: 'Taxi', ex: 'Txoma un táksi.' },
+      { k: 'Barku', e: 'Boat / Ship', ex: 'Barku bai pa Santiago.' },
+      { k: 'Avião', e: 'Airplane', ex: 'Avião ta parti mañan.' },
+      { k: 'Diretu', e: 'Straight ahead', ex: 'Bai diretu.' },
+      { k: 'Skreda', e: 'Left', ex: 'Bira pa skreda.' },
+      { k: 'Diritu', e: 'Right', ex: 'Bira pa diritu.' },
+      { k: 'Longi', e: 'Far', ex: 'E longi di li.' },
+      { k: 'Pertu', e: 'Near / Close', ex: 'E pertu di li.' },
+      { k: 'Rua', e: 'Street / Road', ex: 'Ki rua ki es e?' },
+      { k: 'Pasaporti', e: 'Passport', ex: 'Bu ten bu pasaporti?' },
+      { k: 'Bagagem', e: 'Luggage', ex: 'Nha bagagem e pezadu.' },
+    ]
+  },
+  {
+    id: 'body_health', title: 'Body & Health', titleKriolu: 'Korpu & Saúdi', icon: '🏥', color: '#E76F51',
+    vocab: [
+      { k: 'Kabesa', e: 'Head', ex: 'Nha kabesa ta doi.' },
+      { k: 'Olhu', e: 'Eye', ex: 'Bu ten olhu bunitu.' },
+      { k: 'Oreya', e: 'Ear', ex: 'Nha oreya ta doi.' },
+      { k: 'Naris', e: 'Nose', ex: 'Nha naris e stufadu.' },
+      { k: 'Boka', e: 'Mouth', ex: 'Boka ta doi.' },
+      { k: 'Denti', e: 'Tooth / Teeth', ex: 'Nha denti ta doi.' },
+      { k: 'Peitu', e: 'Chest', ex: 'Nha peitu ta doi.' },
+      { k: 'Barriga', e: 'Stomach / Belly', ex: 'Nha barriga ta doi.' },
+      { k: 'Brasu', e: 'Arm', ex: 'Nha brasu ta doi.' },
+      { k: 'Mão', e: 'Hand', ex: 'Nha mão ta doi.' },
+      { k: 'Perna', e: 'Leg', ex: 'Nha perna ta doi.' },
+      { k: 'Pe', e: 'Foot', ex: 'Nha pe ta doi.' },
+      { k: 'Kostu', e: 'Back', ex: 'Nha kostu ta doi.' },
+      { k: 'N sta doenti', e: "I'm sick", ex: 'N sta doenti oji.' },
+      { k: 'N ten febre', e: 'I have a fever', ex: 'N ten febre altu.' },
+      { k: 'N ta vomitá', e: 'I am vomiting', ex: 'N ta vomitá. N preçiza médiku.' },
+      { k: 'Medikamentu', e: 'Medicine', ex: 'N preçiza medikamentu.' },
+      { k: 'Médiku', e: 'Doctor', ex: 'N preçiza ir bo médiku.' },
+      { k: 'Doi', e: 'Pain / It hurts', ex: 'Undi ki ta doi?' },
+      { k: 'Alérjia', e: 'Allergy', ex: 'N ten alérjia.' },
+      { k: 'Kansadu/a', e: 'Tired', ex: 'N sta txeu kansadu.' },
+      { k: 'Saúdi', e: 'Health', ex: 'Saúdi e tudo.' },
+    ]
+  },
+  {
+    id: 'shopping', title: 'Shopping & Money', titleKriolu: 'Kompras & Dinheru', icon: '🛒', color: '#6A994E',
+    vocab: [
+      { k: 'Kantu kusta?', e: 'How much does it cost?', ex: 'Kantu kusta es sapatu?' },
+      { k: 'E karu', e: "It's expensive", ex: 'Es e txeu karu!' },
+      { k: 'E baratu', e: "It's cheap", ex: 'Es e baratu, kompra!' },
+      { k: 'Dinheru', e: 'Money', ex: 'N ka ten dinheru.' },
+      { k: 'Eskudu', e: 'Escudo (Cape Verde currency)', ex: 'Mil eskudu.' },
+      { k: 'Troku', e: 'Change (money)', ex: 'Bu ten troku?' },
+      { k: 'Karta di kreditu', e: 'Credit card', ex: 'Podi paga ku karta di kreditu?' },
+      { k: 'N kre kompra...', e: 'I want to buy...', ex: 'N kre kompra kel.' },
+      { k: 'Loja', e: 'Shop / Store', ex: 'Loja e abertu.' },
+      { k: 'Merkadu', e: 'Market', ex: 'Merkadu di Praia e grandi.' },
+      { k: 'Sapatu', e: 'Shoe', ex: 'Sapatu nobu.' },
+      { k: 'Ropa', e: 'Clothes', ex: 'Ropa bunita.' },
+      { k: 'Kamisola', e: 'Shirt / T-shirt', ex: 'Kamisola azul.' },
+      { k: 'Kalsa', e: 'Trousers / Pants', ex: 'Kalsa pretu.' },
+      { k: 'Grandi dimaiz', e: 'Too big', ex: 'Es e grandi dimaiz pa mi.' },
+      { k: 'Pikinoti dimaiz', e: 'Too small', ex: 'Es e pikinoti dimaiz.' },
+      { k: 'Podi dá deskóntu?', e: 'Can you give a discount?', ex: 'Podi dá deskóntu, pur favor?' },
+      { k: 'N ta leva es', e: "I'll take this one", ex: 'N ta leva es, obrigadu.' },
+    ]
+  },
+  {
+    id: 'emotions', title: 'Emotions & Feelings', titleKriolu: 'Emosons & Sentimentus', icon: '❤️', color: '#C77DFF',
+    vocab: [
+      { k: 'Feliz', e: 'Happy', ex: 'N sta feliz oji.' },
+      { k: 'Tristi', e: 'Sad', ex: 'N sta tristi.' },
+      { k: 'Braba/u', e: 'Angry', ex: 'N sta braba ku kel.' },
+      { k: 'Sperientadu/a', e: 'Surprised', ex: 'N sta sperientadu!' },
+      { k: 'Medradu/a', e: 'Scared / Afraid', ex: 'N sta medradu.' },
+      { k: 'Saudadi', e: 'Longing / Missing someone', ex: 'N ten saudadi di nha família.' },
+      { k: 'N ama-bu', e: 'I love you', ex: 'N ama-bu, nha amor.' },
+      { k: 'N gosta di bu', e: 'I like you', ex: 'N gosta di bu muntu.' },
+      { k: 'N ta falta bu', e: 'I miss you', ex: 'N ta falta bu txeu.' },
+      { k: 'Kontenti', e: 'Content / Pleased', ex: 'N sta kontenti ku kel.' },
+      { k: 'Preokupadu/a', e: 'Worried', ex: 'N sta preokupadu.' },
+      { k: 'Envergonhadu/a', e: 'Embarrassed', ex: 'N sta envergonhadu.' },
+      { k: 'Orgulhozu/a', e: 'Proud', ex: 'N sta orgulhozu di bu.' },
+      { k: 'Txeu bon', e: 'Very good / Excellent', ex: 'Kel e txeu bon!' },
+      { k: 'Maravilhozu', e: 'Wonderful / Marvelous', ex: 'Kabu Verdi e maravilhozu.' },
+      { k: 'Inkrivel', e: 'Incredible / Amazing', ex: 'Es e inkrivel!' },
+    ]
+  },
+  {
+    id: 'verbs', title: 'Common Verbs', titleKriolu: 'Verbos Komuns', icon: '⚡', color: '#3A86FF',
+    vocab: [
+      { k: 'Bai', e: 'To go', ex: 'N ta bai merkadu.' },
+      { k: 'Ben', e: 'To come', ex: 'Ben pa ki!' },
+      { k: 'Kume', e: 'To eat', ex: 'N ta kume catchupa.' },
+      { k: 'Bebe', e: 'To drink', ex: 'N ta bebe agu.' },
+      { k: 'Durmi', e: 'To sleep', ex: 'N ta durmi sedu.' },
+      { k: 'Trabadja', e: 'To work', ex: 'N ta trabadja muntu.' },
+      { k: 'Fla', e: 'To say / To speak', ex: 'Ki ki bu ta fla?' },
+      { k: 'Obi', e: 'To hear / To listen', ex: 'Obi bem!' },
+      { k: 'Odja', e: 'To see / To look', ex: 'Odja kel!' },
+      { k: 'Fazi', e: 'To do / To make', ex: 'Ki ki bu ta fazi?' },
+      { k: 'Ten', e: 'To have', ex: 'N ten un kaza.' },
+      { k: 'Kre', e: 'To want', ex: 'N kre kafé.' },
+      { k: 'Gosta', e: 'To like', ex: 'N gosta di Kriolu.' },
+      { k: 'Ama', e: 'To love', ex: 'N ama nha família.' },
+      { k: 'Konxe', e: 'To know (a person)', ex: 'Bu konxe João?' },
+      { k: 'Sabi', e: 'To know (a fact)', ex: 'N ka sabi.' },
+      { k: 'Aprende', e: 'To learn', ex: 'N ta aprende Kriolu.' },
+      { k: 'Lê', e: 'To read', ex: 'N ta lê livru.' },
+      { k: 'Skrebe', e: 'To write', ex: 'N ta skrebe karta.' },
+      { k: 'Kanta', e: 'To sing', ex: 'N ta kanta morna.' },
+      { k: 'Dansa', e: 'To dance', ex: 'N ta dansa funaná.' },
+      { k: 'Kuri', e: 'To run', ex: 'N ta kuri na mañan.' },
+      { k: 'Pará', e: 'To stop', ex: 'Pará!' },
+      { k: 'Kumesa', e: 'To start / begin', ex: 'Mos kumesa.' },
+    ]
+  },
+  {
+    id: 'culture', title: 'Culture & Cape Verde', titleKriolu: 'Kultura & Kabu Verdi', icon: '🌴', color: '#2D6A4F',
+    vocab: [
+      { k: 'Kabu Verdi', e: 'Cape Verde', ex: 'N ama Kabu Verdi.' },
+      { k: 'Ilha', e: 'Island', ex: 'Kabu Verdi ten des ilha.' },
+      { k: 'Santiago', e: 'Santiago (largest island)', ex: 'Praia e kapital di Santiago.' },
+      { k: 'São Visentu', e: 'São Vicente island', ex: 'Mindelo e na São Visentu.' },
+      { k: 'Praia', e: 'Praia (capital city)', ex: 'Praia e kapital di Kabu Verdi.' },
+      { k: 'Mindelo', e: 'Mindelo (cultural capital)', ex: 'Mindelo e sidadi di kultura.' },
+      { k: 'Morna', e: 'Morna (traditional music)', ex: 'Morna e muzika di saudadi.' },
+      { k: 'Funaná', e: 'Funaná (dance music)', ex: 'Funaná e muzika di festa.' },
+      { k: 'Batuque', e: 'Batuque (traditional rhythm)', ex: 'Batuque e ritmu di Santiago.' },
+      { k: 'Saudadi', e: 'Saudade (longing/nostalgia)', ex: 'Kriolu ten txeu saudadi.' },
+      { k: 'Morabeza', e: 'Warmth / Hospitality', ex: 'Morabeza e alma di Kabu Verdi.' },
+      { k: 'Sodadi', e: 'Longing for home', ex: 'Sodadi di nha terra.' },
+      { k: 'Diáspora', e: 'Diaspora', ex: 'Diáspora kabuverdiana e grandi.' },
+      { k: 'Karnaval', e: 'Carnival', ex: 'Karnaval di Mindelo e famazu.' },
+      { k: 'Tabanka', e: 'Traditional festival', ex: 'Tabanka e festa di Kriolu.' },
+      { k: 'Grogue', e: 'Sugarcane rum', ex: 'Grogue di Santo Antão e bon.' },
+      { k: 'Panu di terra', e: 'Traditional woven cloth', ex: 'Panu di terra e artizanatu.' },
+      { k: 'Kriolu', e: 'Cape Verdean Creole language', ex: 'Kriolu e nha lingua.' },
+      { k: 'Badiu', e: 'Santiago islander / dialect', ex: 'N fala Kriolu Badiu.' },
+      { k: 'Sampadjudu', e: 'São Vicente islander', ex: 'El e Sampadjudu di Mindelo.' },
+    ]
+  },
+  {
+    id: 'weather', title: 'Weather & Nature', titleKriolu: 'Tempu & Natureza', icon: '🌤️', color: '#48CAE4',
+    vocab: [
+      { k: 'Tempu', e: 'Weather / Time', ex: 'Ki tempu ki ta fazi oji?' },
+      { k: 'Sol', e: 'Sun', ex: 'Sol ta brilha txeu.' },
+      { k: 'Txuva', e: 'Rain', ex: 'Ta txove oji.' },
+      { k: 'Ventu', e: 'Wind', ex: 'Ventu ta sopra forti.' },
+      { k: 'Nuvem', e: 'Cloud', ex: 'Nuvem pretu no séu.' },
+      { k: 'Nebuloza', e: 'Foggy / Hazy', ex: 'Tempu nebuloza oji.' },
+      { k: 'Kenti', e: 'Hot', ex: 'Oji ta fazi kenti.' },
+      { k: 'Friu', e: 'Cold', ex: 'Noti ta fazi friu.' },
+      { k: 'Frieski', e: 'Cool / Fresh', ex: 'Tardi ta fazi frieski.' },
+      { k: 'Seku', e: 'Dry', ex: 'Tempu seku na vera.' },
+      { k: 'Umidu', e: 'Humid', ex: 'Tempu umidu na xuvosa.' },
+      { k: 'Txovada', e: 'Rainy season', ex: 'Txovada kumesa na Agostu.' },
+      { k: 'Vera', e: 'Dry season / Summer', ex: 'Na vera tempu ta fazi kenti.' },
+      { k: 'Tempestadi', e: 'Storm', ex: 'Tempestadi ta ben.' },
+      { k: 'Arku-iris', e: 'Rainbow', ex: 'Arku-iris dipus di txuva.' },
+      { k: 'Mar', e: 'Sea / Ocean', ex: 'Mar di Kabu Verdi e azul.' },
+      { k: 'Onda', e: 'Wave', ex: 'Onda grandi na praia.' },
+      { k: 'Munti', e: 'Mountain', ex: 'Fogo ten munti altu.' },
+      { k: 'Vulkan', e: 'Volcano', ex: 'Vulkan di Fogo e aktiv.' },
+      { k: 'Tera', e: 'Land / Earth / Soil', ex: 'Tera di Kabu Verdi e seku.' },
+      { k: 'Pedra', e: 'Rock / Stone', ex: 'Pedra na praia.' },
+      { k: 'Areia', e: 'Sand', ex: 'Areia branku na praia.' },
+      { k: 'Arburi', e: 'Tree', ex: 'Arburi di tamariñu.' },
+      { k: 'Flor', e: 'Flower', ex: 'Flor di buganvilia.' },
+      { k: 'Folha', e: 'Leaf', ex: 'Folha verdi.' },
+      { k: 'Erva', e: 'Grass / Herb', ex: 'Erva freska.' },
+      { k: 'Ribera', e: 'River / Ravine', ex: 'Ribera di Santiago.' },
+      { k: 'Lagu', e: 'Lake', ex: 'Lagu di Agu Pau.' },
+      { k: 'Serra', e: 'Mountain range / Hills', ex: 'Serra di Malagueta.' },
+      { k: 'Kosta', e: 'Coast / Coastline', ex: 'Kosta di Kabu Verdi e bunita.' },
+    ]
+  },
+  {
+    id: 'house', title: 'House & Home', titleKriolu: 'Kaza & Lar', icon: '🏠', color: '#BC6C25',
+    vocab: [
+      { k: 'Kaza', e: 'House / Home', ex: 'Nha kaza e grandi.' },
+      { k: 'Porta', e: 'Door', ex: 'Porta ta abertu.' },
+      { k: 'Janela', e: 'Window', ex: 'Janela di kaza.' },
+      { k: 'Parede', e: 'Wall', ex: 'Parede branku.' },
+      { k: 'Chan', e: 'Floor', ex: 'Chan di azulejo.' },
+      { k: 'Tetu', e: 'Ceiling / Roof', ex: 'Tetu di kaza.' },
+      { k: 'Skada', e: 'Stairs', ex: 'Skada pa sigundu andar.' },
+      { k: 'Kuzinha', e: 'Kitchen', ex: 'N ta kuzinha na kuzinha.' },
+      { k: 'Sala', e: 'Living room', ex: 'Família ta senta na sala.' },
+      { k: 'Kuartu', e: 'Bedroom', ex: 'N ta durmi na nha kuartu.' },
+      { k: 'Banhu', e: 'Bathroom', ex: 'Banhu e na fundu.' },
+      { k: 'Varandá', e: 'Balcony / Veranda', ex: 'N ta senta na varandá.' },
+      { k: 'Kintal', e: 'Backyard / Courtyard', ex: 'Kintal di kaza.' },
+      { k: 'Kama', e: 'Bed', ex: 'Nha kama e grandi.' },
+      { k: 'Mexa', e: 'Table', ex: 'Mexa di sala.' },
+      { k: 'Kadeira', e: 'Chair', ex: 'Senta na kadeira.' },
+      { k: 'Sofa', e: 'Sofa / Couch', ex: 'N ta senta na sofa.' },
+      { k: 'Armáriu', e: 'Wardrobe / Cupboard', ex: 'Ropa na armáriu.' },
+      { k: 'Frizideira', e: 'Refrigerator / Fridge', ex: 'Agu fresku na frizideira.' },
+      { k: 'Fogão', e: 'Stove / Cooker', ex: 'Kuzinha na fogão.' },
+      { k: 'Panela', e: 'Pot / Pan', ex: 'Panela di catchupa.' },
+      { k: 'Pratu', e: 'Plate / Dish', ex: 'Pratu di kumida.' },
+      { k: 'Kopu', e: 'Cup / Glass', ex: 'Kopu di agu.' },
+      { k: 'Kolher', e: 'Spoon', ex: 'Kolher di sopa.' },
+      { k: 'Garfu', e: 'Fork', ex: 'Garfu pa kume.' },
+      { k: 'Faka', e: 'Knife', ex: 'Faka di kuzinha.' },
+      { k: 'Sabão', e: 'Soap', ex: 'Laba mão ku sabão.' },
+      { k: 'Tualia', e: 'Towel', ex: 'Tualia di banhu.' },
+      { k: 'Luzu', e: 'Light / Electricity', ex: 'Luzu ta funxoná.' },
+      { k: 'Agu kanalizadu', e: 'Running water / Tap water', ex: 'Agu kanalizadu na kaza.' },
+      { k: 'Aluguer', e: 'Rent', ex: 'N ta paga aluguer.' },
+      { k: 'Vizinhu', e: 'Neighbour', ex: 'Nha vizinhu e simpátiku.' },
+    ]
+  },
+  {
+    id: 'school', title: 'School & Education', titleKriolu: 'Skola & Edukasão', icon: '📚', color: '#4361EE',
+    vocab: [
+      { k: 'Skola', e: 'School', ex: 'N ta bai skola.' },
+      { k: 'Universidade', e: 'University', ex: 'N ta studar na universidade.' },
+      { k: 'Sala di ola', e: 'Classroom', ex: 'Sala di ola e grandi.' },
+      { k: 'Profesor/a', e: 'Teacher', ex: 'Nha profesor e bon.' },
+      { k: 'Studanti', e: 'Student', ex: 'N e studanti.' },
+      { k: 'Livru', e: 'Book', ex: 'N ta lê livru.' },
+      { k: 'Kaderno', e: 'Notebook', ex: 'Skrebe na kaderno.' },
+      { k: 'Lapis', e: 'Pencil', ex: 'Lapis pa skrebe.' },
+      { k: 'Kaneta', e: 'Pen', ex: 'Kaneta azul.' },
+      { k: 'Borraxa', e: 'Eraser', ex: 'Borraxa pa apaga.' },
+      { k: 'Régua', e: 'Ruler', ex: 'Régua di plasiku.' },
+      { k: 'Mochila', e: 'Backpack', ex: 'Mochila di skola.' },
+      { k: 'Exami', e: 'Exam / Test', ex: 'N ten exami mañan.' },
+      { k: 'Prova', e: 'Test / Quiz', ex: 'Prova di Kriolu.' },
+      { k: 'Nota', e: 'Grade / Mark', ex: 'N tevi bon nota.' },
+      { k: 'Aula', e: 'Lesson / Class', ex: 'Aula ta kumesa.' },
+      { k: 'Rekrêu', e: 'Break / Recess', ex: 'Rekrêu di des minuto.' },
+      { k: 'Biblioteca', e: 'Library', ex: 'N ta lê na biblioteca.' },
+      { k: 'Matemátika', e: 'Mathematics', ex: 'Matemátika e difísil.' },
+      { k: 'Siénsia', e: 'Science', ex: 'N gosta di siénsia.' },
+      { k: 'Istória', e: 'History', ex: 'Istória di Kabu Verdi.' },
+      { k: 'Jeografia', e: 'Geography', ex: 'Jeografia di Afrika.' },
+      { k: 'Lingua', e: 'Language', ex: 'N ta aprende lingua nobu.' },
+      { k: 'Português', e: 'Portuguese language', ex: 'N fala Português tambe.' },
+      { k: 'Diploma', e: 'Diploma / Degree', ex: 'N tevi nha diploma.' },
+      { k: 'Dever di kaza', e: 'Homework', ex: 'N ten txeu dever di kaza.' },
+      { k: 'Pergunta', e: 'Question', ex: 'N ten un pergunta.' },
+      { k: 'Resposta', e: 'Answer', ex: 'Ki ki e nha resposta?' },
+      { k: 'Aprende', e: 'To learn / study', ex: 'N ta aprende txeu.' },
+      { k: 'Enténde', e: 'To understand', ex: 'Bu enténde?' },
+    ]
+  },
+  {
+    id: 'work', title: 'Work & Professions', titleKriolu: 'Trabadju & Profisons', icon: '💼', color: '#343A40',
+    vocab: [
+      { k: 'Trabadju', e: 'Work / Job', ex: 'N ten bon trabadju.' },
+      { k: 'Skritoriu', e: 'Office', ex: 'N trabadja na skritoriu.' },
+      { k: 'Xefi', e: 'Boss / Chief', ex: 'Nha xefi e bon.' },
+      { k: 'Kolega', e: 'Colleague / Coworker', ex: 'Nha kolega e simpátiku.' },
+      { k: 'Saláriu', e: 'Salary / Wage', ex: 'N ta resebe saláriu.' },
+      { k: 'Empregu', e: 'Employment / Job', ex: 'N ta prokurar empregu.' },
+      { k: 'Reunião', e: 'Meeting', ex: 'N ten reunião agor.' },
+      { k: 'Médiku/a', e: 'Doctor', ex: 'El e médiku.' },
+      { k: 'Infermeru/a', e: 'Nurse', ex: 'Infermera e simpátika.' },
+      { k: 'Advogadu/a', e: 'Lawyer', ex: 'El e advogadu.' },
+      { k: 'Engenheru/a', e: 'Engineer', ex: 'N e engenheiru.' },
+      { k: 'Arkitetu/a', e: 'Architect', ex: 'El e arkiteta.' },
+      { k: 'Kuntabilista', e: 'Accountant', ex: 'El e kuntabilista.' },
+      { k: 'Komersianti', e: 'Merchant / Trader', ex: 'El e komersianti.' },
+      { k: 'Piskador', e: 'Fisherman', ex: 'Piskador ta bai mar.' },
+      { k: 'Agrikultór', e: 'Farmer', ex: 'Agrikultór ta trabadja tera.' },
+      { k: 'Kuzinheru/a', e: 'Cook / Chef', ex: 'El e kuzinheru di restauranti.' },
+      { k: 'Garsom', e: 'Waiter / Waitress', ex: 'Garsom ta trazi kumida.' },
+      { k: 'Motorista', e: 'Driver', ex: 'El e motorista di táksi.' },
+      { k: 'Polisia', e: 'Police officer', ex: 'Polisia ta djuda.' },
+      { k: 'Bomberu', e: 'Firefighter', ex: 'Bomberu ta apaga fogu.' },
+      { k: 'Soldadu', e: 'Soldier', ex: 'El e soldadu.' },
+      { k: 'Artista', e: 'Artist', ex: 'El e artista famazu.' },
+      { k: 'Muzikante', e: 'Musician', ex: 'El e muzikante di morna.' },
+      { k: 'Jornalista', e: 'Journalist', ex: 'El e jornalista.' },
+      { k: 'Informátiku/a', e: 'IT specialist', ex: 'El e informátiku.' },
+      { k: 'Empregadu/a', e: 'Employee', ex: 'N e empregadu.' },
+      { k: 'Patrão', e: 'Employer / Owner', ex: 'Patrão ta paga saláriu.' },
+      { k: 'Aposentadu/a', e: 'Retired', ex: 'Nha pai e aposentadu.' },
+      { k: 'Voluntáriu/a', e: 'Volunteer', ex: 'N e voluntáriu.' },
+    ]
+  },
+  {
+    id: 'sports', title: 'Sports & Hobbies', titleKriolu: 'Desportu & Hobis', icon: '⚽', color: '#38B000',
+    vocab: [
+      { k: 'Desportu', e: 'Sport', ex: 'N gosta di desportu.' },
+      { k: 'Jogu', e: 'Game', ex: 'Jogu di futbol.' },
+      { k: 'Futbol', e: 'Football / Soccer', ex: 'Futbol e desportu favoritu.' },
+      { k: 'Basquete', e: 'Basketball', ex: 'N joga basquete.' },
+      { k: 'Natason', e: 'Swimming', ex: 'N ta nada na mar.' },
+      { k: 'Kuri', e: 'Running', ex: 'N ta kuri na mañan.' },
+      { k: 'Peskaria', e: 'Fishing', ex: 'N gosta di peskaria.' },
+      { k: 'Surfing', e: 'Surfing', ex: 'Surfing na onda grandi.' },
+      { k: 'Vela', e: 'Sailing', ex: 'N ta andá di vela.' },
+      { k: 'Montanhizmu', e: 'Hiking / Mountaineering', ex: 'Montanhizmu na Fogo.' },
+      { k: 'Joga', e: 'To play (sports)', ex: 'N ta joga futbol.' },
+      { k: 'Ganha', e: 'To win', ex: 'N ta ganha!' },
+      { k: 'Perdi', e: 'To lose', ex: 'Ka ta perdi.' },
+      { k: 'Empata', e: 'To draw / tie', ex: 'Jogu empata.' },
+      { k: 'Ekipa', e: 'Team', ex: 'Nha ekipa e bon.' },
+      { k: 'Hobis', e: 'Hobby', ex: 'Ki ki e bu hobis?' },
+      { k: 'Lêtura', e: 'Reading', ex: 'N gosta di lêtura.' },
+      { k: 'Muzika', e: 'Music', ex: 'N ta skuta muzika.' },
+      { k: 'Pintadura', e: 'Painting', ex: 'N ta fazi pintadura.' },
+      { k: 'Fotografia', e: 'Photography', ex: 'N gosta di fotografia.' },
+      { k: 'Kulinária', e: 'Cooking (as hobby)', ex: 'N gosta di kulinária.' },
+      { k: 'Jardinajim', e: 'Gardening', ex: 'N ta trabadja na jardim.' },
+      { k: 'Dansa', e: 'Dancing', ex: 'N gosta di dansa funaná.' },
+      { k: 'Kanta', e: 'Singing', ex: 'N gosta di kanta.' },
+      { k: 'Viajá', e: 'Travelling', ex: 'N ama viajá.' },
+      { k: 'Skuta muzika', e: 'Listening to music', ex: 'N ta skuta morna.' },
+      { k: 'Jogu di tabuleru', e: 'Board game', ex: 'N joga jogu di tabuleru.' },
+      { k: 'Kartus', e: 'Cards (playing cards)', ex: 'N joga kartus ku família.' },
+      { k: 'Diskansa', e: 'To rest / relax', ex: 'N ta diskansa na fim di simana.' },
+      { k: 'Passatempu', e: 'Pastime', ex: 'Ki ki e bu passatempu?' },
+    ]
+  },
+  {
+    id: 'technology', title: 'Technology & Media', titleKriolu: 'Teknolojia & Media', icon: '📱', color: '#6C757D',
+    vocab: [
+      { k: 'Telefoni', e: 'Phone', ex: 'Nha telefoni e nobu.' },
+      { k: 'Komputador', e: 'Computer', ex: 'N ta trabadja na komputador.' },
+      { k: 'Internet', e: 'Internet', ex: 'N ta uza internet.' },
+      { k: 'Rede sosial', e: 'Social media', ex: 'N ta uza rede sosial.' },
+      { k: 'Mensagem', e: 'Message', ex: 'N manda mensagem.' },
+      { k: 'Txamada', e: 'Phone call', ex: 'N ten un txamada.' },
+      { k: 'Bateria', e: 'Battery', ex: 'Bateria ta kaba.' },
+      { k: 'Karregador', e: 'Charger', ex: 'N preçiza karregador.' },
+      { k: 'Wi-Fi', e: 'WiFi', ex: 'Ki ki e password di Wi-Fi?' },
+      { k: 'Aplikason', e: 'App / Application', ex: 'Aplikason di Kriolu.' },
+      { k: 'Fotografia', e: 'Photo', ex: 'N ta tira fotografia.' },
+      { k: 'Video', e: 'Video', ex: 'N ta odja video.' },
+      { k: 'Muzika online', e: 'Streaming music', ex: 'N ta skuta muzika online.' },
+      { k: 'Korreo eletróniku', e: 'Email', ex: 'Manda un korreo eletróniku.' },
+      { k: 'Palavra-pase', e: 'Password', ex: 'Ka skese nha palavra-pase.' },
+      { k: 'Deskarrega', e: 'To download', ex: 'N ta deskarrega aplikason.' },
+      { k: 'Sobe', e: 'To upload', ex: 'N ta sobe fotografia.' },
+      { k: 'Imprime', e: 'To print', ex: 'Imprime dokumentu.' },
+      { k: 'Grava', e: 'To record', ex: 'N ta grava muzika.' },
+      { k: 'Tela', e: 'Screen', ex: 'Tela di telefoni.' },
+      { k: 'Notísia', e: 'News', ex: 'N ta lê notísia.' },
+      { k: 'Televison', e: 'Television / TV', ex: 'N ta odja televison.' },
+      { k: 'Rádiu', e: 'Radio', ex: 'N ta skuta rádiu.' },
+      { k: 'Jornal', e: 'Newspaper', ex: 'N ta lê jornal.' },
+      { k: 'Sitiu web', e: 'Website', ex: 'Sitiu web di Kabu Verdi.' },
+    ]
+  },
+  {
+    id: 'religion', title: 'Religion & Celebrations', titleKriolu: 'Relijion & Festas', icon: '⛪', color: '#9B2226',
+    vocab: [
+      { k: 'Deus', e: 'God', ex: 'Grasa a Deus!' },
+      { k: 'Misa', e: 'Mass / Church service', ex: 'N ta bai misa na Dumingu.' },
+      { k: 'Igreja', e: 'Church', ex: 'Igreja di Santiago.' },
+      { k: 'Orason', e: 'Prayer', ex: 'N ta fazi orason.' },
+      { k: 'Fe', e: 'Faith', ex: 'N ten fe.' },
+      { k: 'Natal', e: 'Christmas', ex: 'Natal e festa di família.' },
+      { k: 'Paskua', e: 'Easter', ex: 'Paskua e festa di kristaun.' },
+      { k: 'Aniversáriu', e: 'Birthday', ex: 'Feliz aniversáriu!' },
+      { k: 'Feliz aniversáriu!', e: 'Happy birthday!', ex: 'Feliz aniversáriu, ami!' },
+      { k: 'Kasamentu', e: 'Wedding / Marriage', ex: 'Kasamentu e festa grandi.' },
+      { k: 'Batizadu', e: 'Baptism / Christening', ex: 'Batizadu di pikinoti.' },
+      { k: 'Enterru', e: 'Funeral', ex: 'Enterru e dia tristi.' },
+      { k: 'Festa', e: 'Party / Celebration', ex: 'Festa di aniversáriu.' },
+      { k: 'Karnaval', e: 'Carnival', ex: 'Karnaval di Mindelo e famazu.' },
+      { k: 'Padróadu', e: 'Patron saint festival', ex: 'Padróadu di Santiago.' },
+      { k: 'Foguera', e: 'Bonfire', ex: 'Foguera na festa di São João.' },
+      { k: 'Brindis', e: 'Toast (at celebration)', ex: 'Mos fazi un brindis!' },
+      { k: 'Parabéns', e: 'Congratulations', ex: 'Parabéns pa bu!' },
+      { k: 'Felisidades', e: 'Best wishes / Happiness', ex: 'Felisidades pa bu família.' },
+      { k: 'Bon anu nobu', e: 'Happy New Year', ex: 'Bon anu nobu pa todus!' },
+      { k: 'Bênção', e: 'Blessing', ex: 'Deus da-bu bênção.' },
+      { k: 'Santo/a', e: 'Saint', ex: 'Santo António e padróadu.' },
+      { k: 'Promessa', e: 'Religious vow / Promise', ex: 'N fazi promessa a Deus.' },
+      { k: 'Rezá', e: 'To pray', ex: 'N ta rezá tud noti.' },
+    ]
+  },
+  {
+    id: 'animals', title: 'Animals', titleKriolu: 'Animais', icon: '🐾', color: '#8B5E3C',
+    vocab: [
+      { k: 'Animál', e: 'Animal', ex: 'Animál di Kabu Verdi.' },
+      { k: 'Katu', e: 'Cat', ex: 'Nha katu ta durmi.' },
+      { k: 'Kachorru', e: 'Dog', ex: 'Kachorru ta ladra.' },
+      { k: 'Galinha', e: 'Hen / Chicken', ex: 'Galinha ta kanta.' },
+      { k: 'Galu', e: 'Rooster', ex: 'Galu ta kanta na mañan.' },
+      { k: 'Porku', e: 'Pig', ex: 'Porku na kintal.' },
+      { k: 'Kabra', e: 'Goat', ex: 'Kabra di Santiago.' },
+      { k: 'Boi', e: 'Ox / Cattle', ex: 'Boi ta trabadja na roça.' },
+      { k: 'Burru', e: 'Donkey', ex: 'Burru ta karga pes.' },
+      { k: 'Kavalu', e: 'Horse', ex: 'Kavalu ta kuri.' },
+      { k: 'Patu', e: 'Duck', ex: 'Patu na agu.' },
+      { k: 'Pombu', e: 'Pigeon / Dove', ex: 'Pombu branku.' },
+      { k: 'Pasaru', e: 'Bird', ex: 'Pasaru ta kanta.' },
+      { k: 'Pexe', e: 'Fish (animal)', ex: 'Pexe na mar.' },
+      { k: 'Baleia', e: 'Whale', ex: 'Baleia na mar di Kabu Verdi.' },
+      { k: 'Golfinho', e: 'Dolphin', ex: 'Golfinho ta binka.' },
+      { k: 'Tartaruga', e: 'Turtle / Tortoise', ex: 'Tartaruga ta pôr ovu na praia.' },
+      { k: 'Pulgu', e: 'Flea', ex: 'Katu ten pulgu.' },
+      { k: 'Mosca', e: 'Fly (insect)', ex: 'Mosca na kumida.' },
+      { k: 'Moskitu', e: 'Mosquito', ex: 'Moskitu ta pika.' },
+      { k: 'Formiga', e: 'Ant', ex: 'Formiga ta trabadja.' },
+      { k: 'Kobrá', e: 'Snake', ex: 'Kobrá na roça.' },
+      { k: 'Lagarto', e: 'Lizard', ex: 'Lagarto na parede.' },
+      { k: 'Morcegu', e: 'Bat', ex: 'Morcegu na noti.' },
+      { k: 'Atum', e: 'Tuna', ex: 'Atum di Kabu Verdi e bon.' },
+      { k: 'Polvu', e: 'Octopus', ex: 'Polvu na mar.' },
+      { k: 'Kamarão', e: 'Shrimp', ex: 'Kamarão grelhadu.' },
+      { k: 'Garsa', e: 'Heron / Egret', ex: 'Garsa branku na praia.' },
+    ]
+  },
+  {
+    id: 'clothing', title: 'Clothing & Appearance', titleKriolu: 'Ropa & Aparénsia', icon: '👗', color: '#D62828',
+    vocab: [
+      { k: 'Ropa', e: 'Clothes / Clothing', ex: 'Ropa bunita.' },
+      { k: 'Kamisola', e: 'Shirt / T-shirt', ex: 'Kamisola azul.' },
+      { k: 'Blusa', e: 'Blouse', ex: 'Blusa di seda.' },
+      { k: 'Kalsa', e: 'Trousers / Pants', ex: 'Kalsa pretu.' },
+      { k: 'Saia', e: 'Skirt', ex: 'Saia di kolor.' },
+      { k: 'Vestidu', e: 'Dress', ex: 'Vestidu di festa.' },
+      { k: 'Jaketa', e: 'Jacket', ex: 'Jaketa di kouru.' },
+      { k: 'Kasaku', e: 'Coat', ex: 'Kasaku pa friu.' },
+      { k: 'Sapatu', e: 'Shoe', ex: 'Sapatu nobu.' },
+      { k: 'Botina', e: 'Boot', ex: 'Botina di trabadju.' },
+      { k: 'Sandália', e: 'Sandal', ex: 'Sandália di praia.' },
+      { k: 'Meia', e: 'Sock', ex: 'Par di meia.' },
+      { k: 'Roupa interior', e: 'Underwear', ex: 'Roupa interior.' },
+      { k: 'Txapéu', e: 'Hat', ex: 'Txapéu di sol.' },
+      { k: 'Óculo', e: 'Glasses / Sunglasses', ex: 'Óculo di sol.' },
+      { k: 'Bolsa', e: 'Bag / Handbag', ex: 'Bolsa di nylon.' },
+      { k: 'Sintu', e: 'Belt', ex: 'Sintu di kouru.' },
+      { k: 'Gravata', e: 'Tie', ex: 'Gravata pa trabadju.' },
+      { k: 'Aliansa', e: 'Wedding ring', ex: 'Aliansa di kasamentu.' },
+      { k: 'Kolar', e: 'Necklace', ex: 'Kolar di ouru.' },
+      { k: 'Brinku', e: 'Earring', ex: 'Brinku di prata.' },
+      { k: 'Pintadu', e: 'Colourful / Painted', ex: 'Ropa pintadu.' },
+      { k: 'Bunitu/a', e: 'Beautiful / Handsome', ex: 'Bu sta bunitu oji.' },
+      { k: 'Eleganti', e: 'Elegant / Smart', ex: 'Bu sta eleganti.' },
+      { k: 'Kabellu', e: 'Hair', ex: 'Kabellu pretu.' },
+      { k: 'Barba', e: 'Beard', ex: 'El ten barba.' },
+      { k: 'Altu/a', e: 'Tall', ex: 'El e altu.' },
+      { k: 'Baxu/a', e: 'Short (height)', ex: 'El e baxu.' },
+      { k: 'Gordu/a', e: 'Fat / Overweight', ex: 'El ta fika gordu.' },
+      { k: 'Magru/a', e: 'Thin / Slim', ex: 'El e magru.' },
+    ]
+  },
+  {
+    id: 'grammar', title: 'Grammar & Sentence Patterns', titleKriolu: 'Gramátika & Frasas', icon: '📝', color: '#5A189A',
+    vocab: [
+      { k: 'N', e: 'I (subject pronoun)', ex: 'N ta bai merkadu.' },
+      { k: 'Bu', e: 'You (singular)', ex: 'Bu ta fala Kriolu?' },
+      { k: 'El', e: 'He / She / It', ex: 'El e bon.' },
+      { k: 'Nos', e: 'We', ex: 'Nos ta kume djuntu.' },
+      { k: 'Nhos', e: 'You (plural)', ex: 'Nhos ta bai undi?' },
+      { k: 'Es', e: 'They', ex: 'Es ta trabadja.' },
+      { k: 'Ta', e: 'Present tense marker', ex: 'N ta kume. (I eat / I am eating)' },
+      { k: 'Dja', e: 'Past tense marker / Already', ex: 'N dja kume. (I already ate)' },
+      { k: 'Mos', e: "Let's (suggestion)", ex: 'Mos bai! (Let\'s go!)' },
+      { k: 'Ka', e: 'Negation marker (not)', ex: 'N ka ta bai. (I am not going)' },
+      { k: 'Ki', e: 'That / Which / Who (relative)', ex: 'Kel ki bu fla.' },
+      { k: 'Ku', e: 'With / And', ex: 'N bai ku ami.' },
+      { k: 'Di', e: 'Of / From', ex: 'N e di Kabu Verdi.' },
+      { k: 'Na', e: 'In / At / On', ex: 'N mora na Praia.' },
+      { k: 'Pa', e: 'For / To', ex: 'Kel e pa bu.' },
+      { k: 'Mas', e: 'But', ex: 'N kre, mas n ka podi.' },
+      { k: 'O', e: 'Or', ex: 'Kafé o txá?' },
+      { k: 'Si', e: 'If', ex: 'Si bu kre, bai.' },
+      { k: 'Pur ke', e: 'Because / Why', ex: 'Pur ke bu ta kanta?' },
+      { k: 'Kantu', e: 'How much / How many', ex: 'Kantu ki e?' },
+      { k: 'Kuma', e: 'How / Like', ex: 'Kuma ki bu fazi kel?' },
+      { k: 'Ki ora', e: 'What time', ex: 'Ki ora ki e?' },
+      { k: 'Kel', e: 'That (demonstrative)', ex: 'Kel e bon.' },
+      { k: 'Es', e: 'This / These (demonstrative)', ex: 'Es e nha livru.' },
+      { k: 'Muntu', e: 'A lot / Very much', ex: 'Obrigadu muntu.' },
+      { k: 'Txeu', e: 'A lot / Very (emphatic)', ex: 'N gosta txeu.' },
+      { k: 'Poku', e: 'A little / Few', ex: 'Un pokutim.' },
+      { k: 'Tudu', e: 'All / Everything', ex: 'Tudu sta ben.' },
+      { k: 'Nada', e: 'Nothing', ex: 'N ka ten nada.' },
+      { k: 'Alguem', e: 'Someone / Anyone', ex: 'Alguem ta txoma bu.' },
+    ]
+  },
+  {
+    id: 'proverbs', title: 'Proverbs & Idioms', titleKriolu: 'Proverbus & Idiomus', icon: '🌟', color: '#E9C46A',
+    vocab: [
+      { k: 'Kuda ben', e: 'Take care (common farewell)', ex: 'Tchau! Kuda ben.' },
+      { k: 'Deus ta djuda', e: 'God will help / It will work out', ex: 'Ka preokupa, Deus ta djuda.' },
+      { k: 'Kabesa fria', e: 'Keep a cool head / Stay calm', ex: 'Ten kabesa fria na problema.' },
+      { k: 'Pé na tera', e: 'Stay grounded / Be realistic', ex: 'Ten pe na tera, ami.' },
+      { k: 'Boka di mel', e: 'Sweet talker (lit: mouth of honey)', ex: 'El ten boka di mel.' },
+      { k: 'Dja e dja', e: 'What is done is done', ex: 'Ka txora. Dja e dja.' },
+      { k: 'Kuzas di vida', e: "That's life / Life's things", ex: 'Ka preokupa. Kuzas di vida.' },
+      { k: 'Pamodi', e: 'Because / That is why', ex: 'Pamodi ki n fla kel.' },
+      { k: 'Txeu bon!', e: 'Excellent! / Great!', ex: 'Txeu bon, parabéns!' },
+      { k: 'Kuma ta ser', e: 'How are things / How is it going', ex: 'Kuma ta ser, ami?' },
+      { k: 'Ta korer ben', e: 'It is going well', ex: 'Ta korer ben, obrigadu.' },
+      { k: 'Nha korzason', e: 'My heart (term of endearment)', ex: 'Nha korzason, kuma bu sta?' },
+      { k: 'Ami di korzason', e: 'My dear friend (heartfelt)', ex: 'Ami di korzason, tchau!' },
+      { k: 'Kabra ki paxi tera', e: 'Stubborn (lit: goat that eats dirt)', ex: 'El e kabra ki paxi tera!' },
+      { k: 'Fazi txeu bariñu', e: 'To make a lot of noise / fuss', ex: 'Ka fazi txeu bariñu.' },
+      { k: 'Bai ku Deus', e: 'Go with God / Goodbye (blessing)', ex: 'Bai ku Deus, ami.' },
+      { k: 'Vida e kurta', e: 'Life is short', ex: 'Vida e kurta, vivi bem.' },
+      { k: 'Devagar se vai longe', e: 'Slowly but surely (Portuguese saying used)', ex: 'Devagar se vai longe.' },
+      { k: 'Na nha tempu', e: 'In my time / Back in my day', ex: 'Na nha tempu, era diferenti.' },
+      { k: 'Sem konta', e: 'Countless / Without counting', ex: 'Es ten problem sem konta.' },
+      { k: 'Kaza di Deus', e: 'God\'s house / Church', ex: 'Bai na kaza di Deus.' },
+      { k: 'Sima agua na pedra', e: 'Like water on stone (persistence)', ex: 'Trabadja sima agua na pedra.' },
+    ]
+  },
+  {
+    id: 'questions', title: 'Questions & Conversation', titleKriolu: 'Perguntas & Konversa', icon: '❓', color: '#F77F00',
+    vocab: [
+      { k: 'Ki?', e: 'What?', ex: 'Ki ki bu kre?' },
+      { k: 'Undi?', e: 'Where?', ex: 'Undi ki bu mora?' },
+      { k: 'Kandu?', e: 'When?', ex: 'Kandu ki bu ta bai?' },
+      { k: 'Kuma?', e: 'How?', ex: 'Kuma ki bu fazi kel?' },
+      { k: 'Pur ke?', e: 'Why?', ex: 'Pur ke ki bu ta txora?' },
+      { k: 'Ken?', e: 'Who?', ex: 'Ken ki e kel?' },
+      { k: 'Kantu?', e: 'How much / many?', ex: 'Kantu ki kusta?' },
+      { k: 'Ki kolor?', e: 'What colour?', ex: 'Ki kolor ki bu gosta?' },
+      { k: 'Ki ora?', e: 'What time?', ex: 'Ki ora ki e oji?' },
+      { k: 'Bu podi djuda-m?', e: 'Can you help me?', ex: 'Bu podi djuda-m, pur favor?' },
+      { k: 'Bu podi repeti?', e: 'Can you repeat?', ex: 'Bu podi repeti divasim?' },
+      { k: 'Ki ki kel ta siñifika?', e: 'What does that mean?', ex: 'Ki ki kel ta siñifika na Kriolu?' },
+      { k: 'Kuma ki bu txoma kel?', e: 'What do you call that?', ex: 'Kuma ki bu txoma kel na Kriolu?' },
+      { k: 'Bu podi skrebe kel?', e: 'Can you write that down?', ex: 'Bu podi skrebe kel pa mi?' },
+      { k: 'E koretu?', e: 'Is that correct?', ex: 'N fla ben. E koretu?' },
+      { k: 'N ta fazi um erru?', e: 'Am I making a mistake?', ex: 'N ta fazi um erru?' },
+      { k: 'Kuze ki bu ta fazi?', e: 'What are you doing?', ex: 'Kuze ki bu ta fazi agor?' },
+      { k: 'Undi ki bu ta bai?', e: 'Where are you going?', ex: 'Undi ki bu ta bai oji?' },
+      { k: 'Kandu ki bu ta volta?', e: 'When will you return?', ex: 'Kandu ki bu ta volta?' },
+      { k: 'Bu sta ben?', e: 'Are you okay?', ex: 'Bu sta ben, ami?' },
+      { k: 'Bu ten fomi?', e: 'Are you hungry?', ex: 'Bu ten fomi? Mos kume.' },
+      { k: 'Bu ten sedi?', e: 'Are you thirsty?', ex: 'Bu ten sedi? N ta trazi agu.' },
+      { k: 'Bu kre más?', e: 'Do you want more?', ex: 'Bu kre más catchupa?' },
+      { k: 'Kel e di ken?', e: 'Whose is that?', ex: 'Kel karru e di ken?' },
+      { k: 'Kuze ki e novedadi?', e: "What's new? / What's up?", ex: 'Kuze ki e novedadi, ami?' },
+    ]
+  },
+  {
+    id: 'medical', title: 'Medical & Emergency', titleKriolu: 'Médiku & Emerjensia', icon: '🏥', color: '#AE2012',
+    vocab: [
+      { k: 'Emerjensia', e: 'Emergency', ex: 'E un emerjensia!' },
+      { k: 'Txoma ambulánsia', e: 'Call an ambulance', ex: 'Txoma ambulánsia, pur favor!' },
+      { k: 'Txoma pulisia', e: 'Call the police', ex: 'Txoma pulisia agora!' },
+      { k: 'Txoma bomberu', e: 'Call the fire brigade', ex: 'Txoma bomberu!' },
+      { k: 'N preçiza ajuda', e: 'I need help', ex: 'N preçiza ajuda, pur favor!' },
+      { k: 'Sintomas', e: 'Symptoms', ex: 'Ki sintomas ki bu ten?' },
+      { k: 'Dolor di kabesa', e: 'Headache', ex: 'N ten dolor di kabesa.' },
+      { k: 'Dolor di barriga', e: 'Stomach ache', ex: 'N ten dolor di barriga.' },
+      { k: 'Dolor di garganta', e: 'Sore throat', ex: 'N ten dolor di garganta.' },
+      { k: 'Tosse', e: 'Cough', ex: 'N ta tosse muntu.' },
+      { k: 'Konstipason', e: 'Cold / Flu', ex: 'N ten konstipason.' },
+      { k: 'Febre', e: 'Fever', ex: 'N ten febre altu.' },
+      { k: 'Presón altu', e: 'High blood pressure', ex: 'N ten presón altu.' },
+      { k: 'Diabeti', e: 'Diabetes', ex: 'El ten diabeti.' },
+      { k: 'Asma', e: 'Asthma', ex: 'N ten asma.' },
+      { k: 'Alérjia', e: 'Allergy', ex: 'N ten alérjia a penicilina.' },
+      { k: 'Inferjon', e: 'Infection', ex: 'N ten inferjon.' },
+      { k: 'Ferida', e: 'Wound / Injury', ex: 'N ten ferida na brasu.' },
+      { k: 'Ossu kebradu', e: 'Broken bone', ex: 'N kreba nha ossu.' },
+      { k: 'Sangramentu', e: 'Bleeding', ex: 'N ta sangra.' },
+      { k: 'Desmaiu', e: 'Fainting', ex: 'El ta desmaiar.' },
+      { k: 'Prisão di ventu', e: 'Constipation', ex: 'N ten prisão di ventu.' },
+      { k: 'Diarea', e: 'Diarrhea', ex: 'N ten diarea.' },
+      { k: 'Alerji a kumida', e: 'Food allergy', ex: 'N ten alerji a amendoin.' },
+      { k: 'Grávida', e: 'Pregnant', ex: 'El e grávida di seis mes.' },
+      { k: 'Operason', e: 'Operation / Surgery', ex: 'N fazi operason.' },
+      { k: 'Raiu-X', e: 'X-ray', ex: 'Médiku manda fazi raiu-X.' },
+      { k: 'Analizi', e: 'Blood test / Analysis', ex: 'N fazi analizi di sangui.' },
+      { k: 'Reseta médika', e: 'Medical prescription', ex: 'Médiku da-m reseta.' },
+      { k: 'Komprimidu', e: 'Pill / Tablet', ex: 'Toma un komprimidu.' },
+      { k: 'Xaropi', e: 'Syrup (medicine)', ex: 'Xaropi pa tosse.' },
+      { k: 'Injeção', e: 'Injection', ex: 'Médiku da-m injeção.' },
+      { k: 'Klinika', e: 'Clinic', ex: 'N ta bai klinika.' },
+    ]
+  },
+  {
+    id: 'legal', title: 'Legal & Government', titleKriolu: 'Legal & Goverñu', icon: '⚖️', color: '#023E8A',
+    vocab: [
+      { k: 'Goverñu', e: 'Government', ex: 'Goverñu di Kabu Verdi.' },
+      { k: 'Lei', e: 'Law', ex: 'Lei di Kabu Verdi.' },
+      { k: 'Dirito', e: 'Right / Law (legal)', ex: 'Tudu ten dirito.' },
+      { k: 'Justisa', e: 'Justice', ex: 'Justisa pa tudu.' },
+      { k: 'Tribunal', e: 'Court / Tribunal', ex: 'N ta bai tribunal.' },
+      { k: 'Juíz', e: 'Judge', ex: 'Juíz ta desidi.' },
+      { k: 'Advogadu/a', e: 'Lawyer / Attorney', ex: 'N preçiza un advogadu.' },
+      { k: 'Kontratu', e: 'Contract', ex: 'Asina kontratu.' },
+      { k: 'Dokumentu', e: 'Document', ex: 'N preçiza dokumentu.' },
+      { k: 'Bilheti di identidade', e: 'Identity card', ex: 'Mostra bu bilheti di identidade.' },
+      { k: 'Pasaporti', e: 'Passport', ex: 'Bu ten bu pasaporti?' },
+      { k: 'Visto', e: 'Visa', ex: 'N preçiza visto.' },
+      { k: 'Residentsa', e: 'Residence permit', ex: 'N ten residentsa.' },
+      { k: 'Sidadania', e: 'Citizenship', ex: 'N ten sidadania kabuverdiana.' },
+      { k: 'Votasão', e: 'Vote / Election', ex: 'Votasão e direitu di tudu.' },
+      { k: 'Prezidenti', e: 'President', ex: 'Prezidenti di Kabu Verdi.' },
+      { k: 'Ministru', e: 'Minister', ex: 'Ministru di saúdi.' },
+      { k: 'Parlamenti', e: 'Parliament', ex: 'Parlamenti di Kabu Verdi.' },
+      { k: 'Munisipalidade', e: 'Municipality', ex: 'Munisipalidade di Praia.' },
+      { k: 'Embaxada', e: 'Embassy', ex: 'N ta bai embaxada.' },
+      { k: 'Kosoladu', e: 'Consulate', ex: 'Kosoladu di Portugal.' },
+      { k: 'Impostu', e: 'Tax', ex: 'Paga impostu.' },
+      { k: 'Multa', e: 'Fine / Penalty', ex: 'N tevi un multa.' },
+      { k: 'Polis', e: 'Police force', ex: 'Polis di Kabu Verdi.' },
+      { k: 'Prizão', e: 'Prison / Jail', ex: 'El foi pa prizão.' },
+      { k: 'Reklamason', e: 'Complaint', ex: 'N ta fazi un reklamason.' },
+      { k: 'Direitu humanu', e: 'Human rights', ex: 'Direitu humanu e fundamental.' },
+      { k: 'Korupson', e: 'Corruption', ex: 'Korupson e problem grandi.' },
+      { k: 'Eleison', e: 'Election', ex: 'Eleison ta ben.' },
+      { k: 'Partido politiku', e: 'Political party', ex: 'Partido politiku di Kabu Verdi.' },
+    ]
+  },
+  {
+    id: 'agriculture', title: 'Agriculture & Fishing', titleKriolu: 'Agrikultura & Peskaria', icon: '🌾', color: '#606C38',
+    vocab: [
+      { k: 'Roça', e: 'Farm / Plantation', ex: 'N trabadja na roça.' },
+      { k: 'Tera', e: 'Land / Soil', ex: 'Tera fértil.' },
+      { k: 'Simentu', e: 'Seed', ex: 'Planta simentu.' },
+      { k: 'Planta', e: 'To plant / Plant', ex: 'N ta planta milhu.' },
+      { k: 'Kolheita', e: 'Harvest', ex: 'Kolheita di milhu.' },
+      { k: 'Rega', e: 'Irrigation / Watering', ex: 'Rega di tera.' },
+      { k: 'Enxada', e: 'Hoe', ex: 'Trabadja ku enxada.' },
+      { k: 'Machadu', e: 'Axe', ex: 'Korta pau ku machadu.' },
+      { k: 'Milhu', e: 'Corn / Maize', ex: 'Milhu e kultura prinsipal.' },
+      { k: 'Mandioka', e: 'Cassava / Manioc', ex: 'Mandioka ta krexi ben.' },
+      { k: 'Batata-dosi', e: 'Sweet potato', ex: 'Batata-dosi kuzinhadu.' },
+      { k: 'Fejon', e: 'Beans', ex: 'Fejon pretu e saborozu.' },
+      { k: 'Kana-di-azukar', e: 'Sugar cane', ex: 'Kana-di-azukar pa grogue.' },
+      { k: 'Kafé', e: 'Coffee (plant/crop)', ex: 'Kafé di Fogo e famazu.' },
+      { k: 'Banana', e: 'Banana (crop)', ex: 'Banana di Santiago.' },
+      { k: 'Manga', e: 'Mango', ex: 'Manga dosi.' },
+      { k: 'Goiaba', e: 'Guava', ex: 'Goiaba freska.' },
+      { k: 'Palmeira', e: 'Palm tree', ex: 'Palmeira na praia.' },
+      { k: 'Sekada', e: 'Drought', ex: 'Sekada ta mata kultura.' },
+      { k: 'Txuva', e: 'Rain (for crops)', ex: 'Txuva ta djuda kultura.' },
+      { k: 'Piskador', e: 'Fisherman', ex: 'Piskador ta sai di mañan.' },
+      { k: 'Rede di piska', e: 'Fishing net', ex: 'Lansa rede di piska.' },
+      { k: 'Anzol', e: 'Fish hook', ex: 'Piska ku anzol.' },
+      { k: 'Barku di piska', e: 'Fishing boat', ex: 'Barku di piska ta sai.' },
+      { k: 'Atum', e: 'Tuna (catch)', ex: 'Atum fresku di oji.' },
+      { k: 'Garoupu', e: 'Grouper fish', ex: 'Garoupu e pes bon.' },
+      { k: 'Cherne', e: 'Stone bass (fish)', ex: 'Cherne grelhadu.' },
+      { k: 'Merda di praia', e: 'Seaweed', ex: 'Merda di praia na kosta.' },
+      { k: 'Sal marinu', e: 'Sea salt', ex: 'Sal marinu di Sal.' },
+      { k: 'Kotxeiru', e: 'Animal pen / Enclosure', ex: 'Kotxeiru di kabra.' },
+    ]
+  },
+  {
+    id: 'dialect_santiago', title: 'Santiago Dialect (Badiu)', titleKriolu: 'Kriolu Badiu', icon: '🗺️', color: '#774936',
+    vocab: [
+      { k: 'Nha manu', e: 'My brother / My man (address)', ex: 'Oi, nha manu, kuma bu sta?' },
+      { k: 'Moça', e: 'Girl / Young woman', ex: 'Kel moça e bunita.' },
+      { k: 'Rapaz', e: 'Boy / Young man', ex: 'Kel rapaz e trabalhador.' },
+      { k: 'Dodi', e: 'Darling / Sweetheart', ex: 'Oi, nha dodi!' },
+      { k: 'Txora', e: 'To cry', ex: 'Ka txora, ta ben.' },
+      { k: 'Binka', e: 'To play / To jump around', ex: 'Pikinoti ta binka.' },
+      { k: 'Konversa', e: 'To chat / Conversation', ex: 'Mos ten un konversa.' },
+      { k: 'Riba', e: 'Above / Up / Uphill', ex: 'Kaza e riba di munti.' },
+      { k: 'Baxu', e: 'Below / Down / Downhill', ex: 'Bai pa baxu.' },
+      { k: 'Fundu', e: 'Deep / Bottom / Back', ex: 'Na fundu di kaza.' },
+      { k: 'Ladu', e: 'Side', ex: 'Na ladu di kaza.' },
+      { k: 'Pamodi', e: 'Because (Badiu usage)', ex: 'N ta bai pamodi N preçiza.' },
+      { k: 'Ora li', e: 'Right now / At this moment', ex: 'Ben ora li!' },
+      { k: 'Dja dja', e: 'Already done / Finished', ex: 'Dja dja, ka preokupa.' },
+      { k: 'Kin kin', e: 'Little by little', ex: 'Aprende kin kin.' },
+      { k: 'Fika li', e: 'Stay here / Wait here', ex: 'Fika li, n ta volta.' },
+      { k: 'Bai li', e: 'Go away / Leave', ex: 'Bai li, ka fika.' },
+      { k: 'Txiga', e: 'To arrive', ex: 'Kandu ki bu ta txiga?' },
+      { k: 'Traz', e: 'To bring', ex: 'Traz agu pa mi.' },
+      { k: 'Leba', e: 'To take / To carry', ex: 'Leba es ku bu.' },
+      { k: 'Bota', e: 'To put / To throw', ex: 'Bota na mexa.' },
+      { k: 'Kaba', e: 'To finish / Done', ex: 'N dja kaba.' },
+      { k: 'Sata', e: 'To be located / To happen', ex: 'Merkadu ta sata na Praia.' },
+      { k: 'Roça di Santiago', e: 'Agricultural land of Santiago', ex: 'Roça di Santiago e fértil.' },
+      { k: 'Tabanka', e: 'Traditional festivity of Santiago', ex: 'Tabanka ta kumesa na Maiu.' },
+      { k: 'Sodadi', e: 'Longing (Santiago pronunciation)', ex: 'N ten sodadi di terra.' },
+      { k: 'Ki nobu?', e: "What's new? (Badiu greeting)", ex: 'Ki nobu, ami?' },
+      { k: 'Nada di nobu', e: 'Nothing new', ex: 'Nada di nobu, tudu sta ben.' },
+      { k: 'Firmi', e: 'Steady / Strong / Solid', ex: 'Fika firmi na vida.' },
+      { k: 'Kuzas di Deus', e: "God's will / It is what it is", ex: 'Kuzas di Deus, aceita.' },
+    ]
+  },
+  {
+    id: 'dialect_saovicente', title: 'São Vicente Dialect', titleKriolu: 'Kriolu di Mindelo', icon: '🎵', color: '#1D3557',
+    vocab: [
+      { k: 'Bô', e: 'You (São Vicente form)', ex: 'Bô ta bai undi?' },
+      { k: 'Nós', e: 'We (São Vicente form)', ex: 'Nós ta bai djuntu.' },
+      { k: 'Ês', e: 'They (São Vicente form)', ex: 'Ês ta trabadja.' },
+      { k: 'Tá', e: 'Present marker (São Vicente)', ex: 'Nós tá kanta.' },
+      { k: 'Djá', e: 'Already (São Vicente form)', ex: 'Djá kaba.' },
+      { k: 'Bué', e: 'A lot / Very much (Mindelo slang)', ex: 'N gosta bué di Mindelo.' },
+      { k: 'Fixe', e: 'Cool / Great (Mindelo slang)', ex: 'Kel e fixe!' },
+      { k: 'Maneiro', e: 'Nice / Easy-going', ex: 'El e maneiro.' },
+      { k: 'Mindelo', e: 'Mindelo city', ex: 'Mindelo e sidadi di kultura.' },
+      { k: 'Porto Grandi', e: 'The big port of Mindelo', ex: 'Barku na Porto Grandi.' },
+      { k: 'Morna', e: 'Morna music (São Vicente specialty)', ex: 'Morna di Mindelo e bela.' },
+      { k: 'Kola Sanjon', e: 'Traditional São Vicente dance', ex: 'Kola Sanjon na festa di June.' },
+      { k: 'Karnaval di Mindelo', e: 'Famous Mindelo Carnival', ex: 'Karnaval di Mindelo e melhor!' },
+      { k: 'Cesária', e: 'Cesária Évora (famous singer)', ex: 'Cesária e voz di Kabu Verdi.' },
+      { k: 'Batuku', e: 'To play music together', ex: 'Mos batuku djuntu.' },
+      { k: 'Tchuba', e: 'Rain (São Vicente word)', ex: 'Tá tchover.' },
+      { k: 'Cretcheu', e: 'My love / Darling (romantic)', ex: 'Nha cretcheu, saudadi di bô.' },
+      { k: 'Morabeza', e: 'Warmth / Cape Verdean hospitality', ex: 'Mindelo ten muita morabeza.' },
+      { k: 'Sodade', e: 'Longing / Saudade (São Vicente)', ex: 'Sodade di terra longi.' },
+      { k: 'Kizomba', e: 'Kizomba dance (popular in CV)', ex: 'N ta dansa kizomba.' },
+      { k: 'Cabo love', e: 'Cape Verdean pride expression', ex: 'Cabo love, sempri.' },
+      { k: 'Nôs terra', e: 'Our land / homeland', ex: 'Nôs terra e bunita.' },
+      { k: 'Mar di Mindelo', e: 'The sea of Mindelo', ex: 'Mar di Mindelo e trankilú.' },
+      { k: 'Ribeira Bote', e: 'Famous neighbourhood of Mindelo', ex: 'Ribeira Bote ten historia.' },
+      { k: 'Praça Nova', e: 'The main square of Mindelo', ex: 'Nos ta nkontra na Praça Nova.' },
+      { k: 'Tocar', e: 'To play (instrument)', ex: 'El ta tocar viola.' },
+      { k: 'Viola', e: 'Guitar (Cape Verdean style)', ex: 'Tocar viola di Kriolu.' },
+      { k: 'Rabeca', e: 'Fiddle / Cape Verdean violin', ex: 'Rabeca na morna.' },
+      { k: 'Harmonia', e: 'Accordion / Harmony', ex: 'Toca harmonia na funaná.' },
+      { k: 'Saudade infinita', e: 'Endless longing (poetic)', ex: 'Saudade infinita di mar.' },
+    ]
+  },
+  {
+    id: 'diaspora', title: 'Diaspora & Immigration', titleKriolu: 'Diáspora & Imigrasão', icon: '🌍', color: '#3D405B',
+    vocab: [
+      { k: 'Diáspora', e: 'Diaspora / Cape Verdeans abroad', ex: 'Diáspora kabuverdiana e grandi.' },
+      { k: 'Emigrante', e: 'Emigrant / Immigrant', ex: 'El e emigrante na Rotedam.' },
+      { k: 'Imigrasão', e: 'Immigration', ex: 'Imigrasão e difísil.' },
+      { k: 'Saudadi di tera', e: 'Homesickness', ex: 'N ten saudadi di nha tera.' },
+      { k: 'Volta pa tera', e: 'Return to homeland', ex: 'N kre volta pa nha tera.' },
+      { k: 'Amerika', e: 'America / USA', ex: 'Txeu kabuverdianus mora na Amerika.' },
+      { k: 'Portugal', e: 'Portugal', ex: 'N mora na Portugal.' },
+      { k: 'Rotedam', e: 'Rotterdam (large CV community)', ex: 'Rotedam ten txeu kriolu.' },
+      { k: 'Francia', e: 'France', ex: 'El mora na Francia.' },
+      { k: 'Itália', e: 'Italy', ex: 'N trabadja na Itália.' },
+      { k: 'Boston', e: 'Boston (large CV community in USA)', ex: 'Nha irmã mora na Boston.' },
+      { k: 'Providens', e: 'Providence RI (CV community)', ex: 'Providens ten komunidade kriolu.' },
+      { k: 'Remesa', e: 'Remittance (money sent home)', ex: 'N manda remesa pa família.' },
+      { k: 'Pasaporti kabuverdian', e: 'Cape Verdean passport', ex: 'N ten pasaporti kabuverdian.' },
+      { k: 'Dupla nasionalidade', e: 'Dual nationality', ex: 'N ten dupla nasionalidade.' },
+      { k: 'Komunidade', e: 'Community', ex: 'Komunidade kriolu na estranjeiru.' },
+      { k: 'Integrasão', e: 'Integration', ex: 'Integrasão na país nobu.' },
+      { k: 'Lingua di adosão', e: 'Adopted language', ex: 'Ingles e nha lingua di adosão.' },
+      { k: 'Raizes', e: 'Roots (cultural)', ex: 'N nun ka skese nha raizes.' },
+      { k: 'Identidade', e: 'Identity', ex: 'Nha identidade e kabuverdiana.' },
+      { k: 'Kultura di orijim', e: 'Culture of origin', ex: 'Preserva kultura di orijim.' },
+      { k: 'Sodadi di família', e: 'Missing family', ex: 'N ten sodadi di nha família.' },
+      { k: 'Bilheti di viagem', e: 'Travel ticket', ex: 'N konpra bilheti di viagem.' },
+      { k: 'Volta di ferias', e: 'Holiday return home', ex: 'N ta volta di ferias na Dizembru.' },
+      { k: 'Kabuverdian di korzason', e: 'Cape Verdean at heart', ex: 'N e kabuverdian di korzason.' },
+    ]
+  },
+  {
+    id: 'environment', title: 'Environment & Sustainability', titleKriolu: 'Meiu Ambenti', icon: '🌿', color: '#1B4332',
+    vocab: [
+      { k: 'Meiu ambenti', e: 'Environment', ex: 'Kuida meiu ambenti.' },
+      { k: 'Klimu', e: 'Climate', ex: 'Mudansa di klimu e sériuzu.' },
+      { k: 'Mudansa klimátika', e: 'Climate change', ex: 'Mudansa klimátika ta afeta Kabu Verdi.' },
+      { k: 'Poluison', e: 'Pollution', ex: 'Poluison ta mata mar.' },
+      { k: 'Lixu', e: 'Rubbish / Garbage', ex: 'Ka bota lixu na mar.' },
+      { k: 'Riklajen', e: 'Recycling', ex: 'Riklajen e importanti.' },
+      { k: 'Energia solar', e: 'Solar energy', ex: 'Kabu Verdi ta uza energia solar.' },
+      { k: 'Energia di ventu', e: 'Wind energy', ex: 'Energia di ventu e renovavel.' },
+      { k: 'Sekada', e: 'Drought', ex: 'Sekada e problema grandi.' },
+      { k: 'Desertifikasão', e: 'Desertification', ex: 'Desertifikasão ta avansa.' },
+      { k: 'Reflorestasão', e: 'Reforestation', ex: 'Reflorestasão ta djuda.' },
+      { k: 'Rezerva natural', e: 'Nature reserve', ex: 'Rezerva natural di Kabu Verdi.' },
+      { k: 'Mar protejidu', e: 'Protected sea area', ex: 'Mar protejidu di tartaruga.' },
+      { k: 'Tartaruga marinha', e: 'Sea turtle', ex: 'Tartaruga marinha ta por ovu na praia.' },
+      { k: 'Peskaria sustentavel', e: 'Sustainable fishing', ex: 'Peskaria sustentavel e futuru.' },
+      { k: 'Agua potavel', e: 'Drinking water', ex: 'Agua potavel e diritu.' },
+      { k: 'Dessalinizasão', e: 'Desalination', ex: 'Dessalinizasão di agu di mar.' },
+      { k: 'Biodiversidade', e: 'Biodiversity', ex: 'Biodiversidade di Kabu Verdi.' },
+      { k: 'Ekosistema', e: 'Ecosystem', ex: 'Ekosistema marinu.' },
+      { k: 'Turizmu sustentavel', e: 'Sustainable tourism', ex: 'Turizmu sustentavel ta krexi.' },
+      { k: 'Kaptura di karbon', e: 'Carbon capture', ex: 'Kaptura di karbon na futuru.' },
+      { k: 'Limpeza di praia', e: 'Beach clean-up', ex: 'Mos fazi limpeza di praia.' },
+      { k: 'Protejon di kostas', e: 'Coastal protection', ex: 'Protejon di kostas e urgenti.' },
+      { k: 'Erozão', e: 'Erosion', ex: 'Erozão di tera e problem.' },
+      { k: 'Florestasão', e: 'Afforestation', ex: 'Florestasão ta djuda klimu.' },
+    ]
+  },
+  {
+    id: 'arts_music', title: 'Arts, Music & Literature', titleKriolu: 'Artis, Muzika & Literatura', icon: '🎶', color: '#7B2D8B',
+    vocab: [
+      { k: 'Muzika', e: 'Music', ex: 'Muzika di Kabu Verdi e famoza.' },
+      { k: 'Kansão', e: 'Song', ex: 'Kansão di morna.' },
+      { k: 'Letra', e: 'Lyrics / Letter', ex: 'Letra di kansão.' },
+      { k: 'Melodia', e: 'Melody', ex: 'Melodia bunita.' },
+      { k: 'Ritmu', e: 'Rhythm', ex: 'Ritmu di funaná.' },
+      { k: 'Instrumintu', e: 'Instrument', ex: 'Ki instrumintu ki bu joga?' },
+      { k: 'Viola', e: 'Guitar', ex: 'N ta tocar viola.' },
+      { k: 'Rabeca', e: 'Fiddle / Violin', ex: 'Rabeca na morna.' },
+      { k: 'Harmónika', e: 'Accordion', ex: 'Harmónika di funaná.' },
+      { k: 'Tambor', e: 'Drum', ex: 'Tambor di batuque.' },
+      { k: 'Kantadu', e: 'Singer', ex: 'El e kantadu famazu.' },
+      { k: 'Grupo muzical', e: 'Musical group / Band', ex: 'Grupo muzical di Mindelo.' },
+      { k: 'Konzerto', e: 'Concert', ex: 'Konzerto di morna.' },
+      { k: 'Dansa', e: 'Dance', ex: 'Dansa di funaná.' },
+      { k: 'Koreografia', e: 'Choreography', ex: 'Koreografia di karnaval.' },
+      { k: 'Poesia', e: 'Poetry', ex: 'Poesia di Kriolu.' },
+      { k: 'Poema', e: 'Poem', ex: 'Poema di saudadi.' },
+      { k: 'Iskritor/a', e: 'Writer / Author', ex: 'El e iskritor famazu.' },
+      { k: 'Livru di isorias', e: 'Storybook', ex: 'Livru di isorias di Kabu Verdi.' },
+      { k: 'Tradisão oral', e: 'Oral tradition', ex: 'Tradisão oral di Kriolu.' },
+      { k: 'Pintor/a', e: 'Painter', ex: 'El e pintora talentoza.' },
+      { k: 'Eskultura', e: 'Sculpture', ex: 'Eskultura di Santiago.' },
+      { k: 'Artizanatu', e: 'Handicraft', ex: 'Artizanatu di Kabu Verdi.' },
+      { k: 'Panu di terra', e: 'Traditional woven cloth', ex: 'Panu di terra e arte.' },
+      { k: 'Festival', e: 'Festival', ex: 'Festival di muzika na Mindelo.' },
+      { k: 'Patrimóniu kultural', e: 'Cultural heritage', ex: 'Patrimóniu kultural di Kabu Verdi.' },
+      { k: 'Arquivu', e: 'Archive', ex: 'Arquivu di istória.' },
+      { k: 'Muzeu', e: 'Museum', ex: 'Muzeu di Kabu Verdi.' },
+      { k: 'Galeria di arti', e: 'Art gallery', ex: 'Galeria di arti na Mindelo.' },
+      { k: 'Patrimóniu', e: 'Heritage / Legacy', ex: 'Patrimóniu di nha família.' },
+    ]
+  },
+  {
+    id: 'advanced_verbs', title: 'Advanced Verbs', titleKriolu: 'Verbos Avansadu', icon: '🔥', color: '#E63946',
+    vocab: [
+      { k: 'Akseita', e: 'To accept', ex: 'N ta akseita bu oferta.' },
+      { k: 'Rejeita', e: 'To reject', ex: 'N ta rejeita kel proposta.' },
+      { k: 'Ajuda', e: 'To help', ex: 'Bu podi ajuda-m?' },
+      { k: 'Prokurar', e: 'To look for / search', ex: 'N ta prokurar trabadju.' },
+      { k: 'Nkontra', e: 'To find / meet', ex: 'N nkontra nha ami.' },
+      { k: 'Perde', e: 'To lose / miss', ex: 'N perde nha txavi.' },
+      { k: 'Ganha', e: 'To win / earn', ex: 'N ta ganha dinheru.' },
+      { k: 'Paga', e: 'To pay', ex: 'N ta paga konta.' },
+      { k: 'Kompra', e: 'To buy', ex: 'N ta kompra kumida.' },
+      { k: 'Vende', e: 'To sell', ex: 'El ta vende pes.' },
+      { k: 'Impresta', e: 'To lend / borrow', ex: 'Bu podi impresta-m dinheru?' },
+      { k: 'Volta', e: 'To return / come back', ex: 'N ta volta mañan.' },
+      { k: 'Manda', e: 'To send', ex: 'N ta manda mensagem.' },
+      { k: 'Resebe', e: 'To receive', ex: 'N ta resebe pakoti.' },
+      { k: 'Eskolhe', e: 'To choose', ex: 'Eskolhe un kolor.' },
+      { k: 'Desidi', e: 'To decide', ex: 'N ta desidi mañan.' },
+      { k: 'Muda', e: 'To change', ex: 'N ta muda di kaza.' },
+      { k: 'Melora', e: 'To improve / get better', ex: 'N ta melora Kriolu.' },
+      { k: 'Repete', e: 'To repeat', ex: 'Repete, pur favor.' },
+      { k: 'Prátika', e: 'To practice', ex: 'N ta prátika Kriolu.' },
+      { k: 'Komete', e: 'To commit / make (error)', ex: 'N komete un erru.' },
+      { k: 'Pensá', e: 'To think', ex: 'N ta pensá na bu.' },
+      { k: 'Akredita', e: 'To believe', ex: 'N ta akredita na bu.' },
+      { k: 'Duvida', e: 'To doubt', ex: 'N ta duvida kel.' },
+      { k: 'Espera', e: 'To wait / hope', ex: 'N ta espera bu.' },
+      { k: 'Preokupa', e: 'To worry', ex: 'Ka preokupa.' },
+      { k: 'Skese', e: 'To forget', ex: 'N skese nha txavi.' },
+      { k: 'Lenbra', e: 'To remember', ex: 'N ta lenbra di bu.' },
+      { k: 'Imajina', e: 'To imagine', ex: 'Imajina Kabu Verdi.' },
+      { k: 'Planeja', e: 'To plan', ex: 'N ta planeja viagem.' },
     ]
   },
 ];
+
+
+
 
 // ═══════════════════════════════════════════
 //  STATE
@@ -1254,31 +2321,88 @@ function renderQuestion() {
 
 // — Flashcard —
 function renderFlashcard(q, container) {
-  container.innerHTML = `
-    <div class="exercise-card">
-      <div class="exercise-type-badge">Flashcard</div>
-      <div id="fc-front">
-        <div class="exercise-word">${q.item.k}</div>
-        <div class="exercise-example">"${q.item.ex}"</div>
-        <button class="reveal-btn" onclick="flipCard()">👆 Reveal Translation</button>
-      </div>
-      <div id="fc-back" style="display:none">
-        <div class="translation-reveal">${q.item.e}</div>
-        <div class="exercise-example">"${q.item.ex}"</div>
-      </div>
-    </div>
-    <div id="fc-actions" style="display:none">
-      <div class="fc-actions">
-        <button class="fc-btn wrong" onclick="fcAnswer(false)">✗ Didn't know</button>
-        <button class="fc-btn correct" onclick="fcAnswer(true)">✓ Got it!</button>
-      </div>
-    </div>`;
+  container.innerHTML = '';
+
+  // Single card wrapper
+  const card = document.createElement('div');
+  card.className = 'exercise-card';
+
+  const badge = document.createElement('div');
+  badge.className = 'exercise-type-badge';
+  badge.textContent = 'Flashcard';
+  card.appendChild(badge);
+
+  // ── FRONT FACE ──
+  const frontFace = document.createElement('div');
+  frontFace.id = 'fc-front-content';
+
+  const word = document.createElement('div');
+  word.className = 'exercise-word';
+  word.textContent = q.item.k || '';
+  frontFace.appendChild(word);
+
+  const exFront = document.createElement('div');
+  exFront.className = 'exercise-example';
+  exFront.textContent = '"' + (q.item.ex || '') + '"';
+  frontFace.appendChild(exFront);
+
+  const revealBtn = document.createElement('button');
+  revealBtn.className = 'reveal-btn';
+  revealBtn.textContent = '👆 Reveal Translation';
+  revealBtn.onclick = flipCard;
+  frontFace.appendChild(revealBtn);
+
+  card.appendChild(frontFace);
+
+  // ── BACK FACE ──
+  const backFace = document.createElement('div');
+  backFace.id = 'fc-back-content';
+  backFace.style.display = 'none';
+
+  const trans = document.createElement('div');
+  trans.className = 'translation-reveal';
+  trans.textContent = q.item.e || '';
+  backFace.appendChild(trans);
+
+  const exBack = document.createElement('div');
+  exBack.className = 'exercise-example';
+  exBack.textContent = '"' + (q.item.ex || '') + '"';
+  backFace.appendChild(exBack);
+
+  card.appendChild(backFace);
+  container.appendChild(card);
+
+  // ── ACTIONS ──
+  const actions = document.createElement('div');
+  actions.id = 'fc-actions';
+  actions.style.display = 'none';
+
+  const fcRow = document.createElement('div');
+  fcRow.className = 'fc-actions';
+
+  const wrongBtn = document.createElement('button');
+  wrongBtn.className = 'fc-btn wrong';
+  wrongBtn.textContent = "✗ Didn't know";
+  wrongBtn.onclick = () => fcAnswer(false);
+
+  const correctBtn = document.createElement('button');
+  correctBtn.className = 'fc-btn correct';
+  correctBtn.textContent = '✓ Got it!';
+  correctBtn.onclick = () => fcAnswer(true);
+
+  fcRow.appendChild(wrongBtn);
+  fcRow.appendChild(correctBtn);
+  actions.appendChild(fcRow);
+  container.appendChild(actions);
 }
 
 function flipCard() {
-  document.getElementById('fc-front').style.display = 'none';
-  document.getElementById('fc-back').style.display = 'block';
-  document.getElementById('fc-actions').style.display = 'block';
+  const front   = document.getElementById('fc-front-content');
+  const back    = document.getElementById('fc-back-content');
+  const actions = document.getElementById('fc-actions');
+  if (front)   front.style.display   = 'none';
+  if (back)    back.style.display    = 'block';
+  if (actions) actions.style.display = 'block';
 }
 
 function fcAnswer(correct) {
@@ -1545,18 +2669,202 @@ function appendUserMessage(text) {
   state.chatHistory.push({ role: 'user', content: text });
 }
 
+// ═══════════════════════════════════════════
+//  TEXT-TO-SPEECH (Browser)
+// ═══════════════════════════════════════════
+
+let autoSpeak = false;
+let isListening = false;
+let recognition = null;
+let bestVoice = null;
+
+// Pre-select the best available voice on load
+function initVoice() {
+  const tryLoad = () => {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return;
+
+    // Populate dropdown
+    const select = document.getElementById('voice-select');
+    if (select) {
+      select.innerHTML = '';
+
+      // Group: Portuguese first, then Spanish, then everything else
+      const pt = voices.filter(v => v.lang.startsWith('pt'));
+      const es = voices.filter(v => v.lang.startsWith('es'));
+      const other = voices.filter(v => !v.lang.startsWith('pt') && !v.lang.startsWith('es'));
+
+      const addGroup = (label, group) => {
+        if (!group.length) return;
+        const og = document.createElement('optgroup');
+        og.label = label;
+        group.forEach((v, i) => {
+          const opt = document.createElement('option');
+          opt.value = v.name;
+          opt.textContent = `${v.name} (${v.lang})`;
+          og.appendChild(opt);
+        });
+        select.appendChild(og);
+      };
+
+      addGroup('🇵🇹 Portuguese', pt);
+      addGroup('🇪🇸 Spanish', es);
+      addGroup('Other', other);
+
+      // Auto-select best voice
+      bestVoice =
+        voices.find(v => v.lang === 'pt-PT') ||
+        voices.find(v => v.lang === 'pt-BR') ||
+        voices.find(v => v.lang.startsWith('pt')) ||
+        voices.find(v => v.lang === 'es-ES') ||
+        voices.find(v => v.lang.startsWith('es')) ||
+        voices[0];
+
+      if (bestVoice) select.value = bestVoice.name;
+      console.log('🔊 Using voice:', bestVoice?.name, bestVoice?.lang);
+    }
+  };
+
+  tryLoad();
+  window.speechSynthesis.onvoiceschanged = tryLoad;
+}
+
+function setVoice(name) {
+  const voices = window.speechSynthesis.getVoices();
+  bestVoice = voices.find(v => v.name === name) || bestVoice;
+  speakText('Bon dia! Kuma bu sta?', null);
+}
+
+function toggleAutoSpeak() {
+  autoSpeak = document.getElementById('autospeak-toggle').checked;
+  document.getElementById('autospeak-label').textContent = autoSpeak ? 'On' : 'Off';
+}
+
+function cleanForSpeech(text) {
+  return text
+    .replace(/\[[^\]]+\]/g, '')          // Remove [english translations]
+    .replace(/<[^>]+>/g, '')             // Remove HTML tags
+    .replace(/&quot;/g, '')              // Remove HTML entities
+    .replace(/&amp;/g, 'and')
+    .replace(/&lt;/g, '')
+    .replace(/&gt;/g, '')
+    // Remove emojis and all non-Latin/punctuation symbols
+    .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')   // Emoji block
+    .replace(/[\u{2600}-\u{27BF}]/gu, '')      // Misc symbols
+    .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')    // More emoji
+    .replace(/[*_~`#►▾•→←]/g, '')             // Markdown / UI symbols
+    .replace(/"{2,}/g, '')                      // Stray quote marks
+    .replace(/\s{2,}/g, ' ')                   // Collapse extra spaces
+    .trim();
+}
+
+function speakText(text, btnEl) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+
+  const clean = cleanForSpeech(text);
+  if (!clean) return;
+
+  const utter = new SpeechSynthesisUtterance(clean);
+  if (bestVoice) utter.voice = bestVoice;
+  utter.lang = bestVoice?.lang || 'pt-PT';
+  utter.rate = 0.82;
+  utter.pitch = 1.0;
+
+  if (btnEl) {
+    btnEl.classList.add('speaking');
+    utter.onend  = () => btnEl.classList.remove('speaking');
+    utter.onerror = () => btnEl.classList.remove('speaking');
+  }
+
+  window.speechSynthesis.speak(utter);
+}
+
+// ── Speech Recognition (Microphone) ──
+function toggleMic() {
+  if (isListening) {
+    stopListening();
+  } else {
+    startListening();
+  }
+}
+
+function startListening() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'pt-PT'; // Portuguese — closest to Kriolu
+
+  const micBtn = document.getElementById('mic-btn');
+  const chatInput = document.getElementById('chat-input');
+
+  recognition.onstart = () => {
+    isListening = true;
+    micBtn.classList.add('listening');
+    micBtn.textContent = '⏹️';
+    chatInput.placeholder = '🎤 Listening...';
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = Array.from(event.results)
+      .map(r => r[0].transcript)
+      .join('');
+    chatInput.value = transcript;
+  };
+
+  recognition.onend = () => {
+    stopListening();
+    // Auto-send if there's text
+    const text = chatInput.value.trim();
+    if (text) sendMessage();
+  };
+
+  recognition.onerror = (e) => {
+    console.error('Speech error:', e.error);
+    stopListening();
+    if (e.error === 'not-allowed') {
+      alert('Microphone access was denied. Please allow microphone access in your browser settings.');
+    }
+  };
+
+  recognition.start();
+}
+
+function stopListening() {
+  isListening = false;
+  const micBtn = document.getElementById('mic-btn');
+  const chatInput = document.getElementById('chat-input');
+  micBtn.classList.remove('listening');
+  micBtn.textContent = '🎤';
+  chatInput.placeholder = 'Fla ku mi… (or tap 🎤 to speak)';
+  if (recognition) { try { recognition.stop(); } catch(e) {} }
+}
+
 function appendBotMessage(kriolu, english) {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg bot';
   const translationHTML = english ? `<div class="msg-translation">${escapeHTML(english)}</div>` : '';
+  const msgId = 'msg-' + Date.now();
   div.innerHTML = `
     <div class="msg-avatar">🧑‍🏫</div>
     <div>
       <div class="msg-bubble">${kriolu}${translationHTML}</div>
+      <button class="speak-btn" id="${msgId}" onclick="speakText(this.dataset.text, this)" data-text="${kriolu.replace(/"/g, '&quot;')}">🔊</button>
     </div>`;
   win.appendChild(div);
   win.scrollTop = win.scrollHeight;
+
+  if (autoSpeak) {
+    const btn = div.querySelector('.speak-btn');
+    setTimeout(() => speakText(kriolu, btn), 300);
+  }
 }
 
 function showTyping() {
@@ -1612,14 +2920,8 @@ async function callClaude(userText) {
       const fullText = data.content[0].text;
       state.chatHistory.push({ role: 'assistant', content: fullText });
 
-      // Parse kriolu and [english translation]
-      const match = fullText.match(/\[([^\]]+)\]/);
-      if (match) {
-        const kriolu = fullText.replace(/\[[^\]]+\]/g, '').trim();
-        appendBotMessage(formatBotText(kriolu), match[1]);
-      } else {
-        appendBotMessage(formatBotText(fullText), '');
-      }
+      const { kriolu, translation } = parseResponse(fullText);
+      appendBotMessage(formatBotText(kriolu), translation);
     }
   } catch (err) {
     hideTyping();
@@ -1631,7 +2933,19 @@ async function callClaude(userText) {
 }
 
 function formatBotText(text) {
-  return text.replace(/\n/g, '<br/>');
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // **bold** → <strong>
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')               // *italic* → <em>
+    .replace(/\n/g, '<br/>');
+}
+
+function parseResponse(fullText) {
+  // Collect ALL [translations] and join them
+  const translations = [...fullText.matchAll(/\[([^\]]+)\]/g)].map(m => m[1]);
+  const translationText = translations.join(' ');
+  // Strip all brackets from the Kriolu text
+  const kriolu = fullText.replace(/\[[^\]]+\]/g, '').trim();
+  return { kriolu, translation: translationText };
 }
 
 // ═══════════════════════════════════════════
@@ -1670,11 +2984,13 @@ function init() {
   renderHomeGrid();
   renderAllLessonsGrid();
 
-  // Load saved API key
+  // Load saved API keys
   const savedKey = getApiKey();
   if (savedKey) {
-    document.getElementById('api-key-input').placeholder = '••••••••••••• (saved)';
+    document.getElementById('api-key-input').placeholder = '••••••••••••• (saved ✓)';
   }
+
+  initVoice();
 }
 
 init();
