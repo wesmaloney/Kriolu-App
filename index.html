@@ -1,928 +1,467 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kriolu — Learn Cape Verdean Creole</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
+    /* ── THEME VARIABLES ── */
     :root {
-      --ocean:    #0B4F71;
-      --sky:      #00B4D8;
-      --coral:    #FF6B35;
-      --sand:     #FAF3E0;
-      --cream:    #FFFDF6;
-      --green:    #2EC4B6;
-      --gold:     #F4A261;
-      --text:     #1A2E3B;
-      --muted:    #6B8A9A;
-      --border:   #E2EAF0;
-      --white:    #FFFFFF;
-      --correct:  #2EC4B6;
-      --wrong:    #E63946;
-      --radius:   16px;
-      --shadow:   0 4px 24px rgba(11,79,113,0.10);
-      --shadow-lg: 0 8px 40px rgba(11,79,113,0.16);
+      --ocean:   #0B4F71; --sky:#00B4D8; --coral:#FF6B35;
+      --sand:    #FAF3E0; --cream:#FFFDF6; --green:#2EC4B6;
+      --gold:    #F4A261; --text:#1A2E3B; --muted:#6B8A9A;
+      --border:  #E2EAF0; --white:#FFFFFF;
+      --correct: #2EC4B6; --wrong:#E63946;
+      --bg:      #FAF3E0; --card:#FFFFFF; --nav:#FFFFFF;
+      --radius:  16px;
+      --shadow:  0 4px 24px rgba(11,79,113,.10);
+      --shadow-lg:0 8px 40px rgba(11,79,113,.16);
+      --fs: 1rem;
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--sand);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    [data-theme="dark"] {
+      --sand:#1A2232; --bg:#1A2232; --card:#243044; --nav:#1F2D40;
+      --text:#E8F0F8; --muted:#8BAABB; --border:#2D4060;
+      --white:#243044; --cream:#243044;
     }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:var(--fs)}
+    body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;transition:background .3s,color .3s}
 
     /* ── HEADER ── */
-    #app-header {
-      width: 100%;
-      background: var(--ocean);
-      color: var(--white);
-      padding: 0 24px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
-    }
+    #app-header{width:100%;background:var(--ocean);color:#fff;padding:0 16px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.18)}
+    .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer}
+    .header-right{display:flex;gap:8px;align-items:center}
+    .stat-chip{display:flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(255,255,255,.15);border-radius:20px;padding:4px 10px}
+    .icon-btn{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
+    .icon-btn:hover{background:rgba(255,255,255,.3)}
 
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
+    /* ── NAV ── */
+    #nav-tabs{width:100%;background:var(--nav);display:flex;justify-content:space-around;border-bottom:2px solid var(--border);position:sticky;top:60px;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    #nav-tabs::-webkit-scrollbar{display:none}
+    .nav-tab{padding:12px 14px;font-weight:700;font-size:.78rem;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;flex:1;text-align:center}
+    .nav-tab.active{color:var(--ocean);border-bottom-color:var(--coral)}
 
-    .logo-wave { font-size: 1.4rem; }
+    /* ── MAIN ── */
+    #main{width:100%;max-width:780px;padding:20px 14px 80px;flex:1}
+    .screen{display:none;animation:fadeIn .22s ease}
+    .screen.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-    .header-stats {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-    }
+    /* ── SETTINGS PANEL ── */
+    #settings-panel{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5)}
+    #settings-panel.open{display:flex;align-items:flex-end}
+    .settings-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:24px;width:100%;max-width:780px;margin:0 auto;animation:slideUp .25s ease}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+    .settings-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--ocean);margin-bottom:20px}
+    .setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+    .setting-row:last-child{border-bottom:none}
+    .setting-label{font-weight:700;font-size:.9rem}
+    .setting-sub{font-size:.78rem;color:var(--muted);margin-top:2px}
+    .toggle-switch{position:relative;width:44px;height:26px;flex-shrink:0}
+    .toggle-switch input{opacity:0;width:0;height:0}
+    .toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--border);border-radius:99px;transition:background .2s}
+    .toggle-slider::before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s}
+    .toggle-switch input:checked+.toggle-slider{background:var(--ocean)}
+    .toggle-switch input:checked+.toggle-slider::before{transform:translateX(18px)}
+    .font-btns{display:flex;gap:8px}
+    .font-btn{padding:6px 14px;border:2px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:all .15s}
+    .font-btn.active,.font-btn:hover{border-color:var(--ocean);color:var(--ocean)}
+    .close-settings{width:100%;padding:12px;margin-top:16px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer}
 
-    .stat-chip {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      background: rgba(255,255,255,0.15);
-      border-radius: 20px;
-      padding: 4px 12px;
-    }
+    /* ── HOME ── */
+    .welcome-banner{background:linear-gradient(135deg,var(--ocean) 0%,#1A7DA8 60%,var(--sky) 100%);border-radius:var(--radius);padding:22px 24px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden}
+    .welcome-banner::after{content:'🌊';position:absolute;right:16px;bottom:-4px;font-size:4rem;opacity:.18}
+    .welcome-banner h2{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:2px}
+    .welcome-banner p{opacity:.85;font-size:.88rem;margin-bottom:14px}
+    .xp-bar-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:9px;overflow:hidden}
+    .xp-bar{height:100%;background:var(--gold);border-radius:99px;transition:width .6s ease}
+    .xp-label{font-size:.75rem;margin-top:5px;opacity:.85}
+    .weekly-goal-bar{margin-top:10px}
+    .weekly-goal-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:7px;overflow:hidden;margin-top:4px}
+    .weekly-goal-fill{height:100%;background:#A8EDEA;border-radius:99px;transition:width .6s ease}
 
-    /* ── NAV TABS ── */
-    #nav-tabs {
-      width: 100%;
-      background: var(--white);
-      display: flex;
-      justify-content: center;
-      border-bottom: 2px solid var(--border);
-      position: sticky;
-      top: 64px;
-      z-index: 99;
-    }
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+    .stat-card{background:var(--card);border-radius:var(--radius);padding:14px 8px;text-align:center;box-shadow:var(--shadow)}
+    .stat-card .icon{font-size:1.6rem;margin-bottom:4px}
+    .stat-card .value{font-size:1.4rem;font-weight:900;color:var(--ocean)}
+    .stat-card .label{font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 
-    .nav-tab {
-      padding: 14px 28px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
+    .section-heading{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ocean);margin-bottom:14px;margin-top:4px}
 
-    .nav-tab.active {
-      color: var(--ocean);
-      border-bottom-color: var(--coral);
-    }
-
-    .nav-tab:hover:not(.active) { color: var(--ocean); }
-
-    /* ── MAIN CONTAINER ── */
-    #main {
-      width: 100%;
-      max-width: 780px;
-      padding: 32px 20px 60px;
-      flex: 1;
-    }
-
-    /* ── SCREEN TRANSITIONS ── */
-    .screen { display: none; animation: fadeIn 0.25s ease; }
-    .screen.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* ── HOME SCREEN ── */
-    .welcome-banner {
-      background: linear-gradient(135deg, var(--ocean) 0%, #1A7DA8 60%, var(--sky) 100%);
-      border-radius: var(--radius);
-      padding: 28px 32px;
-      color: var(--white);
-      margin-bottom: 28px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .welcome-banner::after {
-      content: '🌊';
-      position: absolute;
-      right: 24px;
-      bottom: -4px;
-      font-size: 5rem;
-      opacity: 0.2;
-    }
-
-    .welcome-banner h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      margin-bottom: 4px;
-    }
-
-    .welcome-banner p { opacity: 0.85; font-size: 0.95rem; margin-bottom: 18px; }
-
-    .xp-bar-wrap {
-      background: rgba(255,255,255,0.2);
-      border-radius: 99px;
-      height: 10px;
-      overflow: hidden;
-    }
-
-    .xp-bar {
-      height: 100%;
-      background: var(--gold);
-      border-radius: 99px;
-      transition: width 0.6s ease;
-    }
-
-    .xp-label { font-size: 0.8rem; margin-top: 6px; opacity: 0.85; }
-
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 18px;
-      text-align: center;
-      box-shadow: var(--shadow);
-    }
-
-    .stat-card .icon { font-size: 2rem; margin-bottom: 6px; }
-    .stat-card .value { font-size: 1.6rem; font-weight: 900; color: var(--ocean); }
-    .stat-card .label { font-size: 0.78rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-
-    .section-heading {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--ocean);
-      margin-bottom: 16px;
-    }
+    /* ── ACHIEVEMENT BADGES ── */
+    .achievements-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px;scrollbar-width:none}
+    .achievements-strip::-webkit-scrollbar{display:none}
+    .badge-chip{flex-shrink:0;background:var(--card);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow);border:2px solid var(--border);transition:all .2s}
+    .badge-chip.earned{border-color:var(--gold);background:linear-gradient(135deg,#FFF8E7,#FFF)}
+    .badge-chip.locked{opacity:.45;filter:grayscale(1)}
+    .badge-icon{font-size:1.4rem}
+    .badge-label{font-size:.75rem;font-weight:800;color:var(--text)}
+    .badge-desc{font-size:.65rem;color:var(--muted)}
 
     /* ── LESSON CARDS ── */
-    .lessons-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
+    .lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+    .lesson-card{background:var(--card);border-radius:var(--radius);padding:18px 14px;cursor:pointer;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;border-top:4px solid var(--coral);position:relative;overflow:hidden}
+    .lesson-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+    .lesson-icon{font-size:1.8rem;margin-bottom:8px}
+    .lesson-title{font-weight:800;font-size:.9rem;color:var(--text);margin-bottom:1px}
+    .lesson-sub{font-size:.72rem;color:var(--muted);font-style:italic;margin-bottom:8px}
+    .word-count{font-size:.68rem;color:var(--muted);font-weight:700}
+    .done-badge{position:absolute;top:12px;right:12px;background:var(--correct);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.75rem}
+    .mastery-bar{height:4px;background:var(--border);border-radius:99px;margin-top:8px;overflow:hidden}
+    .mastery-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--sky),var(--ocean));transition:width .4s}
+    .start-btn{display:inline-flex;align-items:center;gap:4px;background:var(--ocean);color:#fff;border:none;border-radius:99px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;transition:background .2s;font-family:'Nunito',sans-serif;margin-top:8px}
+    .start-btn:hover{background:var(--sky)}
 
-    .lesson-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 22px;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-      border-top: 4px solid var(--coral);
-      position: relative;
-      overflow: hidden;
-    }
+    /* ── EXERCISE ── */
+    .exercise-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .back-btn{background:var(--card);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text)}
+    .progress-track{flex:1;background:var(--border);border-radius:99px;height:8px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--ocean));border-radius:99px;transition:width .5s ease}
+    .q-counter{font-size:.82rem;font-weight:700;color:var(--muted);white-space:nowrap}
+    .lives-row{display:flex;gap:3px;align-items:center}
 
-    .lesson-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-
-    .lesson-card .lesson-icon { font-size: 2.2rem; margin-bottom: 10px; }
-    .lesson-card .lesson-title { font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 2px; }
-    .lesson-card .lesson-sub { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-bottom: 12px; }
-    .lesson-card .word-count { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
-
-    .lesson-card .progress-ring {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 32px;
-      height: 32px;
-    }
-
-    .lesson-card .done-badge {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: var(--correct);
-      color: white;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-    }
-
-    .start-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--ocean);
-      color: var(--white);
-      border: none;
-      border-radius: 99px;
-      padding: 8px 18px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-      font-family: 'Nunito', sans-serif;
-    }
-
-    .start-btn:hover { background: var(--sky); }
-
-    /* ── EXERCISE SCREEN ── */
-    .exercise-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .back-btn {
-      background: var(--white);
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      box-shadow: var(--shadow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-
-    .back-btn:hover { background: var(--border); }
-
-    .progress-track {
-      flex: 1;
-      background: var(--border);
-      border-radius: 99px;
-      height: 8px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--sky), var(--ocean));
-      border-radius: 99px;
-      transition: width 0.5s ease;
-    }
-
-    .q-counter { font-size: 0.85rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
-
-    /* ── EXERCISE CARD ── */
-    .exercise-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 36px;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .exercise-type-badge {
-      display: inline-block;
-      background: var(--sand);
-      color: var(--muted);
-      border-radius: 99px;
-      padding: 4px 14px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 24px;
-    }
-
-    .exercise-word {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.6rem;
-      color: var(--ocean);
-      font-weight: 700;
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-
-    .exercise-example {
-      font-size: 0.9rem;
-      color: var(--muted);
-      font-style: italic;
-      margin-bottom: 28px;
-    }
-
-    /* Flashcard */
-    .flashcard-inner {
-      perspective: 1000px;
-      cursor: pointer;
-      margin: 0 auto;
-    }
-
-    .flashcard-flip {
-      transition: transform 0.5s;
-      transform-style: preserve-3d;
-      position: relative;
-    }
-
-    .flashcard-flip.flipped { transform: rotateY(180deg); }
-
-    .flashcard-face {
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-
-    .flashcard-back {
-      transform: rotateY(180deg);
-      padding-top: 16px;
-    }
-
-    .flashcard-hint { font-size: 0.82rem; color: var(--muted); margin-top: 16px; }
-
-    .translation-reveal {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: var(--correct);
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .fc-actions { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
-
-    .fc-btn {
-      flex: 1;
-      max-width: 160px;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: transform 0.15s, filter 0.15s;
-    }
-
-    .fc-btn:hover { transform: scale(1.04); }
-    .fc-btn.wrong { background: #FFE0E3; color: var(--wrong); }
-    .fc-btn.correct { background: #D4F5F1; color: var(--correct); }
+    .exercise-card{background:var(--card);border-radius:var(--radius);padding:28px 22px;box-shadow:var(--shadow);margin-bottom:16px;text-align:center}
+    .exercise-type-badge{display:inline-block;background:var(--bg);color:var(--muted);border-radius:99px;padding:3px 12px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:18px}
+    .exercise-word{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--ocean);font-weight:700;margin-bottom:6px;line-height:1.2}
+    .exercise-example{font-size:.85rem;color:var(--muted);font-style:italic;margin-bottom:20px}
+    .translation-reveal{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--correct);font-weight:700;margin-bottom:10px}
+    .reveal-btn{margin-top:14px;padding:10px 26px;background:var(--ocean);color:#fff;border:none;border-radius:99px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:background .2s}
+    .reveal-btn:hover{background:var(--sky)}
+    .fc-actions{display:flex;gap:10px;justify-content:center;margin-top:16px}
+    .fc-btn{flex:1;max-width:160px;padding:12px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:transform .15s}
+    .fc-btn:hover{transform:scale(1.04)}
+    .fc-btn.wrong{background:#FFE0E3;color:var(--wrong)}
+    .fc-btn.correct{background:#D4F5F1;color:var(--correct)}
 
     /* Multiple choice */
-    .choices-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .choice-btn {
-      padding: 16px;
-      background: var(--sand);
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-      text-align: center;
-    }
-
-    .choice-btn:hover:not(:disabled) { border-color: var(--sky); background: #EEF8FC; }
-    .choice-btn.selected-correct { background: #D4F5F1; border-color: var(--correct); color: var(--correct); }
-    .choice-btn.selected-wrong { background: #FFE0E3; border-color: var(--wrong); color: var(--wrong); }
-    .choice-btn.reveal-correct { background: #D4F5F1; border-color: var(--correct); color: var(--correct); }
-    .choice-btn:disabled { cursor: default; }
+    .choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .choice-btn{padding:14px 10px;background:var(--bg);border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;color:var(--text)}
+    .choice-btn:hover:not(:disabled){border-color:var(--sky);background:#EEF8FC}
+    .choice-btn.selected-correct{background:#D4F5F1;border-color:var(--correct);color:var(--correct)}
+    .choice-btn.selected-wrong{background:#FFE0E3;border-color:var(--wrong);color:var(--wrong)}
+    .choice-btn.reveal-correct{background:#D4F5F1;border-color:var(--correct);color:var(--correct)}
+    .choice-btn:disabled{cursor:default}
 
     /* Type answer */
-    .type-input {
-      width: 100%;
-      padding: 14px 18px;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      outline: none;
-      transition: border-color 0.2s;
-      background: var(--sand);
-    }
+    .type-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:600;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
+    .type-input:focus{border-color:var(--sky)}
+    .type-input.correct-ans{border-color:var(--correct);background:#D4F5F1}
+    .type-input.wrong-ans{border-color:var(--wrong);background:#FFE0E3}
+    .submit-btn{margin-top:10px;width:100%;padding:12px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:background .2s}
+    .submit-btn:hover{background:var(--sky)}
+    .submit-btn:disabled{background:var(--border);color:var(--muted);cursor:default}
 
-    .type-input:focus { border-color: var(--sky); background: var(--white); }
-    .type-input.correct-ans { border-color: var(--correct); background: #D4F5F1; }
-    .type-input.wrong-ans { border-color: var(--wrong); background: #FFE0E3; }
+    /* Word matching */
+    .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .match-col{display:flex;flex-direction:column;gap:8px}
+    .match-btn{padding:12px 10px;border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;text-align:center;background:var(--bg);color:var(--text);transition:all .15s}
+    .match-btn.selected{border-color:var(--ocean);background:#EEF8FC;color:var(--ocean)}
+    .match-btn.matched-correct{border-color:var(--correct);background:#D4F5F1;color:var(--correct);cursor:default}
+    .match-btn.matched-wrong{border-color:var(--wrong);background:#FFE0E3;color:var(--wrong)}
+    .match-btn:disabled{cursor:default}
 
-    .submit-btn {
-      margin-top: 12px;
-      width: 100%;
-      padding: 13px;
-      background: var(--ocean);
-      color: var(--white);
-      border: none;
-      border-radius: 12px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+    /* Listening */
+    .listen-play-btn{background:var(--ocean);color:#fff;border:none;border-radius:50%;width:72px;height:72px;font-size:1.8rem;cursor:pointer;margin:16px auto;display:block;transition:all .2s;box-shadow:var(--shadow)}
+    .listen-play-btn:hover{background:var(--sky);transform:scale(1.05)}
+    .listen-play-btn.playing{background:var(--coral);animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
-    .submit-btn:hover { background: var(--sky); }
-    .submit-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
+    /* Fill in the blank */
+    .blank-sentence{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.6;font-family:'Playfair Display',serif}
+    .blank-input{border-bottom:3px solid var(--ocean);border-top:none;border-left:none;border-right:none;border-radius:0;background:transparent;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ocean);font-weight:700;width:120px;text-align:center;outline:none;padding:4px 6px}
 
-    /* Feedback bar */
-    .feedback-bar {
-      padding: 16px 24px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      animation: slideUp 0.2s ease;
-    }
+    /* Feedback */
+    .feedback-bar{padding:14px 20px;border-radius:12px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px;margin-bottom:10px;animation:slideUp .2s ease}
+    @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .feedback-bar.correct{background:#D4F5F1;color:#1A7A6E}
+    .feedback-bar.wrong{background:#FFE0E3;color:#A0222C}
+    .next-btn{width:100%;padding:13px;background:var(--coral);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:background .2s}
+    .next-btn:hover{background:#E85A25}
 
-    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    /* ── RESULTS ── */
+    .results-card{background:var(--card);border-radius:var(--radius);padding:32px 24px;box-shadow:var(--shadow);text-align:center}
+    .results-emoji{font-size:3.5rem;margin-bottom:12px}
+    .results-title{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--ocean);margin-bottom:6px}
+    .results-sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
+    .results-stats{display:flex;justify-content:center;gap:24px;margin-bottom:20px}
+    .results-stat .val{font-size:2rem;font-weight:900;color:var(--ocean)}
+    .results-stat .lbl{font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase}
+    .results-xp{background:linear-gradient(135deg,var(--ocean),var(--sky));color:#fff;border-radius:12px;padding:14px;font-size:1rem;font-weight:800;margin-bottom:18px}
+    .results-btn{display:block;width:100%;padding:13px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:8px;transition:all .2s}
+    .results-btn.primary{background:var(--coral);color:#fff}
+    .results-btn.primary:hover{background:#E85A25}
+    .results-btn.secondary{background:var(--bg);color:var(--ocean)}
+    .new-badge-pop{background:linear-gradient(135deg,#F4A261,#E76F51);color:#fff;border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;animation:fadeIn .4s ease}
+    .new-badge-pop .badge-icon-lg{font-size:2rem}
+    .new-badge-pop .badge-text{text-align:left}
+    .new-badge-pop .badge-text b{font-size:1rem;display:block}
+    .new-badge-pop .badge-text span{font-size:.8rem;opacity:.9}
 
-    .feedback-bar.correct { background: #D4F5F1; color: #1A7A6E; }
-    .feedback-bar.wrong { background: #FFE0E3; color: #A0222C; }
+    /* ── ACHIEVEMENTS SCREEN ── */
+    .achievements-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+    .ach-card{background:var(--card);border-radius:var(--radius);padding:18px 14px;text-align:center;box-shadow:var(--shadow);border:2px solid var(--border);transition:all .2s}
+    .ach-card.earned{border-color:var(--gold);background:linear-gradient(135deg,#FFF8E7,var(--card))}
+    .ach-card.locked{opacity:.5;filter:grayscale(.8)}
+    .ach-icon{font-size:2rem;margin-bottom:8px}
+    .ach-name{font-weight:800;font-size:.85rem;color:var(--text);margin-bottom:3px}
+    .ach-desc{font-size:.72rem;color:var(--muted)}
+    .ach-earned-label{font-size:.68rem;color:var(--gold);font-weight:800;margin-top:6px;text-transform:uppercase}
 
-    .next-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--coral);
-      color: var(--white);
-      border: none;
-      border-radius: 12px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.2s;
-      letter-spacing: 0.02em;
-    }
+    /* ── REVIEW SCREEN ── */
+    .review-word-card{background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .review-word-k{font-weight:800;color:var(--ocean);font-size:.95rem}
+    .review-word-e{font-size:.82rem;color:var(--muted)}
+    .review-word-ex{font-size:.75rem;color:var(--muted);font-style:italic;margin-top:2px}
+    .difficulty-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
-    .next-btn:hover { background: #E85A25; }
+    /* ── PHRASEBOOK ── */
+    .phrase-category{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden}
+    .phrase-cat-header{padding:14px 18px;font-weight:800;font-size:.9rem;color:#fff;display:flex;align-items:center;gap:8px;cursor:pointer}
+    .phrase-cat-body{padding:0 18px;max-height:0;overflow:hidden;transition:max-height .4s ease}
+    .phrase-cat-body.open{max-height:9999px}
+    .phrase-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:12px}
+    .phrase-row:last-child{border-bottom:none}
+    .phrase-kriolu{font-weight:700;color:var(--ocean);font-size:.88rem}
+    .phrase-english{font-size:.78rem;color:var(--muted)}
+    .fav-btn{background:none;border:none;cursor:pointer;font-size:1.1rem;padding:2px 4px;transition:transform .15s;flex-shrink:0}
+    .fav-btn:hover{transform:scale(1.3)}
 
-    /* ── RESULTS SCREEN ── */
-    .results-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 40px 36px;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
+    /* ── CONVERSATION ── */
+    .convo-header{background:var(--ocean);border-radius:var(--radius);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .avatar{width:46px;height:46px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+    .convo-header h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:1px}
+    .convo-header p{font-size:.75rem;opacity:.8}
+    .api-key-panel{background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;gap:8px;align-items:center}
+    .api-key-panel label{font-size:.78rem;font-weight:700;color:var(--muted);white-space:nowrap}
+    .api-input{flex:1;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.82rem;outline:none;background:var(--bg);color:var(--text)}
+    .api-input:focus{border-color:var(--sky)}
+    .api-save-btn{padding:7px 14px;background:var(--ocean);color:#fff;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+    .autospeak-row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:var(--radius);padding:10px 16px;box-shadow:var(--shadow);margin-bottom:10px;font-size:.85rem;font-weight:700;color:var(--ocean);flex-wrap:wrap}
+    .voice-select{padding:5px 8px;border:2px solid var(--border);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:600;color:var(--ocean);background:var(--card);cursor:pointer;outline:none;max-width:160px}
+    .scenario-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
+    .scenario-chips::-webkit-scrollbar{display:none}
+    .scenario-chip{flex-shrink:0;padding:7px 14px;background:var(--ocean);color:#fff;border:none;border-radius:99px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:background .2s}
+    .scenario-chip:hover{background:var(--sky)}
+    .chat-window{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);height:380px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:10px;scroll-behavior:smooth}
+    .chat-msg{display:flex;gap:8px;align-items:flex-start;animation:fadeIn .2s ease}
+    .chat-msg.user{flex-direction:row-reverse}
+    .msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .chat-msg.bot .msg-avatar{background:var(--ocean);color:#fff}
+    .chat-msg.user .msg-avatar{background:var(--coral);color:#fff}
+    .msg-bubble{max-width:76%;padding:10px 14px;border-radius:14px;font-size:.88rem;line-height:1.5}
+    .chat-msg.bot .msg-bubble{background:var(--bg);border-bottom-left-radius:4px}
+    .chat-msg.user .msg-bubble{background:var(--ocean);color:#fff;border-bottom-right-radius:4px}
+    .msg-translation{font-size:.74rem;color:var(--muted);font-style:italic;margin-top:3px}
+    .grammar-tip{font-size:.72rem;background:var(--bg);border-left:3px solid var(--gold);padding:4px 8px;margin-top:4px;border-radius:0 6px 6px 0;color:var(--text)}
+    .typing-indicator{display:flex;gap:4px;padding:6px;align-items:center}
+    .typing-dot{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
+    .typing-dot:nth-child(2){animation-delay:.2s}
+    .typing-dot:nth-child(3){animation-delay:.4s}
+    @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+    .chat-input-row{display:flex;gap:8px;align-items:center}
+    .mic-btn{width:44px;height:44px;background:var(--bg);border:2px solid var(--border);border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;color:var(--text)}
+    .mic-btn.listening{background:#FFE0E3;border-color:var(--wrong);animation:pulse 0.8s infinite}
+    .chat-input{flex:1;padding:11px 16px;border:2px solid var(--border);border-radius:99px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
+    .chat-input:focus{border-color:var(--sky)}
+    .send-btn{width:44px;height:44px;background:var(--ocean);color:#fff;border:none;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+    .send-btn:hover{background:var(--sky)}
+    .send-btn:disabled{background:var(--border);cursor:default}
+    .convo-tips{background:var(--card);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);margin-top:12px}
+    .convo-tips h4{font-size:.78rem;font-weight:800;color:var(--ocean);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+    .tip-chips{display:flex;flex-wrap:wrap;gap:6px}
+    .tip-chip{background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:5px 11px;font-size:.75rem;font-weight:600;color:var(--ocean);cursor:pointer;transition:all .15s}
+    .tip-chip:hover{background:var(--ocean);color:#fff}
+    .speak-btn{background:none;border:none;cursor:pointer;font-size:.9rem;padding:2px 4px;margin-top:3px;opacity:.6;transition:opacity .2s,transform .15s;display:inline-block}
+    .speak-btn:hover{opacity:1;transform:scale(1.2)}
+    .speak-btn.speaking{opacity:1;animation:pulse .8s infinite}
 
-    .results-emoji { font-size: 4rem; margin-bottom: 16px; }
-    .results-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--ocean); margin-bottom: 8px; }
-    .results-sub { color: var(--muted); font-size: 1rem; margin-bottom: 28px; }
-
-    .results-stats {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      margin-bottom: 28px;
-    }
-
-    .results-stat .val { font-size: 2.4rem; font-weight: 900; color: var(--ocean); }
-    .results-stat .lbl { font-size: 0.8rem; color: var(--muted); font-weight: 600; text-transform: uppercase; }
-
-    .results-xp {
-      background: linear-gradient(135deg, var(--ocean), var(--sky));
-      color: var(--white);
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-
-    .results-btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      margin-bottom: 10px;
-      transition: all 0.2s;
-    }
-
-    .results-btn.primary { background: var(--coral); color: var(--white); }
-    .results-btn.primary:hover { background: #E85A25; }
-    .results-btn.secondary { background: var(--sand); color: var(--ocean); }
-    .results-btn.secondary:hover { background: var(--border); }
-
-    /* ── CONVERSATION SCREEN ── */
-    .convo-header {
-      background: var(--ocean);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .avatar {
-      width: 50px; height: 50px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      flex-shrink: 0;
-    }
-
-    .convo-header h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 2px; }
-    .convo-header p { font-size: 0.82rem; opacity: 0.8; }
-
-    .api-key-panel {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      box-shadow: var(--shadow);
-      margin-bottom: 16px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .api-key-panel label { font-size: 0.82rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
-
-    .api-input {
-      flex: 1;
-      padding: 8px 12px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.85rem;
-      outline: none;
-    }
-
-    .api-input:focus { border-color: var(--sky); }
-
-    .api-save-btn {
-      padding: 8px 16px;
-      background: var(--ocean);
-      color: var(--white);
-      border: none;
-      border-radius: 8px;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .chat-window {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      height: 420px;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 12px;
-      scroll-behavior: smooth;
-    }
-
-    .chat-msg {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      animation: fadeIn 0.2s ease;
-    }
-
-    .chat-msg.user { flex-direction: row-reverse; }
-
-    .msg-avatar {
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-
-    .chat-msg.bot .msg-avatar { background: var(--ocean); color: white; }
-    .chat-msg.user .msg-avatar { background: var(--coral); color: white; }
-
-    .msg-bubble {
-      max-width: 75%;
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-size: 0.93rem;
-      line-height: 1.55;
-    }
-
-    .chat-msg.bot .msg-bubble { background: var(--sand); border-bottom-left-radius: 4px; }
-    .chat-msg.user .msg-bubble { background: var(--ocean); color: var(--white); border-bottom-right-radius: 4px; }
-
-    .msg-translation {
-      font-size: 0.78rem;
-      color: var(--muted);
-      font-style: italic;
-      margin-top: 4px;
-    }
-
-    .typing-indicator {
-      display: flex;
-      gap: 4px;
-      padding: 8px;
-      align-items: center;
-    }
-
-    .typing-dot {
-      width: 7px; height: 7px;
-      background: var(--muted);
-      border-radius: 50%;
-      animation: bounce 1.2s infinite;
-    }
-
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-6px); }
-    }
-
-    .chat-input-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .chat-input {
-      flex: 1;
-      padding: 12px 18px;
-      border: 2px solid var(--border);
-      border-radius: 99px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .chat-input:focus { border-color: var(--sky); }
-
-    .send-btn {
-      width: 46px; height: 46px;
-      background: var(--ocean);
-      color: var(--white);
-      border: none;
-      border-radius: 50%;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-
-    .send-btn:hover { background: var(--sky); }
-    .send-btn:disabled { background: var(--border); cursor: default; }
-
-    .convo-tips {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      box-shadow: var(--shadow);
-      margin-top: 16px;
-    }
-
-    .convo-tips h4 { font-size: 0.85rem; font-weight: 800; color: var(--ocean); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-
-    .tip-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    .tip-chip {
-      background: var(--sand);
-      border: 1px solid var(--border);
-      border-radius: 99px;
-      padding: 5px 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--ocean);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .tip-chip:hover { background: var(--ocean); color: var(--white); }
-
-    /* ── PHRASE BOOK ── */
-    .phrase-category {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-
-    .phrase-cat-header {
-      padding: 16px 22px;
-      font-weight: 800;
-      font-size: 1rem;
-      color: var(--white);
-      background: var(--ocean);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .phrase-cat-body { padding: 0 22px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-    .phrase-cat-body.open { max-height: 1000px; }
-
-    .phrase-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 16px;
-    }
-
-    .phrase-row:last-child { border-bottom: none; }
-
-    .phrase-kriolu { font-weight: 700; color: var(--ocean); font-size: 0.95rem; }
-    .phrase-english { font-size: 0.85rem; color: var(--muted); }
-
-    /* Responsive */
-    @media (max-width: 540px) {
-      .choices-grid { grid-template-columns: 1fr; }
-      .stats-row { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-      .exercise-word { font-size: 2rem; }
-      .exercise-card { padding: 24px 18px; }
-      .results-stats { gap: 16px; }
-      .nav-tab { padding: 12px 16px; font-size: 0.8rem; }
+    /* ── MISC ── */
+    @media(max-width:420px){
+      .stats-row{grid-template-columns:repeat(2,1fr)}
+      .choices-grid{grid-template-columns:1fr}
+      .exercise-word{font-size:1.8rem}
+      .results-stats{gap:14px}
     }
   </style>
 </head>
 <body>
 
 <header id="app-header">
-  <div class="logo" onclick="goHome()">
-    <span class="logo-wave">🌊</span> Kriolu
-  </div>
-  <div class="header-stats">
+  <div class="logo" onclick="goHome()"><span>🌊</span> Kriolu</div>
+  <div class="header-right">
     <div class="stat-chip">🔥 <span id="streak-count">0</span></div>
-    <div class="stat-chip">⭐ <span id="xp-count">0</span> XP</div>
+    <div class="stat-chip">⭐ <span id="xp-count">0</span></div>
+    <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
   </div>
 </header>
 
 <nav id="nav-tabs">
   <div class="nav-tab active" onclick="showTab('home')">🏠 Home</div>
   <div class="nav-tab" onclick="showTab('lessons')">📚 Lessons</div>
-  <div class="nav-tab" onclick="showTab('phrasebook')">📖 Phrasebook</div>
-  <div class="nav-tab" onclick="showTab('conversation')">💬 Conversation</div>
+  <div class="nav-tab" onclick="showTab('review')">📋 Review</div>
+  <div class="nav-tab" onclick="showTab('achievements')">🏆 Badges</div>
+  <div class="nav-tab" onclick="showTab('phrasebook')">📖 Phrases</div>
+  <div class="nav-tab" onclick="showTab('conversation')">💬 Chat</div>
 </nav>
+
+<!-- SETTINGS PANEL -->
+<div id="settings-panel" onclick="closeSettings(event)">
+  <div class="settings-sheet">
+    <div class="settings-title">⚙️ Settings</div>
+    <div class="setting-row">
+      <div><div class="setting-label">🌙 Dark Mode</div><div class="setting-sub">Easier on the eyes at night</div></div>
+      <label class="toggle-switch"><input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">🔔 Daily Reminder</div><div class="setting-sub">Browser notification each day</div></div>
+      <label class="toggle-switch"><input type="checkbox" id="notif-toggle" onchange="toggleNotification()"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">🔊 Sound Effects</div><div class="setting-sub">Feedback sounds on answers</div></div>
+      <label class="toggle-switch"><input type="checkbox" id="sfx-toggle" onchange="toggleSfx()" checked><span class="toggle-slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">📝 Font Size</div><div class="setting-sub">Adjust text size</div></div>
+      <div class="font-btns">
+        <button class="font-btn" onclick="setFont('0.9rem','S')">S</button>
+        <button class="font-btn active" id="font-M" onclick="setFont('1rem','M')">M</button>
+        <button class="font-btn" onclick="setFont('1.1rem','L')">L</button>
+      </div>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">🎯 Weekly XP Goal</div><div class="setting-sub">XP target per week</div></div>
+      <select id="weekly-goal-select" onchange="setWeeklyGoal(this.value)" style="padding:6px 10px;border:2px solid var(--border);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;background:var(--card);color:var(--text)">
+        <option value="50">50 XP</option>
+        <option value="100" selected>100 XP</option>
+        <option value="200">200 XP</option>
+        <option value="300">300 XP</option>
+      </select>
+    </div>
+    <button class="close-settings" onclick="closeSettings()">Done</button>
+  </div>
+</div>
 
 <main id="main">
 
-  <!-- ══ HOME SCREEN ══ -->
+  <!-- HOME -->
   <div id="screen-home" class="screen active">
     <div class="welcome-banner">
-      <h2>Bon dia! 👋</h2>
+      <h2 id="greeting-text">Bon dia! 👋</h2>
       <p>Continue your Cape Verdean Creole journey</p>
-      <div class="xp-bar-wrap">
-        <div class="xp-bar" id="xp-bar" style="width: 0%"></div>
+      <div class="xp-bar-wrap"><div class="xp-bar" id="xp-bar" style="width:0%"></div></div>
+      <div class="xp-label" id="xp-label">0 / 100 XP to level 1</div>
+      <div class="weekly-goal-bar">
+        <div style="font-size:.72rem;opacity:.8;margin-top:6px">Weekly goal: <span id="weekly-progress-label">0 / 100 XP</span></div>
+        <div class="weekly-goal-wrap"><div class="weekly-goal-fill" id="weekly-goal-fill" style="width:0%"></div></div>
       </div>
-      <div class="xp-label" id="xp-label">0 / 100 XP to next level</div>
     </div>
-
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="icon">🔥</div>
-        <div class="value" id="stat-streak">0</div>
-        <div class="label">Day Streak</div>
-      </div>
-      <div class="stat-card">
-        <div class="icon">⭐</div>
-        <div class="value" id="stat-xp">0</div>
-        <div class="label">Total XP</div>
-      </div>
-      <div class="stat-card">
-        <div class="icon">✅</div>
-        <div class="value" id="stat-lessons">0</div>
-        <div class="label">Lessons Done</div>
-      </div>
+      <div class="stat-card"><div class="icon">🔥</div><div class="value" id="stat-streak">0</div><div class="label">Streak</div></div>
+      <div class="stat-card"><div class="icon">⭐</div><div class="value" id="stat-xp">0</div><div class="label">Total XP</div></div>
+      <div class="stat-card"><div class="icon">✅</div><div class="value" id="stat-lessons">0</div><div class="label">Lessons</div></div>
+      <div class="stat-card"><div class="icon">🧠</div><div class="value" id="stat-words">0</div><div class="label">Mastered</div></div>
     </div>
-
+    <h2 class="section-heading">🏆 Recent Badges</h2>
+    <div class="achievements-strip" id="home-badges"></div>
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
-
-    <h2 class="section-heading">Quick Practice</h2>
-    <div style="background:var(--white); border-radius:var(--radius); padding:20px 24px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-      <div>
-        <div style="font-weight:800; font-size:1rem; color:var(--ocean); margin-bottom:4px;">🎯 Mix & Review</div>
-        <div style="font-size:0.85rem; color:var(--muted);">Practice words from all lessons</div>
-      </div>
-      <button class="start-btn" onclick="startMixedSession()">Start Practice →</button>
+    <div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div><div style="font-weight:800;font-size:.95rem;color:var(--ocean);margin-bottom:2px">🎯 Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from all lessons</div></div>
+      <button class="start-btn" onclick="startMixedSession()">Start →</button>
     </div>
   </div>
 
-  <!-- ══ LESSONS SCREEN ══ -->
+  <!-- LESSONS -->
   <div id="screen-lessons" class="screen">
     <h2 class="section-heading">All Lessons</h2>
     <div class="lessons-grid" id="all-lessons-grid"></div>
   </div>
 
-  <!-- ══ EXERCISE SCREEN ══ -->
+  <!-- EXERCISE -->
   <div id="screen-exercise" class="screen">
     <div class="exercise-header">
       <button class="back-btn" onclick="exitExercise()">←</button>
       <div class="progress-track"><div class="progress-fill" id="ex-progress" style="width:0%"></div></div>
-      <div class="q-counter" id="ex-counter">0 / 0</div>
+      <div class="lives-row" id="lives-row"></div>
+      <div class="q-counter" id="ex-counter">1 / 1</div>
     </div>
     <div id="exercise-content"></div>
   </div>
 
-  <!-- ══ RESULTS SCREEN ══ -->
+  <!-- RESULTS -->
   <div id="screen-results" class="screen">
     <div class="results-card" id="results-card"></div>
   </div>
 
-  <!-- ══ PHRASEBOOK SCREEN ══ -->
+  <!-- REVIEW MISTAKES -->
+  <div id="screen-review" class="screen">
+    <h2 class="section-heading">📋 Words to Review</h2>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Words you've struggled with. Practice these to master them!</p>
+    <div id="review-content"></div>
+  </div>
+
+  <!-- ACHIEVEMENTS -->
+  <div id="screen-achievements" class="screen">
+    <h2 class="section-heading">🏆 Achievements</h2>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Earn badges by completing challenges</p>
+    <div class="achievements-grid" id="achievements-grid"></div>
+  </div>
+
+  <!-- PHRASEBOOK -->
   <div id="screen-phrasebook" class="screen">
-    <h2 class="section-heading">Phrase Book</h2>
+    <h2 class="section-heading">📖 Phrase Book</h2>
+    <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center">
+      <div style="font-size:.82rem;color:var(--muted)">⭐ <span id="fav-count">0</span> favourites saved</div>
+      <button onclick="showFavourites()" style="padding:5px 12px;border:1.5px solid var(--ocean);border-radius:99px;background:none;color:var(--ocean);font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer">View Favourites</button>
+    </div>
     <div id="phrasebook-content"></div>
   </div>
 
-  <!-- ══ CONVERSATION SCREEN ══ -->
+  <!-- CONVERSATION -->
   <div id="screen-conversation" class="screen">
     <div class="convo-header">
       <div class="avatar">🧑‍🏫</div>
-      <div>
-        <h3>Sôr António</h3>
-        <p>Your Kriolu conversation partner • Powered by Claude</p>
-      </div>
+      <div><h3>Sôr António</h3><p>Your Kriolu tutor • Powered by Claude</p></div>
     </div>
-
     <div class="api-key-panel">
       <label>API Key:</label>
       <input type="password" id="api-key-input" class="api-input" placeholder="sk-ant-..." />
       <button class="api-save-btn" onclick="saveApiKey()">Save</button>
     </div>
-
+    <div class="autospeak-row">
+      <span>🔊 Auto-speak</span>
+      <label class="toggle-switch"><input type="checkbox" id="autospeak-toggle" onchange="toggleAutoSpeak()"><span class="toggle-slider"></span></label>
+      <span id="autospeak-label" style="color:var(--muted);font-weight:600">Off</span>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+        <span style="font-size:.75rem;color:var(--muted);font-weight:700">🎙️</span>
+        <select id="voice-select" class="voice-select" onchange="setVoice(this.value)"><option>Loading…</option></select>
+      </div>
+    </div>
+    <div style="font-size:.78rem;font-weight:700;color:var(--ocean);margin-bottom:6px">🎭 Scenarios:</div>
+    <div class="scenario-chips">
+      <button class="scenario-chip" onclick="startScenario('greet')">👋 Greetings</button>
+      <button class="scenario-chip" onclick="startScenario('food')">🍽️ Ordering Food</button>
+      <button class="scenario-chip" onclick="startScenario('directions')">🗺️ Directions</button>
+      <button class="scenario-chip" onclick="startScenario('shopping')">🛒 Shopping</button>
+      <button class="scenario-chip" onclick="startScenario('family')">👨‍👩‍👧 Family Talk</button>
+      <button class="scenario-chip" onclick="startScenario('freeform')">💬 Free Chat</button>
+    </div>
     <div class="chat-window" id="chat-window"></div>
-
     <div class="chat-input-row">
-      <input type="text" id="chat-input" class="chat-input" placeholder="Fla ku mi… (Talk to me…)" onkeydown="if(event.key==='Enter') sendMessage()" />
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak">🎤</button>
+      <input type="text" id="chat-input" class="chat-input" placeholder="Fla ku mi… (or tap 🎤)" onkeydown="if(event.key==='Enter')sendMessage()" />
       <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
     </div>
-
     <div class="convo-tips">
-      <h4>💡 Conversation Starters</h4>
+      <h4>💡 Quick starters</h4>
       <div class="tip-chips">
         <div class="tip-chip" onclick="useStarter('Oi! Kuma bu sta?')">Oi! Kuma bu sta?</div>
-        <div class="tip-chip" onclick="useStarter('Fla-m sobri Kabu Verdi')">Tell me about Cape Verde</div>
-        <div class="tip-chip" onclick="useStarter('Djuda-m aprende Kriolu')">Help me practice</div>
-        <div class="tip-chip" onclick="useStarter('Kuze ki kumida tipiku di Kabu Verdi?')">Ask about food</div>
-        <div class="tip-chip" onclick="useStarter('Korekta nha Kriolu pur favor')">Correct my Kriolu</div>
-        <div class="tip-chip" onclick="useStarter('Pratika konversa simples ku mi')">Simple conversation</div>
+        <div class="tip-chip" onclick="useStarter('Fla-m sobri Kabu Verdi')">About Cape Verde</div>
+        <div class="tip-chip" onclick="useStarter('Korekta nha Kriolu')">Correct my Kriolu</div>
+        <div class="tip-chip" onclick="useStarter('Ensina-m un palavra nobu')">New word please</div>
+        <div class="tip-chip" onclick="useStarter('Kuze ki kumida tipiku di Kabu Verdi?')">Cape Verde food</div>
+        <div class="tip-chip" onclick="useStarter('Konta-m sobri morna')">About morna music</div>
       </div>
     </div>
   </div>
@@ -930,10 +469,6 @@
 </main>
 
 <script>
-// ═══════════════════════════════════════════
-//  DATA
-// ═══════════════════════════════════════════
-
 const LESSONS = [
   {
     id: 'greetings', title: 'Greetings', titleKriolu: 'Saudações', icon: '👋', color: '#FF6B35',
@@ -943,11 +478,21 @@ const LESSONS = [
       { k: 'Bon tarde', e: 'Good afternoon', ex: 'Bon tarde, profesor!' },
       { k: 'Bon noti', e: 'Good night', ex: 'Bon noti, família.' },
       { k: 'Kuma bu sta?', e: 'How are you?', ex: 'Oi! Kuma bu sta, ami?' },
-      { k: 'N sta ben', e: "I'm fine", ex: 'N sta ben, obrigadu.' },
+      { k: 'N sta ben', e: "I'm fine / I'm well", ex: 'N sta ben, obrigadu.' },
+      { k: 'N sta dretu', e: "I'm good / I'm alright", ex: 'N sta dretu, obrigadu.' },
+      { k: 'N sta más o menos', e: "I'm so-so", ex: 'N sta más o menos oji.' },
+      { k: 'N sta txeu bem', e: "I'm very well", ex: 'N sta txeu bem, grasa a Deus!' },
       { k: 'Obrigadu', e: 'Thank you (said by male)', ex: 'Obrigadu pela djuda.' },
       { k: 'Obrigada', e: 'Thank you (said by female)', ex: 'Obrigada, sei ki bu fes.' },
       { k: 'Di nada', e: "You're welcome", ex: 'Di nada! E nada.' },
       { k: 'Purdon', e: 'Sorry / Excuse me', ex: 'Purdon, ka n intendi.' },
+      { k: 'Ate logo', e: 'See you later', ex: 'Ate logo, ami!' },
+      { k: 'Ate mañan', e: 'See you tomorrow', ex: 'Ate mañan, tchau!' },
+      { k: 'Tchau', e: 'Bye', ex: 'Tchau! Kuda ben.' },
+      { k: 'Bem-vindu', e: 'Welcome (to a male)', ex: 'Bem-vindu na nha kaza!' },
+      { k: 'Bem-vinda', e: 'Welcome (to a female)', ex: 'Bem-vinda na Kabu Verdi!' },
+      { k: 'Kuda ben', e: 'Take care', ex: 'Tchau! Kuda ben, ami.' },
+      { k: 'Grasa a Deus', e: 'Thanks be to God', ex: 'N sta ben, grasa a Deus!' },
     ]
   },
   {
@@ -956,12 +501,21 @@ const LESSONS = [
       { k: 'Ki ki bu txoma?', e: "What's your name?", ex: 'Oi! Ki ki bu txoma?' },
       { k: 'N txoma...', e: 'My name is...', ex: 'N txoma Maria.' },
       { k: 'Prazer', e: 'Nice to meet you', ex: 'Prazer di konxi-bu.' },
+      { k: 'Prazer di konxi-bu', e: 'Pleased to meet you', ex: 'Prazer di konxi-bu, João.' },
       { k: 'Undi ki bu mora?', e: 'Where do you live?', ex: 'Undi ki bu mora?' },
       { k: 'N mora na...', e: 'I live in...', ex: 'N mora na Praia.' },
       { k: 'Kantu anu ki bu ten?', e: 'How old are you?', ex: 'Kantu anu ki bu ten?' },
       { k: 'N ten ... anu', e: 'I am ... years old', ex: 'N ten vinti anu.' },
       { k: 'Undi ki bu e di?', e: 'Where are you from?', ex: 'Undi ki bu e di?' },
       { k: 'N e di...', e: 'I am from...', ex: 'N e di Mindelo.' },
+      { k: 'Ki ki bu fazi?', e: 'What do you do? (job)', ex: 'Ki ki bu fazi na vida?' },
+      { k: 'N e profesor/a', e: 'I am a teacher', ex: 'N e professor na skola.' },
+      { k: 'N e studanti', e: 'I am a student', ex: 'N e studanti na universidade.' },
+      { k: 'N e médiku/a', e: 'I am a doctor', ex: 'N e médiku.' },
+      { k: 'Kel e nha amig/a', e: 'That is my friend', ex: 'Kel e nha amiga Maria.' },
+      { k: 'Fala Kriolu?', e: 'Do you speak Kriolu?', ex: 'Bu fala Kriolu?' },
+      { k: 'Un pokutim', e: 'A little bit', ex: 'N fala Kriolu un pokutim.' },
+      { k: 'N ta aprende Kriolu', e: 'I am learning Kriolu', ex: 'N ta aprende Kriolu tud dia.' },
     ]
   },
   {
@@ -977,8 +531,20 @@ const LESSONS = [
       { k: 'Oitu', e: 'Eight (8)', ex: 'Oitu eskudu.' },
       { k: 'Novi', e: 'Nine (9)', ex: 'Novi pessoa.' },
       { k: 'Des', e: 'Ten (10)', ex: 'Des anu.' },
+      { k: 'Onzi', e: 'Eleven (11)', ex: 'Onzi ora di noti.' },
+      { k: 'Dozi', e: 'Twelve (12)', ex: 'Dozi mes na anu.' },
+      { k: 'Trezi', e: 'Thirteen (13)', ex: 'Trezi pessoa.' },
+      { k: 'Katórzi', e: 'Fourteen (14)', ex: 'Katórzi anu.' },
+      { k: 'Kinzi', e: 'Fifteen (15)', ex: 'Kinzi minuto.' },
       { k: 'Vinti', e: 'Twenty (20)', ex: 'Vinti eskudu.' },
+      { k: 'Trinta', e: 'Thirty (30)', ex: 'Trinta pessoa.' },
+      { k: 'Kuarenta', e: 'Forty (40)', ex: 'Kuarenta anu.' },
+      { k: 'Sinkuenta', e: 'Fifty (50)', ex: 'Sinkuenta eskudu.' },
       { k: 'Sen', e: 'One hundred (100)', ex: 'Sen pessoa.' },
+      { k: 'Mil', e: 'One thousand (1000)', ex: 'Mil eskudu.' },
+      { k: 'Primeru', e: 'First', ex: 'Primeru lugar.' },
+      { k: 'Sigundu', e: 'Second', ex: 'Sigundu ves.' },
+      { k: 'Terseiru', e: 'Third', ex: 'Terseiru andar.' },
     ]
   },
   {
@@ -989,11 +555,27 @@ const LESSONS = [
       { k: 'Leiti', e: 'Milk', ex: 'N kre leiti ku sukru.' },
       { k: 'Pes', e: 'Fish', ex: 'Pes fresku.' },
       { k: 'Karne', e: 'Meat', ex: 'Karne di vaka.' },
+      { k: 'Frango', e: 'Chicken', ex: 'Frango grelhadu e saborozu.' },
       { k: 'Aroz', e: 'Rice', ex: 'Aroz ku fejon.' },
       { k: 'Fejon', e: 'Beans', ex: 'Fejon pretu e saborozu.' },
+      { k: 'Milhu', e: 'Corn / Maize', ex: 'Milhu e base di catchupa.' },
       { k: 'Pão', e: 'Bread', ex: 'Pão fresku di mañan.' },
+      { k: 'Manteiga', e: 'Butter', ex: 'Pão ku manteiga.' },
       { k: 'Kafé', e: 'Coffee', ex: 'N kre un kafé.' },
+      { k: 'Txá', e: 'Tea', ex: 'Txá di ervas.' },
+      { k: 'Sumo', e: 'Juice', ex: 'Sumo di laranja fresku.' },
       { k: 'Catchupa', e: 'Cachupa (national dish)', ex: 'Catchupa e kumida di Kabu Verdi.' },
+      { k: 'Lagosta', e: 'Lobster', ex: 'Lagosta di Kabu Verdi e famoza.' },
+      { k: 'Djagacida', e: 'Meat and bean stew', ex: 'Djagacida e gostosa.' },
+      { k: 'Pastel', e: 'Fried pastry with fish', ex: 'Pastel ku atum e txeu bon.' },
+      { k: 'Grogue', e: 'Cape Verdean rum', ex: 'Grogue e bebida tradisional.' },
+      { k: 'Pontxi', e: 'Ponche (mixed drink)', ex: 'Pontxi ku limão e fresku.' },
+      { k: 'Sukru', e: 'Sugar', ex: 'Kafé ku sukru.' },
+      { k: 'Sal', e: 'Salt', ex: 'Kumida preçiza sal.' },
+      { k: 'Azeiti', e: 'Olive oil', ex: 'Azeiti di boa kualidade.' },
+      { k: 'Fruta', e: 'Fruit', ex: 'Fruta freska di Kabu Verdi.' },
+      { k: 'Banana', e: 'Banana', ex: 'Banana di Santiago e dosi.' },
+      { k: 'Papaia', e: 'Papaya', ex: 'Papaia madura e dosi.' },
     ]
   },
   {
@@ -1010,6 +592,17 @@ const LESSONS = [
       { k: 'Avó', e: 'Grandmother', ex: 'Nha avó e simpátika.' },
       { k: 'Maridu', e: 'Husband', ex: 'Nha maridu txoma Pedro.' },
       { k: 'Mudjer', e: 'Wife', ex: 'Nha mudjer trabadja na skola.' },
+      { k: 'Tiu', e: 'Uncle', ex: 'Nha tiu mora na Lisboa.' },
+      { k: 'Tia', e: 'Aunt', ex: 'Nha tia e kuzinhera.' },
+      { k: 'Primu', e: 'Male cousin', ex: 'Nha primu ten karru novu.' },
+      { k: 'Prima', e: 'Female cousin', ex: 'Nha prima e simpátika.' },
+      { k: 'Sobrinhu', e: 'Nephew', ex: 'Nha sobrinhu e pikinoti.' },
+      { k: 'Sobrinha', e: 'Niece', ex: 'Nha sobrinha ta bai skola.' },
+      { k: 'Sogru', e: 'Father-in-law', ex: 'Nha sogru e bon omi.' },
+      { k: 'Sogra', e: 'Mother-in-law', ex: 'Nha sogra kuzinha bem.' },
+      { k: 'Namoradu', e: 'Boyfriend', ex: 'Nha namoradu e di Mindelo.' },
+      { k: 'Namorada', e: 'Girlfriend', ex: 'Nha namorada e linda.' },
+      { k: 'Nha', e: 'My (possessive)', ex: 'Nha família e grandi.' },
     ]
   },
   {
@@ -1017,14 +610,25 @@ const LESSONS = [
     vocab: [
       { k: 'Sim', e: 'Yes', ex: 'Sim, n sta de akurdu.' },
       { k: 'Ña', e: 'No', ex: 'Ña, n ka kre.' },
+      { k: 'Talbez', e: 'Maybe', ex: 'Talbez mañan.' },
       { k: 'N ka intendi', e: "I don't understand", ex: 'N ka intendi. Pudi repeti?' },
       { k: 'Fla-m di novu', e: 'Say that again', ex: 'Fla-m di novu, pur favor.' },
+      { k: 'Mais divasim', e: 'More slowly', ex: 'Fla mais divasim, pur favor.' },
       { k: 'Pur favor', e: 'Please', ex: 'Pur favor, djuda-m.' },
       { k: 'Djuda-m', e: 'Help me', ex: 'Djuda-m, pur favor!' },
       { k: 'Undi?', e: 'Where?', ex: 'Undi ki e banhu?' },
       { k: 'Kantu kusta?', e: 'How much does it cost?', ex: 'Kantu kusta es sapatu?' },
       { k: 'N preçiza...', e: 'I need...', ex: 'N preçiza un médiku.' },
       { k: 'Txoma pulisia!', e: 'Call the police!', ex: 'Txoma pulisia, pur favor!' },
+      { k: 'N ka sei', e: "I don't know", ex: 'N ka sei undi ki e.' },
+      { k: 'Klaru', e: 'Of course / Clear', ex: 'Klaru! N ta djuda-bu.' },
+      { k: 'Ta bon', e: "It's okay / No problem", ex: 'Ta bon, ka preokupa.' },
+      { k: 'Kuze?', e: 'What?', ex: 'Kuze ki bu fla?' },
+      { k: 'Kel e bon', e: 'That is good', ex: 'Kel e bon, obrigadu.' },
+      { k: 'Kel e mau', e: 'That is bad', ex: 'Kel e mau notísia.' },
+      { k: 'N kre...', e: 'I want...', ex: 'N kre un kafé, pur favor.' },
+      { k: 'N gosta di...', e: 'I like...', ex: 'N gosta di Kriolu.' },
+      { k: 'N ka gosta di...', e: "I don't like...", ex: 'N ka gosta di kal.' },
     ]
   },
   {
@@ -1033,6 +637,8 @@ const LESSONS = [
       { k: 'Oji', e: 'Today', ex: 'Oji e bon dia.' },
       { k: 'Mañan', e: 'Tomorrow', ex: 'Mañan n vai trabadja.' },
       { k: 'Onti', e: 'Yesterday', ex: 'Onti n fika na kaza.' },
+      { k: 'Simana ki ben', e: 'Next week', ex: 'Simana ki ben n bai Mindelo.' },
+      { k: 'Simana pasadu', e: 'Last week', ex: 'Simana pasadu n trabadja muntu.' },
       { k: 'Sigunda-fera', e: 'Monday', ex: 'N trabadja na sigunda-fera.' },
       { k: 'Tersa-fera', e: 'Tuesday', ex: 'Merkadu na tersa-fera.' },
       { k: 'Kuarta-fera', e: 'Wednesday', ex: 'Eskola ta sata na kuarta-fera.' },
@@ -1040,6 +646,18 @@ const LESSONS = [
       { k: 'Sesta-fera', e: 'Friday', ex: 'Festa na sesta-fera!' },
       { k: 'Sabadu', e: 'Saturday', ex: 'Sabadu e dia di diskansa.' },
       { k: 'Dumingu', e: 'Sunday', ex: 'Dumingu e sagrado.' },
+      { k: 'Ora', e: 'Hour / Time', ex: 'Ki ora ki e?' },
+      { k: 'Minuto', e: 'Minute', ex: 'Sinku minuto.' },
+      { k: 'Mañansiña', e: 'Morning', ex: 'Na mañansiña n bebe kafé.' },
+      { k: 'Merdia', e: 'Noon / Midday', ex: 'Na merdia n kume.' },
+      { k: 'Tardi', e: 'Afternoon / Evening', ex: 'Na tardi n diskansa.' },
+      { k: 'Noti', e: 'Night', ex: 'Na noti n durmi sedu.' },
+      { k: 'Sempri', e: 'Always', ex: 'N sempri bebe kafé.' },
+      { k: 'Nunka', e: 'Never', ex: 'N nunka fuma.' },
+      { k: 'Às vezes', e: 'Sometimes', ex: 'Às vezes n ta kanta.' },
+      { k: 'Agora', e: 'Now', ex: 'Bai agora!' },
+      { k: 'Dipus', e: 'Later / After', ex: 'Dipus n ta bai.' },
+      { k: 'Antes', e: 'Before', ex: 'Antes di durmi, n ta lê.' },
     ]
   },
   {
@@ -1052,93 +670,1216 @@ const LESSONS = [
       { k: 'Verdi', e: 'Green', ex: 'Folha verdi.' },
       { k: 'Marelu', e: 'Yellow', ex: 'Sol marelu.' },
       { k: 'Laranja', e: 'Orange', ex: 'Fruta laranja.' },
+      { k: 'Roza', e: 'Pink', ex: 'Flor roza.' },
+      { k: 'Roxu', e: 'Purple', ex: 'Kamisola roxu.' },
+      { k: 'Maron', e: 'Brown', ex: 'Tera maron.' },
+      { k: 'Sinzento', e: 'Grey', ex: 'Nuvem sinzento.' },
       { k: 'Grandi', e: 'Big / Large', ex: 'Kaza grandi.' },
       { k: 'Pikinoti', e: 'Small', ex: 'Pikinoti kriança.' },
+      { k: 'Bunitu/a', e: 'Beautiful / Pretty', ex: 'Kabu Verdi e bunitu.' },
+      { k: 'Feiu/a', e: 'Ugly', ex: 'Kel kaza e feia.' },
       { k: 'Saborozu', e: 'Delicious', ex: 'Catchupa e saborozu.' },
+      { k: 'Nobu/a', e: 'New', ex: 'Karru nobu.' },
+      { k: 'Bedju/a', e: 'Old', ex: 'Omi bedju.' },
+      { k: 'Kenti', e: 'Hot', ex: 'Agu kenti.' },
+      { k: 'Friu', e: 'Cold', ex: 'Agu friu.' },
+      { k: 'Rapidu', e: 'Fast', ex: 'Karru rapidu.' },
+      { k: 'Divasim', e: 'Slow', ex: 'Fla divasim.' },
+      { k: 'Bon', e: 'Good', ex: 'Kel e bon.' },
+      { k: 'Mau', e: 'Bad', ex: 'Kel e mau.' },
+    ]
+  },
+  {
+    id: 'travel', title: 'Travel & Directions', titleKriolu: 'Viagem & Direson', icon: '✈️', color: '#0077B6',
+    vocab: [
+      { k: 'Undi ki e...?', e: 'Where is...?', ex: 'Undi ki e hotel?' },
+      { k: 'Banku', e: 'Bank', ex: 'Undi ki e banku?' },
+      { k: 'Ospital', e: 'Hospital', ex: 'N preçiza ir na ospital.' },
+      { k: 'Farmásia', e: 'Pharmacy', ex: 'Undi ki e farmásia?' },
+      { k: 'Merkadu', e: 'Market', ex: 'Merkadu e grandi.' },
+      { k: 'Supermerkadu', e: 'Supermarket', ex: 'N bai supermerkadu.' },
+      { k: 'Aeroportu', e: 'Airport', ex: 'Aeroportu e longi.' },
+      { k: 'Porto', e: 'Port / Harbor', ex: 'Porto di Mindelo e famazu.' },
+      { k: 'Praia', e: 'Beach', ex: 'Praia di Kabu Verdi e bunita.' },
+      { k: 'Hotel', e: 'Hotel', ex: 'N mora na hotel.' },
+      { k: 'Restauranti', e: 'Restaurant', ex: 'Restauranti e bon.' },
+      { k: 'Karru', e: 'Car', ex: 'N ten karru nobu.' },
+      { k: 'Otokarro', e: 'Bus', ex: 'N ta bai di otokarro.' },
+      { k: 'Táksi', e: 'Taxi', ex: 'Txoma un táksi.' },
+      { k: 'Barku', e: 'Boat / Ship', ex: 'Barku bai pa Santiago.' },
+      { k: 'Avião', e: 'Airplane', ex: 'Avião ta parti mañan.' },
+      { k: 'Diretu', e: 'Straight ahead', ex: 'Bai diretu.' },
+      { k: 'Skreda', e: 'Left', ex: 'Bira pa skreda.' },
+      { k: 'Diritu', e: 'Right', ex: 'Bira pa diritu.' },
+      { k: 'Longi', e: 'Far', ex: 'E longi di li.' },
+      { k: 'Pertu', e: 'Near / Close', ex: 'E pertu di li.' },
+      { k: 'Rua', e: 'Street / Road', ex: 'Ki rua ki es e?' },
+      { k: 'Pasaporti', e: 'Passport', ex: 'Bu ten bu pasaporti?' },
+      { k: 'Bagagem', e: 'Luggage', ex: 'Nha bagagem e pezadu.' },
+    ]
+  },
+  {
+    id: 'body_health', title: 'Body & Health', titleKriolu: 'Korpu & Saúdi', icon: '🏥', color: '#E76F51',
+    vocab: [
+      { k: 'Kabesa', e: 'Head', ex: 'Nha kabesa ta doi.' },
+      { k: 'Olhu', e: 'Eye', ex: 'Bu ten olhu bunitu.' },
+      { k: 'Oreya', e: 'Ear', ex: 'Nha oreya ta doi.' },
+      { k: 'Naris', e: 'Nose', ex: 'Nha naris e stufadu.' },
+      { k: 'Boka', e: 'Mouth', ex: 'Boka ta doi.' },
+      { k: 'Denti', e: 'Tooth / Teeth', ex: 'Nha denti ta doi.' },
+      { k: 'Peitu', e: 'Chest', ex: 'Nha peitu ta doi.' },
+      { k: 'Barriga', e: 'Stomach / Belly', ex: 'Nha barriga ta doi.' },
+      { k: 'Brasu', e: 'Arm', ex: 'Nha brasu ta doi.' },
+      { k: 'Mão', e: 'Hand', ex: 'Nha mão ta doi.' },
+      { k: 'Perna', e: 'Leg', ex: 'Nha perna ta doi.' },
+      { k: 'Pe', e: 'Foot', ex: 'Nha pe ta doi.' },
+      { k: 'Kostu', e: 'Back', ex: 'Nha kostu ta doi.' },
+      { k: 'N sta doenti', e: "I'm sick", ex: 'N sta doenti oji.' },
+      { k: 'N ten febre', e: 'I have a fever', ex: 'N ten febre altu.' },
+      { k: 'N ta vomitá', e: 'I am vomiting', ex: 'N ta vomitá. N preçiza médiku.' },
+      { k: 'Medikamentu', e: 'Medicine', ex: 'N preçiza medikamentu.' },
+      { k: 'Médiku', e: 'Doctor', ex: 'N preçiza ir bo médiku.' },
+      { k: 'Doi', e: 'Pain / It hurts', ex: 'Undi ki ta doi?' },
+      { k: 'Alérjia', e: 'Allergy', ex: 'N ten alérjia.' },
+      { k: 'Kansadu/a', e: 'Tired', ex: 'N sta txeu kansadu.' },
+      { k: 'Saúdi', e: 'Health', ex: 'Saúdi e tudo.' },
+    ]
+  },
+  {
+    id: 'shopping', title: 'Shopping & Money', titleKriolu: 'Kompras & Dinheru', icon: '🛒', color: '#6A994E',
+    vocab: [
+      { k: 'Kantu kusta?', e: 'How much does it cost?', ex: 'Kantu kusta es sapatu?' },
+      { k: 'E karu', e: "It's expensive", ex: 'Es e txeu karu!' },
+      { k: 'E baratu', e: "It's cheap", ex: 'Es e baratu, kompra!' },
+      { k: 'Dinheru', e: 'Money', ex: 'N ka ten dinheru.' },
+      { k: 'Eskudu', e: 'Escudo (Cape Verde currency)', ex: 'Mil eskudu.' },
+      { k: 'Troku', e: 'Change (money)', ex: 'Bu ten troku?' },
+      { k: 'Karta di kreditu', e: 'Credit card', ex: 'Podi paga ku karta di kreditu?' },
+      { k: 'N kre kompra...', e: 'I want to buy...', ex: 'N kre kompra kel.' },
+      { k: 'Loja', e: 'Shop / Store', ex: 'Loja e abertu.' },
+      { k: 'Merkadu', e: 'Market', ex: 'Merkadu di Praia e grandi.' },
+      { k: 'Sapatu', e: 'Shoe', ex: 'Sapatu nobu.' },
+      { k: 'Ropa', e: 'Clothes', ex: 'Ropa bunita.' },
+      { k: 'Kamisola', e: 'Shirt / T-shirt', ex: 'Kamisola azul.' },
+      { k: 'Kalsa', e: 'Trousers / Pants', ex: 'Kalsa pretu.' },
+      { k: 'Grandi dimaiz', e: 'Too big', ex: 'Es e grandi dimaiz pa mi.' },
+      { k: 'Pikinoti dimaiz', e: 'Too small', ex: 'Es e pikinoti dimaiz.' },
+      { k: 'Podi dá deskóntu?', e: 'Can you give a discount?', ex: 'Podi dá deskóntu, pur favor?' },
+      { k: 'N ta leva es', e: "I'll take this one", ex: 'N ta leva es, obrigadu.' },
+    ]
+  },
+  {
+    id: 'emotions', title: 'Emotions & Feelings', titleKriolu: 'Emosons & Sentimentus', icon: '❤️', color: '#C77DFF',
+    vocab: [
+      { k: 'Feliz', e: 'Happy', ex: 'N sta feliz oji.' },
+      { k: 'Tristi', e: 'Sad', ex: 'N sta tristi.' },
+      { k: 'Braba/u', e: 'Angry', ex: 'N sta braba ku kel.' },
+      { k: 'Sperientadu/a', e: 'Surprised', ex: 'N sta sperientadu!' },
+      { k: 'Medradu/a', e: 'Scared / Afraid', ex: 'N sta medradu.' },
+      { k: 'Saudadi', e: 'Longing / Missing someone', ex: 'N ten saudadi di nha família.' },
+      { k: 'N ama-bu', e: 'I love you', ex: 'N ama-bu, nha amor.' },
+      { k: 'N gosta di bu', e: 'I like you', ex: 'N gosta di bu muntu.' },
+      { k: 'N ta falta bu', e: 'I miss you', ex: 'N ta falta bu txeu.' },
+      { k: 'Kontenti', e: 'Content / Pleased', ex: 'N sta kontenti ku kel.' },
+      { k: 'Preokupadu/a', e: 'Worried', ex: 'N sta preokupadu.' },
+      { k: 'Envergonhadu/a', e: 'Embarrassed', ex: 'N sta envergonhadu.' },
+      { k: 'Orgulhozu/a', e: 'Proud', ex: 'N sta orgulhozu di bu.' },
+      { k: 'Txeu bon', e: 'Very good / Excellent', ex: 'Kel e txeu bon!' },
+      { k: 'Maravilhozu', e: 'Wonderful / Marvelous', ex: 'Kabu Verdi e maravilhozu.' },
+      { k: 'Inkrivel', e: 'Incredible / Amazing', ex: 'Es e inkrivel!' },
+    ]
+  },
+  {
+    id: 'verbs', title: 'Common Verbs', titleKriolu: 'Verbos Komuns', icon: '⚡', color: '#3A86FF',
+    vocab: [
+      { k: 'Bai', e: 'To go', ex: 'N ta bai merkadu.' },
+      { k: 'Ben', e: 'To come', ex: 'Ben pa ki!' },
+      { k: 'Kume', e: 'To eat', ex: 'N ta kume catchupa.' },
+      { k: 'Bebe', e: 'To drink', ex: 'N ta bebe agu.' },
+      { k: 'Durmi', e: 'To sleep', ex: 'N ta durmi sedu.' },
+      { k: 'Trabadja', e: 'To work', ex: 'N ta trabadja muntu.' },
+      { k: 'Fla', e: 'To say / To speak', ex: 'Ki ki bu ta fla?' },
+      { k: 'Obi', e: 'To hear / To listen', ex: 'Obi bem!' },
+      { k: 'Odja', e: 'To see / To look', ex: 'Odja kel!' },
+      { k: 'Fazi', e: 'To do / To make', ex: 'Ki ki bu ta fazi?' },
+      { k: 'Ten', e: 'To have', ex: 'N ten un kaza.' },
+      { k: 'Kre', e: 'To want', ex: 'N kre kafé.' },
+      { k: 'Gosta', e: 'To like', ex: 'N gosta di Kriolu.' },
+      { k: 'Ama', e: 'To love', ex: 'N ama nha família.' },
+      { k: 'Konxe', e: 'To know (a person)', ex: 'Bu konxe João?' },
+      { k: 'Sabi', e: 'To know (a fact)', ex: 'N ka sabi.' },
+      { k: 'Aprende', e: 'To learn', ex: 'N ta aprende Kriolu.' },
+      { k: 'Lê', e: 'To read', ex: 'N ta lê livru.' },
+      { k: 'Skrebe', e: 'To write', ex: 'N ta skrebe karta.' },
+      { k: 'Kanta', e: 'To sing', ex: 'N ta kanta morna.' },
+      { k: 'Dansa', e: 'To dance', ex: 'N ta dansa funaná.' },
+      { k: 'Kuri', e: 'To run', ex: 'N ta kuri na mañan.' },
+      { k: 'Pará', e: 'To stop', ex: 'Pará!' },
+      { k: 'Kumesa', e: 'To start / begin', ex: 'Mos kumesa.' },
+    ]
+  },
+  {
+    id: 'culture', title: 'Culture & Cape Verde', titleKriolu: 'Kultura & Kabu Verdi', icon: '🌴', color: '#2D6A4F',
+    vocab: [
+      { k: 'Kabu Verdi', e: 'Cape Verde', ex: 'N ama Kabu Verdi.' },
+      { k: 'Ilha', e: 'Island', ex: 'Kabu Verdi ten des ilha.' },
+      { k: 'Santiago', e: 'Santiago (largest island)', ex: 'Praia e kapital di Santiago.' },
+      { k: 'São Visentu', e: 'São Vicente island', ex: 'Mindelo e na São Visentu.' },
+      { k: 'Praia', e: 'Praia (capital city)', ex: 'Praia e kapital di Kabu Verdi.' },
+      { k: 'Mindelo', e: 'Mindelo (cultural capital)', ex: 'Mindelo e sidadi di kultura.' },
+      { k: 'Morna', e: 'Morna (traditional music)', ex: 'Morna e muzika di saudadi.' },
+      { k: 'Funaná', e: 'Funaná (dance music)', ex: 'Funaná e muzika di festa.' },
+      { k: 'Batuque', e: 'Batuque (traditional rhythm)', ex: 'Batuque e ritmu di Santiago.' },
+      { k: 'Saudadi', e: 'Saudade (longing/nostalgia)', ex: 'Kriolu ten txeu saudadi.' },
+      { k: 'Morabeza', e: 'Warmth / Hospitality', ex: 'Morabeza e alma di Kabu Verdi.' },
+      { k: 'Sodadi', e: 'Longing for home', ex: 'Sodadi di nha terra.' },
+      { k: 'Diáspora', e: 'Diaspora', ex: 'Diáspora kabuverdiana e grandi.' },
+      { k: 'Karnaval', e: 'Carnival', ex: 'Karnaval di Mindelo e famazu.' },
+      { k: 'Tabanka', e: 'Traditional festival', ex: 'Tabanka e festa di Kriolu.' },
+      { k: 'Grogue', e: 'Sugarcane rum', ex: 'Grogue di Santo Antão e bon.' },
+      { k: 'Panu di terra', e: 'Traditional woven cloth', ex: 'Panu di terra e artizanatu.' },
+      { k: 'Kriolu', e: 'Cape Verdean Creole language', ex: 'Kriolu e nha lingua.' },
+      { k: 'Badiu', e: 'Santiago islander / dialect', ex: 'N fala Kriolu Badiu.' },
+      { k: 'Sampadjudu', e: 'São Vicente islander', ex: 'El e Sampadjudu di Mindelo.' },
+    ]
+  },
+  {
+    id: 'weather', title: 'Weather & Nature', titleKriolu: 'Tempu & Natureza', icon: '🌤️', color: '#48CAE4',
+    vocab: [
+      { k: 'Tempu', e: 'Weather / Time', ex: 'Ki tempu ki ta fazi oji?' },
+      { k: 'Sol', e: 'Sun', ex: 'Sol ta brilha txeu.' },
+      { k: 'Txuva', e: 'Rain', ex: 'Ta txove oji.' },
+      { k: 'Ventu', e: 'Wind', ex: 'Ventu ta sopra forti.' },
+      { k: 'Nuvem', e: 'Cloud', ex: 'Nuvem pretu no séu.' },
+      { k: 'Nebuloza', e: 'Foggy / Hazy', ex: 'Tempu nebuloza oji.' },
+      { k: 'Kenti', e: 'Hot', ex: 'Oji ta fazi kenti.' },
+      { k: 'Friu', e: 'Cold', ex: 'Noti ta fazi friu.' },
+      { k: 'Frieski', e: 'Cool / Fresh', ex: 'Tardi ta fazi frieski.' },
+      { k: 'Seku', e: 'Dry', ex: 'Tempu seku na vera.' },
+      { k: 'Umidu', e: 'Humid', ex: 'Tempu umidu na xuvosa.' },
+      { k: 'Txovada', e: 'Rainy season', ex: 'Txovada kumesa na Agostu.' },
+      { k: 'Vera', e: 'Dry season / Summer', ex: 'Na vera tempu ta fazi kenti.' },
+      { k: 'Tempestadi', e: 'Storm', ex: 'Tempestadi ta ben.' },
+      { k: 'Arku-iris', e: 'Rainbow', ex: 'Arku-iris dipus di txuva.' },
+      { k: 'Mar', e: 'Sea / Ocean', ex: 'Mar di Kabu Verdi e azul.' },
+      { k: 'Onda', e: 'Wave', ex: 'Onda grandi na praia.' },
+      { k: 'Munti', e: 'Mountain', ex: 'Fogo ten munti altu.' },
+      { k: 'Vulkan', e: 'Volcano', ex: 'Vulkan di Fogo e aktiv.' },
+      { k: 'Tera', e: 'Land / Earth / Soil', ex: 'Tera di Kabu Verdi e seku.' },
+      { k: 'Pedra', e: 'Rock / Stone', ex: 'Pedra na praia.' },
+      { k: 'Areia', e: 'Sand', ex: 'Areia branku na praia.' },
+      { k: 'Arburi', e: 'Tree', ex: 'Arburi di tamariñu.' },
+      { k: 'Flor', e: 'Flower', ex: 'Flor di buganvilia.' },
+      { k: 'Folha', e: 'Leaf', ex: 'Folha verdi.' },
+      { k: 'Erva', e: 'Grass / Herb', ex: 'Erva freska.' },
+      { k: 'Ribera', e: 'River / Ravine', ex: 'Ribera di Santiago.' },
+      { k: 'Lagu', e: 'Lake', ex: 'Lagu di Agu Pau.' },
+      { k: 'Serra', e: 'Mountain range / Hills', ex: 'Serra di Malagueta.' },
+      { k: 'Kosta', e: 'Coast / Coastline', ex: 'Kosta di Kabu Verdi e bunita.' },
+    ]
+  },
+  {
+    id: 'house', title: 'House & Home', titleKriolu: 'Kaza & Lar', icon: '🏠', color: '#BC6C25',
+    vocab: [
+      { k: 'Kaza', e: 'House / Home', ex: 'Nha kaza e grandi.' },
+      { k: 'Porta', e: 'Door', ex: 'Porta ta abertu.' },
+      { k: 'Janela', e: 'Window', ex: 'Janela di kaza.' },
+      { k: 'Parede', e: 'Wall', ex: 'Parede branku.' },
+      { k: 'Chan', e: 'Floor', ex: 'Chan di azulejo.' },
+      { k: 'Tetu', e: 'Ceiling / Roof', ex: 'Tetu di kaza.' },
+      { k: 'Skada', e: 'Stairs', ex: 'Skada pa sigundu andar.' },
+      { k: 'Kuzinha', e: 'Kitchen', ex: 'N ta kuzinha na kuzinha.' },
+      { k: 'Sala', e: 'Living room', ex: 'Família ta senta na sala.' },
+      { k: 'Kuartu', e: 'Bedroom', ex: 'N ta durmi na nha kuartu.' },
+      { k: 'Banhu', e: 'Bathroom', ex: 'Banhu e na fundu.' },
+      { k: 'Varandá', e: 'Balcony / Veranda', ex: 'N ta senta na varandá.' },
+      { k: 'Kintal', e: 'Backyard / Courtyard', ex: 'Kintal di kaza.' },
+      { k: 'Kama', e: 'Bed', ex: 'Nha kama e grandi.' },
+      { k: 'Mexa', e: 'Table', ex: 'Mexa di sala.' },
+      { k: 'Kadeira', e: 'Chair', ex: 'Senta na kadeira.' },
+      { k: 'Sofa', e: 'Sofa / Couch', ex: 'N ta senta na sofa.' },
+      { k: 'Armáriu', e: 'Wardrobe / Cupboard', ex: 'Ropa na armáriu.' },
+      { k: 'Frizideira', e: 'Refrigerator / Fridge', ex: 'Agu fresku na frizideira.' },
+      { k: 'Fogão', e: 'Stove / Cooker', ex: 'Kuzinha na fogão.' },
+      { k: 'Panela', e: 'Pot / Pan', ex: 'Panela di catchupa.' },
+      { k: 'Pratu', e: 'Plate / Dish', ex: 'Pratu di kumida.' },
+      { k: 'Kopu', e: 'Cup / Glass', ex: 'Kopu di agu.' },
+      { k: 'Kolher', e: 'Spoon', ex: 'Kolher di sopa.' },
+      { k: 'Garfu', e: 'Fork', ex: 'Garfu pa kume.' },
+      { k: 'Faka', e: 'Knife', ex: 'Faka di kuzinha.' },
+      { k: 'Sabão', e: 'Soap', ex: 'Laba mão ku sabão.' },
+      { k: 'Tualia', e: 'Towel', ex: 'Tualia di banhu.' },
+      { k: 'Luzu', e: 'Light / Electricity', ex: 'Luzu ta funxoná.' },
+      { k: 'Agu kanalizadu', e: 'Running water / Tap water', ex: 'Agu kanalizadu na kaza.' },
+      { k: 'Aluguer', e: 'Rent', ex: 'N ta paga aluguer.' },
+      { k: 'Vizinhu', e: 'Neighbour', ex: 'Nha vizinhu e simpátiku.' },
+    ]
+  },
+  {
+    id: 'school', title: 'School & Education', titleKriolu: 'Skola & Edukasão', icon: '📚', color: '#4361EE',
+    vocab: [
+      { k: 'Skola', e: 'School', ex: 'N ta bai skola.' },
+      { k: 'Universidade', e: 'University', ex: 'N ta studar na universidade.' },
+      { k: 'Sala di ola', e: 'Classroom', ex: 'Sala di ola e grandi.' },
+      { k: 'Profesor/a', e: 'Teacher', ex: 'Nha profesor e bon.' },
+      { k: 'Studanti', e: 'Student', ex: 'N e studanti.' },
+      { k: 'Livru', e: 'Book', ex: 'N ta lê livru.' },
+      { k: 'Kaderno', e: 'Notebook', ex: 'Skrebe na kaderno.' },
+      { k: 'Lapis', e: 'Pencil', ex: 'Lapis pa skrebe.' },
+      { k: 'Kaneta', e: 'Pen', ex: 'Kaneta azul.' },
+      { k: 'Borraxa', e: 'Eraser', ex: 'Borraxa pa apaga.' },
+      { k: 'Régua', e: 'Ruler', ex: 'Régua di plasiku.' },
+      { k: 'Mochila', e: 'Backpack', ex: 'Mochila di skola.' },
+      { k: 'Exami', e: 'Exam / Test', ex: 'N ten exami mañan.' },
+      { k: 'Prova', e: 'Test / Quiz', ex: 'Prova di Kriolu.' },
+      { k: 'Nota', e: 'Grade / Mark', ex: 'N tevi bon nota.' },
+      { k: 'Aula', e: 'Lesson / Class', ex: 'Aula ta kumesa.' },
+      { k: 'Rekrêu', e: 'Break / Recess', ex: 'Rekrêu di des minuto.' },
+      { k: 'Biblioteca', e: 'Library', ex: 'N ta lê na biblioteca.' },
+      { k: 'Matemátika', e: 'Mathematics', ex: 'Matemátika e difísil.' },
+      { k: 'Siénsia', e: 'Science', ex: 'N gosta di siénsia.' },
+      { k: 'Istória', e: 'History', ex: 'Istória di Kabu Verdi.' },
+      { k: 'Jeografia', e: 'Geography', ex: 'Jeografia di Afrika.' },
+      { k: 'Lingua', e: 'Language', ex: 'N ta aprende lingua nobu.' },
+      { k: 'Português', e: 'Portuguese language', ex: 'N fala Português tambe.' },
+      { k: 'Diploma', e: 'Diploma / Degree', ex: 'N tevi nha diploma.' },
+      { k: 'Dever di kaza', e: 'Homework', ex: 'N ten txeu dever di kaza.' },
+      { k: 'Pergunta', e: 'Question', ex: 'N ten un pergunta.' },
+      { k: 'Resposta', e: 'Answer', ex: 'Ki ki e nha resposta?' },
+      { k: 'Aprende', e: 'To learn / study', ex: 'N ta aprende txeu.' },
+      { k: 'Enténde', e: 'To understand', ex: 'Bu enténde?' },
+    ]
+  },
+  {
+    id: 'work', title: 'Work & Professions', titleKriolu: 'Trabadju & Profisons', icon: '💼', color: '#343A40',
+    vocab: [
+      { k: 'Trabadju', e: 'Work / Job', ex: 'N ten bon trabadju.' },
+      { k: 'Skritoriu', e: 'Office', ex: 'N trabadja na skritoriu.' },
+      { k: 'Xefi', e: 'Boss / Chief', ex: 'Nha xefi e bon.' },
+      { k: 'Kolega', e: 'Colleague / Coworker', ex: 'Nha kolega e simpátiku.' },
+      { k: 'Saláriu', e: 'Salary / Wage', ex: 'N ta resebe saláriu.' },
+      { k: 'Empregu', e: 'Employment / Job', ex: 'N ta prokurar empregu.' },
+      { k: 'Reunião', e: 'Meeting', ex: 'N ten reunião agor.' },
+      { k: 'Médiku/a', e: 'Doctor', ex: 'El e médiku.' },
+      { k: 'Infermeru/a', e: 'Nurse', ex: 'Infermera e simpátika.' },
+      { k: 'Advogadu/a', e: 'Lawyer', ex: 'El e advogadu.' },
+      { k: 'Engenheru/a', e: 'Engineer', ex: 'N e engenheiru.' },
+      { k: 'Arkitetu/a', e: 'Architect', ex: 'El e arkiteta.' },
+      { k: 'Kuntabilista', e: 'Accountant', ex: 'El e kuntabilista.' },
+      { k: 'Komersianti', e: 'Merchant / Trader', ex: 'El e komersianti.' },
+      { k: 'Piskador', e: 'Fisherman', ex: 'Piskador ta bai mar.' },
+      { k: 'Agrikultór', e: 'Farmer', ex: 'Agrikultór ta trabadja tera.' },
+      { k: 'Kuzinheru/a', e: 'Cook / Chef', ex: 'El e kuzinheru di restauranti.' },
+      { k: 'Garsom', e: 'Waiter / Waitress', ex: 'Garsom ta trazi kumida.' },
+      { k: 'Motorista', e: 'Driver', ex: 'El e motorista di táksi.' },
+      { k: 'Polisia', e: 'Police officer', ex: 'Polisia ta djuda.' },
+      { k: 'Bomberu', e: 'Firefighter', ex: 'Bomberu ta apaga fogu.' },
+      { k: 'Soldadu', e: 'Soldier', ex: 'El e soldadu.' },
+      { k: 'Artista', e: 'Artist', ex: 'El e artista famazu.' },
+      { k: 'Muzikante', e: 'Musician', ex: 'El e muzikante di morna.' },
+      { k: 'Jornalista', e: 'Journalist', ex: 'El e jornalista.' },
+      { k: 'Informátiku/a', e: 'IT specialist', ex: 'El e informátiku.' },
+      { k: 'Empregadu/a', e: 'Employee', ex: 'N e empregadu.' },
+      { k: 'Patrão', e: 'Employer / Owner', ex: 'Patrão ta paga saláriu.' },
+      { k: 'Aposentadu/a', e: 'Retired', ex: 'Nha pai e aposentadu.' },
+      { k: 'Voluntáriu/a', e: 'Volunteer', ex: 'N e voluntáriu.' },
+    ]
+  },
+  {
+    id: 'sports', title: 'Sports & Hobbies', titleKriolu: 'Desportu & Hobis', icon: '⚽', color: '#38B000',
+    vocab: [
+      { k: 'Desportu', e: 'Sport', ex: 'N gosta di desportu.' },
+      { k: 'Jogu', e: 'Game', ex: 'Jogu di futbol.' },
+      { k: 'Futbol', e: 'Football / Soccer', ex: 'Futbol e desportu favoritu.' },
+      { k: 'Basquete', e: 'Basketball', ex: 'N joga basquete.' },
+      { k: 'Natason', e: 'Swimming', ex: 'N ta nada na mar.' },
+      { k: 'Kuri', e: 'Running', ex: 'N ta kuri na mañan.' },
+      { k: 'Peskaria', e: 'Fishing', ex: 'N gosta di peskaria.' },
+      { k: 'Surfing', e: 'Surfing', ex: 'Surfing na onda grandi.' },
+      { k: 'Vela', e: 'Sailing', ex: 'N ta andá di vela.' },
+      { k: 'Montanhizmu', e: 'Hiking / Mountaineering', ex: 'Montanhizmu na Fogo.' },
+      { k: 'Joga', e: 'To play (sports)', ex: 'N ta joga futbol.' },
+      { k: 'Ganha', e: 'To win', ex: 'N ta ganha!' },
+      { k: 'Perdi', e: 'To lose', ex: 'Ka ta perdi.' },
+      { k: 'Empata', e: 'To draw / tie', ex: 'Jogu empata.' },
+      { k: 'Ekipa', e: 'Team', ex: 'Nha ekipa e bon.' },
+      { k: 'Hobis', e: 'Hobby', ex: 'Ki ki e bu hobis?' },
+      { k: 'Lêtura', e: 'Reading', ex: 'N gosta di lêtura.' },
+      { k: 'Muzika', e: 'Music', ex: 'N ta skuta muzika.' },
+      { k: 'Pintadura', e: 'Painting', ex: 'N ta fazi pintadura.' },
+      { k: 'Fotografia', e: 'Photography', ex: 'N gosta di fotografia.' },
+      { k: 'Kulinária', e: 'Cooking (as hobby)', ex: 'N gosta di kulinária.' },
+      { k: 'Jardinajim', e: 'Gardening', ex: 'N ta trabadja na jardim.' },
+      { k: 'Dansa', e: 'Dancing', ex: 'N gosta di dansa funaná.' },
+      { k: 'Kanta', e: 'Singing', ex: 'N gosta di kanta.' },
+      { k: 'Viajá', e: 'Travelling', ex: 'N ama viajá.' },
+      { k: 'Skuta muzika', e: 'Listening to music', ex: 'N ta skuta morna.' },
+      { k: 'Jogu di tabuleru', e: 'Board game', ex: 'N joga jogu di tabuleru.' },
+      { k: 'Kartus', e: 'Cards (playing cards)', ex: 'N joga kartus ku família.' },
+      { k: 'Diskansa', e: 'To rest / relax', ex: 'N ta diskansa na fim di simana.' },
+      { k: 'Passatempu', e: 'Pastime', ex: 'Ki ki e bu passatempu?' },
+    ]
+  },
+  {
+    id: 'technology', title: 'Technology & Media', titleKriolu: 'Teknolojia & Media', icon: '📱', color: '#6C757D',
+    vocab: [
+      { k: 'Telefoni', e: 'Phone', ex: 'Nha telefoni e nobu.' },
+      { k: 'Komputador', e: 'Computer', ex: 'N ta trabadja na komputador.' },
+      { k: 'Internet', e: 'Internet', ex: 'N ta uza internet.' },
+      { k: 'Rede sosial', e: 'Social media', ex: 'N ta uza rede sosial.' },
+      { k: 'Mensagem', e: 'Message', ex: 'N manda mensagem.' },
+      { k: 'Txamada', e: 'Phone call', ex: 'N ten un txamada.' },
+      { k: 'Bateria', e: 'Battery', ex: 'Bateria ta kaba.' },
+      { k: 'Karregador', e: 'Charger', ex: 'N preçiza karregador.' },
+      { k: 'Wi-Fi', e: 'WiFi', ex: 'Ki ki e password di Wi-Fi?' },
+      { k: 'Aplikason', e: 'App / Application', ex: 'Aplikason di Kriolu.' },
+      { k: 'Fotografia', e: 'Photo', ex: 'N ta tira fotografia.' },
+      { k: 'Video', e: 'Video', ex: 'N ta odja video.' },
+      { k: 'Muzika online', e: 'Streaming music', ex: 'N ta skuta muzika online.' },
+      { k: 'Korreo eletróniku', e: 'Email', ex: 'Manda un korreo eletróniku.' },
+      { k: 'Palavra-pase', e: 'Password', ex: 'Ka skese nha palavra-pase.' },
+      { k: 'Deskarrega', e: 'To download', ex: 'N ta deskarrega aplikason.' },
+      { k: 'Sobe', e: 'To upload', ex: 'N ta sobe fotografia.' },
+      { k: 'Imprime', e: 'To print', ex: 'Imprime dokumentu.' },
+      { k: 'Grava', e: 'To record', ex: 'N ta grava muzika.' },
+      { k: 'Tela', e: 'Screen', ex: 'Tela di telefoni.' },
+      { k: 'Notísia', e: 'News', ex: 'N ta lê notísia.' },
+      { k: 'Televison', e: 'Television / TV', ex: 'N ta odja televison.' },
+      { k: 'Rádiu', e: 'Radio', ex: 'N ta skuta rádiu.' },
+      { k: 'Jornal', e: 'Newspaper', ex: 'N ta lê jornal.' },
+      { k: 'Sitiu web', e: 'Website', ex: 'Sitiu web di Kabu Verdi.' },
+    ]
+  },
+  {
+    id: 'religion', title: 'Religion & Celebrations', titleKriolu: 'Relijion & Festas', icon: '⛪', color: '#9B2226',
+    vocab: [
+      { k: 'Deus', e: 'God', ex: 'Grasa a Deus!' },
+      { k: 'Misa', e: 'Mass / Church service', ex: 'N ta bai misa na Dumingu.' },
+      { k: 'Igreja', e: 'Church', ex: 'Igreja di Santiago.' },
+      { k: 'Orason', e: 'Prayer', ex: 'N ta fazi orason.' },
+      { k: 'Fe', e: 'Faith', ex: 'N ten fe.' },
+      { k: 'Natal', e: 'Christmas', ex: 'Natal e festa di família.' },
+      { k: 'Paskua', e: 'Easter', ex: 'Paskua e festa di kristaun.' },
+      { k: 'Aniversáriu', e: 'Birthday', ex: 'Feliz aniversáriu!' },
+      { k: 'Feliz aniversáriu!', e: 'Happy birthday!', ex: 'Feliz aniversáriu, ami!' },
+      { k: 'Kasamentu', e: 'Wedding / Marriage', ex: 'Kasamentu e festa grandi.' },
+      { k: 'Batizadu', e: 'Baptism / Christening', ex: 'Batizadu di pikinoti.' },
+      { k: 'Enterru', e: 'Funeral', ex: 'Enterru e dia tristi.' },
+      { k: 'Festa', e: 'Party / Celebration', ex: 'Festa di aniversáriu.' },
+      { k: 'Karnaval', e: 'Carnival', ex: 'Karnaval di Mindelo e famazu.' },
+      { k: 'Padróadu', e: 'Patron saint festival', ex: 'Padróadu di Santiago.' },
+      { k: 'Foguera', e: 'Bonfire', ex: 'Foguera na festa di São João.' },
+      { k: 'Brindis', e: 'Toast (at celebration)', ex: 'Mos fazi un brindis!' },
+      { k: 'Parabéns', e: 'Congratulations', ex: 'Parabéns pa bu!' },
+      { k: 'Felisidades', e: 'Best wishes / Happiness', ex: 'Felisidades pa bu família.' },
+      { k: 'Bon anu nobu', e: 'Happy New Year', ex: 'Bon anu nobu pa todus!' },
+      { k: 'Bênção', e: 'Blessing', ex: 'Deus da-bu bênção.' },
+      { k: 'Santo/a', e: 'Saint', ex: 'Santo António e padróadu.' },
+      { k: 'Promessa', e: 'Religious vow / Promise', ex: 'N fazi promessa a Deus.' },
+      { k: 'Rezá', e: 'To pray', ex: 'N ta rezá tud noti.' },
+    ]
+  },
+  {
+    id: 'animals', title: 'Animals', titleKriolu: 'Animais', icon: '🐾', color: '#8B5E3C',
+    vocab: [
+      { k: 'Animál', e: 'Animal', ex: 'Animál di Kabu Verdi.' },
+      { k: 'Katu', e: 'Cat', ex: 'Nha katu ta durmi.' },
+      { k: 'Kachorru', e: 'Dog', ex: 'Kachorru ta ladra.' },
+      { k: 'Galinha', e: 'Hen / Chicken', ex: 'Galinha ta kanta.' },
+      { k: 'Galu', e: 'Rooster', ex: 'Galu ta kanta na mañan.' },
+      { k: 'Porku', e: 'Pig', ex: 'Porku na kintal.' },
+      { k: 'Kabra', e: 'Goat', ex: 'Kabra di Santiago.' },
+      { k: 'Boi', e: 'Ox / Cattle', ex: 'Boi ta trabadja na roça.' },
+      { k: 'Burru', e: 'Donkey', ex: 'Burru ta karga pes.' },
+      { k: 'Kavalu', e: 'Horse', ex: 'Kavalu ta kuri.' },
+      { k: 'Patu', e: 'Duck', ex: 'Patu na agu.' },
+      { k: 'Pombu', e: 'Pigeon / Dove', ex: 'Pombu branku.' },
+      { k: 'Pasaru', e: 'Bird', ex: 'Pasaru ta kanta.' },
+      { k: 'Pexe', e: 'Fish (animal)', ex: 'Pexe na mar.' },
+      { k: 'Baleia', e: 'Whale', ex: 'Baleia na mar di Kabu Verdi.' },
+      { k: 'Golfinho', e: 'Dolphin', ex: 'Golfinho ta binka.' },
+      { k: 'Tartaruga', e: 'Turtle / Tortoise', ex: 'Tartaruga ta pôr ovu na praia.' },
+      { k: 'Pulgu', e: 'Flea', ex: 'Katu ten pulgu.' },
+      { k: 'Mosca', e: 'Fly (insect)', ex: 'Mosca na kumida.' },
+      { k: 'Moskitu', e: 'Mosquito', ex: 'Moskitu ta pika.' },
+      { k: 'Formiga', e: 'Ant', ex: 'Formiga ta trabadja.' },
+      { k: 'Kobrá', e: 'Snake', ex: 'Kobrá na roça.' },
+      { k: 'Lagarto', e: 'Lizard', ex: 'Lagarto na parede.' },
+      { k: 'Morcegu', e: 'Bat', ex: 'Morcegu na noti.' },
+      { k: 'Atum', e: 'Tuna', ex: 'Atum di Kabu Verdi e bon.' },
+      { k: 'Polvu', e: 'Octopus', ex: 'Polvu na mar.' },
+      { k: 'Kamarão', e: 'Shrimp', ex: 'Kamarão grelhadu.' },
+      { k: 'Garsa', e: 'Heron / Egret', ex: 'Garsa branku na praia.' },
+    ]
+  },
+  {
+    id: 'clothing', title: 'Clothing & Appearance', titleKriolu: 'Ropa & Aparénsia', icon: '👗', color: '#D62828',
+    vocab: [
+      { k: 'Ropa', e: 'Clothes / Clothing', ex: 'Ropa bunita.' },
+      { k: 'Kamisola', e: 'Shirt / T-shirt', ex: 'Kamisola azul.' },
+      { k: 'Blusa', e: 'Blouse', ex: 'Blusa di seda.' },
+      { k: 'Kalsa', e: 'Trousers / Pants', ex: 'Kalsa pretu.' },
+      { k: 'Saia', e: 'Skirt', ex: 'Saia di kolor.' },
+      { k: 'Vestidu', e: 'Dress', ex: 'Vestidu di festa.' },
+      { k: 'Jaketa', e: 'Jacket', ex: 'Jaketa di kouru.' },
+      { k: 'Kasaku', e: 'Coat', ex: 'Kasaku pa friu.' },
+      { k: 'Sapatu', e: 'Shoe', ex: 'Sapatu nobu.' },
+      { k: 'Botina', e: 'Boot', ex: 'Botina di trabadju.' },
+      { k: 'Sandália', e: 'Sandal', ex: 'Sandália di praia.' },
+      { k: 'Meia', e: 'Sock', ex: 'Par di meia.' },
+      { k: 'Roupa interior', e: 'Underwear', ex: 'Roupa interior.' },
+      { k: 'Txapéu', e: 'Hat', ex: 'Txapéu di sol.' },
+      { k: 'Óculo', e: 'Glasses / Sunglasses', ex: 'Óculo di sol.' },
+      { k: 'Bolsa', e: 'Bag / Handbag', ex: 'Bolsa di nylon.' },
+      { k: 'Sintu', e: 'Belt', ex: 'Sintu di kouru.' },
+      { k: 'Gravata', e: 'Tie', ex: 'Gravata pa trabadju.' },
+      { k: 'Aliansa', e: 'Wedding ring', ex: 'Aliansa di kasamentu.' },
+      { k: 'Kolar', e: 'Necklace', ex: 'Kolar di ouru.' },
+      { k: 'Brinku', e: 'Earring', ex: 'Brinku di prata.' },
+      { k: 'Pintadu', e: 'Colourful / Painted', ex: 'Ropa pintadu.' },
+      { k: 'Bunitu/a', e: 'Beautiful / Handsome', ex: 'Bu sta bunitu oji.' },
+      { k: 'Eleganti', e: 'Elegant / Smart', ex: 'Bu sta eleganti.' },
+      { k: 'Kabellu', e: 'Hair', ex: 'Kabellu pretu.' },
+      { k: 'Barba', e: 'Beard', ex: 'El ten barba.' },
+      { k: 'Altu/a', e: 'Tall', ex: 'El e altu.' },
+      { k: 'Baxu/a', e: 'Short (height)', ex: 'El e baxu.' },
+      { k: 'Gordu/a', e: 'Fat / Overweight', ex: 'El ta fika gordu.' },
+      { k: 'Magru/a', e: 'Thin / Slim', ex: 'El e magru.' },
+    ]
+  },
+  {
+    id: 'grammar', title: 'Grammar & Sentence Patterns', titleKriolu: 'Gramátika & Frasas', icon: '📝', color: '#5A189A',
+    vocab: [
+      { k: 'N', e: 'I (subject pronoun)', ex: 'N ta bai merkadu.' },
+      { k: 'Bu', e: 'You (singular)', ex: 'Bu ta fala Kriolu?' },
+      { k: 'El', e: 'He / She / It', ex: 'El e bon.' },
+      { k: 'Nos', e: 'We', ex: 'Nos ta kume djuntu.' },
+      { k: 'Nhos', e: 'You (plural)', ex: 'Nhos ta bai undi?' },
+      { k: 'Es', e: 'They', ex: 'Es ta trabadja.' },
+      { k: 'Ta', e: 'Present tense marker', ex: 'N ta kume. (I eat / I am eating)' },
+      { k: 'Dja', e: 'Past tense marker / Already', ex: 'N dja kume. (I already ate)' },
+      { k: 'Mos', e: "Let's (suggestion)", ex: 'Mos bai! (Let\'s go!)' },
+      { k: 'Ka', e: 'Negation marker (not)', ex: 'N ka ta bai. (I am not going)' },
+      { k: 'Ki', e: 'That / Which / Who (relative)', ex: 'Kel ki bu fla.' },
+      { k: 'Ku', e: 'With / And', ex: 'N bai ku ami.' },
+      { k: 'Di', e: 'Of / From', ex: 'N e di Kabu Verdi.' },
+      { k: 'Na', e: 'In / At / On', ex: 'N mora na Praia.' },
+      { k: 'Pa', e: 'For / To', ex: 'Kel e pa bu.' },
+      { k: 'Mas', e: 'But', ex: 'N kre, mas n ka podi.' },
+      { k: 'O', e: 'Or', ex: 'Kafé o txá?' },
+      { k: 'Si', e: 'If', ex: 'Si bu kre, bai.' },
+      { k: 'Pur ke', e: 'Because / Why', ex: 'Pur ke bu ta kanta?' },
+      { k: 'Kantu', e: 'How much / How many', ex: 'Kantu ki e?' },
+      { k: 'Kuma', e: 'How / Like', ex: 'Kuma ki bu fazi kel?' },
+      { k: 'Ki ora', e: 'What time', ex: 'Ki ora ki e?' },
+      { k: 'Kel', e: 'That (demonstrative)', ex: 'Kel e bon.' },
+      { k: 'Es', e: 'This / These (demonstrative)', ex: 'Es e nha livru.' },
+      { k: 'Muntu', e: 'A lot / Very much', ex: 'Obrigadu muntu.' },
+      { k: 'Txeu', e: 'A lot / Very (emphatic)', ex: 'N gosta txeu.' },
+      { k: 'Poku', e: 'A little / Few', ex: 'Un pokutim.' },
+      { k: 'Tudu', e: 'All / Everything', ex: 'Tudu sta ben.' },
+      { k: 'Nada', e: 'Nothing', ex: 'N ka ten nada.' },
+      { k: 'Alguem', e: 'Someone / Anyone', ex: 'Alguem ta txoma bu.' },
+    ]
+  },
+  {
+    id: 'proverbs', title: 'Proverbs & Idioms', titleKriolu: 'Proverbus & Idiomus', icon: '🌟', color: '#E9C46A',
+    vocab: [
+      { k: 'Kuda ben', e: 'Take care (common farewell)', ex: 'Tchau! Kuda ben.' },
+      { k: 'Deus ta djuda', e: 'God will help / It will work out', ex: 'Ka preokupa, Deus ta djuda.' },
+      { k: 'Kabesa fria', e: 'Keep a cool head / Stay calm', ex: 'Ten kabesa fria na problema.' },
+      { k: 'Pé na tera', e: 'Stay grounded / Be realistic', ex: 'Ten pe na tera, ami.' },
+      { k: 'Boka di mel', e: 'Sweet talker (lit: mouth of honey)', ex: 'El ten boka di mel.' },
+      { k: 'Dja e dja', e: 'What is done is done', ex: 'Ka txora. Dja e dja.' },
+      { k: 'Kuzas di vida', e: "That's life / Life's things", ex: 'Ka preokupa. Kuzas di vida.' },
+      { k: 'Pamodi', e: 'Because / That is why', ex: 'Pamodi ki n fla kel.' },
+      { k: 'Txeu bon!', e: 'Excellent! / Great!', ex: 'Txeu bon, parabéns!' },
+      { k: 'Kuma ta ser', e: 'How are things / How is it going', ex: 'Kuma ta ser, ami?' },
+      { k: 'Ta korer ben', e: 'It is going well', ex: 'Ta korer ben, obrigadu.' },
+      { k: 'Nha korzason', e: 'My heart (term of endearment)', ex: 'Nha korzason, kuma bu sta?' },
+      { k: 'Ami di korzason', e: 'My dear friend (heartfelt)', ex: 'Ami di korzason, tchau!' },
+      { k: 'Kabra ki paxi tera', e: 'Stubborn (lit: goat that eats dirt)', ex: 'El e kabra ki paxi tera!' },
+      { k: 'Fazi txeu bariñu', e: 'To make a lot of noise / fuss', ex: 'Ka fazi txeu bariñu.' },
+      { k: 'Bai ku Deus', e: 'Go with God / Goodbye (blessing)', ex: 'Bai ku Deus, ami.' },
+      { k: 'Vida e kurta', e: 'Life is short', ex: 'Vida e kurta, vivi bem.' },
+      { k: 'Devagar se vai longe', e: 'Slowly but surely (Portuguese saying used)', ex: 'Devagar se vai longe.' },
+      { k: 'Na nha tempu', e: 'In my time / Back in my day', ex: 'Na nha tempu, era diferenti.' },
+      { k: 'Sem konta', e: 'Countless / Without counting', ex: 'Es ten problem sem konta.' },
+      { k: 'Kaza di Deus', e: 'God\'s house / Church', ex: 'Bai na kaza di Deus.' },
+      { k: 'Sima agua na pedra', e: 'Like water on stone (persistence)', ex: 'Trabadja sima agua na pedra.' },
+    ]
+  },
+  {
+    id: 'questions', title: 'Questions & Conversation', titleKriolu: 'Perguntas & Konversa', icon: '❓', color: '#F77F00',
+    vocab: [
+      { k: 'Ki?', e: 'What?', ex: 'Ki ki bu kre?' },
+      { k: 'Undi?', e: 'Where?', ex: 'Undi ki bu mora?' },
+      { k: 'Kandu?', e: 'When?', ex: 'Kandu ki bu ta bai?' },
+      { k: 'Kuma?', e: 'How?', ex: 'Kuma ki bu fazi kel?' },
+      { k: 'Pur ke?', e: 'Why?', ex: 'Pur ke ki bu ta txora?' },
+      { k: 'Ken?', e: 'Who?', ex: 'Ken ki e kel?' },
+      { k: 'Kantu?', e: 'How much / many?', ex: 'Kantu ki kusta?' },
+      { k: 'Ki kolor?', e: 'What colour?', ex: 'Ki kolor ki bu gosta?' },
+      { k: 'Ki ora?', e: 'What time?', ex: 'Ki ora ki e oji?' },
+      { k: 'Bu podi djuda-m?', e: 'Can you help me?', ex: 'Bu podi djuda-m, pur favor?' },
+      { k: 'Bu podi repeti?', e: 'Can you repeat?', ex: 'Bu podi repeti divasim?' },
+      { k: 'Ki ki kel ta siñifika?', e: 'What does that mean?', ex: 'Ki ki kel ta siñifika na Kriolu?' },
+      { k: 'Kuma ki bu txoma kel?', e: 'What do you call that?', ex: 'Kuma ki bu txoma kel na Kriolu?' },
+      { k: 'Bu podi skrebe kel?', e: 'Can you write that down?', ex: 'Bu podi skrebe kel pa mi?' },
+      { k: 'E koretu?', e: 'Is that correct?', ex: 'N fla ben. E koretu?' },
+      { k: 'N ta fazi um erru?', e: 'Am I making a mistake?', ex: 'N ta fazi um erru?' },
+      { k: 'Kuze ki bu ta fazi?', e: 'What are you doing?', ex: 'Kuze ki bu ta fazi agor?' },
+      { k: 'Undi ki bu ta bai?', e: 'Where are you going?', ex: 'Undi ki bu ta bai oji?' },
+      { k: 'Kandu ki bu ta volta?', e: 'When will you return?', ex: 'Kandu ki bu ta volta?' },
+      { k: 'Bu sta ben?', e: 'Are you okay?', ex: 'Bu sta ben, ami?' },
+      { k: 'Bu ten fomi?', e: 'Are you hungry?', ex: 'Bu ten fomi? Mos kume.' },
+      { k: 'Bu ten sedi?', e: 'Are you thirsty?', ex: 'Bu ten sedi? N ta trazi agu.' },
+      { k: 'Bu kre más?', e: 'Do you want more?', ex: 'Bu kre más catchupa?' },
+      { k: 'Kel e di ken?', e: 'Whose is that?', ex: 'Kel karru e di ken?' },
+      { k: 'Kuze ki e novedadi?', e: "What's new? / What's up?", ex: 'Kuze ki e novedadi, ami?' },
+    ]
+  },
+  {
+    id: 'medical', title: 'Medical & Emergency', titleKriolu: 'Médiku & Emerjensia', icon: '🏥', color: '#AE2012',
+    vocab: [
+      { k: 'Emerjensia', e: 'Emergency', ex: 'E un emerjensia!' },
+      { k: 'Txoma ambulánsia', e: 'Call an ambulance', ex: 'Txoma ambulánsia, pur favor!' },
+      { k: 'Txoma pulisia', e: 'Call the police', ex: 'Txoma pulisia agora!' },
+      { k: 'Txoma bomberu', e: 'Call the fire brigade', ex: 'Txoma bomberu!' },
+      { k: 'N preçiza ajuda', e: 'I need help', ex: 'N preçiza ajuda, pur favor!' },
+      { k: 'Sintomas', e: 'Symptoms', ex: 'Ki sintomas ki bu ten?' },
+      { k: 'Dolor di kabesa', e: 'Headache', ex: 'N ten dolor di kabesa.' },
+      { k: 'Dolor di barriga', e: 'Stomach ache', ex: 'N ten dolor di barriga.' },
+      { k: 'Dolor di garganta', e: 'Sore throat', ex: 'N ten dolor di garganta.' },
+      { k: 'Tosse', e: 'Cough', ex: 'N ta tosse muntu.' },
+      { k: 'Konstipason', e: 'Cold / Flu', ex: 'N ten konstipason.' },
+      { k: 'Febre', e: 'Fever', ex: 'N ten febre altu.' },
+      { k: 'Presón altu', e: 'High blood pressure', ex: 'N ten presón altu.' },
+      { k: 'Diabeti', e: 'Diabetes', ex: 'El ten diabeti.' },
+      { k: 'Asma', e: 'Asthma', ex: 'N ten asma.' },
+      { k: 'Alérjia', e: 'Allergy', ex: 'N ten alérjia a penicilina.' },
+      { k: 'Inferjon', e: 'Infection', ex: 'N ten inferjon.' },
+      { k: 'Ferida', e: 'Wound / Injury', ex: 'N ten ferida na brasu.' },
+      { k: 'Ossu kebradu', e: 'Broken bone', ex: 'N kreba nha ossu.' },
+      { k: 'Sangramentu', e: 'Bleeding', ex: 'N ta sangra.' },
+      { k: 'Desmaiu', e: 'Fainting', ex: 'El ta desmaiar.' },
+      { k: 'Prisão di ventu', e: 'Constipation', ex: 'N ten prisão di ventu.' },
+      { k: 'Diarea', e: 'Diarrhea', ex: 'N ten diarea.' },
+      { k: 'Alerji a kumida', e: 'Food allergy', ex: 'N ten alerji a amendoin.' },
+      { k: 'Grávida', e: 'Pregnant', ex: 'El e grávida di seis mes.' },
+      { k: 'Operason', e: 'Operation / Surgery', ex: 'N fazi operason.' },
+      { k: 'Raiu-X', e: 'X-ray', ex: 'Médiku manda fazi raiu-X.' },
+      { k: 'Analizi', e: 'Blood test / Analysis', ex: 'N fazi analizi di sangui.' },
+      { k: 'Reseta médika', e: 'Medical prescription', ex: 'Médiku da-m reseta.' },
+      { k: 'Komprimidu', e: 'Pill / Tablet', ex: 'Toma un komprimidu.' },
+      { k: 'Xaropi', e: 'Syrup (medicine)', ex: 'Xaropi pa tosse.' },
+      { k: 'Injeção', e: 'Injection', ex: 'Médiku da-m injeção.' },
+      { k: 'Klinika', e: 'Clinic', ex: 'N ta bai klinika.' },
+    ]
+  },
+  {
+    id: 'legal', title: 'Legal & Government', titleKriolu: 'Legal & Goverñu', icon: '⚖️', color: '#023E8A',
+    vocab: [
+      { k: 'Goverñu', e: 'Government', ex: 'Goverñu di Kabu Verdi.' },
+      { k: 'Lei', e: 'Law', ex: 'Lei di Kabu Verdi.' },
+      { k: 'Dirito', e: 'Right / Law (legal)', ex: 'Tudu ten dirito.' },
+      { k: 'Justisa', e: 'Justice', ex: 'Justisa pa tudu.' },
+      { k: 'Tribunal', e: 'Court / Tribunal', ex: 'N ta bai tribunal.' },
+      { k: 'Juíz', e: 'Judge', ex: 'Juíz ta desidi.' },
+      { k: 'Advogadu/a', e: 'Lawyer / Attorney', ex: 'N preçiza un advogadu.' },
+      { k: 'Kontratu', e: 'Contract', ex: 'Asina kontratu.' },
+      { k: 'Dokumentu', e: 'Document', ex: 'N preçiza dokumentu.' },
+      { k: 'Bilheti di identidade', e: 'Identity card', ex: 'Mostra bu bilheti di identidade.' },
+      { k: 'Pasaporti', e: 'Passport', ex: 'Bu ten bu pasaporti?' },
+      { k: 'Visto', e: 'Visa', ex: 'N preçiza visto.' },
+      { k: 'Residentsa', e: 'Residence permit', ex: 'N ten residentsa.' },
+      { k: 'Sidadania', e: 'Citizenship', ex: 'N ten sidadania kabuverdiana.' },
+      { k: 'Votasão', e: 'Vote / Election', ex: 'Votasão e direitu di tudu.' },
+      { k: 'Prezidenti', e: 'President', ex: 'Prezidenti di Kabu Verdi.' },
+      { k: 'Ministru', e: 'Minister', ex: 'Ministru di saúdi.' },
+      { k: 'Parlamenti', e: 'Parliament', ex: 'Parlamenti di Kabu Verdi.' },
+      { k: 'Munisipalidade', e: 'Municipality', ex: 'Munisipalidade di Praia.' },
+      { k: 'Embaxada', e: 'Embassy', ex: 'N ta bai embaxada.' },
+      { k: 'Kosoladu', e: 'Consulate', ex: 'Kosoladu di Portugal.' },
+      { k: 'Impostu', e: 'Tax', ex: 'Paga impostu.' },
+      { k: 'Multa', e: 'Fine / Penalty', ex: 'N tevi un multa.' },
+      { k: 'Polis', e: 'Police force', ex: 'Polis di Kabu Verdi.' },
+      { k: 'Prizão', e: 'Prison / Jail', ex: 'El foi pa prizão.' },
+      { k: 'Reklamason', e: 'Complaint', ex: 'N ta fazi un reklamason.' },
+      { k: 'Direitu humanu', e: 'Human rights', ex: 'Direitu humanu e fundamental.' },
+      { k: 'Korupson', e: 'Corruption', ex: 'Korupson e problem grandi.' },
+      { k: 'Eleison', e: 'Election', ex: 'Eleison ta ben.' },
+      { k: 'Partido politiku', e: 'Political party', ex: 'Partido politiku di Kabu Verdi.' },
+    ]
+  },
+  {
+    id: 'agriculture', title: 'Agriculture & Fishing', titleKriolu: 'Agrikultura & Peskaria', icon: '🌾', color: '#606C38',
+    vocab: [
+      { k: 'Roça', e: 'Farm / Plantation', ex: 'N trabadja na roça.' },
+      { k: 'Tera', e: 'Land / Soil', ex: 'Tera fértil.' },
+      { k: 'Simentu', e: 'Seed', ex: 'Planta simentu.' },
+      { k: 'Planta', e: 'To plant / Plant', ex: 'N ta planta milhu.' },
+      { k: 'Kolheita', e: 'Harvest', ex: 'Kolheita di milhu.' },
+      { k: 'Rega', e: 'Irrigation / Watering', ex: 'Rega di tera.' },
+      { k: 'Enxada', e: 'Hoe', ex: 'Trabadja ku enxada.' },
+      { k: 'Machadu', e: 'Axe', ex: 'Korta pau ku machadu.' },
+      { k: 'Milhu', e: 'Corn / Maize', ex: 'Milhu e kultura prinsipal.' },
+      { k: 'Mandioka', e: 'Cassava / Manioc', ex: 'Mandioka ta krexi ben.' },
+      { k: 'Batata-dosi', e: 'Sweet potato', ex: 'Batata-dosi kuzinhadu.' },
+      { k: 'Fejon', e: 'Beans', ex: 'Fejon pretu e saborozu.' },
+      { k: 'Kana-di-azukar', e: 'Sugar cane', ex: 'Kana-di-azukar pa grogue.' },
+      { k: 'Kafé', e: 'Coffee (plant/crop)', ex: 'Kafé di Fogo e famazu.' },
+      { k: 'Banana', e: 'Banana (crop)', ex: 'Banana di Santiago.' },
+      { k: 'Manga', e: 'Mango', ex: 'Manga dosi.' },
+      { k: 'Goiaba', e: 'Guava', ex: 'Goiaba freska.' },
+      { k: 'Palmeira', e: 'Palm tree', ex: 'Palmeira na praia.' },
+      { k: 'Sekada', e: 'Drought', ex: 'Sekada ta mata kultura.' },
+      { k: 'Txuva', e: 'Rain (for crops)', ex: 'Txuva ta djuda kultura.' },
+      { k: 'Piskador', e: 'Fisherman', ex: 'Piskador ta sai di mañan.' },
+      { k: 'Rede di piska', e: 'Fishing net', ex: 'Lansa rede di piska.' },
+      { k: 'Anzol', e: 'Fish hook', ex: 'Piska ku anzol.' },
+      { k: 'Barku di piska', e: 'Fishing boat', ex: 'Barku di piska ta sai.' },
+      { k: 'Atum', e: 'Tuna (catch)', ex: 'Atum fresku di oji.' },
+      { k: 'Garoupu', e: 'Grouper fish', ex: 'Garoupu e pes bon.' },
+      { k: 'Cherne', e: 'Stone bass (fish)', ex: 'Cherne grelhadu.' },
+      { k: 'Merda di praia', e: 'Seaweed', ex: 'Merda di praia na kosta.' },
+      { k: 'Sal marinu', e: 'Sea salt', ex: 'Sal marinu di Sal.' },
+      { k: 'Kotxeiru', e: 'Animal pen / Enclosure', ex: 'Kotxeiru di kabra.' },
+    ]
+  },
+  {
+    id: 'dialect_santiago', title: 'Santiago Dialect (Badiu)', titleKriolu: 'Kriolu Badiu', icon: '🗺️', color: '#774936',
+    vocab: [
+      { k: 'Nha manu', e: 'My brother / My man (address)', ex: 'Oi, nha manu, kuma bu sta?' },
+      { k: 'Moça', e: 'Girl / Young woman', ex: 'Kel moça e bunita.' },
+      { k: 'Rapaz', e: 'Boy / Young man', ex: 'Kel rapaz e trabalhador.' },
+      { k: 'Dodi', e: 'Darling / Sweetheart', ex: 'Oi, nha dodi!' },
+      { k: 'Txora', e: 'To cry', ex: 'Ka txora, ta ben.' },
+      { k: 'Binka', e: 'To play / To jump around', ex: 'Pikinoti ta binka.' },
+      { k: 'Konversa', e: 'To chat / Conversation', ex: 'Mos ten un konversa.' },
+      { k: 'Riba', e: 'Above / Up / Uphill', ex: 'Kaza e riba di munti.' },
+      { k: 'Baxu', e: 'Below / Down / Downhill', ex: 'Bai pa baxu.' },
+      { k: 'Fundu', e: 'Deep / Bottom / Back', ex: 'Na fundu di kaza.' },
+      { k: 'Ladu', e: 'Side', ex: 'Na ladu di kaza.' },
+      { k: 'Pamodi', e: 'Because (Badiu usage)', ex: 'N ta bai pamodi N preçiza.' },
+      { k: 'Ora li', e: 'Right now / At this moment', ex: 'Ben ora li!' },
+      { k: 'Dja dja', e: 'Already done / Finished', ex: 'Dja dja, ka preokupa.' },
+      { k: 'Kin kin', e: 'Little by little', ex: 'Aprende kin kin.' },
+      { k: 'Fika li', e: 'Stay here / Wait here', ex: 'Fika li, n ta volta.' },
+      { k: 'Bai li', e: 'Go away / Leave', ex: 'Bai li, ka fika.' },
+      { k: 'Txiga', e: 'To arrive', ex: 'Kandu ki bu ta txiga?' },
+      { k: 'Traz', e: 'To bring', ex: 'Traz agu pa mi.' },
+      { k: 'Leba', e: 'To take / To carry', ex: 'Leba es ku bu.' },
+      { k: 'Bota', e: 'To put / To throw', ex: 'Bota na mexa.' },
+      { k: 'Kaba', e: 'To finish / Done', ex: 'N dja kaba.' },
+      { k: 'Sata', e: 'To be located / To happen', ex: 'Merkadu ta sata na Praia.' },
+      { k: 'Roça di Santiago', e: 'Agricultural land of Santiago', ex: 'Roça di Santiago e fértil.' },
+      { k: 'Tabanka', e: 'Traditional festivity of Santiago', ex: 'Tabanka ta kumesa na Maiu.' },
+      { k: 'Sodadi', e: 'Longing (Santiago pronunciation)', ex: 'N ten sodadi di terra.' },
+      { k: 'Ki nobu?', e: "What's new? (Badiu greeting)", ex: 'Ki nobu, ami?' },
+      { k: 'Nada di nobu', e: 'Nothing new', ex: 'Nada di nobu, tudu sta ben.' },
+      { k: 'Firmi', e: 'Steady / Strong / Solid', ex: 'Fika firmi na vida.' },
+      { k: 'Kuzas di Deus', e: "God's will / It is what it is", ex: 'Kuzas di Deus, aceita.' },
+    ]
+  },
+  {
+    id: 'dialect_saovicente', title: 'São Vicente Dialect', titleKriolu: 'Kriolu di Mindelo', icon: '🎵', color: '#1D3557',
+    vocab: [
+      { k: 'Bô', e: 'You (São Vicente form)', ex: 'Bô ta bai undi?' },
+      { k: 'Nós', e: 'We (São Vicente form)', ex: 'Nós ta bai djuntu.' },
+      { k: 'Ês', e: 'They (São Vicente form)', ex: 'Ês ta trabadja.' },
+      { k: 'Tá', e: 'Present marker (São Vicente)', ex: 'Nós tá kanta.' },
+      { k: 'Djá', e: 'Already (São Vicente form)', ex: 'Djá kaba.' },
+      { k: 'Bué', e: 'A lot / Very much (Mindelo slang)', ex: 'N gosta bué di Mindelo.' },
+      { k: 'Fixe', e: 'Cool / Great (Mindelo slang)', ex: 'Kel e fixe!' },
+      { k: 'Maneiro', e: 'Nice / Easy-going', ex: 'El e maneiro.' },
+      { k: 'Mindelo', e: 'Mindelo city', ex: 'Mindelo e sidadi di kultura.' },
+      { k: 'Porto Grandi', e: 'The big port of Mindelo', ex: 'Barku na Porto Grandi.' },
+      { k: 'Morna', e: 'Morna music (São Vicente specialty)', ex: 'Morna di Mindelo e bela.' },
+      { k: 'Kola Sanjon', e: 'Traditional São Vicente dance', ex: 'Kola Sanjon na festa di June.' },
+      { k: 'Karnaval di Mindelo', e: 'Famous Mindelo Carnival', ex: 'Karnaval di Mindelo e melhor!' },
+      { k: 'Cesária', e: 'Cesária Évora (famous singer)', ex: 'Cesária e voz di Kabu Verdi.' },
+      { k: 'Batuku', e: 'To play music together', ex: 'Mos batuku djuntu.' },
+      { k: 'Tchuba', e: 'Rain (São Vicente word)', ex: 'Tá tchover.' },
+      { k: 'Cretcheu', e: 'My love / Darling (romantic)', ex: 'Nha cretcheu, saudadi di bô.' },
+      { k: 'Morabeza', e: 'Warmth / Cape Verdean hospitality', ex: 'Mindelo ten muita morabeza.' },
+      { k: 'Sodade', e: 'Longing / Saudade (São Vicente)', ex: 'Sodade di terra longi.' },
+      { k: 'Kizomba', e: 'Kizomba dance (popular in CV)', ex: 'N ta dansa kizomba.' },
+      { k: 'Cabo love', e: 'Cape Verdean pride expression', ex: 'Cabo love, sempri.' },
+      { k: 'Nôs terra', e: 'Our land / homeland', ex: 'Nôs terra e bunita.' },
+      { k: 'Mar di Mindelo', e: 'The sea of Mindelo', ex: 'Mar di Mindelo e trankilú.' },
+      { k: 'Ribeira Bote', e: 'Famous neighbourhood of Mindelo', ex: 'Ribeira Bote ten historia.' },
+      { k: 'Praça Nova', e: 'The main square of Mindelo', ex: 'Nos ta nkontra na Praça Nova.' },
+      { k: 'Tocar', e: 'To play (instrument)', ex: 'El ta tocar viola.' },
+      { k: 'Viola', e: 'Guitar (Cape Verdean style)', ex: 'Tocar viola di Kriolu.' },
+      { k: 'Rabeca', e: 'Fiddle / Cape Verdean violin', ex: 'Rabeca na morna.' },
+      { k: 'Harmonia', e: 'Accordion / Harmony', ex: 'Toca harmonia na funaná.' },
+      { k: 'Saudade infinita', e: 'Endless longing (poetic)', ex: 'Saudade infinita di mar.' },
+    ]
+  },
+  {
+    id: 'diaspora', title: 'Diaspora & Immigration', titleKriolu: 'Diáspora & Imigrasão', icon: '🌍', color: '#3D405B',
+    vocab: [
+      { k: 'Diáspora', e: 'Diaspora / Cape Verdeans abroad', ex: 'Diáspora kabuverdiana e grandi.' },
+      { k: 'Emigrante', e: 'Emigrant / Immigrant', ex: 'El e emigrante na Rotedam.' },
+      { k: 'Imigrasão', e: 'Immigration', ex: 'Imigrasão e difísil.' },
+      { k: 'Saudadi di tera', e: 'Homesickness', ex: 'N ten saudadi di nha tera.' },
+      { k: 'Volta pa tera', e: 'Return to homeland', ex: 'N kre volta pa nha tera.' },
+      { k: 'Amerika', e: 'America / USA', ex: 'Txeu kabuverdianus mora na Amerika.' },
+      { k: 'Portugal', e: 'Portugal', ex: 'N mora na Portugal.' },
+      { k: 'Rotedam', e: 'Rotterdam (large CV community)', ex: 'Rotedam ten txeu kriolu.' },
+      { k: 'Francia', e: 'France', ex: 'El mora na Francia.' },
+      { k: 'Itália', e: 'Italy', ex: 'N trabadja na Itália.' },
+      { k: 'Boston', e: 'Boston (large CV community in USA)', ex: 'Nha irmã mora na Boston.' },
+      { k: 'Providens', e: 'Providence RI (CV community)', ex: 'Providens ten komunidade kriolu.' },
+      { k: 'Remesa', e: 'Remittance (money sent home)', ex: 'N manda remesa pa família.' },
+      { k: 'Pasaporti kabuverdian', e: 'Cape Verdean passport', ex: 'N ten pasaporti kabuverdian.' },
+      { k: 'Dupla nasionalidade', e: 'Dual nationality', ex: 'N ten dupla nasionalidade.' },
+      { k: 'Komunidade', e: 'Community', ex: 'Komunidade kriolu na estranjeiru.' },
+      { k: 'Integrasão', e: 'Integration', ex: 'Integrasão na país nobu.' },
+      { k: 'Lingua di adosão', e: 'Adopted language', ex: 'Ingles e nha lingua di adosão.' },
+      { k: 'Raizes', e: 'Roots (cultural)', ex: 'N nun ka skese nha raizes.' },
+      { k: 'Identidade', e: 'Identity', ex: 'Nha identidade e kabuverdiana.' },
+      { k: 'Kultura di orijim', e: 'Culture of origin', ex: 'Preserva kultura di orijim.' },
+      { k: 'Sodadi di família', e: 'Missing family', ex: 'N ten sodadi di nha família.' },
+      { k: 'Bilheti di viagem', e: 'Travel ticket', ex: 'N konpra bilheti di viagem.' },
+      { k: 'Volta di ferias', e: 'Holiday return home', ex: 'N ta volta di ferias na Dizembru.' },
+      { k: 'Kabuverdian di korzason', e: 'Cape Verdean at heart', ex: 'N e kabuverdian di korzason.' },
+    ]
+  },
+  {
+    id: 'environment', title: 'Environment & Sustainability', titleKriolu: 'Meiu Ambenti', icon: '🌿', color: '#1B4332',
+    vocab: [
+      { k: 'Meiu ambenti', e: 'Environment', ex: 'Kuida meiu ambenti.' },
+      { k: 'Klimu', e: 'Climate', ex: 'Mudansa di klimu e sériuzu.' },
+      { k: 'Mudansa klimátika', e: 'Climate change', ex: 'Mudansa klimátika ta afeta Kabu Verdi.' },
+      { k: 'Poluison', e: 'Pollution', ex: 'Poluison ta mata mar.' },
+      { k: 'Lixu', e: 'Rubbish / Garbage', ex: 'Ka bota lixu na mar.' },
+      { k: 'Riklajen', e: 'Recycling', ex: 'Riklajen e importanti.' },
+      { k: 'Energia solar', e: 'Solar energy', ex: 'Kabu Verdi ta uza energia solar.' },
+      { k: 'Energia di ventu', e: 'Wind energy', ex: 'Energia di ventu e renovavel.' },
+      { k: 'Sekada', e: 'Drought', ex: 'Sekada e problema grandi.' },
+      { k: 'Desertifikasão', e: 'Desertification', ex: 'Desertifikasão ta avansa.' },
+      { k: 'Reflorestasão', e: 'Reforestation', ex: 'Reflorestasão ta djuda.' },
+      { k: 'Rezerva natural', e: 'Nature reserve', ex: 'Rezerva natural di Kabu Verdi.' },
+      { k: 'Mar protejidu', e: 'Protected sea area', ex: 'Mar protejidu di tartaruga.' },
+      { k: 'Tartaruga marinha', e: 'Sea turtle', ex: 'Tartaruga marinha ta por ovu na praia.' },
+      { k: 'Peskaria sustentavel', e: 'Sustainable fishing', ex: 'Peskaria sustentavel e futuru.' },
+      { k: 'Agua potavel', e: 'Drinking water', ex: 'Agua potavel e diritu.' },
+      { k: 'Dessalinizasão', e: 'Desalination', ex: 'Dessalinizasão di agu di mar.' },
+      { k: 'Biodiversidade', e: 'Biodiversity', ex: 'Biodiversidade di Kabu Verdi.' },
+      { k: 'Ekosistema', e: 'Ecosystem', ex: 'Ekosistema marinu.' },
+      { k: 'Turizmu sustentavel', e: 'Sustainable tourism', ex: 'Turizmu sustentavel ta krexi.' },
+      { k: 'Kaptura di karbon', e: 'Carbon capture', ex: 'Kaptura di karbon na futuru.' },
+      { k: 'Limpeza di praia', e: 'Beach clean-up', ex: 'Mos fazi limpeza di praia.' },
+      { k: 'Protejon di kostas', e: 'Coastal protection', ex: 'Protejon di kostas e urgenti.' },
+      { k: 'Erozão', e: 'Erosion', ex: 'Erozão di tera e problem.' },
+      { k: 'Florestasão', e: 'Afforestation', ex: 'Florestasão ta djuda klimu.' },
+    ]
+  },
+  {
+    id: 'arts_music', title: 'Arts, Music & Literature', titleKriolu: 'Artis, Muzika & Literatura', icon: '🎶', color: '#7B2D8B',
+    vocab: [
+      { k: 'Muzika', e: 'Music', ex: 'Muzika di Kabu Verdi e famoza.' },
+      { k: 'Kansão', e: 'Song', ex: 'Kansão di morna.' },
+      { k: 'Letra', e: 'Lyrics / Letter', ex: 'Letra di kansão.' },
+      { k: 'Melodia', e: 'Melody', ex: 'Melodia bunita.' },
+      { k: 'Ritmu', e: 'Rhythm', ex: 'Ritmu di funaná.' },
+      { k: 'Instrumintu', e: 'Instrument', ex: 'Ki instrumintu ki bu joga?' },
+      { k: 'Viola', e: 'Guitar', ex: 'N ta tocar viola.' },
+      { k: 'Rabeca', e: 'Fiddle / Violin', ex: 'Rabeca na morna.' },
+      { k: 'Harmónika', e: 'Accordion', ex: 'Harmónika di funaná.' },
+      { k: 'Tambor', e: 'Drum', ex: 'Tambor di batuque.' },
+      { k: 'Kantadu', e: 'Singer', ex: 'El e kantadu famazu.' },
+      { k: 'Grupo muzical', e: 'Musical group / Band', ex: 'Grupo muzical di Mindelo.' },
+      { k: 'Konzerto', e: 'Concert', ex: 'Konzerto di morna.' },
+      { k: 'Dansa', e: 'Dance', ex: 'Dansa di funaná.' },
+      { k: 'Koreografia', e: 'Choreography', ex: 'Koreografia di karnaval.' },
+      { k: 'Poesia', e: 'Poetry', ex: 'Poesia di Kriolu.' },
+      { k: 'Poema', e: 'Poem', ex: 'Poema di saudadi.' },
+      { k: 'Iskritor/a', e: 'Writer / Author', ex: 'El e iskritor famazu.' },
+      { k: 'Livru di isorias', e: 'Storybook', ex: 'Livru di isorias di Kabu Verdi.' },
+      { k: 'Tradisão oral', e: 'Oral tradition', ex: 'Tradisão oral di Kriolu.' },
+      { k: 'Pintor/a', e: 'Painter', ex: 'El e pintora talentoza.' },
+      { k: 'Eskultura', e: 'Sculpture', ex: 'Eskultura di Santiago.' },
+      { k: 'Artizanatu', e: 'Handicraft', ex: 'Artizanatu di Kabu Verdi.' },
+      { k: 'Panu di terra', e: 'Traditional woven cloth', ex: 'Panu di terra e arte.' },
+      { k: 'Festival', e: 'Festival', ex: 'Festival di muzika na Mindelo.' },
+      { k: 'Patrimóniu kultural', e: 'Cultural heritage', ex: 'Patrimóniu kultural di Kabu Verdi.' },
+      { k: 'Arquivu', e: 'Archive', ex: 'Arquivu di istória.' },
+      { k: 'Muzeu', e: 'Museum', ex: 'Muzeu di Kabu Verdi.' },
+      { k: 'Galeria di arti', e: 'Art gallery', ex: 'Galeria di arti na Mindelo.' },
+      { k: 'Patrimóniu', e: 'Heritage / Legacy', ex: 'Patrimóniu di nha família.' },
+    ]
+  },
+  {
+    id: 'advanced_verbs', title: 'Advanced Verbs', titleKriolu: 'Verbos Avansadu', icon: '🔥', color: '#E63946',
+    vocab: [
+      { k: 'Akseita', e: 'To accept', ex: 'N ta akseita bu oferta.' },
+      { k: 'Rejeita', e: 'To reject', ex: 'N ta rejeita kel proposta.' },
+      { k: 'Ajuda', e: 'To help', ex: 'Bu podi ajuda-m?' },
+      { k: 'Prokurar', e: 'To look for / search', ex: 'N ta prokurar trabadju.' },
+      { k: 'Nkontra', e: 'To find / meet', ex: 'N nkontra nha ami.' },
+      { k: 'Perde', e: 'To lose / miss', ex: 'N perde nha txavi.' },
+      { k: 'Ganha', e: 'To win / earn', ex: 'N ta ganha dinheru.' },
+      { k: 'Paga', e: 'To pay', ex: 'N ta paga konta.' },
+      { k: 'Kompra', e: 'To buy', ex: 'N ta kompra kumida.' },
+      { k: 'Vende', e: 'To sell', ex: 'El ta vende pes.' },
+      { k: 'Impresta', e: 'To lend / borrow', ex: 'Bu podi impresta-m dinheru?' },
+      { k: 'Volta', e: 'To return / come back', ex: 'N ta volta mañan.' },
+      { k: 'Manda', e: 'To send', ex: 'N ta manda mensagem.' },
+      { k: 'Resebe', e: 'To receive', ex: 'N ta resebe pakoti.' },
+      { k: 'Eskolhe', e: 'To choose', ex: 'Eskolhe un kolor.' },
+      { k: 'Desidi', e: 'To decide', ex: 'N ta desidi mañan.' },
+      { k: 'Muda', e: 'To change', ex: 'N ta muda di kaza.' },
+      { k: 'Melora', e: 'To improve / get better', ex: 'N ta melora Kriolu.' },
+      { k: 'Repete', e: 'To repeat', ex: 'Repete, pur favor.' },
+      { k: 'Prátika', e: 'To practice', ex: 'N ta prátika Kriolu.' },
+      { k: 'Komete', e: 'To commit / make (error)', ex: 'N komete un erru.' },
+      { k: 'Pensá', e: 'To think', ex: 'N ta pensá na bu.' },
+      { k: 'Akredita', e: 'To believe', ex: 'N ta akredita na bu.' },
+      { k: 'Duvida', e: 'To doubt', ex: 'N ta duvida kel.' },
+      { k: 'Espera', e: 'To wait / hope', ex: 'N ta espera bu.' },
+      { k: 'Preokupa', e: 'To worry', ex: 'Ka preokupa.' },
+      { k: 'Skese', e: 'To forget', ex: 'N skese nha txavi.' },
+      { k: 'Lenbra', e: 'To remember', ex: 'N ta lenbra di bu.' },
+      { k: 'Imajina', e: 'To imagine', ex: 'Imajina Kabu Verdi.' },
+      { k: 'Planeja', e: 'To plan', ex: 'N ta planeja viagem.' },
     ]
   },
 ];
 
 // ═══════════════════════════════════════════
+//  ACHIEVEMENTS DEFINITION
+// ═══════════════════════════════════════════
+const ACHIEVEMENTS = [
+  { id:'first_lesson',  icon:'🌱', name:'First Steps',      desc:'Complete your first lesson',          check: s => s.lessonsCompleted >= 1 },
+  { id:'streak3',       icon:'🔥', name:'On Fire',          desc:'3 day streak',                        check: s => s.streak >= 3 },
+  { id:'streak7',       icon:'⚡', name:'Week Warrior',     desc:'7 day streak',                        check: s => s.streak >= 7 },
+  { id:'streak30',      icon:'💎', name:'Diamond Streak',   desc:'30 day streak',                       check: s => s.streak >= 30 },
+  { id:'xp100',         icon:'⭐', name:'Century',          desc:'Earn 100 XP',                         check: s => s.xp >= 100 },
+  { id:'xp500',         icon:'🌟', name:'Star Learner',     desc:'Earn 500 XP',                         check: s => s.xp >= 500 },
+  { id:'xp1000',        icon:'🏅', name:'Gold Learner',     desc:'Earn 1000 XP',                        check: s => s.xp >= 1000 },
+  { id:'perfect',       icon:'💯', name:'Perfecto!',        desc:'Score 100% on any lesson',            check: s => s.perfectLessons >= 1 },
+  { id:'perfect5',      icon:'🎯', name:'Sharpshooter',     desc:'5 perfect lessons',                   check: s => s.perfectLessons >= 5 },
+  { id:'lessons5',      icon:'📚', name:'Bookworm',         desc:'Complete 5 lessons',                  check: s => s.lessonsCompleted >= 5 },
+  { id:'lessons10',     icon:'🎓', name:'Graduate',         desc:'Complete 10 lessons',                 check: s => s.lessonsCompleted >= 10 },
+  { id:'lessons34',     icon:'👑', name:'Kriolu Master',    desc:'Complete all 34 lessons',             check: s => s.lessonsCompleted >= 34 },
+  { id:'mastered10',    icon:'🧠', name:'Word Wizard',      desc:'Master 10 words',                     check: s => s.masteredWords >= 10 },
+  { id:'mastered50',    icon:'📖', name:'Dictionary',       desc:'Master 50 words',                     check: s => s.masteredWords >= 50 },
+  { id:'mastered100',   icon:'🗝️', name:'Fluent',           desc:'Master 100 words',                    check: s => s.masteredWords >= 100 },
+  { id:'chat1',         icon:'💬', name:'Conversationalist',desc:'Have your first conversation',         check: s => s.chatMessages >= 1 },
+  { id:'chat50',        icon:'🗣️', name:'Chatterbox',       desc:'Send 50 chat messages',               check: s => s.chatMessages >= 50 },
+  { id:'fav5',          icon:'❤️', name:'Collector',        desc:'Save 5 favourite phrases',             check: s => s.favourites.length >= 5 },
+  { id:'mixed5',        icon:'🎲', name:'Mix Master',       desc:'Complete 5 mixed sessions',           check: s => s.mixedSessions >= 5 },
+  { id:'nightowl',      icon:'🦉', name:'Night Owl',        desc:'Practice after 10 PM',                check: s => s.nightOwl },
+  { id:'earlybird',     icon:'🐦', name:'Early Bird',       desc:'Practice before 7 AM',                check: s => s.earlyBird },
+];
+
+// ═══════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════
-
 let state = {
-  xp: 0,
-  streak: 0,
-  lastActiveDate: null,
-  completedLessons: {},
-  // exercise session
-  session: null,
-  qIndex: 0,
-  score: 0,
-  wrongItems: [],
-  awaitingNext: false,
-  // conversation
-  chatHistory: [],
+  xp: 0, streak: 0, lastActiveDate: null,
+  weeklyXP: 0, weeklyGoal: 100, weekStart: null,
+  completedLessons: {}, wordScores: {},
+  earnedBadges: [], lessonsCompleted: 0, perfectLessons: 0,
+  masteredWords: 0, chatMessages: 0, mixedSessions: 0,
+  favourites: [], nightOwl: false, earlyBird: false,
+  session: null, qIndex: 0, score: 0, wrongItems: [], awaitingNext: false,
+  lives: 3, chatHistory: [], darkMode: false, sfx: true, fontSize: '1rem',
 };
 
+const MASTERY_THRESHOLD = 3; // correct answers needed to "master" a word
+
 function loadState() {
-  const saved = localStorage.getItem('kriolu_state');
+  // ── Migrate from old save keys ──
+  const oldKeys = ['kriolu_state', 'kriolu_state_v2'];
+  let migrated = null;
+  for (const key of oldKeys) {
+    const old = localStorage.getItem(key);
+    if (old) { try { migrated = JSON.parse(old); } catch(e) {} break; }
+  }
+
+  const saved = localStorage.getItem('kriolu_state_v3');
   if (saved) {
     try { Object.assign(state, JSON.parse(saved)); } catch(e) {}
+  } else if (migrated) {
+    // Bring over all fields that exist in both versions
+    const fields = ['xp','streak','lastActiveDate','completedLessons','earnedBadges','favourites','darkMode','sfx','fontSize','weeklyGoal'];
+    fields.forEach(f => { if (migrated[f] !== undefined) state[f] = migrated[f]; });
+    // Recalculate derived counts from migrated data
+    state.lessonsCompleted = LESSONS.filter(l => (state.completedLessons[l.id]||0) >= l.vocab.length).length;
   }
-  // streak logic
-  const today = new Date().toDateString();
+
+  // Weekly XP reset
+  const now = new Date();
+  const weekStart = getWeekStart(now);
+  if (state.weekStart !== weekStart) { state.weeklyXP = 0; state.weekStart = weekStart; }
+
+  // Streak
+  const today = now.toDateString();
   if (state.lastActiveDate !== today) {
     const yesterday = new Date(Date.now() - 86400000).toDateString();
-    if (state.lastActiveDate !== yesterday) state.streak = 0;
+    state.streak = state.lastActiveDate === yesterday ? state.streak + 1 : 1;
+    state.lastActiveDate = today;
   }
-  state.lastActiveDate = today;
+
+  // Night owl / early bird
+  const h = now.getHours();
+  if (h >= 22) state.nightOwl = true;
+  if (h < 7) state.earlyBird = true;
+
   saveState();
+  applyTheme();
+  applyFontSize();
+}
+
+function getWeekStart(d) {
+  const day = d.getDay();
+  const diff = d.getDate() - day;
+  return new Date(d.setDate(diff)).toDateString();
 }
 
 function saveState() {
-  const { xp, streak, lastActiveDate, completedLessons } = state;
-  localStorage.setItem('kriolu_state', JSON.stringify({ xp, streak, lastActiveDate, completedLessons }));
+  const s = { xp:state.xp, streak:state.streak, lastActiveDate:state.lastActiveDate,
+    weeklyXP:state.weeklyXP, weeklyGoal:state.weeklyGoal, weekStart:state.weekStart,
+    completedLessons:state.completedLessons, wordScores:state.wordScores,
+    earnedBadges:state.earnedBadges, lessonsCompleted:state.lessonsCompleted,
+    perfectLessons:state.perfectLessons, masteredWords:state.masteredWords,
+    chatMessages:state.chatMessages, mixedSessions:state.mixedSessions,
+    favourites:state.favourites, nightOwl:state.nightOwl, earlyBird:state.earlyBird,
+    darkMode:state.darkMode, sfx:state.sfx, fontSize:state.fontSize,
+  };
+  localStorage.setItem('kriolu_state_v3', JSON.stringify(s));
 }
 
 function addXP(amount) {
   state.xp += amount;
-  saveState();
-  updateHeader();
-  updateHomeStats();
+  state.weeklyXP += amount;
+  saveState(); updateHeader(); updateHomeStats(); checkAchievements();
+}
+
+function recordWordResult(item, correct) {
+  const key = item.k;
+  if (!state.wordScores[key]) state.wordScores[key] = { correct:0, wrong:0 };
+  if (correct) {
+    state.wordScores[key].correct++;
+  } else {
+    state.wordScores[key].wrong++;
+    if (!state.wrongItems.find(w => w.k === item.k)) state.wrongItems.push(item);
+  }
+  // Update mastered words count
+  state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
+}
+
+// ═══════════════════════════════════════════
+//  SOUND EFFECTS
+// ═══════════════════════════════════════════
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+function playSound(type) {
+  if (!state.sfx) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    if (type === 'correct') {
+      osc.frequency.setValueAtTime(523, ctx.currentTime);
+      osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.start(); osc.stop(ctx.currentTime + 0.5);
+    } else if (type === 'wrong') {
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.setValueAtTime(180, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      osc.type = 'sawtooth';
+      osc.start(); osc.stop(ctx.currentTime + 0.4);
+    } else if (type === 'complete') {
+      [523,659,784,1047].forEach((freq, i) => {
+        const o2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.frequency.value = freq;
+        g2.gain.setValueAtTime(0.15, ctx.currentTime + i*0.12);
+        g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.12 + 0.3);
+        o2.start(ctx.currentTime + i*0.12);
+        o2.stop(ctx.currentTime + i*0.12 + 0.3);
+      });
+    } else if (type === 'badge') {
+      [784,1047,1319,1568].forEach((freq, i) => {
+        const o2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.frequency.value = freq; o2.type = 'sine';
+        g2.gain.setValueAtTime(0.12, ctx.currentTime + i*0.1);
+        g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.1 + 0.25);
+        o2.start(ctx.currentTime + i*0.1);
+        o2.stop(ctx.currentTime + i*0.1 + 0.25);
+      });
+    }
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════
+function openSettings() { document.getElementById('settings-panel').classList.add('open'); }
+function closeSettings(e) {
+  if (!e || e.target === document.getElementById('settings-panel')) {
+    document.getElementById('settings-panel').classList.remove('open');
+  }
+}
+
+function toggleDarkMode() {
+  state.darkMode = document.getElementById('dark-mode-toggle').checked;
+  saveState(); applyTheme();
+}
+
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
+  document.getElementById('dark-mode-toggle').checked = state.darkMode;
+}
+
+function toggleSfx() { state.sfx = document.getElementById('sfx-toggle').checked; saveState(); }
+
+function setFont(size, label) {
+  state.fontSize = size; saveState(); applyFontSize();
+  document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.font-btn').forEach(b => { if(b.textContent===label) b.classList.add('active'); });
+}
+
+function applyFontSize() {
+  document.documentElement.style.setProperty('--fs', state.fontSize);
+}
+
+function setWeeklyGoal(val) {
+  state.weeklyGoal = parseInt(val); saveState(); updateHomeStats();
+}
+
+function toggleNotification() {
+  const on = document.getElementById('notif-toggle').checked;
+  if (on && 'Notification' in window) {
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') scheduleReminder();
+      else document.getElementById('notif-toggle').checked = false;
+    });
+  }
+}
+
+function scheduleReminder() {
+  // Check every hour if we should remind
+  setTimeout(() => {
+    const h = new Date().getHours();
+    if (h === 19 && state.lastActiveDate !== new Date().toDateString()) {
+      new Notification('Kriolu 🌊', { body: "Don't break your streak! Time to practice Kriolu today." });
+    }
+  }, 60000);
+}
+
+// ═══════════════════════════════════════════
+//  ACHIEVEMENTS
+// ═══════════════════════════════════════════
+function checkAchievements() {
+  const newBadges = [];
+  ACHIEVEMENTS.forEach(ach => {
+    if (!state.earnedBadges.includes(ach.id) && ach.check(state)) {
+      state.earnedBadges.push(ach.id);
+      newBadges.push(ach);
+    }
+  });
+  if (newBadges.length) {
+    saveState();
+    playSound('badge');
+    newBadges.forEach(b => showBadgePopup(b));
+    renderHomeBadges();
+    renderAchievements();
+  }
+}
+
+function showBadgePopup(ach) {
+  const popup = document.createElement('div');
+  popup.className = 'new-badge-pop';
+  popup.innerHTML = `<div class="badge-icon-lg">${ach.icon}</div><div class="badge-text"><b>New Badge: ${ach.name}!</b><span>${ach.desc}</span></div>`;
+  const rc = document.getElementById('results-card');
+  if (rc) rc.prepend(popup);
+}
+
+function renderAchievements() {
+  const grid = document.getElementById('achievements-grid');
+  if (!grid) return;
+  grid.innerHTML = ACHIEVEMENTS.map(ach => {
+    const earned = state.earnedBadges.includes(ach.id);
+    return `<div class="ach-card ${earned ? 'earned' : 'locked'}">
+      <div class="ach-icon">${ach.icon}</div>
+      <div class="ach-name">${ach.name}</div>
+      <div class="ach-desc">${ach.desc}</div>
+      ${earned ? '<div class="ach-earned-label">✓ Earned</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function renderHomeBadges() {
+  const strip = document.getElementById('home-badges');
+  if (!strip) return;
+  const toShow = ACHIEVEMENTS.filter(a => state.earnedBadges.includes(a.id)).slice(-6)
+    .concat(ACHIEVEMENTS.filter(a => !state.earnedBadges.includes(a.id)).slice(0, 3));
+  strip.innerHTML = toShow.map(a => {
+    const earned = state.earnedBadges.includes(a.id);
+    return `<div class="badge-chip ${earned ? 'earned' : 'locked'}">
+      <div class="badge-icon">${a.icon}</div>
+      <div><div class="badge-label">${a.name}</div><div class="badge-desc">${a.desc}</div></div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════════
 //  NAVIGATION
 // ═══════════════════════════════════════════
-
-const SCREENS = ['home', 'lessons', 'exercise', 'results', 'phrasebook', 'conversation'];
-const TABS = ['home', 'lessons', 'phrasebook', 'conversation'];
+const SCREENS = ['home','lessons','exercise','results','review','achievements','phrasebook','conversation'];
+const TABS    = ['home','lessons','review','achievements','phrasebook','conversation'];
 
 function showTab(id) {
-  SCREENS.forEach(s => document.getElementById('screen-' + s)?.classList.remove('active'));
-  document.getElementById('screen-' + id)?.classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach((t, i) => {
-    t.classList.toggle('active', TABS[i] === id);
-  });
-  if (id === 'phrasebook') renderPhrasebook();
+  SCREENS.forEach(s => document.getElementById('screen-'+s)?.classList.remove('active'));
+  document.getElementById('screen-'+id)?.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', TABS[i]===id));
+  if (id==='phrasebook') renderPhrasebook();
+  if (id==='achievements') renderAchievements();
+  if (id==='review') renderReview();
+}
+
+function showScreen(id) {
+  SCREENS.forEach(s => document.getElementById('screen-'+s)?.classList.remove('active'));
+  document.getElementById('screen-'+id)?.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', TABS[i]===id));
 }
 
 function goHome() { showTab('home'); }
 
-function showScreen(id) {
-  SCREENS.forEach(s => document.getElementById('screen-' + s)?.classList.remove('active'));
-  document.getElementById('screen-' + id)?.classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach((t, i) => {
-    t.classList.toggle('active', TABS[i] === id);
-  });
+// ═══════════════════════════════════════════
+//  HOME
+// ═══════════════════════════════════════════
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return 'Bon dia! 👋';
+  if (h < 18) return 'Bon tarde! 👋';
+  return 'Bon noti! 👋';
 }
-
-// ═══════════════════════════════════════════
-//  HOME & LESSON CARDS
-// ═══════════════════════════════════════════
 
 function renderHomeGrid() {
   const grid = document.getElementById('home-lessons-grid');
   if (!grid) return;
-  grid.innerHTML = LESSONS.slice(0, 4).map(renderLessonCard).join('');
+  grid.innerHTML = LESSONS.slice(0, 6).map(renderLessonCard).join('');
 }
 
 function renderAllLessonsGrid() {
@@ -1150,105 +1891,121 @@ function renderAllLessonsGrid() {
 function renderLessonCard(lesson) {
   const done = state.completedLessons[lesson.id] || 0;
   const total = lesson.vocab.length;
+  const mastered = lesson.vocab.filter(v => (state.wordScores[v.k]?.correct || 0) >= MASTERY_THRESHOLD).length;
+  const masteryPct = Math.round((mastered / total) * 100);
   const badge = done >= total
     ? `<div class="done-badge">✓</div>`
-    : `<div style="position:absolute;top:14px;right:14px;font-size:0.75rem;color:var(--muted);font-weight:700;">${done}/${total}</div>`;
-  return `
-    <div class="lesson-card" onclick="startLesson('${lesson.id}')" style="border-top-color:${lesson.color}">
-      ${badge}
-      <div class="lesson-icon">${lesson.icon}</div>
-      <div class="lesson-title">${lesson.title}</div>
-      <div class="lesson-sub">${lesson.titleKriolu}</div>
-      <div class="word-count">${total} words</div>
-      <br/>
-      <button class="start-btn" style="background:${lesson.color}">Practice →</button>
-    </div>`;
+    : `<div style="position:absolute;top:10px;right:10px;font-size:.7rem;color:var(--muted);font-weight:700">${mastered}/${total}</div>`;
+  return `<div class="lesson-card" onclick="startLesson('${lesson.id}')" style="border-top-color:${lesson.color}">
+    ${badge}
+    <div class="lesson-icon">${lesson.icon}</div>
+    <div class="lesson-title">${lesson.title}</div>
+    <div class="lesson-sub">${lesson.titleKriolu}</div>
+    <div class="mastery-bar"><div class="mastery-fill" style="width:${masteryPct}%"></div></div>
+    <button class="start-btn" style="background:${lesson.color}">Practice →</button>
+  </div>`;
 }
 
 function updateHeader() {
   document.getElementById('streak-count').textContent = state.streak;
-  document.getElementById('xp-count').textContent = state.xp;
+  document.getElementById('xp-count').textContent = state.xp + ' XP';
 }
 
 function updateHomeStats() {
   document.getElementById('stat-streak').textContent = state.streak;
   document.getElementById('stat-xp').textContent = state.xp;
-  const doneCount = Object.keys(state.completedLessons).filter(k => {
-    const lesson = LESSONS.find(l => l.id === k);
-    return lesson && (state.completedLessons[k] || 0) >= lesson.vocab.length;
-  }).length;
+  const doneCount = LESSONS.filter(l => (state.completedLessons[l.id]||0) >= l.vocab.length).length;
   document.getElementById('stat-lessons').textContent = doneCount;
+  document.getElementById('stat-words').textContent = state.masteredWords;
 
   const level = Math.floor(state.xp / 100);
   const levelXP = state.xp % 100;
   document.getElementById('xp-bar').style.width = levelXP + '%';
-  document.getElementById('xp-label').textContent = `${levelXP} / 100 XP to level ${level + 1}`;
+  document.getElementById('xp-label').textContent = `${levelXP} / 100 XP • Level ${level + 1}`;
+
+  const wPct = Math.min(100, Math.round((state.weeklyXP / state.weeklyGoal) * 100));
+  document.getElementById('weekly-goal-fill').style.width = wPct + '%';
+  document.getElementById('weekly-progress-label').textContent = `${state.weeklyXP} / ${state.weeklyGoal} XP`;
+  document.getElementById('greeting-text').textContent = getGreeting();
+}
+
+// ═══════════════════════════════════════════
+//  SPACED REPETITION — pick harder words more
+// ═══════════════════════════════════════════
+function getWordDifficulty(word) {
+  const score = state.wordScores[word.k];
+  if (!score) return 3; // unseen = medium-high priority
+  const ratio = score.correct / Math.max(1, score.correct + score.wrong);
+  if (score.correct >= MASTERY_THRESHOLD && ratio > 0.8) return 1; // mastered
+  if (ratio < 0.5) return 5; // struggling
+  return 3; // average
+}
+
+function buildSpacedSession(vocab, limit = 15) {
+  const weighted = [];
+  vocab.forEach(v => {
+    const weight = getWordDifficulty(v);
+    for (let i = 0; i < weight; i++) weighted.push(v);
+  });
+  shuffle(weighted);
+  const seen = new Set();
+  const items = [];
+  for (const v of weighted) {
+    if (!seen.has(v.k)) { seen.add(v.k); items.push(v); }
+    if (items.length >= limit) break;
+  }
+  return items;
 }
 
 // ═══════════════════════════════════════════
 //  EXERCISE ENGINE
 // ═══════════════════════════════════════════
-
-const EXERCISE_TYPES = ['flashcard', 'multiChoice', 'typeAnswer', 'multiChoiceKriolu'];
+const EXERCISE_TYPES = ['flashcard','multiChoice','typeAnswer','multiChoiceKriolu','listening','fillBlank','matching'];
 
 function buildSession(lessonId) {
   const lesson = LESSONS.find(l => l.id === lessonId);
   if (!lesson) return null;
-  const items = [...lesson.vocab];
-  shuffle(items);
-  const questions = items.map((item, i) => {
-    const type = EXERCISE_TYPES[i % EXERCISE_TYPES.length];
-    return { item, type, lessonId };
-  });
+  const items = buildSpacedSession(lesson.vocab);
+  const questions = items.map((item, i) => ({
+    item, type: EXERCISE_TYPES[i % EXERCISE_TYPES.length], lessonId
+  }));
   return { questions, lessonId, lessonTitle: lesson.title };
 }
 
 function buildMixedSession() {
-  const allVocab = LESSONS.flatMap(l => l.vocab.map(v => ({ ...v, lessonId: l.id })));
-  shuffle(allVocab);
-  const items = allVocab.slice(0, 15);
+  const allVocab = LESSONS.flatMap(l => l.vocab);
+  const items = buildSpacedSession(allVocab, 20);
   const questions = items.map((item, i) => ({
-    item, type: EXERCISE_TYPES[i % EXERCISE_TYPES.length], lessonId: item.lessonId
+    item, type: EXERCISE_TYPES[i % EXERCISE_TYPES.length], lessonId: 'mixed'
   }));
-  return { questions, lessonId: 'mixed', lessonTitle: 'Mix & Review' };
+  return { questions, lessonId:'mixed', lessonTitle:'Mix & Review' };
 }
 
 function startLesson(id) {
   const session = buildSession(id);
   if (!session) return;
-  state.session = session;
-  state.qIndex = 0;
-  state.score = 0;
-  state.wrongItems = [];
-  state.awaitingNext = false;
-  state.streak = Math.max(state.streak, 1);
-  showScreen('exercise');
-  renderQuestion();
+  state.session = session; state.qIndex = 0; state.score = 0;
+  state.wrongItems = []; state.awaitingNext = false; state.lives = 3;
+  showScreen('exercise'); renderQuestion();
 }
 
 function startMixedSession() {
-  state.session = buildMixedSession();
-  state.qIndex = 0;
-  state.score = 0;
-  state.wrongItems = [];
-  state.awaitingNext = false;
-  state.streak = Math.max(state.streak, 1);
-  showScreen('exercise');
-  renderQuestion();
+  state.session = buildMixedSession(); state.qIndex = 0; state.score = 0;
+  state.wrongItems = []; state.awaitingNext = false; state.lives = 3;
+  state.mixedSessions++; saveState();
+  showScreen('exercise'); renderQuestion();
 }
 
-function exitExercise() {
-  state.session = null;
-  showTab('lessons');
-}
+function exitExercise() { state.session = null; showTab('lessons'); }
 
 function renderQuestion() {
   const { session, qIndex } = state;
   const total = session.questions.length;
-  const pct = (qIndex / total) * 100;
-
-  document.getElementById('ex-progress').style.width = pct + '%';
-  document.getElementById('ex-counter').textContent = `${qIndex + 1} / ${total}`;
+  document.getElementById('ex-progress').style.width = (qIndex/total*100) + '%';
+  document.getElementById('ex-counter').textContent = `${qIndex+1} / ${total}`;
+  // Lives
+  const lr = document.getElementById('lives-row');
+  lr.innerHTML = [0,1,2].map(i => `<span style="font-size:.9rem">${i < state.lives ? '❤️' : '🖤'}</span>`).join('');
 
   const q = session.questions[qIndex];
   const content = document.getElementById('exercise-content');
@@ -1258,51 +2015,76 @@ function renderQuestion() {
   else if (q.type === 'multiChoice') renderMultiChoice(q, content, false);
   else if (q.type === 'multiChoiceKriolu') renderMultiChoice(q, content, true);
   else if (q.type === 'typeAnswer') renderTypeAnswer(q, content);
+  else if (q.type === 'listening') renderListening(q, content);
+  else if (q.type === 'fillBlank') renderFillBlank(q, content);
+  else if (q.type === 'matching') renderMatching(q, content);
+  else renderFlashcard(q, content);
 }
 
 // — Flashcard —
 function renderFlashcard(q, container) {
-  container.innerHTML = `
-    <div class="exercise-card">
-      <div class="exercise-type-badge">Flashcard</div>
-      <div class="flashcard-inner" onclick="flipCard()" id="fc-wrap">
-        <div class="flashcard-flip" id="fc-flip">
-          <div class="flashcard-face">
-            <div class="exercise-word">${q.item.k}</div>
-            <div class="exercise-example">"${q.item.ex}"</div>
-            <div class="flashcard-hint">👆 Tap to reveal translation</div>
-          </div>
-          <div class="flashcard-face flashcard-back" style="display:none" id="fc-back">
-            <div class="translation-reveal">${q.item.e}</div>
-            <div class="exercise-example">"${q.item.ex}"</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="fc-actions" style="display:none">
-      <div class="fc-actions">
-        <button class="fc-btn wrong" onclick="fcAnswer(false)">✗ Didn't know</button>
-        <button class="fc-btn correct" onclick="fcAnswer(true)">✓ Got it!</button>
-      </div>
-    </div>`;
+  container.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'exercise-card';
+  const badge = document.createElement('div');
+  badge.className = 'exercise-type-badge';
+  badge.textContent = 'Flashcard';
+  card.appendChild(badge);
+
+  const front = document.createElement('div');
+  front.id = 'fc-front-content';
+  const word = document.createElement('div');
+  word.className = 'exercise-word';
+  word.textContent = q.item.k || '';
+  const ex = document.createElement('div');
+  ex.className = 'exercise-example';
+  ex.textContent = '"' + (q.item.ex||'') + '"';
+  const btn = document.createElement('button');
+  btn.className = 'reveal-btn';
+  btn.textContent = '👆 Reveal Translation';
+  btn.onclick = flipCard;
+  front.appendChild(word); front.appendChild(ex); front.appendChild(btn);
+  card.appendChild(front);
+
+  const back = document.createElement('div');
+  back.id = 'fc-back-content';
+  back.style.display = 'none';
+  const trans = document.createElement('div');
+  trans.className = 'translation-reveal';
+  trans.textContent = q.item.e || '';
+  const ex2 = document.createElement('div');
+  ex2.className = 'exercise-example';
+  ex2.textContent = '"' + (q.item.ex||'') + '"';
+  back.appendChild(trans); back.appendChild(ex2);
+  card.appendChild(back);
+  container.appendChild(card);
+
+  const actions = document.createElement('div');
+  actions.id = 'fc-actions';
+  actions.style.display = 'none';
+  const row = document.createElement('div');
+  row.className = 'fc-actions';
+  const wb = document.createElement('button');
+  wb.className = 'fc-btn wrong'; wb.textContent = "✗ Didn't know";
+  wb.onclick = () => fcAnswer(false);
+  const cb = document.createElement('button');
+  cb.className = 'fc-btn correct'; cb.textContent = '✓ Got it!';
+  cb.onclick = () => fcAnswer(true);
+  row.appendChild(wb); row.appendChild(cb);
+  actions.appendChild(row);
+  container.appendChild(actions);
 }
 
 function flipCard() {
-  const flip = document.getElementById('fc-flip');
-  const front = flip.querySelector('.flashcard-face');
-  const back = document.getElementById('fc-back');
-  const actions = document.getElementById('fc-actions');
-  if (!back.dataset.flipped) {
-    front.style.display = 'none';
-    back.style.display = 'block';
-    back.dataset.flipped = '1';
-    if (actions) actions.style.display = 'block';
-  }
+  document.getElementById('fc-front-content').style.display = 'none';
+  document.getElementById('fc-back-content').style.display = 'block';
+  document.getElementById('fc-actions').style.display = 'block';
 }
 
 function fcAnswer(correct) {
-  if (correct) state.score++;
-  else state.wrongItems.push(state.session.questions[state.qIndex].item);
+  recordWordResult(state.session.questions[state.qIndex].item, correct);
+  if (correct) { state.score++; playSound('correct'); }
+  else { state.lives--; playSound('wrong'); }
   advanceQuestion();
 }
 
@@ -1311,209 +2093,474 @@ function renderMultiChoice(q, container, krioluToEnglish) {
   const allVocab = LESSONS.flatMap(l => l.vocab);
   const distractors = allVocab.filter(v => v.k !== q.item.k && v.e !== q.item.e);
   shuffle(distractors);
-  const wrong3 = distractors.slice(0, 3);
-  const options = shuffle([q.item, ...wrong3]);
-
+  const options = shuffle([q.item, ...distractors.slice(0,3)]);
   const question = krioluToEnglish
     ? `What does <strong>${q.item.k}</strong> mean?`
     : `How do you say <strong>"${q.item.e}"</strong> in Kriolu?`;
-
-  const choiceHTML = options.map((opt, i) => {
+  const choiceHTML = options.map(opt => {
     const label = krioluToEnglish ? opt.e : opt.k;
-    const isCorrect = krioluToEnglish ? opt.e === q.item.e : opt.k === q.item.k;
-    return `<button class="choice-btn" onclick="mcAnswer(this, ${isCorrect})">${label}</button>`;
+    const isCorrect = krioluToEnglish ? opt.e===q.item.e : opt.k===q.item.k;
+    return `<button class="choice-btn" onclick="mcAnswer(this,${isCorrect})">${escapeHTML(label)}</button>`;
   }).join('');
-
-  container.innerHTML = `
-    <div class="exercise-card">
-      <div class="exercise-type-badge">Multiple Choice</div>
-      <div class="exercise-word" style="font-size:1.6rem">${question}</div>
-      <br/>
-      <div class="choices-grid">${choiceHTML}</div>
-    </div>
-    <div id="feedback-area"></div>`;
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">Multiple Choice</div>
+    <div class="exercise-word" style="font-size:1.4rem">${question}</div><br/>
+    <div class="choices-grid">${choiceHTML}</div></div><div id="feedback-area"></div>`;
 }
 
 function mcAnswer(btn, correct) {
   if (state.awaitingNext) return;
   state.awaitingNext = true;
-  const allBtns = document.querySelectorAll('.choice-btn');
-  allBtns.forEach(b => { b.disabled = true; });
-
+  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+  const q = state.session.questions[state.qIndex];
   if (correct) {
-    btn.classList.add('selected-correct');
-    state.score++;
+    btn.classList.add('selected-correct'); state.score++;
+    recordWordResult(q.item, true); playSound('correct');
     showFeedback(true, '');
   } else {
     btn.classList.add('selected-wrong');
-    const q = state.session.questions[state.qIndex];
-    state.wrongItems.push(q.item);
-    const correctAns = q.type === 'multiChoiceKriolu' ? q.item.e : q.item.k;
-    allBtns.forEach(b => {
-      const txt = b.textContent.trim();
-      if (txt === correctAns) b.classList.add('reveal-correct');
-    });
-    showFeedback(false, `Correct answer: <em>${correctAns}</em>`);
+    recordWordResult(q.item, false); playSound('wrong'); state.lives--;
+    const correctAns = q.type==='multiChoiceKriolu' ? q.item.e : q.item.k;
+    document.querySelectorAll('.choice-btn').forEach(b => { if(b.textContent===correctAns) b.classList.add('reveal-correct'); });
+    showFeedback(false, `Correct: <em>${escapeHTML(correctAns)}</em>`);
   }
 }
 
 // — Type Answer —
 function renderTypeAnswer(q, container) {
-  container.innerHTML = `
-    <div class="exercise-card">
-      <div class="exercise-type-badge">Type the Answer</div>
-      <div class="exercise-word">${q.item.k}</div>
-      <div class="exercise-example">"${q.item.ex}"</div>
-      <div style="font-size:0.85rem; color:var(--muted); margin-bottom:14px;">Type the English translation</div>
-      <input type="text" class="type-input" id="type-input" placeholder="Your answer..." 
-             onkeydown="if(event.key==='Enter') submitType()" autocomplete="off" />
-      <button class="submit-btn" onclick="submitType()">Check ✓</button>
-    </div>
-    <div id="feedback-area"></div>`;
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">Type the Answer</div>
+    <div class="exercise-word">${escapeHTML(q.item.k)}</div>
+    <div class="exercise-example">"${escapeHTML(q.item.ex)}"</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:12px">Type the English translation</div>
+    <input type="text" class="type-input" id="type-input" placeholder="Your answer…" onkeydown="if(event.key==='Enter')submitType()" autocomplete="off"/>
+    <button class="submit-btn" onclick="submitType()">Check ✓</button></div><div id="feedback-area"></div>`;
   setTimeout(() => document.getElementById('type-input')?.focus(), 100);
 }
 
 function submitType() {
   if (state.awaitingNext) return;
   const input = document.getElementById('type-input');
-  if (!input) return;
-  const val = input.value.trim().toLowerCase();
-  if (!val) return;
+  if (!input || !input.value.trim()) return;
   state.awaitingNext = true;
-
   const q = state.session.questions[state.qIndex];
+  const val = input.value.trim().toLowerCase();
   const correct = q.item.e.toLowerCase();
-  const isCorrect = levenshtein(val, correct) <= 2 || correct.toLowerCase().includes(val) || val.includes(correct.split(' ')[0].toLowerCase());
-
+  const isCorrect = levenshtein(val,correct)<=2 || correct.includes(val) || val.includes(correct.split(' ')[0]);
   input.classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
   input.disabled = true;
   document.querySelector('.submit-btn').disabled = true;
-
-  if (isCorrect) state.score++;
-  else state.wrongItems.push(q.item);
-
-  showFeedback(isCorrect, isCorrect ? '' : `Correct: <em>${q.item.e}</em>`);
+  if (isCorrect) { state.score++; recordWordResult(q.item,true); playSound('correct'); }
+  else { recordWordResult(q.item,false); playSound('wrong'); state.lives--; }
+  showFeedback(isCorrect, isCorrect ? '' : `Correct: <em>${escapeHTML(q.item.e)}</em>`);
 }
 
+// — Listening Comprehension —
+function renderListening(q, container) {
+  const allVocab = LESSONS.flatMap(l => l.vocab);
+  const distractors = allVocab.filter(v => v.k !== q.item.k).slice(0,3);
+  const options = shuffle([q.item, ...distractors]);
+  const choiceHTML = options.map(opt => {
+    const isCorrect = opt.k === q.item.k;
+    return `<button class="choice-btn" onclick="mcAnswer(this,${isCorrect})">${escapeHTML(opt.e)}</button>`;
+  }).join('');
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">👂 Listening</div>
+    <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">Listen and choose the correct meaning:</div>
+    <button class="listen-play-btn" id="listen-btn" onclick="playListenWord('${escapeHTML(q.item.k)}',this)">🔊</button>
+    <div class="choices-grid">${choiceHTML}</div></div><div id="feedback-area"></div>`;
+  // Auto-play after short delay
+  setTimeout(() => {
+    const btn = document.getElementById('listen-btn');
+    if (btn) playListenWord(q.item.k, btn);
+  }, 500);
+}
+
+function playListenWord(word, btn) {
+  if (btn) btn.classList.add('playing');
+  speakText(word, btn);
+}
+
+// — Fill in the Blank —
+function renderFillBlank(q, container) {
+  const sentence = q.item.ex || '';
+  const word = q.item.k;
+  // Blank out the Kriolu word in the example sentence
+  const blanked = sentence.replace(word, '______');
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">Fill in the Blank</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Complete the sentence in Kriolu:</div>
+    <div class="blank-sentence">${escapeHTML(blanked)}</div>
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:14px">Hint: ${escapeHTML(q.item.e)}</div>
+    <input type="text" class="type-input" id="type-input" placeholder="Type the missing word…" onkeydown="if(event.key==='Enter')submitFill()" autocomplete="off"/>
+    <button class="submit-btn" onclick="submitFill()">Check ✓</button></div><div id="feedback-area"></div>`;
+  setTimeout(() => document.getElementById('type-input')?.focus(), 100);
+}
+
+function submitFill() {
+  if (state.awaitingNext) return;
+  const input = document.getElementById('type-input');
+  if (!input || !input.value.trim()) return;
+  state.awaitingNext = true;
+  const q = state.session.questions[state.qIndex];
+  const val = input.value.trim().toLowerCase();
+  const correct = q.item.k.toLowerCase();
+  const isCorrect = levenshtein(val, correct) <= 2;
+  input.classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
+  input.disabled = true;
+  document.querySelector('.submit-btn').disabled = true;
+  if (isCorrect) { state.score++; recordWordResult(q.item,true); playSound('correct'); }
+  else { recordWordResult(q.item,false); playSound('wrong'); state.lives--; }
+  showFeedback(isCorrect, isCorrect ? '' : `Correct: <em>${escapeHTML(q.item.k)}</em>`);
+}
+
+// — Word Matching —
+let matchState = { selected: null, side: null, matched: new Set() };
+
+function renderMatching(q, container) {
+  // Pick 4 word pairs including this question's item
+  const allVocab = LESSONS.flatMap(l => l.vocab);
+  const others = shuffle(allVocab.filter(v => v.k !== q.item.k)).slice(0,3);
+  const pairs = shuffle([q.item, ...others]);
+  const leftItems = shuffle([...pairs]);
+  const rightItems = shuffle([...pairs]);
+
+  matchState = { selected: null, side: null, matched: new Set(), pairs };
+
+  const leftHTML = leftItems.map(v =>
+    `<button class="match-btn" id="ml-${v.k.replace(/\s/g,'_')}" onclick="matchSelect('${escapeHTML(v.k)}','left',this)">${escapeHTML(v.k)}</button>`
+  ).join('');
+  const rightHTML = rightItems.map(v =>
+    `<button class="match-btn" id="mr-${v.k.replace(/\s/g,'_')}" onclick="matchSelect('${escapeHTML(v.k)}','right',this)">${escapeHTML(v.e)}</button>`
+  ).join('');
+
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🔗 Match the Words</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:14px">Tap a Kriolu word then its English meaning</div>
+    <div class="match-grid"><div class="match-col">${leftHTML}</div><div class="match-col">${rightHTML}</div></div>
+    </div><div id="feedback-area"></div>`;
+}
+
+function matchSelect(key, side, btn) {
+  if (matchState.matched.has(key)) return;
+  if (side === 'left') {
+    if (matchState.side === 'left') {
+      document.querySelectorAll('.match-btn.selected').forEach(b => b.classList.remove('selected'));
+    }
+    matchState.selected = key; matchState.side = 'left';
+    btn.classList.add('selected');
+  } else {
+    // Right side selected — check if it matches the selected left
+    if (!matchState.selected) return;
+    const isMatch = matchState.selected === key;
+    const leftBtn = document.getElementById('ml-' + matchState.selected.replace(/\s/g,'_'));
+    if (isMatch) {
+      btn.classList.add('matched-correct');
+      if (leftBtn) leftBtn.classList.add('matched-correct');
+      btn.disabled = true; if(leftBtn) leftBtn.disabled = true;
+      matchState.matched.add(key);
+      playSound('correct');
+      if (matchState.matched.size === matchState.pairs.length) {
+        state.score++; state.awaitingNext = true;
+        matchState.pairs.forEach(v => recordWordResult(v, true));
+        playSound('complete');
+        showFeedback(true, 'All pairs matched!');
+      }
+    } else {
+      btn.classList.add('matched-wrong');
+      if (leftBtn) leftBtn.classList.add('matched-wrong');
+      playSound('wrong'); state.lives--;
+      setTimeout(() => {
+        btn.classList.remove('matched-wrong','selected');
+        if(leftBtn) leftBtn.classList.remove('matched-wrong','selected');
+      }, 600);
+    }
+    matchState.selected = null; matchState.side = null;
+    document.querySelectorAll('.match-btn.selected').forEach(b => b.classList.remove('selected'));
+  }
+}
+
+// ── Feedback & Progress ──
 function showFeedback(correct, extra) {
   const area = document.getElementById('feedback-area');
   if (!area) return;
-  area.innerHTML = `
-    <div class="feedback-bar ${correct ? 'correct' : 'wrong'}">
-      <span>${correct ? '✅ Correct!' : '❌ Not quite'}</span>
-      ${extra ? `<span>${extra}</span>` : ''}
-    </div>
-    <button class="next-btn" onclick="advanceQuestion()">Continue →</button>`;
+  area.innerHTML = `<div class="feedback-bar ${correct?'correct':'wrong'}">
+    <span>${correct ? '✅ Correct!' : '❌ Not quite'}</span>${extra ? `<span>${extra}</span>` : ''}
+  </div><button class="next-btn" onclick="advanceQuestion()">Continue →</button>`;
 }
 
 function advanceQuestion() {
   state.awaitingNext = false;
+  if (state.lives <= 0) { finishSession(); return; }
   state.qIndex++;
-  if (state.qIndex >= state.session.questions.length) {
-    finishSession();
-  } else {
-    renderQuestion();
-  }
+  if (state.qIndex >= state.session.questions.length) finishSession();
+  else renderQuestion();
 }
 
 function finishSession() {
-  const { session, score, wrongItems } = state;
+  const { session, score } = state;
   const total = session.questions.length;
-  const pct = Math.round((score / total) * 100);
-  const earned = Math.round((score / total) * 20) + (pct === 100 ? 10 : 0);
+  const pct = Math.round((score/total)*100);
+  const earned = Math.round((score/total)*20) + (pct===100?10:0);
 
   addXP(earned);
 
   if (session.lessonId !== 'mixed') {
-    state.completedLessons[session.lessonId] = (state.completedLessons[session.lessonId] || 0) + score;
-    saveState();
+    state.completedLessons[session.lessonId] = (state.completedLessons[session.lessonId]||0) + score;
+    state.lessonsCompleted = LESSONS.filter(l => (state.completedLessons[l.id]||0) >= l.vocab.length).length;
   }
+  if (pct === 100) state.perfectLessons++;
+  state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
+  saveState(); checkAchievements(); renderHomeGrid(); renderAllLessonsGrid();
 
-  let emoji = '😊';
-  if (pct === 100) emoji = '🎉';
-  else if (pct >= 80) emoji = '🌟';
-  else if (pct >= 60) emoji = '👍';
-  else if (pct < 40) emoji = '💪';
-
-  const wrongHTML = wrongItems.length
-    ? `<div style="margin:16px 0; text-align:left">
-        <div style="font-size:0.85rem;font-weight:800;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;">Review These:</div>
-        ${wrongItems.slice(0,5).map(w => `
-          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.9rem;">
-            <span style="font-weight:700;color:var(--ocean)">${w.k}</span>
-            <span style="color:var(--muted)">${w.e}</span>
-          </div>`).join('')}
+  const emoji = pct===100?'🎉':pct>=80?'🌟':pct>=60?'👍':'💪';
+  const wrongHTML = state.wrongItems.length
+    ? `<div style="margin:14px 0;text-align:left"><div style="font-size:.78rem;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase">Review these:</div>
+        ${state.wrongItems.slice(0,5).map(w=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:.85rem">
+          <span style="font-weight:700;color:var(--ocean)">${escapeHTML(w.k)}</span><span style="color:var(--muted)">${escapeHTML(w.e)}</span></div>`).join('')}
        </div>` : '';
+
+  playSound('complete');
 
   document.getElementById('results-card').innerHTML = `
     <div class="results-emoji">${emoji}</div>
-    <div class="results-title">${pct === 100 ? 'Perfecto!' : pct >= 80 ? 'Excelenti!' : 'Bon trabadju!'}</div>
+    <div class="results-title">${pct===100?'Perfecto!':pct>=80?'Excelenti!':'Bon trabadju!'}</div>
     <div class="results-sub">${session.lessonTitle} complete</div>
     <div class="results-stats">
       <div class="results-stat"><div class="val">${score}/${total}</div><div class="lbl">Correct</div></div>
       <div class="results-stat"><div class="val">${pct}%</div><div class="lbl">Score</div></div>
-      <div class="results-stat"><div class="val">+${earned}</div><div class="lbl">XP Earned</div></div>
+      <div class="results-stat"><div class="val">+${earned}</div><div class="lbl">XP</div></div>
     </div>
-    <div class="results-xp">⭐ You earned <strong>${earned} XP</strong>! Total: ${state.xp} XP</div>
+    <div class="results-xp">⭐ +${earned} XP earned! Total: ${state.xp} XP</div>
     ${wrongHTML}
-    ${session.lessonId !== 'mixed' ? `<button class="results-btn primary" onclick="startLesson('${session.lessonId}')">Practice Again 🔁</button>` : ''}
+    ${session.lessonId!=='mixed'?`<button class="results-btn primary" onclick="startLesson('${session.lessonId}')">Practice Again 🔁</button>`:''}
     <button class="results-btn primary" onclick="startMixedSession()">Mixed Review 🎯</button>
     <button class="results-btn secondary" onclick="showTab('lessons')">Back to Lessons</button>`;
-
   showScreen('results');
+}
+
+// ═══════════════════════════════════════════
+//  REVIEW SCREEN
+// ═══════════════════════════════════════════
+function renderReview() {
+  const content = document.getElementById('review-content');
+  if (!content) return;
+  const struggling = LESSONS.flatMap(l => l.vocab).filter(v => {
+    const s = state.wordScores[v.k];
+    return s && s.wrong > 0;
+  }).sort((a,b) => {
+    const sa = state.wordScores[a.k], sb = state.wordScores[b.k];
+    return (sb.wrong - sb.correct) - (sa.wrong - sa.correct);
+  });
+  if (!struggling.length) {
+    content.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--muted)">
+      <div style="font-size:3rem;margin-bottom:12px">🎉</div>
+      <div style="font-weight:800;font-size:1.1rem;color:var(--ocean)">No mistakes yet!</div>
+      <div style="font-size:.85rem;margin-top:6px">Complete some lessons to see words to review here.</div>
+    </div>`;
+    return;
+  }
+  content.innerHTML = struggling.map(v => {
+    const s = state.wordScores[v.k];
+    const ratio = s.correct / Math.max(1, s.correct + s.wrong);
+    const color = ratio > 0.6 ? '#2EC4B6' : ratio > 0.3 ? '#F4A261' : '#E63946';
+    return `<div class="review-word-card">
+      <div><div class="review-word-k">${escapeHTML(v.k)}</div>
+        <div class="review-word-e">${escapeHTML(v.e)}</div>
+        <div class="review-word-ex">"${escapeHTML(v.ex)}"</div></div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="difficulty-dot" style="background:${color};margin-left:auto;margin-bottom:4px"></div>
+        <div style="font-size:.68rem;color:var(--muted)">${s.correct}✓ ${s.wrong}✗</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════════
 //  PHRASEBOOK
 // ═══════════════════════════════════════════
-
 function renderPhrasebook() {
   const container = document.getElementById('phrasebook-content');
   container.innerHTML = LESSONS.map((lesson, li) => `
     <div class="phrase-category">
       <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="background:${lesson.color}">
-        ${lesson.icon} ${lesson.title}
-        <span style="margin-left:auto">▾</span>
+        ${lesson.icon} ${lesson.title} <span style="margin-left:auto">▾</span>
       </div>
       <div class="phrase-cat-body" id="pc-${li}">
-        ${lesson.vocab.map(v => `
-          <div class="phrase-row">
-            <div><div class="phrase-kriolu">${v.k}</div><div class="phrase-english" style="font-style:italic;font-size:0.8rem;color:var(--muted)">${v.ex}</div></div>
-            <div class="phrase-english">${v.e}</div>
-          </div>`).join('')}
+        ${lesson.vocab.map(v => {
+          const isFav = state.favourites.some(f => f.k === v.k);
+          return `<div class="phrase-row">
+            <div><div class="phrase-kriolu">${escapeHTML(v.k)}</div>
+              <div class="phrase-english" style="font-size:.72rem;font-style:italic">${escapeHTML(v.ex)}</div></div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="phrase-english">${escapeHTML(v.e)}</div>
+              <button class="fav-btn" onclick="toggleFav('${escapeHTML(v.k)}','${escapeHTML(v.e)}','${escapeHTML(v.ex)}')">${isFav?'❤️':'🤍'}</button>
+            </div>
+          </div>`;
+        }).join('')}
       </div>
     </div>`).join('');
+  updateFavCount();
 }
 
-function togglePhraseCat(i) {
-  const body = document.getElementById('pc-' + i);
-  body.classList.toggle('open');
+function togglePhraseCat(i) { document.getElementById('pc-'+i)?.classList.toggle('open'); }
+
+function toggleFav(k, e, ex) {
+  const idx = state.favourites.findIndex(f => f.k === k);
+  if (idx > -1) state.favourites.splice(idx, 1);
+  else state.favourites.push({k,e,ex});
+  saveState(); checkAchievements(); renderPhrasebook();
+}
+
+function updateFavCount() {
+  const el = document.getElementById('fav-count');
+  if (el) el.textContent = state.favourites.length;
+}
+
+function showFavourites() {
+  const container = document.getElementById('phrasebook-content');
+  if (!state.favourites.length) {
+    container.innerHTML = `<div style="text-align:center;padding:30px;color:var(--muted)">
+      <div style="font-size:2rem">🤍</div><div style="margin-top:8px">No favourites yet. Tap 🤍 on any phrase to save it.</div>
+    </div>`;
+    return;
+  }
+  container.innerHTML = `<div style="font-size:.82rem;font-weight:700;color:var(--ocean);margin-bottom:12px">❤️ Your Favourites (${state.favourites.length})</div>` +
+    state.favourites.map(v => `<div class="review-word-card">
+      <div><div class="review-word-k">${escapeHTML(v.k)}</div>
+        <div class="review-word-e">${escapeHTML(v.e)}</div>
+        <div class="review-word-ex">"${escapeHTML(v.ex)}"</div></div>
+      <button class="fav-btn" onclick="toggleFav('${escapeHTML(v.k)}','${escapeHTML(v.e)}','${escapeHTML(v.ex)}')">❤️</button>
+    </div>`).join('') +
+    `<button onclick="renderPhrasebook()" style="margin-top:12px;width:100%;padding:10px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer">← Back to all phrases</button>`;
 }
 
 // ═══════════════════════════════════════════
-//  CONVERSATION (Claude API)
+//  TTS & SPEECH RECOGNITION
 // ═══════════════════════════════════════════
+let autoSpeak = false, isListening = false, recognition = null, bestVoice = null;
+let userHasInteracted = false;
+document.addEventListener('click', () => { userHasInteracted=true; }, {once:true});
+document.addEventListener('touchstart', () => { userHasInteracted=true; }, {once:true});
 
-const SYSTEM_PROMPT = `You are Sôr António, a warm and patient Kriolu (Cape Verdean Creole) language tutor. You are a native speaker from Santiago island, Cape Verde.
+function initVoice() {
+  const tryLoad = () => {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return;
+    const sel = document.getElementById('voice-select');
+    if (sel) {
+      sel.innerHTML = '';
+      const pt = voices.filter(v=>v.lang.startsWith('pt'));
+      const es = voices.filter(v=>v.lang.startsWith('es'));
+      const ot = voices.filter(v=>!v.lang.startsWith('pt')&&!v.lang.startsWith('es'));
+      const addGroup = (label,group) => {
+        if (!group.length) return;
+        const og = document.createElement('optgroup'); og.label = label;
+        group.forEach(v => { const o=document.createElement('option'); o.value=v.name; o.textContent=`${v.name} (${v.lang})`; og.appendChild(o); });
+        sel.appendChild(og);
+      };
+      addGroup('🇵🇹 Portuguese',pt); addGroup('🇪🇸 Spanish',es); addGroup('Other',ot);
+      bestVoice = voices.find(v=>v.lang==='pt-PT')||voices.find(v=>v.lang==='pt-BR')||voices.find(v=>v.lang.startsWith('pt'))||voices.find(v=>v.lang.startsWith('es'))||voices[0];
+      if (bestVoice) sel.value = bestVoice.name;
+    }
+  };
+  tryLoad();
+  if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = tryLoad;
+}
 
-Your role:
-1. Engage the learner in conversation primarily in Kriolu (Crioulo da Santiago/Badiu variety)
-2. After each Kriolu sentence you write, provide an English translation in [brackets like this]
-3. When the learner makes a mistake in Kriolu, gently correct them with: "Korretu seria: ..." (The correct would be:...)
-4. If they write in English, understand what they want to say, respond appropriately in Kriolu, and gently encourage them to try saying something in Kriolu
-5. Keep sentences clear and appropriate for a language learner — simple vocabulary, short sentences
-6. Be encouraging and culturally informative about Cape Verde when relevant
-7. Help them practice greetings, introductions, numbers, food, family, and daily life topics
-8. If they ask for vocabulary or grammar help, provide it with examples
+function setVoice(name) {
+  const voices = window.speechSynthesis.getVoices();
+  bestVoice = voices.find(v=>v.name===name) || bestVoice;
+  speakText('Bon dia! Kuma bu sta?', null);
+}
 
-Always be warm, patient, and encouraging. Use emojis occasionally to make the conversation friendly.
-Start with a warm greeting in Kriolu with translation.`;
+function cleanForSpeech(text) {
+  return text
+    .replace(/\[[^\]]+\]/g,'').replace(/<[^>]+>/g,'').replace(/&quot;/g,'').replace(/&amp;/g,'and').replace(/&lt;/g,'').replace(/&gt;/g,'')
+    .replace(/[\u{1F000}-\u{1FFFF}]/gu,'').replace(/[\u{2600}-\u{27BF}]/gu,'').replace(/[\u{1F300}-\u{1F9FF}]/gu,'')
+    .replace(/[*_~`#►▾•→←]/g,'').replace(/\s{2,}/g,' ').trim();
+}
+
+function speakText(text, btnEl) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const clean = cleanForSpeech(text);
+  if (!clean) return;
+  const utter = new SpeechSynthesisUtterance(clean);
+  if (bestVoice) utter.voice = bestVoice;
+  utter.lang = bestVoice?.lang || 'pt-PT';
+  utter.rate = 0.82; utter.pitch = 1.0;
+  if (btnEl) { btnEl.classList.add('speaking'); utter.onend=()=>btnEl.classList.remove('speaking'); utter.onerror=()=>btnEl.classList.remove('speaking'); }
+  window.speechSynthesis.speak(utter);
+}
+
+function toggleAutoSpeak() {
+  userHasInteracted = true;
+  autoSpeak = document.getElementById('autospeak-toggle').checked;
+  document.getElementById('autospeak-label').textContent = autoSpeak ? 'On' : 'Off';
+}
+
+function toggleMic() { isListening ? stopListening() : startListening(); }
+
+function startListening() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Speech recognition not supported. Use Chrome or Edge.'); return; }
+  recognition = new SR();
+  recognition.continuous = false; recognition.interimResults = true; recognition.lang = 'pt-PT';
+  const micBtn = document.getElementById('mic-btn');
+  const chatInput = document.getElementById('chat-input');
+  recognition.onstart = () => { isListening=true; micBtn.classList.add('listening'); micBtn.textContent='⏹️'; chatInput.placeholder='🎤 Listening…'; };
+  recognition.onresult = e => { chatInput.value = Array.from(e.results).map(r=>r[0].transcript).join(''); };
+  recognition.onend = () => { stopListening(); if(chatInput.value.trim()) sendMessage(); };
+  recognition.onerror = e => { stopListening(); if(e.error==='not-allowed') alert('Microphone access denied.'); };
+  recognition.start();
+}
+
+function stopListening() {
+  isListening = false;
+  const micBtn = document.getElementById('mic-btn');
+  if (micBtn) { micBtn.classList.remove('listening'); micBtn.textContent='🎤'; }
+  const ci = document.getElementById('chat-input');
+  if (ci) ci.placeholder = 'Fla ku mi… (or tap 🎤)';
+  if (recognition) { try { recognition.stop(); } catch(e){} }
+}
+
+// ═══════════════════════════════════════════
+//  CONVERSATION
+// ═══════════════════════════════════════════
+const BASE_SYSTEM = `You are Sôr António, a warm and patient Kriolu (Cape Verdean Creole) language tutor and native speaker from Santiago island, Cape Verde.
+
+Rules:
+1. Respond primarily in Kriolu (Santiago/Badiu dialect). After each Kriolu sentence, add [English translation in brackets].
+2. Gently correct mistakes: "Korretu seria: ..."
+3. If they write in English, respond in Kriolu and encourage them to try in Kriolu.
+4. Keep sentences clear and learner-appropriate.
+5. Be encouraging and culturally informative about Cape Verde.
+6. Format bold with **word** syntax.
+7. Keep responses concise — 3-5 sentences max unless they ask for more.`;
+
+const SCENARIOS = {
+  greet:      BASE_SYSTEM + '\n\nSCENARIO: Practice greetings and introductions. Start with a warm greeting and ask the learner\'s name.',
+  food:       BASE_SYSTEM + '\n\nSCENARIO: You are a waiter at a Cape Verdean restaurant. The learner is a customer. Start by welcoming them and asking what they would like.',
+  directions: BASE_SYSTEM + '\n\nSCENARIO: The learner is lost in Praia and needs directions. Start by asking where they want to go.',
+  shopping:   BASE_SYSTEM + '\n\nSCENARIO: You are a market vendor in Mercado do Plateau, Praia. The learner is a customer. Start by showing them your goods.',
+  family:     BASE_SYSTEM + '\n\nSCENARIO: Have a conversation about family. Ask the learner about their family members.',
+  freeform:   BASE_SYSTEM + '\n\nSCENARIO: Free conversation. Start with a warm greeting and let the learner guide the topic.',
+};
+
+let currentSystemPrompt = BASE_SYSTEM;
+
+function startScenario(scenario) {
+  currentSystemPrompt = SCENARIOS[scenario] || BASE_SYSTEM;
+  state.chatHistory = [];
+  const win = document.getElementById('chat-window');
+  win.innerHTML = '';
+  const key = getApiKey();
+  if (!key) { appendBotMessage('Please save your Anthropic API key above first! ☝️', ''); return; }
+  callClaude('Start the scenario.');
+}
 
 function saveApiKey() {
   const key = document.getElementById('api-key-input').value.trim();
   if (key) {
     localStorage.setItem('kriolu_api_key', key);
     document.getElementById('api-key-input').value = '';
+    document.getElementById('api-key-input').placeholder = '••••••••••••• (saved ✓)';
     initConversation();
   }
 }
@@ -1521,12 +2568,8 @@ function saveApiKey() {
 function getApiKey() { return localStorage.getItem('kriolu_api_key') || ''; }
 
 function initConversation() {
-  if (state.chatHistory.length === 0) {
-    const key = getApiKey();
-    if (!key) {
-      appendBotMessage('Please enter your Anthropic API key above to start chatting! You can get one at console.anthropic.com', '');
-      return;
-    }
+  if (!state.chatHistory.length) {
+    if (!getApiKey()) { appendBotMessage('Please enter your Anthropic API key above to start chatting!', ''); return; }
     callClaude('Start the conversation with a warm greeting in Kriolu.');
   }
 }
@@ -1535,165 +2578,114 @@ async function sendMessage() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
-
-  const key = getApiKey();
-  if (!key) {
-    appendBotMessage('Please save your Anthropic API key first! ☝️', '');
-    return;
-  }
-
+  if (!getApiKey()) { appendBotMessage('Please save your API key first! ☝️', ''); return; }
   input.value = '';
   appendUserMessage(text);
+  state.chatMessages++; saveState(); checkAchievements();
   await callClaude(text);
 }
 
-function useStarter(text) {
-  document.getElementById('chat-input').value = text;
-  document.getElementById('chat-input').focus();
-}
+function useStarter(text) { document.getElementById('chat-input').value = text; document.getElementById('chat-input').focus(); }
 
 function appendUserMessage(text) {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg user';
-  div.innerHTML = `
-    <div class="msg-avatar">👤</div>
-    <div class="msg-bubble">${escapeHTML(text)}</div>`;
-  win.appendChild(div);
-  win.scrollTop = win.scrollHeight;
-  state.chatHistory.push({ role: 'user', content: text });
+  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${escapeHTML(text)}</div>`;
+  win.appendChild(div); win.scrollTop = win.scrollHeight;
+  state.chatHistory.push({role:'user', content:text});
 }
 
 function appendBotMessage(kriolu, english) {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg bot';
-  const translationHTML = english ? `<div class="msg-translation">${escapeHTML(english)}</div>` : '';
-  div.innerHTML = `
-    <div class="msg-avatar">🧑‍🏫</div>
-    <div>
-      <div class="msg-bubble">${kriolu}${translationHTML}</div>
-    </div>`;
-  win.appendChild(div);
-  win.scrollTop = win.scrollHeight;
+  const tHTML = english ? `<div class="msg-translation">${escapeHTML(english)}</div>` : '';
+  const msgId = 'msg-'+Date.now();
+  div.innerHTML = `<div class="msg-avatar">🧑‍🏫</div>
+    <div><div class="msg-bubble">${kriolu}${tHTML}</div>
+    <button class="speak-btn" id="${msgId}" onclick="userHasInteracted=true;speakText(this.dataset.text,this)" data-text="${kriolu.replace(/"/g,'&quot;')}">🔊</button></div>`;
+  win.appendChild(div); win.scrollTop = win.scrollHeight;
+  if (autoSpeak && userHasInteracted) setTimeout(() => speakText(kriolu, div.querySelector('.speak-btn')), 600);
 }
 
 function showTyping() {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
-  div.className = 'chat-msg bot';
-  div.id = 'typing-indicator';
-  div.innerHTML = `<div class="msg-avatar">🧑‍🏫</div>
-    <div class="msg-bubble"><div class="typing-indicator">
-      <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
-    </div></div>`;
-  win.appendChild(div);
-  win.scrollTop = win.scrollHeight;
+  div.className = 'chat-msg bot'; div.id = 'typing-indicator';
+  div.innerHTML = `<div class="msg-avatar">🧑‍🏫</div><div class="msg-bubble"><div class="typing-indicator">
+    <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  win.appendChild(div); win.scrollTop = win.scrollHeight;
 }
 
-function hideTyping() {
-  document.getElementById('typing-indicator')?.remove();
+function hideTyping() { document.getElementById('typing-indicator')?.remove(); }
+
+function formatBotText(text) {
+  return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br/>');
+}
+
+function parseResponse(fullText) {
+  const translations = [...fullText.matchAll(/\[([^\]]+)\]/g)].map(m=>m[1]);
+  const kriolu = fullText.replace(/\[[^\]]+\]/g,'').trim();
+  return { kriolu, translation: translations.join(' ') };
 }
 
 async function callClaude(userText) {
   const key = getApiKey();
   const sendBtn = document.getElementById('send-btn');
-  sendBtn.disabled = true;
+  if (sendBtn) sendBtn.disabled = true;
   showTyping();
 
   const messages = state.chatHistory.length > 1
-    ? state.chatHistory.slice(-10)
-    : [{ role: 'user', content: userText }];
+    ? state.chatHistory.slice(-12)
+    : [{ role:'user', content:userText }];
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 600,
-        system: SYSTEM_PROMPT,
-        messages: messages
-      })
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, system:currentSystemPrompt, messages })
     });
-
     const data = await resp.json();
     hideTyping();
-
-    if (data.error) {
-      appendBotMessage(`⚠️ API Error: ${data.error.message}`, '');
-    } else {
+    if (data.error) { appendBotMessage(`⚠️ API Error: ${data.error.message}`, ''); }
+    else {
       const fullText = data.content[0].text;
-      state.chatHistory.push({ role: 'assistant', content: fullText });
-
-      // Parse kriolu and [english translation]
-      const match = fullText.match(/\[([^\]]+)\]/);
-      if (match) {
-        const kriolu = fullText.replace(/\[[^\]]+\]/g, '').trim();
-        appendBotMessage(formatBotText(kriolu), match[1]);
-      } else {
-        appendBotMessage(formatBotText(fullText), '');
-      }
+      state.chatHistory.push({role:'assistant', content:fullText});
+      const { kriolu, translation } = parseResponse(fullText);
+      appendBotMessage(formatBotText(kriolu), translation);
     }
-  } catch (err) {
+  } catch(err) {
     hideTyping();
-    appendBotMessage(`⚠️ Connection error. Make sure you're running this from a local server (VS Code Live Server), not opening the file directly.`, '');
-    console.error(err);
+    appendBotMessage('⚠️ Connection error. Make sure you\'re running via Live Server or GitHub Pages.', '');
   }
-
-  sendBtn.disabled = false;
-}
-
-function formatBotText(text) {
-  return text.replace(/\n/g, '<br/>');
+  if (sendBtn) sendBtn.disabled = false;
 }
 
 // ═══════════════════════════════════════════
 //  UTILITIES
 // ═══════════════════════════════════════════
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function escapeHTML(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function levenshtein(a, b) {
-  const m = a.length, n = b.length;
-  const dp = Array.from({length: m+1}, (_, i) => Array.from({length: n+1}, (_, j) => i === 0 ? j : j === 0 ? i : 0));
-  for (let i = 1; i <= m; i++)
-    for (let j = 1; j <= n; j++)
-      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
-  return dp[m][n];
-}
+function shuffle(arr) { for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+function escapeHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function levenshtein(a,b){const m=a.length,n=b.length,dp=Array.from({length:m+1},(_,i)=>Array.from({length:n+1},(_,j)=>i===0?j:j===0?i:0));for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);return dp[m][n];}
 
 // ═══════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════
-
 function init() {
   loadState();
-  updateHeader();
-  updateHomeStats();
-  renderHomeGrid();
-  renderAllLessonsGrid();
+  updateHeader(); updateHomeStats();
+  renderHomeGrid(); renderAllLessonsGrid();
+  renderHomeBadges();
+  initVoice();
 
-  // Load saved API key
+  // Restore settings UI
+  document.getElementById('dark-mode-toggle').checked = state.darkMode;
+  document.getElementById('sfx-toggle').checked = state.sfx !== false;
+  document.getElementById('weekly-goal-select').value = state.weeklyGoal || 100;
+
   const savedKey = getApiKey();
-  if (savedKey) {
-    document.getElementById('api-key-input').placeholder = '••••••••••••• (saved)';
-  }
+  if (savedKey) document.getElementById('api-key-input').placeholder = '••••••••••••• (saved ✓)';
 }
 
 init();
