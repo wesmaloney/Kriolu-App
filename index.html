@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kriolu — Learn Cape Verdean Creole</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0B4F71" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kriolu" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     /* ── THEME VARIABLES ── */
@@ -171,6 +177,25 @@
     .blank-sentence{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.6;font-family:'Playfair Display',serif}
     .blank-input{border-bottom:3px solid var(--ocean);border-top:none;border-left:none;border-right:none;border-radius:0;background:transparent;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ocean);font-weight:700;width:120px;text-align:center;outline:none;padding:4px 6px}
 
+    /* Speaking exercise */
+    .speak-mic-btn{background:var(--coral);color:#fff;border:none;border-radius:50%;width:80px;height:80px;font-size:2rem;cursor:pointer;margin:14px auto;display:block;transition:all .2s;box-shadow:var(--shadow)}
+    .speak-mic-btn:hover{transform:scale(1.05)}
+    .speak-mic-btn.listening{background:var(--wrong);animation:pulse .8s infinite}
+    .speak-transcript{min-height:32px;font-size:1rem;font-weight:700;color:var(--ocean);font-style:italic;margin:10px 0}
+    .speak-result{padding:10px 16px;border-radius:12px;font-weight:700;font-size:.9rem;margin-top:8px}
+    .speak-result.good{background:#D4F5F1;color:#1A7A6E}
+    .speak-result.bad{background:#FFE0E3;color:#A0222C}
+    .self-assess-row{display:flex;gap:10px;justify-content:center;margin-top:14px}
+
+    /* Sentence builder */
+    .sb-target-area{min-height:54px;background:var(--bg);border:2px dashed var(--border);border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-bottom:16px;transition:border-color .2s}
+    .sb-target-area.has-words{border-style:solid;border-color:var(--sky)}
+    .sb-bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+    .sb-chip{padding:9px 16px;background:var(--card);border:2px solid var(--border);border-radius:99px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+    .sb-chip:hover{border-color:var(--sky);transform:translateY(-2px)}
+    .sb-chip.in-answer{background:var(--ocean);color:#fff;border-color:var(--ocean)}
+    .sb-chip.used{opacity:.25;pointer-events:none}
+
     /* Feedback */
     .feedback-bar{padding:14px 20px;border-radius:12px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px;margin-bottom:10px;animation:slideUp .2s ease}
     @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -197,6 +222,13 @@
     .new-badge-pop .badge-text{text-align:left}
     .new-badge-pop .badge-text b{font-size:1rem;display:block}
     .new-badge-pop .badge-text span{font-size:.8rem;opacity:.9}
+
+    /* Floating badge toast */
+    .badge-toast{position:fixed;top:72px;left:50%;transform:translate(-50%,-24px);background:linear-gradient(135deg,#F4A261,#E76F51);color:#fff;border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:12px;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,.3);opacity:0;transition:all .35s ease;max-width:90vw}
+    .badge-toast.show{opacity:1;transform:translate(-50%,0)}
+    .badge-toast .badge-icon-lg{font-size:2rem}
+    .badge-toast .badge-text b{font-size:.95rem;display:block}
+    .badge-toast .badge-text span{font-size:.78rem;opacity:.9}
 
     /* ── ACHIEVEMENTS SCREEN ── */
     .achievements-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
@@ -276,6 +308,22 @@
     .speak-btn:hover{opacity:1;transform:scale(1.2)}
     .speak-btn.speaking{opacity:1;animation:pulse .8s infinite}
 
+    /* ── TRANSLATOR ── */
+    .translate-direction{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
+    .lang-pill{background:var(--card);border:2px solid var(--border);border-radius:99px;padding:8px 18px;font-weight:800;font-size:.9rem;color:var(--ocean);box-shadow:var(--shadow)}
+    .swap-btn{background:var(--ocean);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.2rem;cursor:pointer;transition:all .2s;flex-shrink:0}
+    .swap-btn:hover{background:var(--sky);transform:rotate(180deg)}
+    .translate-card{background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:12px}
+    .translate-label{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+    .translate-input{width:100%;border:2px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;color:var(--text);background:var(--bg);outline:none;resize:vertical;transition:border-color .2s}
+    .translate-input:focus{border-color:var(--sky)}
+    .translate-controls{display:flex;gap:10px;align-items:center;margin-top:10px}
+    .trans-btn{flex:1;padding:11px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:background .2s}
+    .trans-btn:hover{background:var(--sky)}
+    .trans-btn:disabled{background:var(--border);color:var(--muted);cursor:default}
+    .translate-output{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--ocean);line-height:1.5;min-height:36px}
+    .translate-note{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:8px}
+
     /* ── MISC ── */
     @media(max-width:420px){
       .stats-row{grid-template-columns:repeat(2,1fr)}
@@ -300,6 +348,7 @@
   <div class="nav-tab active" onclick="showTab('home')">🏠 Home</div>
   <div class="nav-tab" onclick="showTab('lessons')">📚 Lessons</div>
   <div class="nav-tab" onclick="showTab('review')">📋 Review</div>
+  <div class="nav-tab" onclick="showTab('translate')">🔄 Translate</div>
   <div class="nav-tab" onclick="showTab('achievements')">🏆 Badges</div>
   <div class="nav-tab" onclick="showTab('phrasebook')">📖 Phrases</div>
   <div class="nav-tab" onclick="showTab('conversation')">💬 Chat</div>
@@ -399,6 +448,43 @@
     <h2 class="section-heading">📋 Words to Review</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Words you've struggled with. Practice these to master them!</p>
     <div id="review-content"></div>
+  </div>
+
+  <!-- TRANSLATE -->
+  <div id="screen-translate" class="screen">
+    <h2 class="section-heading">🔄 Translator</h2>
+
+    <div class="translate-direction">
+      <div class="lang-pill" id="lang-from">🇨🇻 Kriolu</div>
+      <button class="swap-btn" onclick="swapDirection()" title="Swap direction">⇄</button>
+      <div class="lang-pill" id="lang-to">🇬🇧 English</div>
+    </div>
+
+    <div class="translate-card">
+      <div class="translate-label" id="input-label">Kriolu</div>
+      <textarea class="translate-input" id="translate-input" rows="3" placeholder="Type or tap 🎤 to speak…"></textarea>
+      <div class="translate-controls">
+        <button class="mic-btn" id="trans-mic-btn" onclick="toggleTransMic()" title="Speak">🎤</button>
+        <button class="trans-btn" id="translate-btn" onclick="doTranslate()">Translate →</button>
+        <button class="mic-btn" onclick="clearTranslate()" title="Clear">🗑️</button>
+      </div>
+    </div>
+
+    <div class="translate-card" id="translate-result-card" style="display:none">
+      <div class="translate-label" id="output-label">English</div>
+      <div class="translate-output" id="translate-output"></div>
+      <div class="translate-note" id="translate-note"></div>
+      <div class="translate-controls">
+        <button class="mic-btn" id="trans-speak-btn" onclick="speakTranslation()" title="Listen">🔊</button>
+        <button class="mic-btn" onclick="copyTranslation()" title="Copy">📋</button>
+        <button class="mic-btn" onclick="saveTranslationFav()" title="Save to favourites">🤍</button>
+      </div>
+    </div>
+
+    <div class="convo-tips" style="margin-top:14px">
+      <h4>💡 Try translating</h4>
+      <div class="tip-chips" id="translate-examples"></div>
+    </div>
   </div>
 
   <!-- ACHIEVEMENTS -->
@@ -1553,25 +1639,55 @@ const LESSONS = [
 //  ACHIEVEMENTS DEFINITION
 // ═══════════════════════════════════════════
 const ACHIEVEMENTS = [
-  { id:'first_lesson',  icon:'🌱', name:'First Steps',      desc:'Complete your first lesson',          check: s => s.lessonsCompleted >= 1 },
+  // ── Getting started ──
+  { id:'first_lesson',  icon:'🌱', name:'First Steps',      desc:'Finish your first practice session',  check: s => s.sessionsCompleted >= 1 },
+  { id:'sessions10',    icon:'📆', name:'Dedicated',        desc:'Finish 10 practice sessions',         check: s => s.sessionsCompleted >= 10 },
+  { id:'sessions50',    icon:'🚀', name:'Unstoppable',      desc:'Finish 50 practice sessions',         check: s => s.sessionsCompleted >= 50 },
+  // ── Streaks ──
   { id:'streak3',       icon:'🔥', name:'On Fire',          desc:'3 day streak',                        check: s => s.streak >= 3 },
   { id:'streak7',       icon:'⚡', name:'Week Warrior',     desc:'7 day streak',                        check: s => s.streak >= 7 },
+  { id:'streak14',      icon:'🌋', name:'Fortnight Force',  desc:'14 day streak',                       check: s => s.streak >= 14 },
   { id:'streak30',      icon:'💎', name:'Diamond Streak',   desc:'30 day streak',                       check: s => s.streak >= 30 },
+  { id:'streak100',     icon:'🏛️', name:'Centurion',        desc:'100 day streak',                      check: s => s.streak >= 100 },
+  // ── XP ──
   { id:'xp100',         icon:'⭐', name:'Century',          desc:'Earn 100 XP',                         check: s => s.xp >= 100 },
   { id:'xp500',         icon:'🌟', name:'Star Learner',     desc:'Earn 500 XP',                         check: s => s.xp >= 500 },
   { id:'xp1000',        icon:'🏅', name:'Gold Learner',     desc:'Earn 1000 XP',                        check: s => s.xp >= 1000 },
-  { id:'perfect',       icon:'💯', name:'Perfecto!',        desc:'Score 100% on any lesson',            check: s => s.perfectLessons >= 1 },
-  { id:'perfect5',      icon:'🎯', name:'Sharpshooter',     desc:'5 perfect lessons',                   check: s => s.perfectLessons >= 5 },
-  { id:'lessons5',      icon:'📚', name:'Bookworm',         desc:'Complete 5 lessons',                  check: s => s.lessonsCompleted >= 5 },
-  { id:'lessons10',     icon:'🎓', name:'Graduate',         desc:'Complete 10 lessons',                 check: s => s.lessonsCompleted >= 10 },
-  { id:'lessons34',     icon:'👑', name:'Kriolu Master',    desc:'Complete all 34 lessons',             check: s => s.lessonsCompleted >= 34 },
+  { id:'xp2500',        icon:'🏆', name:'Legend',           desc:'Earn 2500 XP',                        check: s => s.xp >= 2500 },
+  { id:'xp5000',        icon:'🔱', name:'Mythic',           desc:'Earn 5000 XP',                        check: s => s.xp >= 5000 },
+  // ── Perfection ──
+  { id:'perfect',       icon:'💯', name:'Perfecto!',        desc:'Score 100% on any session',           check: s => s.perfectLessons >= 1 },
+  { id:'perfect5',      icon:'🎯', name:'Sharpshooter',     desc:'5 perfect sessions',                  check: s => s.perfectLessons >= 5 },
+  { id:'perfect10',     icon:'👁️', name:'Flawless',         desc:'10 perfect sessions',                 check: s => s.perfectLessons >= 10 },
+  // ── Lessons ──
+  { id:'lessons5',      icon:'📚', name:'Bookworm',         desc:'Complete 5 lessons (80%+ score)',     check: s => s.lessonsCompleted >= 5 },
+  { id:'lessons10',     icon:'🎓', name:'Graduate',         desc:'Complete 10 lessons (80%+ score)',    check: s => s.lessonsCompleted >= 10 },
+  { id:'lessons_all',   icon:'👑', name:'Kriolu Master',    desc:'Complete every lesson (80%+ score)',  check: s => s.lessonsCompleted >= LESSONS.length },
+  // ── Word mastery ──
   { id:'mastered10',    icon:'🧠', name:'Word Wizard',      desc:'Master 10 words',                     check: s => s.masteredWords >= 10 },
   { id:'mastered50',    icon:'📖', name:'Dictionary',       desc:'Master 50 words',                     check: s => s.masteredWords >= 50 },
   { id:'mastered100',   icon:'🗝️', name:'Fluent',           desc:'Master 100 words',                    check: s => s.masteredWords >= 100 },
+  { id:'mastered250',   icon:'🦜', name:'Scholar',          desc:'Master 250 words',                    check: s => s.masteredWords >= 250 },
+  { id:'mastered500',   icon:'🧭', name:'Walking Dictionary',desc:'Master 500 words',                   check: s => s.masteredWords >= 500 },
+  { id:'mastered1000',  icon:'🌌', name:'Lexicon',          desc:'Master 1000 words',                   check: s => s.masteredWords >= 1000 },
+  // ── Skill-specific ──
+  { id:'speak10',       icon:'🗣️', name:'Loud & Proud',     desc:'10 correct speaking exercises',       check: s => s.speakingCorrect >= 10 },
+  { id:'speak50',       icon:'🎙️', name:'Golden Voice',     desc:'50 correct speaking exercises',       check: s => s.speakingCorrect >= 50 },
+  { id:'builder10',     icon:'🧩', name:'Architect',        desc:'Build 10 sentences correctly',        check: s => s.sentencesBuilt >= 10 },
+  { id:'builder50',     icon:'🏗️', name:'Master Builder',   desc:'Build 50 sentences correctly',        check: s => s.sentencesBuilt >= 50 },
+  { id:'listen10',      icon:'👂', name:'Golden Ears',      desc:'10 correct listening exercises',      check: s => s.listeningCorrect >= 10 },
+  { id:'listen50',      icon:'🎧', name:'Sound Sage',       desc:'50 correct listening exercises',      check: s => s.listeningCorrect >= 50 },
+  // ── Conversation ──
   { id:'chat1',         icon:'💬', name:'Conversationalist',desc:'Have your first conversation',         check: s => s.chatMessages >= 1 },
-  { id:'chat50',        icon:'🗣️', name:'Chatterbox',       desc:'Send 50 chat messages',               check: s => s.chatMessages >= 50 },
+  { id:'chat50',        icon:'🗨️', name:'Chatterbox',       desc:'Send 50 chat messages',               check: s => s.chatMessages >= 50 },
+  { id:'chat200',       icon:'🌐', name:'Fluent Friend',    desc:'Send 200 chat messages',              check: s => s.chatMessages >= 200 },
+  // ── Collection & goals ──
   { id:'fav5',          icon:'❤️', name:'Collector',        desc:'Save 5 favourite phrases',             check: s => s.favourites.length >= 5 },
+  { id:'fav20',         icon:'💝', name:'Curator',          desc:'Save 20 favourite phrases',            check: s => s.favourites.length >= 20 },
   { id:'mixed5',        icon:'🎲', name:'Mix Master',       desc:'Complete 5 mixed sessions',           check: s => s.mixedSessions >= 5 },
+  { id:'goal1',         icon:'🎯', name:'Goal Getter',      desc:'Hit your weekly XP goal',             check: s => s.weeklyGoalsHit >= 1 },
+  { id:'goal5',         icon:'📈', name:'Consistent',       desc:'Hit your weekly goal 5 times',        check: s => s.weeklyGoalsHit >= 5 },
+  // ── Time of day ──
   { id:'nightowl',      icon:'🦉', name:'Night Owl',        desc:'Practice after 10 PM',                check: s => s.nightOwl },
   { id:'earlybird',     icon:'🐦', name:'Early Bird',       desc:'Practice before 7 AM',                check: s => s.earlyBird },
 ];
@@ -1586,6 +1702,9 @@ let state = {
   earnedBadges: [], lessonsCompleted: 0, perfectLessons: 0,
   masteredWords: 0, chatMessages: 0, mixedSessions: 0,
   favourites: [], nightOwl: false, earlyBird: false,
+  sessionsCompleted: 0, lessonsFinished: {},
+  speakingCorrect: 0, sentencesBuilt: 0, listeningCorrect: 0,
+  weeklyGoalsHit: 0, weeklyGoalHitThisWeek: false,
   session: null, qIndex: 0, score: 0, wrongItems: [], awaitingNext: false,
   lives: 3, chatHistory: [], darkMode: false, sfx: true, fontSize: '1rem',
 };
@@ -1615,7 +1734,7 @@ function loadState() {
   // Weekly XP reset
   const now = new Date();
   const weekStart = getWeekStart(now);
-  if (state.weekStart !== weekStart) { state.weeklyXP = 0; state.weekStart = weekStart; }
+  if (state.weekStart !== weekStart) { state.weeklyXP = 0; state.weekStart = weekStart; state.weeklyGoalHitThisWeek = false; }
 
   // Streak
   const today = now.toDateString();
@@ -1649,6 +1768,10 @@ function saveState() {
     perfectLessons:state.perfectLessons, masteredWords:state.masteredWords,
     chatMessages:state.chatMessages, mixedSessions:state.mixedSessions,
     favourites:state.favourites, nightOwl:state.nightOwl, earlyBird:state.earlyBird,
+    sessionsCompleted:state.sessionsCompleted, lessonsFinished:state.lessonsFinished,
+    speakingCorrect:state.speakingCorrect, sentencesBuilt:state.sentencesBuilt,
+    listeningCorrect:state.listeningCorrect, weeklyGoalsHit:state.weeklyGoalsHit,
+    weeklyGoalHitThisWeek:state.weeklyGoalHitThisWeek,
     darkMode:state.darkMode, sfx:state.sfx, fontSize:state.fontSize,
   };
   localStorage.setItem('kriolu_state_v3', JSON.stringify(s));
@@ -1657,20 +1780,45 @@ function saveState() {
 function addXP(amount) {
   state.xp += amount;
   state.weeklyXP += amount;
+  if (!state.weeklyGoalHitThisWeek && state.weeklyXP >= state.weeklyGoal) {
+    state.weeklyGoalHitThisWeek = true;
+    state.weeklyGoalsHit = (state.weeklyGoalsHit || 0) + 1;
+  }
   saveState(); updateHeader(); updateHomeStats(); checkAchievements();
 }
 
 function recordWordResult(item, correct) {
   const key = item.k;
-  if (!state.wordScores[key]) state.wordScores[key] = { correct:0, wrong:0 };
+  if (!state.wordScores[key]) state.wordScores[key] = { correct:0, wrong:0, streak:0 };
+  const s = state.wordScores[key];
   if (correct) {
-    state.wordScores[key].correct++;
+    s.correct++;
+    s.streak = (s.streak || 0) + 1;   // consecutive correct — used to clear review list
   } else {
-    state.wordScores[key].wrong++;
+    s.wrong++;
+    s.streak = 0;                      // mistake resets recovery progress
     if (!state.wrongItems.find(w => w.k === item.k)) state.wrongItems.push(item);
   }
   // Update mastered words count
   state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
+}
+
+// A word needs this many correct answers in a row (after a mistake) to leave the review list
+const REVIEW_CLEAR_STREAK = 3;
+
+function isInReview(v) {
+  const s = state.wordScores[v.k];
+  if (!s || s.wrong === 0) return false;
+  if ((s.streak || 0) >= REVIEW_CLEAR_STREAK) return false;       // recovered
+  if (s.correct >= s.wrong + REVIEW_CLEAR_STREAK) return false;   // legacy data without streak tracking
+  return true;
+}
+
+function getReviewWords() {
+  return LESSONS.flatMap(l => l.vocab).filter(isInReview).sort((a,b) => {
+    const sa = state.wordScores[a.k], sb = state.wordScores[b.k];
+    return (sb.wrong - sb.correct) - (sa.wrong - sa.correct);
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -1807,18 +1955,36 @@ function checkAchievements() {
   }
 }
 
+let badgeToastQueue = [];
+let badgeToastShowing = false;
+
 function showBadgePopup(ach) {
-  const popup = document.createElement('div');
-  popup.className = 'new-badge-pop';
-  popup.innerHTML = `<div class="badge-icon-lg">${ach.icon}</div><div class="badge-text"><b>New Badge: ${ach.name}!</b><span>${ach.desc}</span></div>`;
-  const rc = document.getElementById('results-card');
-  if (rc) rc.prepend(popup);
+  badgeToastQueue.push(ach);
+  if (!badgeToastShowing) showNextBadgeToast();
+}
+
+function showNextBadgeToast() {
+  const ach = badgeToastQueue.shift();
+  if (!ach) { badgeToastShowing = false; return; }
+  badgeToastShowing = true;
+  const toast = document.createElement('div');
+  toast.className = 'badge-toast';
+  toast.innerHTML = `<div class="badge-icon-lg">${ach.icon}</div>
+    <div class="badge-text"><b>New Badge: ${ach.name}!</b><span>${ach.desc}</span></div>`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => { toast.remove(); showNextBadgeToast(); }, 350);
+  }, 2800);
 }
 
 function renderAchievements() {
   const grid = document.getElementById('achievements-grid');
   if (!grid) return;
-  grid.innerHTML = ACHIEVEMENTS.map(ach => {
+  const earnedCount = state.earnedBadges.filter(id => ACHIEVEMENTS.some(a => a.id === id)).length;
+  grid.innerHTML = `<div style="grid-column:1/-1;font-size:.85rem;font-weight:800;color:var(--ocean);margin-bottom:4px">${earnedCount} / ${ACHIEVEMENTS.length} earned</div>` +
+    ACHIEVEMENTS.map(ach => {
     const earned = state.earnedBadges.includes(ach.id);
     return `<div class="ach-card ${earned ? 'earned' : 'locked'}">
       <div class="ach-icon">${ach.icon}</div>
@@ -1846,8 +2012,8 @@ function renderHomeBadges() {
 // ═══════════════════════════════════════════
 //  NAVIGATION
 // ═══════════════════════════════════════════
-const SCREENS = ['home','lessons','exercise','results','review','achievements','phrasebook','conversation'];
-const TABS    = ['home','lessons','review','achievements','phrasebook','conversation'];
+const SCREENS = ['home','lessons','exercise','results','review','translate','achievements','phrasebook','conversation'];
+const TABS    = ['home','lessons','review','translate','achievements','phrasebook','conversation'];
 
 function showTab(id) {
   SCREENS.forEach(s => document.getElementById('screen-'+s)?.classList.remove('active'));
@@ -1856,6 +2022,7 @@ function showTab(id) {
   if (id==='phrasebook') renderPhrasebook();
   if (id==='achievements') renderAchievements();
   if (id==='review') renderReview();
+  if (id==='translate') updateTranslateUI();
 }
 
 function showScreen(id) {
@@ -1889,11 +2056,11 @@ function renderAllLessonsGrid() {
 }
 
 function renderLessonCard(lesson) {
-  const done = state.completedLessons[lesson.id] || 0;
   const total = lesson.vocab.length;
   const mastered = lesson.vocab.filter(v => (state.wordScores[v.k]?.correct || 0) >= MASTERY_THRESHOLD).length;
   const masteryPct = Math.round((mastered / total) * 100);
-  const badge = done >= total
+  const bestPct = (state.lessonsFinished || {})[lesson.id] || 0;
+  const badge = bestPct >= 80
     ? `<div class="done-badge">✓</div>`
     : `<div style="position:absolute;top:10px;right:10px;font-size:.7rem;color:var(--muted);font-weight:700">${mastered}/${total}</div>`;
   return `<div class="lesson-card" onclick="startLesson('${lesson.id}')" style="border-top-color:${lesson.color}">
@@ -1914,7 +2081,7 @@ function updateHeader() {
 function updateHomeStats() {
   document.getElementById('stat-streak').textContent = state.streak;
   document.getElementById('stat-xp').textContent = state.xp;
-  const doneCount = LESSONS.filter(l => (state.completedLessons[l.id]||0) >= l.vocab.length).length;
+  const doneCount = Object.values(state.lessonsFinished || {}).filter(p => p >= 80).length;
   document.getElementById('stat-lessons').textContent = doneCount;
   document.getElementById('stat-words').textContent = state.masteredWords;
 
@@ -1935,6 +2102,7 @@ function updateHomeStats() {
 function getWordDifficulty(word) {
   const score = state.wordScores[word.k];
   if (!score) return 3; // unseen = medium-high priority
+  if (isInReview(word)) return 6; // actively recovering from mistakes = highest priority
   const ratio = score.correct / Math.max(1, score.correct + score.wrong);
   if (score.correct >= MASTERY_THRESHOLD && ratio > 0.8) return 1; // mastered
   if (ratio < 0.5) return 5; // struggling
@@ -1960,7 +2128,7 @@ function buildSpacedSession(vocab, limit = 15) {
 // ═══════════════════════════════════════════
 //  EXERCISE ENGINE
 // ═══════════════════════════════════════════
-const EXERCISE_TYPES = ['flashcard','multiChoice','typeAnswer','multiChoiceKriolu','listening','fillBlank','matching'];
+const EXERCISE_TYPES = ['flashcard','multiChoice','speaking','typeAnswer','sentenceBuilder','multiChoiceKriolu','listening','fillBlank','matching'];
 
 function buildSession(lessonId) {
   const lesson = LESSONS.find(l => l.id === lessonId);
@@ -2018,6 +2186,8 @@ function renderQuestion() {
   else if (q.type === 'listening') renderListening(q, content);
   else if (q.type === 'fillBlank') renderFillBlank(q, content);
   else if (q.type === 'matching') renderMatching(q, content);
+  else if (q.type === 'speaking') renderSpeaking(q, content);
+  else if (q.type === 'sentenceBuilder') renderSentenceBuilder(q, content);
   else renderFlashcard(q, content);
 }
 
@@ -2115,6 +2285,7 @@ function mcAnswer(btn, correct) {
   if (correct) {
     btn.classList.add('selected-correct'); state.score++;
     recordWordResult(q.item, true); playSound('correct');
+    if (q.type === 'listening') state.listeningCorrect = (state.listeningCorrect || 0) + 1;
     showFeedback(true, '');
   } else {
     btn.classList.add('selected-wrong');
@@ -2142,9 +2313,11 @@ function submitType() {
   if (!input || !input.value.trim()) return;
   state.awaitingNext = true;
   const q = state.session.questions[state.qIndex];
-  const val = input.value.trim().toLowerCase();
-  const correct = q.item.e.toLowerCase();
-  const isCorrect = levenshtein(val,correct)<=2 || correct.includes(val) || val.includes(correct.split(' ')[0]);
+  const val = normalizeText(input.value);
+  const correct = normalizeText(q.item.e);
+  // Accept variants split by / or () — e.g. "I'm fine / I'm well", "Thank you (said by male)"
+  const variants = [correct, ...q.item.e.split(/[\/(]/).map(normalizeText).filter(v => v.length > 1)];
+  const isCorrect = variants.some(v => levenshtein(val, v) <= Math.max(1, Math.floor(v.length * 0.25)) || (val.length > 2 && v.includes(val)));
   input.classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
   input.disabled = true;
   document.querySelector('.submit-btn').disabled = true;
@@ -2156,7 +2329,7 @@ function submitType() {
 // — Listening Comprehension —
 function renderListening(q, container) {
   const allVocab = LESSONS.flatMap(l => l.vocab);
-  const distractors = allVocab.filter(v => v.k !== q.item.k).slice(0,3);
+  const distractors = shuffle(allVocab.filter(v => v.k !== q.item.k && v.e !== q.item.e)).slice(0,3);
   const options = shuffle([q.item, ...distractors]);
   const choiceHTML = options.map(opt => {
     const isCorrect = opt.k === q.item.k;
@@ -2181,15 +2354,32 @@ function playListenWord(word, btn) {
 // — Fill in the Blank —
 function renderFillBlank(q, container) {
   const sentence = q.item.ex || '';
-  const word = q.item.k;
-  // Blank out the Kriolu word in the example sentence
-  const blanked = sentence.replace(word, '______');
+  // Try the full key, then each "A / B" variant, case-insensitively
+  const variants = [q.item.k, ...q.item.k.split(' / ')].filter(Boolean);
+  let blanked = null, answer = q.item.k;
+  for (const v of variants) {
+    const idx = sentence.toLowerCase().indexOf(v.toLowerCase());
+    if (idx > -1) {
+      blanked = sentence.slice(0, idx) + '______' + sentence.slice(idx + v.length);
+      answer = sentence.slice(idx, idx + v.length); // actual casing from sentence
+      break;
+    }
+  }
+  if (!blanked) {
+    // Fallback: translate-to-Kriolu prompt (never reveal the answer)
+    blanked = null;
+  }
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">Fill in the Blank</div>
-    <div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Complete the sentence in Kriolu:</div>
-    <div class="blank-sentence">${escapeHTML(blanked)}</div>
-    <div style="font-size:.8rem;color:var(--muted);margin-bottom:14px">Hint: ${escapeHTML(q.item.e)}</div>
+    ${blanked !== null
+      ? `<div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Complete the sentence in Kriolu:</div>
+         <div class="blank-sentence">${escapeHTML(blanked)}</div>`
+      : `<div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">How do you say this in Kriolu?</div>
+         <div class="blank-sentence">"${escapeHTML(q.item.e)}"</div>`}
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:14px">${blanked !== null ? 'Hint: ' + escapeHTML(q.item.e) : ''}</div>
     <input type="text" class="type-input" id="type-input" placeholder="Type the missing word…" onkeydown="if(event.key==='Enter')submitFill()" autocomplete="off"/>
     <button class="submit-btn" onclick="submitFill()">Check ✓</button></div><div id="feedback-area"></div>`;
+  // Store actual expected answer on state for submitFill
+  state.fillAnswer = answer;
   setTimeout(() => document.getElementById('type-input')?.focus(), 100);
 }
 
@@ -2199,35 +2389,216 @@ function submitFill() {
   if (!input || !input.value.trim()) return;
   state.awaitingNext = true;
   const q = state.session.questions[state.qIndex];
-  const val = input.value.trim().toLowerCase();
-  const correct = q.item.k.toLowerCase();
-  const isCorrect = levenshtein(val, correct) <= 2;
+  const val = normalizeText(input.value);
+  const target = normalizeText(state.fillAnswer || q.item.k);
+  // Accept any "A / B" variant too
+  const variants = [target, ...q.item.k.split(' / ').map(normalizeText)];
+  const isCorrect = variants.some(v => levenshtein(val, v) <= Math.max(1, Math.floor(v.length * 0.2)));
   input.classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
   input.disabled = true;
   document.querySelector('.submit-btn').disabled = true;
   if (isCorrect) { state.score++; recordWordResult(q.item,true); playSound('correct'); }
   else { recordWordResult(q.item,false); playSound('wrong'); state.lives--; }
-  showFeedback(isCorrect, isCorrect ? '' : `Correct: <em>${escapeHTML(q.item.k)}</em>`);
+  showFeedback(isCorrect, isCorrect ? '' : `Correct: <em>${escapeHTML(state.fillAnswer || q.item.k)}</em>`);
+}
+
+// — Speaking (Pronunciation) —
+let speakRecognition = null;
+
+function renderSpeaking(q, container) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const hasSR = !!SR;
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🗣️ Speaking Practice</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">Say this out loud in Kriolu:</div>
+    <div class="exercise-word">${escapeHTML(q.item.k)}</div>
+    <div class="exercise-example">${escapeHTML(q.item.e)} • "${escapeHTML(q.item.ex)}"</div>
+    <button class="reveal-btn" style="margin-top:4px" onclick="userHasInteracted=true;speakText(this.dataset.w,this)" data-w="${escapeHTML(q.item.k)}">🔊 Hear it first</button>
+    ${hasSR
+      ? `<button class="speak-mic-btn" id="speak-mic" onclick="startSpeakCheck()">🎤</button>
+         <div style="font-size:.78rem;color:var(--muted)">Tap the mic, then speak clearly</div>
+         <div class="speak-transcript" id="speak-transcript"></div>
+         <div id="speak-result"></div>`
+      : `<div style="font-size:.82rem;color:var(--muted);margin:14px 0 4px">Speech recognition isn't supported in this browser.<br/>Say it aloud, then rate yourself:</div>
+         <div class="self-assess-row">
+           <button class="fc-btn wrong" onclick="speakSelfAssess(false)">✗ Struggled</button>
+           <button class="fc-btn correct" onclick="speakSelfAssess(true)">✓ Said it!</button>
+         </div>`}
+  </div><div id="feedback-area"></div>`;
+}
+
+function startSpeakCheck() {
+  if (state.awaitingNext) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  const q = state.session.questions[state.qIndex];
+  const micBtn = document.getElementById('speak-mic');
+  const transcriptEl = document.getElementById('speak-transcript');
+
+  // Stop any TTS so it doesn't hear itself
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+  speakRecognition = new SR();
+  speakRecognition.continuous = false;
+  speakRecognition.interimResults = true;
+  speakRecognition.lang = 'pt-PT';
+
+  micBtn.classList.add('listening');
+  micBtn.textContent = '👂';
+  transcriptEl.textContent = '';
+
+  let finalTranscript = '';
+
+  speakRecognition.onresult = e => {
+    finalTranscript = Array.from(e.results).map(r => r[0].transcript).join('');
+    transcriptEl.textContent = '"' + finalTranscript + '"';
+  };
+
+  speakRecognition.onend = () => {
+    micBtn.classList.remove('listening');
+    micBtn.textContent = '🎤';
+    if (!finalTranscript.trim()) {
+      transcriptEl.textContent = "Didn't catch that — try again!";
+      return;
+    }
+    evaluateSpeech(finalTranscript, q);
+  };
+
+  speakRecognition.onerror = e => {
+    micBtn.classList.remove('listening');
+    micBtn.textContent = '🎤';
+    if (e.error === 'not-allowed') alert('Microphone access denied. Please allow it in browser settings.');
+    else transcriptEl.textContent = "Didn't catch that — try again!";
+  };
+
+  speakRecognition.start();
+}
+
+function evaluateSpeech(transcript, q) {
+  if (state.awaitingNext) return;
+  const said = normalizeText(transcript);
+  const target = normalizeText(q.item.k);
+  const tolerance = Math.max(2, Math.floor(target.length * 0.35));
+  const dist = levenshtein(said, target);
+  const isClose = dist <= tolerance || said.includes(target) || target.includes(said);
+
+  const resultEl = document.getElementById('speak-result');
+  state.awaitingNext = true;
+
+  if (isClose) {
+    state.score++; recordWordResult(q.item, true); playSound('correct');
+    state.speakingCorrect = (state.speakingCorrect || 0) + 1;
+    resultEl.innerHTML = `<div class="speak-result good">🎉 Great pronunciation!</div>`;
+    showFeedback(true, '');
+  } else {
+    recordWordResult(q.item, false); playSound('wrong'); state.lives--;
+    resultEl.innerHTML = `<div class="speak-result bad">Heard: "${escapeHTML(transcript)}"</div>`;
+    showFeedback(false, `Target: <em>${escapeHTML(q.item.k)}</em> — keep practicing!`);
+  }
+}
+
+function speakSelfAssess(correct) {
+  if (state.awaitingNext) return;
+  const q = state.session.questions[state.qIndex];
+  recordWordResult(q.item, correct);
+  if (correct) { state.score++; state.speakingCorrect = (state.speakingCorrect || 0) + 1; playSound('correct'); }
+  else { state.lives--; playSound('wrong'); }
+  advanceQuestion();
+}
+
+// — Sentence Builder (Word Order / Structure) —
+let sbState = { words: [], answer: [], target: '' };
+
+function renderSentenceBuilder(q, container) {
+  const sentence = (q.item.ex || '').trim();
+  const words = sentence.split(/\s+/);
+
+  // Too short to be meaningful — fall back to multiple choice
+  if (words.length < 3) { renderMultiChoice(q, container, false); return; }
+
+  sbState = { words: shuffle(words.map((w, i) => ({ w, id: i }))), answer: [], target: sentence };
+
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🧩 Build the Sentence</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:6px">Tap the words in the correct order:</div>
+    <div style="font-size:.85rem;font-weight:700;color:var(--ocean);margin-bottom:14px">Featuring: ${escapeHTML(q.item.k)} <span style="color:var(--muted);font-weight:600">(${escapeHTML(q.item.e)})</span></div>
+    <div class="sb-target-area" id="sb-answer"></div>
+    <div class="sb-bank" id="sb-bank"></div>
+    <button class="submit-btn" id="sb-check" onclick="checkSentence()" disabled>Check ✓</button>
+    <button class="reveal-btn" style="margin-top:8px;background:var(--muted)" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(sentence)}">🔊 Hear the sentence</button>
+  </div><div id="feedback-area"></div>`;
+
+  renderSbChips();
+}
+
+function renderSbChips() {
+  const bank = document.getElementById('sb-bank');
+  const answer = document.getElementById('sb-answer');
+  if (!bank || !answer) return;
+
+  bank.innerHTML = sbState.words.map(item => {
+    const used = sbState.answer.some(a => a.id === item.id);
+    return `<button class="sb-chip ${used ? 'used' : ''}" onclick="sbPick(${item.id})">${escapeHTML(item.w)}</button>`;
+  }).join('');
+
+  answer.innerHTML = sbState.answer.length
+    ? sbState.answer.map(item => `<button class="sb-chip in-answer" onclick="sbRemove(${item.id})">${escapeHTML(item.w)}</button>`).join('')
+    : '<span style="font-size:.8rem;color:var(--muted)">Tap words below to build the sentence</span>';
+
+  answer.classList.toggle('has-words', sbState.answer.length > 0);
+  const check = document.getElementById('sb-check');
+  if (check) check.disabled = sbState.answer.length !== sbState.words.length;
+}
+
+function sbPick(id) {
+  if (state.awaitingNext) return;
+  if (sbState.answer.some(a => a.id === id)) return;
+  const item = sbState.words.find(w => w.id === id);
+  if (item) { sbState.answer.push(item); renderSbChips(); }
+}
+
+function sbRemove(id) {
+  if (state.awaitingNext) return;
+  sbState.answer = sbState.answer.filter(a => a.id !== id);
+  renderSbChips();
+}
+
+function checkSentence() {
+  if (state.awaitingNext) return;
+  state.awaitingNext = true;
+  const q = state.session.questions[state.qIndex];
+  const built = sbState.answer.map(a => a.w).join(' ');
+  const isCorrect = normalizeText(built) === normalizeText(sbState.target);
+  document.getElementById('sb-check').disabled = true;
+
+  if (isCorrect) {
+    state.score++; recordWordResult(q.item, true); playSound('correct');
+    state.sentencesBuilt = (state.sentencesBuilt || 0) + 1;
+    document.getElementById('sb-answer').style.borderColor = 'var(--correct)';
+    showFeedback(true, '');
+  } else {
+    recordWordResult(q.item, false); playSound('wrong'); state.lives--;
+    document.getElementById('sb-answer').style.borderColor = 'var(--wrong)';
+    showFeedback(false, `Correct: <em>${escapeHTML(sbState.target)}</em>`);
+  }
 }
 
 // — Word Matching —
-let matchState = { selected: null, side: null, matched: new Set() };
+let matchState = { selected: null, matched: new Set(), pairs: [] };
 
 function renderMatching(q, container) {
   // Pick 4 word pairs including this question's item
   const allVocab = LESSONS.flatMap(l => l.vocab);
   const others = shuffle(allVocab.filter(v => v.k !== q.item.k)).slice(0,3);
   const pairs = shuffle([q.item, ...others]);
-  const leftItems = shuffle([...pairs]);
-  const rightItems = shuffle([...pairs]);
+  const leftOrder = shuffle(pairs.map((_, i) => i));
+  const rightOrder = shuffle(pairs.map((_, i) => i));
 
-  matchState = { selected: null, side: null, matched: new Set(), pairs };
+  matchState = { selected: null, matched: new Set(), pairs };
 
-  const leftHTML = leftItems.map(v =>
-    `<button class="match-btn" id="ml-${v.k.replace(/\s/g,'_')}" onclick="matchSelect('${escapeHTML(v.k)}','left',this)">${escapeHTML(v.k)}</button>`
+  const leftHTML = leftOrder.map(i =>
+    `<button class="match-btn" id="ml-${i}" onclick="matchSelect(${i},'left',this)">${escapeHTML(pairs[i].k)}</button>`
   ).join('');
-  const rightHTML = rightItems.map(v =>
-    `<button class="match-btn" id="mr-${v.k.replace(/\s/g,'_')}" onclick="matchSelect('${escapeHTML(v.k)}','right',this)">${escapeHTML(v.e)}</button>`
+  const rightHTML = rightOrder.map(i =>
+    `<button class="match-btn" id="mr-${i}" onclick="matchSelect(${i},'right',this)">${escapeHTML(pairs[i].e)}</button>`
   ).join('');
 
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🔗 Match the Words</div>
@@ -2236,24 +2607,22 @@ function renderMatching(q, container) {
     </div><div id="feedback-area"></div>`;
 }
 
-function matchSelect(key, side, btn) {
-  if (matchState.matched.has(key)) return;
+function matchSelect(idx, side, btn) {
+  if (state.awaitingNext) return;
+  if (matchState.matched.has(idx)) return;
   if (side === 'left') {
-    if (matchState.side === 'left') {
-      document.querySelectorAll('.match-btn.selected').forEach(b => b.classList.remove('selected'));
-    }
-    matchState.selected = key; matchState.side = 'left';
+    document.querySelectorAll('.match-btn.selected').forEach(b => b.classList.remove('selected'));
+    matchState.selected = idx;
     btn.classList.add('selected');
   } else {
-    // Right side selected — check if it matches the selected left
-    if (!matchState.selected) return;
-    const isMatch = matchState.selected === key;
-    const leftBtn = document.getElementById('ml-' + matchState.selected.replace(/\s/g,'_'));
+    if (matchState.selected === null) return;
+    const isMatch = matchState.selected === idx;
+    const leftBtn = document.getElementById('ml-' + matchState.selected);
     if (isMatch) {
       btn.classList.add('matched-correct');
       if (leftBtn) leftBtn.classList.add('matched-correct');
       btn.disabled = true; if(leftBtn) leftBtn.disabled = true;
-      matchState.matched.add(key);
+      matchState.matched.add(idx);
       playSound('correct');
       if (matchState.matched.size === matchState.pairs.length) {
         state.score++; state.awaitingNext = true;
@@ -2265,12 +2634,18 @@ function matchSelect(key, side, btn) {
       btn.classList.add('matched-wrong');
       if (leftBtn) leftBtn.classList.add('matched-wrong');
       playSound('wrong'); state.lives--;
+      if (state.lives <= 0) {
+        state.awaitingNext = true;
+        recordWordResult(matchState.pairs[matchState.selected], false);
+        showFeedback(false, 'Out of lives!');
+        return;
+      }
       setTimeout(() => {
         btn.classList.remove('matched-wrong','selected');
         if(leftBtn) leftBtn.classList.remove('matched-wrong','selected');
       }, 600);
     }
-    matchState.selected = null; matchState.side = null;
+    matchState.selected = null;
     document.querySelectorAll('.match-btn.selected').forEach(b => b.classList.remove('selected'));
   }
 }
@@ -2300,9 +2675,14 @@ function finishSession() {
 
   addXP(earned);
 
-  if (session.lessonId !== 'mixed') {
+  state.sessionsCompleted = (state.sessionsCompleted || 0) + 1;
+
+  if (session.lessonId !== 'mixed' && session.lessonId !== 'review') {
     state.completedLessons[session.lessonId] = (state.completedLessons[session.lessonId]||0) + score;
-    state.lessonsCompleted = LESSONS.filter(l => (state.completedLessons[l.id]||0) >= l.vocab.length).length;
+    // A lesson counts as "completed" once finished with 80%+ — store best score
+    if (!state.lessonsFinished) state.lessonsFinished = {};
+    state.lessonsFinished[session.lessonId] = Math.max(state.lessonsFinished[session.lessonId] || 0, pct);
+    state.lessonsCompleted = Object.values(state.lessonsFinished).filter(p => p >= 80).length;
   }
   if (pct === 100) state.perfectLessons++;
   state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
@@ -2317,6 +2697,11 @@ function finishSession() {
 
   playSound('complete');
 
+  const remaining = getReviewWords().length;
+  const reviewNote = session.lessonId === 'review'
+    ? `<div style="font-size:.85rem;font-weight:700;color:var(--ocean);margin-bottom:14px">${remaining === 0 ? '🎉 Review list cleared!' : `📋 ${remaining} word${remaining===1?'':'s'} still need review`}</div>`
+    : '';
+
   document.getElementById('results-card').innerHTML = `
     <div class="results-emoji">${emoji}</div>
     <div class="results-title">${pct===100?'Perfecto!':pct>=80?'Excelenti!':'Bon trabadju!'}</div>
@@ -2327,10 +2712,12 @@ function finishSession() {
       <div class="results-stat"><div class="val">+${earned}</div><div class="lbl">XP</div></div>
     </div>
     <div class="results-xp">⭐ +${earned} XP earned! Total: ${state.xp} XP</div>
+    ${reviewNote}
     ${wrongHTML}
-    ${session.lessonId!=='mixed'?`<button class="results-btn primary" onclick="startLesson('${session.lessonId}')">Practice Again 🔁</button>`:''}
+    ${session.lessonId === 'review' && remaining > 0 ? `<button class="results-btn primary" onclick="startReviewSession()">Keep Reviewing 📋</button>` : ''}
+    ${session.lessonId!=='mixed' && session.lessonId!=='review' ? `<button class="results-btn primary" onclick="startLesson('${session.lessonId}')">Practice Again 🔁</button>`:''}
     <button class="results-btn primary" onclick="startMixedSession()">Mixed Review 🎯</button>
-    <button class="results-btn secondary" onclick="showTab('lessons')">Back to Lessons</button>`;
+    <button class="results-btn secondary" onclick="showTab('${session.lessonId === 'review' ? 'review' : 'lessons'}')">${session.lessonId === 'review' ? 'Back to Review List' : 'Back to Lessons'}</button>`;
   showScreen('results');
 }
 
@@ -2340,35 +2727,53 @@ function finishSession() {
 function renderReview() {
   const content = document.getElementById('review-content');
   if (!content) return;
-  const struggling = LESSONS.flatMap(l => l.vocab).filter(v => {
-    const s = state.wordScores[v.k];
-    return s && s.wrong > 0;
-  }).sort((a,b) => {
-    const sa = state.wordScores[a.k], sb = state.wordScores[b.k];
-    return (sb.wrong - sb.correct) - (sa.wrong - sa.correct);
-  });
+  const struggling = getReviewWords();
+
   if (!struggling.length) {
     content.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--muted)">
       <div style="font-size:3rem;margin-bottom:12px">🎉</div>
-      <div style="font-weight:800;font-size:1.1rem;color:var(--ocean)">No mistakes yet!</div>
-      <div style="font-size:.85rem;margin-top:6px">Complete some lessons to see words to review here.</div>
+      <div style="font-weight:800;font-size:1.1rem;color:var(--ocean)">All clear!</div>
+      <div style="font-size:.85rem;margin-top:6px">No words need review right now. Answer a word correctly ${REVIEW_CLEAR_STREAK} times in a row after a mistake and it clears from this list.</div>
     </div>`;
     return;
   }
-  content.innerHTML = struggling.map(v => {
-    const s = state.wordScores[v.k];
-    const ratio = s.correct / Math.max(1, s.correct + s.wrong);
-    const color = ratio > 0.6 ? '#2EC4B6' : ratio > 0.3 ? '#F4A261' : '#E63946';
-    return `<div class="review-word-card">
-      <div><div class="review-word-k">${escapeHTML(v.k)}</div>
-        <div class="review-word-e">${escapeHTML(v.e)}</div>
-        <div class="review-word-ex">"${escapeHTML(v.ex)}"</div></div>
-      <div style="text-align:right;flex-shrink:0">
-        <div class="difficulty-dot" style="background:${color};margin-left:auto;margin-bottom:4px"></div>
-        <div style="font-size:.68rem;color:var(--muted)">${s.correct}✓ ${s.wrong}✗</div>
-      </div>
-    </div>`;
-  }).join('');
+
+  content.innerHTML = `
+    <button onclick="startReviewSession()" style="width:100%;padding:13px;background:var(--coral);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:14px">
+      🎯 Practice These ${struggling.length} Word${struggling.length===1?'':'s'}
+    </button>
+    <div style="font-size:.75rem;color:var(--muted);margin-bottom:12px">Get a word right ${REVIEW_CLEAR_STREAK} times in a row and it drops off this list. Dots show your progress.</div>` +
+    struggling.map(v => {
+      const s = state.wordScores[v.k];
+      const streak = Math.min(s.streak || 0, REVIEW_CLEAR_STREAK);
+      const dots = Array.from({length: REVIEW_CLEAR_STREAK}, (_, i) =>
+        `<span style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-left:3px;background:${i < streak ? 'var(--correct)' : 'var(--border)'}"></span>`
+      ).join('');
+      const ratio = s.correct / Math.max(1, s.correct + s.wrong);
+      const color = ratio > 0.6 ? '#2EC4B6' : ratio > 0.3 ? '#F4A261' : '#E63946';
+      return `<div class="review-word-card">
+        <div><div class="review-word-k">${escapeHTML(v.k)}</div>
+          <div class="review-word-e">${escapeHTML(v.e)}</div>
+          <div class="review-word-ex">"${escapeHTML(v.ex)}"</div></div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="difficulty-dot" style="background:${color};margin-left:auto;margin-bottom:4px"></div>
+          <div style="font-size:.68rem;color:var(--muted)">${s.correct}✓ ${s.wrong}✗</div>
+          <div style="margin-top:4px" title="${streak}/${REVIEW_CLEAR_STREAK} to clear">${dots}</div>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+function startReviewSession() {
+  const words = shuffle(getReviewWords()).slice(0, 15);
+  if (!words.length) return;
+  const questions = words.map((item, i) => ({
+    item, type: EXERCISE_TYPES[i % EXERCISE_TYPES.length], lessonId: 'review'
+  }));
+  state.session = { questions, lessonId: 'review', lessonTitle: 'Review Mistakes' };
+  state.qIndex = 0; state.score = 0;
+  state.wrongItems = []; state.awaitingNext = false; state.lives = 3;
+  showScreen('exercise'); renderQuestion();
 }
 
 // ═══════════════════════════════════════════
@@ -2382,14 +2787,14 @@ function renderPhrasebook() {
         ${lesson.icon} ${lesson.title} <span style="margin-left:auto">▾</span>
       </div>
       <div class="phrase-cat-body" id="pc-${li}">
-        ${lesson.vocab.map(v => {
+        ${lesson.vocab.map((v, vi) => {
           const isFav = state.favourites.some(f => f.k === v.k);
           return `<div class="phrase-row">
             <div><div class="phrase-kriolu">${escapeHTML(v.k)}</div>
               <div class="phrase-english" style="font-size:.72rem;font-style:italic">${escapeHTML(v.ex)}</div></div>
             <div style="display:flex;align-items:center;gap:8px">
               <div class="phrase-english">${escapeHTML(v.e)}</div>
-              <button class="fav-btn" onclick="toggleFav('${escapeHTML(v.k)}','${escapeHTML(v.e)}','${escapeHTML(v.ex)}')">${isFav?'❤️':'🤍'}</button>
+              <button class="fav-btn" onclick="toggleFavByIndex(${li},${vi})">${isFav?'❤️':'🤍'}</button>
             </div>
           </div>`;
         }).join('')}
@@ -2400,11 +2805,18 @@ function renderPhrasebook() {
 
 function togglePhraseCat(i) { document.getElementById('pc-'+i)?.classList.toggle('open'); }
 
-function toggleFav(k, e, ex) {
-  const idx = state.favourites.findIndex(f => f.k === k);
+function toggleFavByIndex(li, vi) {
+  const v = LESSONS[li]?.vocab[vi];
+  if (!v) return;
+  const idx = state.favourites.findIndex(f => f.k === v.k);
   if (idx > -1) state.favourites.splice(idx, 1);
-  else state.favourites.push({k,e,ex});
+  else state.favourites.push({k:v.k, e:v.e, ex:v.ex});
   saveState(); checkAchievements(); renderPhrasebook();
+}
+
+function removeFavByIndex(idx) {
+  state.favourites.splice(idx, 1);
+  saveState(); showFavourites();
 }
 
 function updateFavCount() {
@@ -2421,11 +2833,11 @@ function showFavourites() {
     return;
   }
   container.innerHTML = `<div style="font-size:.82rem;font-weight:700;color:var(--ocean);margin-bottom:12px">❤️ Your Favourites (${state.favourites.length})</div>` +
-    state.favourites.map(v => `<div class="review-word-card">
+    state.favourites.map((v, i) => `<div class="review-word-card">
       <div><div class="review-word-k">${escapeHTML(v.k)}</div>
         <div class="review-word-e">${escapeHTML(v.e)}</div>
         <div class="review-word-ex">"${escapeHTML(v.ex)}"</div></div>
-      <button class="fav-btn" onclick="toggleFav('${escapeHTML(v.k)}','${escapeHTML(v.e)}','${escapeHTML(v.ex)}')">❤️</button>
+      <button class="fav-btn" onclick="removeFavByIndex(${i})">❤️</button>
     </div>`).join('') +
     `<button onclick="renderPhrasebook()" style="margin-top:12px;width:100%;padding:10px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer">← Back to all phrases</button>`;
 }
@@ -2663,10 +3075,214 @@ async function callClaude(userText) {
 }
 
 // ═══════════════════════════════════════════
+//  TRANSLATOR
+// ═══════════════════════════════════════════
+let transDirection = 'k2e'; // 'k2e' = Kriolu→English, 'e2k' = English→Kriolu
+let transRecognition = null;
+let transIsListening = false;
+let lastTranslation = { text: '', source: '' };
+
+const TRANSLATE_EXAMPLES = {
+  k2e: ['N ten sodadi di nha terra', 'Kuze ki bu ta fazi mañan?', 'Catchupa e kumida más saborozu', 'Nha família mora na Mindelo'],
+  e2k: ['Where is the beach?', 'I love Cape Verdean music', 'Can you help me please?', 'The food here is delicious'],
+};
+
+function updateTranslateUI() {
+  const k2e = transDirection === 'k2e';
+  document.getElementById('lang-from').textContent = k2e ? '🇨🇻 Kriolu' : '🇬🇧 English';
+  document.getElementById('lang-to').textContent   = k2e ? '🇬🇧 English' : '🇨🇻 Kriolu';
+  document.getElementById('input-label').textContent  = k2e ? 'Kriolu' : 'English';
+  document.getElementById('output-label').textContent = k2e ? 'English' : 'Kriolu';
+  document.getElementById('translate-input').placeholder = k2e
+    ? 'Skrebe na Kriolu o toka 🎤…'
+    : 'Type in English or tap 🎤…';
+  // Example chips
+  const ex = document.getElementById('translate-examples');
+  if (ex) ex.innerHTML = TRANSLATE_EXAMPLES[transDirection].map(t =>
+    `<div class="tip-chip" onclick="useTranslateExample(this.dataset.t)" data-t="${escapeHTML(t)}">${escapeHTML(t)}</div>`
+  ).join('');
+}
+
+function useTranslateExample(text) {
+  document.getElementById('translate-input').value = text;
+  doTranslate();
+}
+
+function swapDirection() {
+  transDirection = transDirection === 'k2e' ? 'e2k' : 'k2e';
+  // Move result into input for quick back-translation
+  const output = document.getElementById('translate-output').textContent;
+  if (output) document.getElementById('translate-input').value = output;
+  document.getElementById('translate-result-card').style.display = 'none';
+  updateTranslateUI();
+}
+
+function clearTranslate() {
+  document.getElementById('translate-input').value = '';
+  document.getElementById('translate-result-card').style.display = 'none';
+}
+
+async function doTranslate() {
+  const input = document.getElementById('translate-input').value.trim();
+  if (!input) return;
+  const key = getApiKey();
+  if (!key) {
+    alert('Please save your Anthropic API key in the Chat tab first — the translator uses the same AI.');
+    showTab('conversation');
+    return;
+  }
+
+  const btn = document.getElementById('translate-btn');
+  btn.disabled = true; btn.textContent = 'Translating…';
+
+  const k2e = transDirection === 'k2e';
+  const sysPrompt = `You are an expert translator between Kriolu (Cape Verdean Creole, Santiago/Badiu variety) and English.
+Translate the user's text ${k2e ? 'from Kriolu to natural English' : 'from English to natural Kriolu (Santiago/Badiu)'}.
+Respond with ONLY valid JSON, no markdown fences, in this exact format:
+{"translation":"the translated text","note":"a one-sentence note about word choice, grammar, or culture if helpful, else empty string"}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:400, system:sysPrompt, messages:[{role:'user', content:input}] })
+    });
+    const data = await resp.json();
+    if (data.error) {
+      showTranslation('⚠️ ' + data.error.message, '');
+    } else {
+      const raw = data.content[0].text.replace(/```json|```/g,'').trim();
+      let parsed;
+      try { parsed = JSON.parse(raw); }
+      catch { parsed = { translation: raw, note: '' }; }
+      showTranslation(parsed.translation || raw, parsed.note || '');
+      lastTranslation = { text: parsed.translation || raw, source: input };
+    }
+  } catch(e) {
+    showTranslation('⚠️ Connection error. Check your internet and try again.', '');
+  }
+  btn.disabled = false; btn.textContent = 'Translate →';
+}
+
+function showTranslation(text, note) {
+  document.getElementById('translate-output').textContent = text;
+  document.getElementById('translate-note').textContent = note;
+  document.getElementById('translate-result-card').style.display = 'block';
+}
+
+function speakTranslation() {
+  userHasInteracted = true;
+  const text = document.getElementById('translate-output').textContent;
+  if (!text || text.startsWith('⚠️')) return;
+  const btn = document.getElementById('trans-speak-btn');
+  // Kriolu output → Portuguese voice; English output → English voice
+  if (transDirection === 'e2k') {
+    speakText(text, btn);
+  } else {
+    speakTextInLang(text, 'en-US', btn);
+  }
+}
+
+function speakTextInLang(text, lang, btnEl) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const clean = cleanForSpeech(text);
+  if (!clean) return;
+  const utter = new SpeechSynthesisUtterance(clean);
+  const voices = window.speechSynthesis.getVoices();
+  const voice = voices.find(v => v.lang === lang) || voices.find(v => v.lang.startsWith(lang.split('-')[0]));
+  if (voice) utter.voice = voice;
+  utter.lang = lang;
+  utter.rate = 0.95;
+  if (btnEl) { btnEl.classList.add('speaking'); utter.onend=()=>btnEl.classList.remove('speaking'); utter.onerror=()=>btnEl.classList.remove('speaking'); }
+  window.speechSynthesis.speak(utter);
+}
+
+function copyTranslation() {
+  const text = document.getElementById('translate-output').textContent;
+  if (!text || text.startsWith('⚠️')) return;
+  navigator.clipboard?.writeText(text).then(() => {
+    const note = document.getElementById('translate-note');
+    const prev = note.textContent;
+    note.textContent = '📋 Copied!';
+    setTimeout(() => { note.textContent = prev; }, 1200);
+  });
+}
+
+function saveTranslationFav() {
+  if (!lastTranslation.text || lastTranslation.text.startsWith('⚠️')) return;
+  const k2e = transDirection === 'k2e';
+  const fav = {
+    k: k2e ? lastTranslation.source : lastTranslation.text,
+    e: k2e ? lastTranslation.text : lastTranslation.source,
+    ex: '(saved from translator)'
+  };
+  if (!state.favourites.some(f => f.k === fav.k)) {
+    state.favourites.push(fav);
+    saveState(); checkAchievements();
+  }
+  const note = document.getElementById('translate-note');
+  const prev = note.textContent;
+  note.textContent = '❤️ Saved to favourites!';
+  setTimeout(() => { note.textContent = prev; }, 1200);
+}
+
+// — Translator mic —
+function toggleTransMic() {
+  if (transIsListening) { stopTransMic(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Speech recognition not supported in this browser. Use Chrome or Edge.'); return; }
+  userHasInteracted = true;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+  transRecognition = new SR();
+  transRecognition.continuous = false;
+  transRecognition.interimResults = true;
+  // Listen in the input language
+  transRecognition.lang = transDirection === 'k2e' ? 'pt-PT' : 'en-US';
+
+  const micBtn = document.getElementById('trans-mic-btn');
+  const input = document.getElementById('translate-input');
+
+  transRecognition.onstart = () => {
+    transIsListening = true;
+    micBtn.classList.add('listening');
+    micBtn.textContent = '⏹️';
+    input.placeholder = '🎤 Listening…';
+  };
+  transRecognition.onresult = e => {
+    input.value = Array.from(e.results).map(r => r[0].transcript).join('');
+  };
+  transRecognition.onend = () => {
+    stopTransMic();
+    if (input.value.trim()) doTranslate();
+  };
+  transRecognition.onerror = e => {
+    stopTransMic();
+    if (e.error === 'not-allowed') alert('Microphone access denied. Please allow it in browser settings.');
+  };
+  transRecognition.start();
+}
+
+function stopTransMic() {
+  transIsListening = false;
+  const micBtn = document.getElementById('trans-mic-btn');
+  if (micBtn) { micBtn.classList.remove('listening'); micBtn.textContent = '🎤'; }
+  updateTranslateUI();
+  if (transRecognition) { try { transRecognition.stop(); } catch(e) {} }
+}
+
+// ═══════════════════════════════════════════
 //  UTILITIES
 // ═══════════════════════════════════════════
 function shuffle(arr) { for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
-function escapeHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function normalizeText(s) {
+  return String(s||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')   // strip accents
+    .replace(/[.,!?;:"'¡¿()\[\]…—–-]/g,'')               // strip punctuation
+    .replace(/\s+/g,' ').trim();
+}
+function escapeHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 function levenshtein(a,b){const m=a.length,n=b.length,dp=Array.from({length:m+1},(_,i)=>Array.from({length:n+1},(_,j)=>i===0?j:j===0?i:0));for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);return dp[m][n];}
 
 // ═══════════════════════════════════════════
@@ -2678,6 +3294,7 @@ function init() {
   renderHomeGrid(); renderAllLessonsGrid();
   renderHomeBadges();
   initVoice();
+  checkAchievements();
 
   // Restore settings UI
   document.getElementById('dark-mode-toggle').checked = state.darkMode;
@@ -2686,6 +3303,11 @@ function init() {
 
   const savedKey = getApiKey();
   if (savedKey) document.getElementById('api-key-input').placeholder = '••••••••••••• (saved ✓)';
+
+  // Register PWA service worker for offline support + installability
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
 }
 
 init();
