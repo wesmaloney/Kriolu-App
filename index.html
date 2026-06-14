@@ -454,6 +454,12 @@
   <div id="screen-translate" class="screen">
     <h2 class="section-heading">🔄 Translator</h2>
 
+    <div class="api-key-panel" id="translate-key-panel" style="display:none">
+      <label>API Key:</label>
+      <input type="password" id="translate-api-input" class="api-input" placeholder="sk-ant-..." />
+      <button class="api-save-btn" onclick="saveApiKeyFromTranslate()">Save</button>
+    </div>
+
     <div class="translate-direction">
       <div class="lang-pill" id="lang-from">🇨🇻 Kriolu</div>
       <button class="swap-btn" onclick="swapDirection()" title="Swap direction">⇄</button>
@@ -3114,6 +3120,21 @@ const TRANSLATE_EXAMPLES = {
   e2k: ['Where is the beach?', 'I love Cape Verdean music', 'Can you help me please?', 'The food here is delicious'],
 };
 
+function saveApiKeyFromTranslate() {
+  const key = document.getElementById('translate-api-input').value.trim();
+  if (key) {
+    localStorage.setItem('kriolu_api_key', key);
+    document.getElementById('translate-api-input').value = '';
+    document.getElementById('translate-key-panel').style.display = 'none';
+    document.getElementById('translate-result-card').style.display = 'none';
+    // Mirror into the chat tab's field state
+    const chatField = document.getElementById('api-key-input');
+    if (chatField) chatField.placeholder = '••••••••••••• (saved ✓)';
+    // Retry the translation now that we have a key
+    doTranslate();
+  }
+}
+
 function updateTranslateUI() {
   const k2e = transDirection === 'k2e';
   document.getElementById('lang-from').textContent = k2e ? '🇨🇻 Kriolu' : '🇬🇧 English';
@@ -3123,6 +3144,9 @@ function updateTranslateUI() {
   document.getElementById('translate-input').placeholder = k2e
     ? 'Skrebe na Kriolu o toka 🎤…'
     : 'Type in English or tap 🎤…';
+  // Show the key panel only if no key is saved yet
+  const panel = document.getElementById('translate-key-panel');
+  if (panel) panel.style.display = getApiKey() ? 'none' : 'flex';
   // Example chips
   const ex = document.getElementById('translate-examples');
   if (ex) ex.innerHTML = TRANSLATE_EXAMPLES[transDirection].map(t =>
@@ -3138,7 +3162,7 @@ function useTranslateExample(text) {
 function swapDirection() {
   transDirection = transDirection === 'k2e' ? 'e2k' : 'k2e';
   // Move result into input for quick back-translation
-  const output = document.getElementById('translate-output').textContent;
+  const output = lastTranslation.text || '';
   if (output) document.getElementById('translate-input').value = output;
   document.getElementById('translate-result-card').style.display = 'none';
   updateTranslateUI();
@@ -3154,8 +3178,13 @@ async function doTranslate() {
   if (!input) return;
   const key = getApiKey();
   if (!key) {
-    alert('Please save your Anthropic API key in the Chat tab first — the translator uses the same AI.');
-    showTab('conversation');
+    // Show the inline key panel right here instead of jumping to another tab
+    const panel = document.getElementById('translate-key-panel');
+    panel.style.display = 'flex';
+    document.getElementById('translate-note').textContent = '';
+    const note = document.createElement('div');
+    document.getElementById('translate-api-input').focus();
+    showTranslation('⚠️ Enter your Anthropic API key above to translate.', '');
     return;
   }
 
@@ -3182,8 +3211,9 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
       let parsed;
       try { parsed = JSON.parse(raw); }
       catch { parsed = { translation: raw, note: '' }; }
-      showTranslation(parsed.translation || raw, parsed.note || '');
-      lastTranslation = { text: parsed.translation || raw, source: input };
+      const translated = parsed.translation || raw;
+      lastTranslation = { text: translated, source: input };
+      showTranslation(translated, parsed.note || '');
     }
   } catch(e) {
     showTranslation('⚠️ Connection error. Check your internet and try again.', '');
@@ -3192,14 +3222,18 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
 }
 
 function showTranslation(text, note) {
-  document.getElementById('translate-output').textContent = text;
+  // Keep the raw text (with real newlines) for speaking/copying/swapping
+  lastTranslation.text = text;
+  // Escape HTML, then convert newlines to <br> so multi-line translations display properly
+  const safe = escapeHTML(text).replace(/\r?\n/g, '<br>');
+  document.getElementById('translate-output').innerHTML = safe;
   document.getElementById('translate-note').textContent = note;
   document.getElementById('translate-result-card').style.display = 'block';
 }
 
 function speakTranslation() {
   userHasInteracted = true;
-  const text = document.getElementById('translate-output').textContent;
+  const text = lastTranslation.text || '';
   if (!text || text.startsWith('⚠️')) return;
   const btn = document.getElementById('trans-speak-btn');
   // Kriolu output → Portuguese voice; English output → English voice
@@ -3226,7 +3260,7 @@ function speakTextInLang(text, lang, btnEl) {
 }
 
 function copyTranslation() {
-  const text = document.getElementById('translate-output').textContent;
+  const text = lastTranslation.text || '';
   if (!text || text.startsWith('⚠️')) return;
   navigator.clipboard?.writeText(text).then(() => {
     const note = document.getElementById('translate-note');
