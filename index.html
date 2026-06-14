@@ -324,6 +324,58 @@
     .translate-output{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--ocean);line-height:1.5;min-height:36px}
     .translate-note{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:8px}
 
+    /* ── GRAMMAR ── */
+    .grammar-card{background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:12px;cursor:pointer;border-left:4px solid var(--ocean);transition:transform .15s,box-shadow .15s;display:flex;align-items:center;gap:14px}
+    .grammar-card:hover{transform:translateX(3px);box-shadow:var(--shadow-lg)}
+    .grammar-card .g-icon{font-size:1.8rem}
+    .grammar-card .g-title{font-weight:800;font-size:1rem;color:var(--text)}
+    .grammar-card .g-sub{font-size:.78rem;color:var(--muted)}
+    .grammar-card .g-check{margin-left:auto;color:var(--correct);font-size:1.1rem}
+    .grammar-detail-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .g-intro{font-size:.95rem;line-height:1.6;color:var(--text);margin-bottom:18px;background:var(--bg);padding:14px;border-radius:12px;border-left:3px solid var(--sky)}
+    .g-point{padding:12px 0;border-bottom:1px solid var(--border)}
+    .g-point-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+    .g-point-k{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ocean)}
+    .g-point-e{font-size:.82rem;color:var(--muted);font-weight:700}
+    .g-point-ex{font-size:.9rem;color:var(--text);font-weight:600}
+    .g-point-exE{font-size:.8rem;color:var(--muted);font-style:italic}
+    .g-tip{margin-top:16px;background:linear-gradient(135deg,#FFF8E7,var(--card));border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:.85rem;color:var(--text)}
+    .g-tip b{color:var(--coral)}
+
+    /* ── READING ── */
+    .story-card{background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:12px;cursor:pointer;transition:transform .15s,box-shadow .15s;display:flex;align-items:center;gap:14px;border-left:4px solid var(--green)}
+    .story-card:hover{transform:translateX(3px);box-shadow:var(--shadow-lg)}
+    .story-card .s-icon{font-size:1.8rem}
+    .story-card .s-title{font-weight:800;font-size:1rem;color:var(--text)}
+    .story-card .s-titleE{font-size:.78rem;color:var(--muted);font-style:italic}
+    .story-card .s-level{font-size:.68rem;font-weight:800;text-transform:uppercase;padding:2px 8px;border-radius:99px;margin-top:4px;display:inline-block}
+    .level-Beginner{background:#D4F5F1;color:#1A7A6E}
+    .level-Intermediate{background:#FFF0D9;color:#A66A1E}
+    .level-Advanced{background:#FFE0E3;color:#A0222C}
+    .story-detail-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .story-line{margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+    .story-line:last-child{border-bottom:none}
+    .story-k{font-family:'Playfair Display',serif;font-size:1.15rem;line-height:1.7;color:var(--text);margin-bottom:6px}
+    .story-word{cursor:pointer;border-radius:4px;padding:1px 2px;transition:background .15s;border-bottom:1.5px dotted var(--sky)}
+    .story-word:hover,.story-word:active{background:var(--sky);color:#fff}
+    .story-e{font-size:.82rem;color:var(--muted);font-style:italic;display:none}
+    .story-line.show-trans .story-e{display:block}
+    .word-popup{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ocean);color:#fff;border-radius:14px;padding:12px 20px;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;max-width:90vw;animation:fadeIn .2s}
+    .word-popup .wp-k{font-weight:800;font-size:1rem}
+    .word-popup .wp-e{font-size:.88rem;opacity:.9}
+    .word-popup .wp-speak{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:.9rem}
+
+    /* ── DAILY / DUE CARDS ── */
+    .daily-card{background:linear-gradient(135deg,var(--coral),#E76F51);color:#fff;border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow)}
+    .daily-card .d-title{font-weight:800;font-size:1.05rem;margin-bottom:2px}
+    .daily-card .d-sub{font-size:.82rem;opacity:.9}
+    .daily-card .d-btn{background:#fff;color:var(--coral);border:none;border-radius:99px;padding:9px 18px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;white-space:nowrap}
+    .due-badge-count{background:var(--coral);color:#fff;border-radius:99px;padding:1px 7px;font-size:.7rem;font-weight:800;margin-left:4px}
+
+    /* ── PLACEMENT TEST ── */
+    .placement-intro{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);text-align:center}
+    .placement-intro .p-emoji{font-size:3rem;margin-bottom:12px}
+
     /* ── MISC ── */
     @media(max-width:420px){
       .stats-row{grid-template-columns:repeat(2,1fr)}
@@ -347,10 +399,12 @@
 <nav id="nav-tabs">
   <div class="nav-tab active" onclick="showTab('home')">🏠 Home</div>
   <div class="nav-tab" onclick="showTab('lessons')">📚 Lessons</div>
+  <div class="nav-tab" onclick="showTab('grammar')">📐 Learn</div>
+  <div class="nav-tab" onclick="showTab('reading')">📖 Read</div>
   <div class="nav-tab" onclick="showTab('review')">📋 Review</div>
   <div class="nav-tab" onclick="showTab('translate')">🔄 Translate</div>
   <div class="nav-tab" onclick="showTab('achievements')">🏆 Badges</div>
-  <div class="nav-tab" onclick="showTab('phrasebook')">📖 Phrases</div>
+  <div class="nav-tab" onclick="showTab('phrasebook')">📔 Phrases</div>
   <div class="nav-tab" onclick="showTab('conversation')">💬 Chat</div>
 </nav>
 
@@ -411,6 +465,9 @@
       <div class="stat-card"><div class="icon">✅</div><div class="value" id="stat-lessons">0</div><div class="label">Lessons</div></div>
       <div class="stat-card"><div class="icon">🧠</div><div class="value" id="stat-words">0</div><div class="label">Mastered</div></div>
     </div>
+    <div id="daily-card-slot"></div>
+    <div id="placement-slot"></div>
+    <div id="insights-slot"></div>
     <h2 class="section-heading">🏆 Recent Badges</h2>
     <div class="achievements-strip" id="home-badges"></div>
     <h2 class="section-heading">Continue Learning</h2>
@@ -448,6 +505,22 @@
     <h2 class="section-heading">📋 Words to Review</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Words you've struggled with. Practice these to master them!</p>
     <div id="review-content"></div>
+  </div>
+
+  <!-- GRAMMAR / LEARN -->
+  <div id="screen-grammar" class="screen">
+    <h2 class="section-heading">📐 Grammar Lessons</h2>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Learn the rules behind the words. Tap a lesson to read it.</p>
+    <div id="grammar-list"></div>
+    <div id="grammar-detail" style="display:none"></div>
+  </div>
+
+  <!-- READING -->
+  <div id="screen-reading" class="screen">
+    <h2 class="section-heading">📖 Graded Reading</h2>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Read short Kriolu stories. Tap any word to see its meaning.</p>
+    <div id="reading-list"></div>
+    <div id="reading-detail" style="display:none"></div>
   </div>
 
   <!-- TRANSLATE -->
@@ -1644,6 +1717,169 @@ const LESSONS = [
 // ═══════════════════════════════════════════
 //  ACHIEVEMENTS DEFINITION
 // ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+//  GRAMMAR LESSONS
+// ═══════════════════════════════════════════
+const GRAMMAR = [
+  {
+    id:'pronouns', icon:'👥', title:'Subject Pronouns', sub:'Who is doing the action',
+    intro:'Kriolu pronouns are short and come before the verb. Unlike English, the same word often works for he/she/it.',
+    points:[
+      { k:'N', e:'I', ex:'N ta kume.', exE:'I eat.' },
+      { k:'Bu', e:'You (singular)', ex:'Bu ta fala Kriolu.', exE:'You speak Kriolu.' },
+      { k:'El', e:'He / She / It', ex:'El e nha amigu.', exE:'He is my friend.' },
+      { k:'Nos', e:'We', ex:'Nos ta kanta.', exE:'We sing.' },
+      { k:'Nhos', e:'You (plural)', ex:'Nhos ta studa.', exE:'You all study.' },
+      { k:'Es', e:'They', ex:'Es ta trabadja.', exE:'They work.' },
+    ],
+    tip:'In São Vicente dialect, you\'ll hear "bô" for you and "ês" for they — same meaning, slightly different sound.'
+  },
+  {
+    id:'present', icon:'⏱️', title:'Present Tense: "ta"', sub:'Talking about now & habits',
+    intro:'To make a present-tense verb, put "ta" before it. This covers both "I eat" and "I am eating".',
+    points:[
+      { k:'ta', e:'present marker', ex:'N ta bebe agu.', exE:'I drink water / I am drinking water.' },
+      { k:'ta', e:'habitual action', ex:'El ta trabadja tud dia.', exE:'He works every day.' },
+      { k:'ta', e:'with any pronoun', ex:'Nos ta studa Kriolu.', exE:'We study Kriolu.' },
+    ],
+    tip:'Drop "ta" for commands: "Kume!" = "Eat!" and "Bai!" = "Go!"'
+  },
+  {
+    id:'past', icon:'⏪', title:'Past Tense: "dja"', sub:'Things that already happened',
+    intro:'Put "dja" before the verb to show the action is already done. It often means "already".',
+    points:[
+      { k:'dja', e:'already / past', ex:'N dja kume.', exE:'I already ate.' },
+      { k:'dja', e:'completed action', ex:'El dja bai.', exE:'He already left.' },
+      { k:'dja', e:'with question', ex:'Bu dja kaba?', exE:'Are you done already?' },
+    ],
+    tip:'Bare verb with no marker can also imply past in casual speech: "N kume" can mean "I ate".'
+  },
+  {
+    id:'negation', icon:'🚫', title:'Saying No: "ka"', sub:'Making sentences negative',
+    intro:'Put "ka" before the verb (and before "ta") to make it negative.',
+    points:[
+      { k:'ka', e:'not', ex:'N ka sabe.', exE:'I don\'t know.' },
+      { k:'ka ta', e:'not (present)', ex:'El ka ta fuma.', exE:'He doesn\'t smoke.' },
+      { k:'ka', e:'negative command', ex:'Ka bai!', exE:'Don\'t go!' },
+    ],
+    tip:'Order matters: pronoun + ka + ta + verb. "N ka ta kume" = "I am not eating".'
+  },
+  {
+    id:'questions', icon:'❓', title:'Asking Questions', sub:'Question words & word order',
+    intro:'Many questions just use rising intonation. For specific questions, use a question word at the start.',
+    points:[
+      { k:'Kuze?', e:'What?', ex:'Kuze ki bu kre?', exE:'What do you want?' },
+      { k:'Undi?', e:'Where?', ex:'Undi ki bu mora?', exE:'Where do you live?' },
+      { k:'Kandu?', e:'When?', ex:'Kandu ki bu ta bai?', exE:'When are you going?' },
+      { k:'Ken?', e:'Who?', ex:'Ken ki e kel?', exE:'Who is that?' },
+      { k:'Pamodi?', e:'Why?', ex:'Pamodi ki bu ta txora?', exE:'Why are you crying?' },
+      { k:'Kuma?', e:'How?', ex:'Kuma ki bu sta?', exE:'How are you?' },
+    ],
+    tip:'"ki" often links the question word to the rest: "Undi ki..." = "Where is it that...".'
+  },
+  {
+    id:'possessive', icon:'🔑', title:'Possessives: "nha"', sub:'Showing ownership',
+    intro:'Put the possessive word before the noun, just like in English.',
+    points:[
+      { k:'nha', e:'my', ex:'nha kaza', exE:'my house' },
+      { k:'bu', e:'your', ex:'bu karru', exE:'your car' },
+      { k:'si', e:'his / her / its', ex:'si fidju', exE:'his/her child' },
+      { k:'nos', e:'our', ex:'nos terra', exE:'our homeland' },
+      { k:'di', e:'of (for things)', ex:'porta di kaza', exE:'the door of the house' },
+    ],
+    tip:'"di" connects nouns: "kafé di Fogo" = "coffee from Fogo".'
+  },
+  {
+    id:'future', icon:'⏩', title:'Future: "ta bai" & "al"', sub:'Talking about what will happen',
+    intro:'The future is often shown by context, by "ta" plus a time word, or with "al" / "ta bai".',
+    points:[
+      { k:'ta + mañan', e:'future by time word', ex:'N ta bai mañan.', exE:'I will go tomorrow.' },
+      { k:'al', e:'will (intention)', ex:'N al fazi-l.', exE:'I will do it.' },
+      { k:'ta bai', e:'going to', ex:'Es ta bai kanta.', exE:'They are going to sing.' },
+    ],
+    tip:'Adding a time word like "mañan" (tomorrow) or "dipus" (later) makes the future clear.'
+  },
+  {
+    id:'servs', icon:'🔗', title:'"To Be": ser, sta & ten', sub:'Three ways to say "is"',
+    intro:'Kriolu splits "to be" into different words depending on meaning — like Spanish ser/estar.',
+    points:[
+      { k:'e / ser', e:'is (permanent)', ex:'El e médiku.', exE:'He is a doctor.' },
+      { k:'sta', e:'is (state/location)', ex:'N sta ben.', exE:'I am well.' },
+      { k:'ten', e:'to have / there is', ex:'N ten dôs fidju.', exE:'I have two children.' },
+    ],
+    tip:'Use "e" for identity (jobs, names), "sta" for feelings and location, "ten" for possession.'
+  },
+];
+
+// ═══════════════════════════════════════════
+//  GRADED READING STORIES
+// ═══════════════════════════════════════════
+// Each word in "words" is tappable for translation. Sentences build comprehensible input.
+const STORIES = [
+  {
+    id:'morning', level:'Beginner', icon:'🌅', title:'Bon Dia', titleE:'Good Morning',
+    summary:'A simple morning routine.',
+    lines:[
+      { k:'Bon dia! N ta korda sedu.', e:'Good morning! I wake up early.' },
+      { k:'N ta bebe nha kafé na kuzinha.', e:'I drink my coffee in the kitchen.' },
+      { k:'Nha mamã ta fazi katxupa.', e:'My mom makes cachupa.' },
+      { k:'Katxupa ta xeira ben!', e:'The cachupa smells good!' },
+      { k:'Dipus, N ta bai trabadja.', e:'After, I go to work.' },
+      { k:'Ate logo, família!', e:'See you later, family!' },
+    ]
+  },
+  {
+    id:'market', level:'Beginner', icon:'🛒', title:'Na Merkadu', titleE:'At the Market',
+    summary:'Buying fish and fruit at the market.',
+    lines:[
+      { k:'Oji N ta bai merkadu.', e:'Today I am going to the market.' },
+      { k:'N kre kumpra pexi fresku.', e:'I want to buy fresh fish.' },
+      { k:'Kantu ki kusta es pexi?', e:'How much does this fish cost?' },
+      { k:'Sinku sentu eskudu, fia.', e:'Five hundred escudos, dear.' },
+      { k:'E karu! Bu podi baxa?', e:'That\'s expensive! Can you lower it?' },
+      { k:'Ta bon, kuatru sentu pa bo.', e:'Alright, four hundred for you.' },
+      { k:'Obrigadu! N ta leva tambe banana.', e:'Thank you! I will also take bananas.' },
+    ]
+  },
+  {
+    id:'family', level:'Intermediate', icon:'👨‍👩‍👧', title:'Nha Família', titleE:'My Family',
+    summary:'Describing family members and where they live.',
+    lines:[
+      { k:'Nha família e grandi i N ama-s txeu.', e:'My family is big and I love them a lot.' },
+      { k:'Nha pai ta trabadja na porto di Mindelo.', e:'My father works at the port of Mindelo.' },
+      { k:'Nha mai ta dispensa na un skola.', e:'My mother teaches at a school.' },
+      { k:'N ten dôs irmon i un irmã.', e:'I have two brothers and one sister.' },
+      { k:'Nha irmã ta mora na Boston, na Merka.', e:'My sister lives in Boston, in America.' },
+      { k:'Tud anu, el ta volta pa Kabu Verdi.', e:'Every year, she returns to Cape Verde.' },
+      { k:'Nu ta sata kontenti kantu nu sta djuntu.', e:'We are happy when we are together.' },
+    ]
+  },
+  {
+    id:'beach', level:'Intermediate', icon:'🏖️', title:'Dia na Praia', titleE:'A Day at the Beach',
+    summary:'Spending a Sunday at the beach with friends.',
+    lines:[
+      { k:'Dumingu pasadu, N bai praia ku nhas amigu.', e:'Last Sunday, I went to the beach with my friends.' },
+      { k:'Mar staba azul i kalmu.', e:'The sea was blue and calm.' },
+      { k:'Nu nada i nu joga bola na areia.', e:'We swam and played ball on the sand.' },
+      { k:'Un amigu traze un viola i nu kanta morna.', e:'A friend brought a guitar and we sang morna.' },
+      { k:'Na tardi, nu kume pexi gretadu.', e:'In the afternoon, we ate grilled fish.' },
+      { k:'Foi un dia ki N ka ta skese.', e:'It was a day I will not forget.' },
+    ]
+  },
+  {
+    id:'saudadi', level:'Advanced', icon:'🌊', title:'Sodadi di Téra', titleE:'Longing for Home',
+    summary:'A reflection on the Cape Verdean feeling of saudade.',
+    lines:[
+      { k:'Sodadi e un palavra ki ta vivi na korason di tud kabuverdianu.', e:'Saudade is a word that lives in the heart of every Cape Verdean.' },
+      { k:'E kel sintimentu di falta di un lugar ô di un algen.', e:'It is that feeling of missing a place or a person.' },
+      { k:'Kantu un kabuverdianu ta bai pa lonji, el ta leva si téra na korason.', e:'When a Cape Verdean goes far away, they carry their homeland in their heart.' },
+      { k:'Na muzika di Cesária Évora, sodadi ta kanta más altu.', e:'In the music of Cesária Évora, saudade sings the loudest.' },
+      { k:'Mésmu lonji, nos raiz ta fika sempri na ilha.', e:'Even far away, our roots always remain on the islands.' },
+      { k:'Pamodi téra ka ta skese si fidju.', e:'Because the homeland never forgets its children.' },
+    ]
+  },
+];
+
 const ACHIEVEMENTS = [
   // ── Getting started ──
   { id:'first_lesson',  icon:'🌱', name:'First Steps',      desc:'Finish your first practice session',  check: s => s.sessionsCompleted >= 1 },
@@ -1696,6 +1932,13 @@ const ACHIEVEMENTS = [
   // ── Time of day ──
   { id:'nightowl',      icon:'🦉', name:'Night Owl',        desc:'Practice after 10 PM',                check: s => s.nightOwl },
   { id:'earlybird',     icon:'🐦', name:'Early Bird',       desc:'Practice before 7 AM',                check: s => s.earlyBird },
+  // ── Grammar & reading ──
+  { id:'grammar1',      icon:'📐', name:'Grammar Rookie',   desc:'Read your first grammar lesson',      check: s => (s.grammarRead||[]).length >= 1 },
+  { id:'grammar_all',   icon:'📏', name:'Grammar Guru',     desc:'Read every grammar lesson',           check: s => (s.grammarRead||[]).length >= GRAMMAR.length },
+  { id:'story1',        icon:'📕', name:'First Read',       desc:'Finish your first story',             check: s => (s.storiesRead||[]).length >= 1 },
+  { id:'story_all',     icon:'📚', name:'Storyteller',      desc:'Read every story',                    check: s => (s.storiesRead||[]).length >= STORIES.length },
+  { id:'placement',     icon:'🎓', name:'Placed',           desc:'Take the placement test',             check: s => s.placementDone },
+  { id:'daily7',        icon:'🗓️', name:'Daily Habit',      desc:'Do the daily lesson 7 times',         check: s => (s.dailyDoneCount||0) >= 7 },
 ];
 
 // ═══════════════════════════════════════════
@@ -1711,6 +1954,9 @@ let state = {
   sessionsCompleted: 0, lessonsFinished: {},
   speakingCorrect: 0, sentencesBuilt: 0, listeningCorrect: 0,
   weeklyGoalsHit: 0, weeklyGoalHitThisWeek: false,
+  srData: {}, grammarRead: [], storiesRead: [],
+  placementDone: false, placementLevel: null,
+  dailyDoneDate: null, dailyDoneCount: 0,
   session: null, qIndex: 0, score: 0, wrongItems: [], awaitingNext: false,
   lives: 3, chatHistory: [], darkMode: false, sfx: true, fontSize: '1rem',
 };
@@ -1778,6 +2024,9 @@ function saveState() {
     speakingCorrect:state.speakingCorrect, sentencesBuilt:state.sentencesBuilt,
     listeningCorrect:state.listeningCorrect, weeklyGoalsHit:state.weeklyGoalsHit,
     weeklyGoalHitThisWeek:state.weeklyGoalHitThisWeek,
+    srData:state.srData, grammarRead:state.grammarRead, storiesRead:state.storiesRead,
+    placementDone:state.placementDone, placementLevel:state.placementLevel,
+    dailyDoneDate:state.dailyDoneDate, dailyDoneCount:state.dailyDoneCount,
     darkMode:state.darkMode, sfx:state.sfx, fontSize:state.fontSize,
   };
   localStorage.setItem('kriolu_state_v3', JSON.stringify(s));
@@ -1793,19 +2042,59 @@ function addXP(amount) {
   saveState(); updateHeader(); updateHomeStats(); checkAchievements();
 }
 
+// ═══════════════════════════════════════════
+//  SM-2 SPACED REPETITION SCHEDULER
+// ═══════════════════════════════════════════
+// Each word gets: ease factor, interval (days), repetitions, and a due timestamp.
+// Quality: 5 = correct & easy, 3 = correct but hard, 0-2 = wrong.
+function srUpdate(wordKey, quality) {
+  if (!state.srData) state.srData = {};
+  let d = state.srData[wordKey] || { ef: 2.5, interval: 0, reps: 0, due: 0 };
+
+  if (quality < 3) {
+    // Failed — reset repetitions, review again soon (10 min)
+    d.reps = 0;
+    d.interval = 0;
+    d.due = Date.now() + 10 * 60 * 1000;
+  } else {
+    d.reps += 1;
+    if (d.reps === 1) d.interval = 1;
+    else if (d.reps === 2) d.interval = 3;
+    else d.interval = Math.round(d.interval * d.ef);
+    // Update ease factor (SM-2 formula)
+    d.ef = Math.max(1.3, d.ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
+    d.due = Date.now() + d.interval * 24 * 60 * 60 * 1000;
+  }
+  state.srData[wordKey] = d;
+}
+
+function getDueWords() {
+  const now = Date.now();
+  const due = [];
+  LESSONS.forEach(l => l.vocab.forEach(v => {
+    const d = state.srData?.[v.k];
+    if (d && d.due <= now && d.reps > 0) due.push(v);
+  }));
+  // Also include never-seen words that have a score (recently failed)
+  return due;
+}
+
+function countDueWords() { return getDueWords().length; }
+
 function recordWordResult(item, correct) {
   const key = item.k;
   if (!state.wordScores[key]) state.wordScores[key] = { correct:0, wrong:0, streak:0 };
   const s = state.wordScores[key];
   if (correct) {
     s.correct++;
-    s.streak = (s.streak || 0) + 1;   // consecutive correct — used to clear review list
+    s.streak = (s.streak || 0) + 1;
+    srUpdate(key, s.streak >= 2 ? 5 : 4);   // SR: correct
   } else {
     s.wrong++;
-    s.streak = 0;                      // mistake resets recovery progress
+    s.streak = 0;
+    srUpdate(key, 1);                         // SR: failed
     if (!state.wrongItems.find(w => w.k === item.k)) state.wrongItems.push(item);
   }
-  // Update mastered words count
   state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
 }
 
@@ -2018,8 +2307,8 @@ function renderHomeBadges() {
 // ═══════════════════════════════════════════
 //  NAVIGATION
 // ═══════════════════════════════════════════
-const SCREENS = ['home','lessons','exercise','results','review','translate','achievements','phrasebook','conversation'];
-const TABS    = ['home','lessons','review','translate','achievements','phrasebook','conversation'];
+const SCREENS = ['home','lessons','grammar','reading','exercise','results','review','translate','achievements','phrasebook','conversation'];
+const TABS    = ['home','lessons','grammar','reading','review','translate','achievements','phrasebook','conversation'];
 
 function showTab(id) {
   SCREENS.forEach(s => document.getElementById('screen-'+s)?.classList.remove('active'));
@@ -2029,6 +2318,8 @@ function showTab(id) {
   if (id==='achievements') renderAchievements();
   if (id==='review') renderReview();
   if (id==='translate') updateTranslateUI();
+  if (id==='grammar') renderGrammar();
+  if (id==='reading') renderReadingList();
 }
 
 function showScreen(id) {
@@ -2100,6 +2391,41 @@ function updateHomeStats() {
   document.getElementById('weekly-goal-fill').style.width = wPct + '%';
   document.getElementById('weekly-progress-label').textContent = `${state.weeklyXP} / ${state.weeklyGoal} XP`;
   document.getElementById('greeting-text').textContent = getGreeting();
+  renderHomeExtras();
+}
+
+function renderHomeExtras() {
+  // Daily lesson card
+  const dailySlot = document.getElementById('daily-card-slot');
+  if (dailySlot) {
+    const due = countDueWords();
+    const done = isDailyDoneToday();
+    dailySlot.innerHTML = `<div class="daily-card">
+      <div><div class="d-title">${done ? '✅ Daily lesson done!' : '☀️ Today\'s Lesson'}</div>
+        <div class="d-sub">${done ? 'Come back tomorrow to keep your streak.' : (due > 0 ? `${due} word${due===1?'':'s'} due for review + new words` : 'A fresh mix of words to learn')}</div></div>
+      ${done ? '' : '<button class="d-btn" onclick="startDailyLesson()">Start →</button>'}
+    </div>`;
+  }
+  // Placement prompt (only if not done)
+  const placeSlot = document.getElementById('placement-slot');
+  if (placeSlot) {
+    placeSlot.innerHTML = state.placementDone ? '' :
+      `<div style="background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <div><div style="font-weight:800;font-size:.95rem;color:var(--ocean)">🎓 Find your level</div>
+          <div style="font-size:.8rem;color:var(--muted)">Take a quick placement test</div></div>
+        <button class="start-btn" onclick="startPlacementTest()">Start Test →</button>
+      </div>`;
+  }
+  // Mistake insights
+  const insightsSlot = document.getElementById('insights-slot');
+  if (insightsSlot) {
+    const insights = getMistakeInsights();
+    insightsSlot.innerHTML = insights.length
+      ? `<div style="background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);margin-bottom:16px">
+          <div style="font-weight:800;font-size:.88rem;color:var(--ocean);margin-bottom:8px">📊 Your Insights</div>
+          ${insights.map(i => `<div style="font-size:.83rem;color:var(--text);padding:4px 0">${i}</div>`).join('')}
+        </div>` : '';
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -2689,13 +3015,22 @@ function finishSession() {
   const { session, score } = state;
   const total = session.questions.length;
   const pct = Math.round((score/total)*100);
+
+  // Placement test has its own results screen
+  if (session.lessonId === 'placement') {
+    finishPlacement(score, total);
+    return;
+  }
+
   const earned = Math.round((score/total)*20) + (pct===100?10:0);
 
   addXP(earned);
 
   state.sessionsCompleted = (state.sessionsCompleted || 0) + 1;
 
-  if (session.lessonId !== 'mixed' && session.lessonId !== 'review') {
+  if (session.lessonId === 'daily') markDailyDone();
+
+  if (session.lessonId !== 'mixed' && session.lessonId !== 'review' && session.lessonId !== 'daily') {
     state.completedLessons[session.lessonId] = (state.completedLessons[session.lessonId]||0) + score;
     // A lesson counts as "completed" once finished with 80%+ — store best score
     if (!state.lessonsFinished) state.lessonsFinished = {};
@@ -3338,6 +3673,251 @@ function stopTransMic() {
   if (micBtn) { micBtn.classList.remove('listening'); micBtn.textContent = '🎤'; }
   updateTranslateUI();
   if (transRecognition) { try { transRecognition.stop(); } catch(e) {} }
+}
+
+// ═══════════════════════════════════════════
+//  GRAMMAR LESSONS
+// ═══════════════════════════════════════════
+function renderGrammar() {
+  document.getElementById('grammar-detail').style.display = 'none';
+  const list = document.getElementById('grammar-list');
+  list.style.display = 'block';
+  list.innerHTML = GRAMMAR.map(g => {
+    const read = (state.grammarRead || []).includes(g.id);
+    return `<div class="grammar-card" onclick="openGrammar('${g.id}')">
+      <div class="g-icon">${g.icon}</div>
+      <div><div class="g-title">${g.title}</div><div class="g-sub">${g.sub}</div></div>
+      ${read ? '<div class="g-check">✓</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function openGrammar(id) {
+  const g = GRAMMAR.find(x => x.id === id);
+  if (!g) return;
+  if (!state.grammarRead) state.grammarRead = [];
+  if (!state.grammarRead.includes(id)) { state.grammarRead.push(id); saveState(); checkAchievements(); }
+
+  document.getElementById('grammar-list').style.display = 'none';
+  const detail = document.getElementById('grammar-detail');
+  detail.style.display = 'block';
+  detail.innerHTML = `
+    <button class="back-btn" style="margin-bottom:14px" onclick="renderGrammar()">←</button>
+    <div class="grammar-detail-card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="font-size:2.2rem">${g.icon}</div>
+        <div><div style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${g.title}</div>
+        <div style="font-size:.82rem;color:var(--muted)">${g.sub}</div></div>
+      </div>
+      <div class="g-intro">${escapeHTML(g.intro)}</div>
+      ${g.points.map(p => `<div class="g-point">
+        <div class="g-point-head"><span class="g-point-k">${escapeHTML(p.k)}</span><span class="g-point-e">${escapeHTML(p.e)}</span>
+          <button class="speak-btn" style="margin:0" onclick="userHasInteracted=true;speakText('${escapeHTML(p.ex)}',this)">🔊</button></div>
+        <div class="g-point-ex">${escapeHTML(p.ex)}</div>
+        <div class="g-point-exE">${escapeHTML(p.exE)}</div>
+      </div>`).join('')}
+      <div class="g-tip"><b>💡 Tip:</b> ${escapeHTML(g.tip)}</div>
+    </div>`;
+  window.scrollTo(0, 0);
+}
+
+// ═══════════════════════════════════════════
+//  GRADED READING
+// ═══════════════════════════════════════════
+function renderReadingList() {
+  document.getElementById('reading-detail').style.display = 'none';
+  const list = document.getElementById('reading-list');
+  list.style.display = 'block';
+  list.innerHTML = STORIES.map(s => {
+    const read = (state.storiesRead || []).includes(s.id);
+    return `<div class="story-card" onclick="openStory('${s.id}')">
+      <div class="s-icon">${s.icon}</div>
+      <div style="flex:1">
+        <div class="s-title">${s.title} ${read ? '<span style="color:var(--correct)">✓</span>' : ''}</div>
+        <div class="s-titleE">${s.titleE} — ${s.summary}</div>
+        <span class="s-level level-${s.level}">${s.level}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openStory(id) {
+  const story = STORIES.find(s => s.id === id);
+  if (!story) return;
+  if (!state.storiesRead) state.storiesRead = [];
+  if (!state.storiesRead.includes(id)) { state.storiesRead.push(id); saveState(); checkAchievements(); }
+
+  document.getElementById('reading-list').style.display = 'none';
+  const detail = document.getElementById('reading-detail');
+  detail.style.display = 'block';
+
+  // Build a lookup of known vocab for tap-to-translate
+  const vocabMap = {};
+  LESSONS.forEach(l => l.vocab.forEach(v => {
+    const clean = v.k.toLowerCase().replace(/[.,!?]/g,'');
+    vocabMap[clean] = v.e;
+    // also index individual words of multi-word entries
+    clean.split(/\s+/).forEach(w => { if (!vocabMap[w]) vocabMap[w] = v.e; });
+  }));
+
+  const linesHTML = story.lines.map((line, li) => {
+    const wordsHTML = line.k.split(/(\s+)/).map(token => {
+      if (/^\s+$/.test(token)) return token;
+      const clean = token.toLowerCase().replace(/[.,!?¡¿"]/g,'');
+      const meaning = vocabMap[clean];
+      if (meaning) {
+        return `<span class="story-word" onclick="showWordPopup('${escapeHTML(token)}','${escapeHTML(meaning)}')">${escapeHTML(token)}</span>`;
+      }
+      return `<span>${escapeHTML(token)}</span>`;
+    }).join('');
+    return `<div class="story-line" id="sl-${li}" onclick="toggleLineTrans(${li})">
+      <div class="story-k">${wordsHTML} <button class="speak-btn" style="margin:0" onclick="event.stopPropagation();userHasInteracted=true;speakText('${escapeHTML(line.k)}',this)">🔊</button></div>
+      <div class="story-e">${escapeHTML(line.e)}</div>
+    </div>`;
+  }).join('');
+
+  detail.innerHTML = `
+    <button class="back-btn" style="margin-bottom:14px" onclick="renderReadingList()">←</button>
+    <div class="story-detail-card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <div style="font-size:2rem">${story.icon}</div>
+        <div><div style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${story.title}</div>
+        <div style="font-size:.82rem;color:var(--muted);font-style:italic">${story.titleE}</div></div>
+      </div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:16px">💡 Tap a <span style="border-bottom:1.5px dotted var(--sky)">dotted word</span> for its meaning, or tap a line to reveal its full translation.</div>
+      ${linesHTML}
+      <button class="reveal-btn" style="margin-top:10px;width:100%" onclick="toggleAllTrans(this)">Show all translations</button>
+    </div>`;
+  window.scrollTo(0, 0);
+}
+
+function toggleLineTrans(li) {
+  document.getElementById('sl-' + li)?.classList.toggle('show-trans');
+}
+
+function toggleAllTrans(btn) {
+  const lines = document.querySelectorAll('.story-line');
+  const anyHidden = [...lines].some(l => !l.classList.contains('show-trans'));
+  lines.forEach(l => l.classList.toggle('show-trans', anyHidden));
+  btn.textContent = anyHidden ? 'Hide all translations' : 'Show all translations';
+}
+
+let wordPopupTimer = null;
+function showWordPopup(word, meaning) {
+  document.querySelector('.word-popup')?.remove();
+  clearTimeout(wordPopupTimer);
+  const popup = document.createElement('div');
+  popup.className = 'word-popup';
+  popup.innerHTML = `<div><div class="wp-k">${escapeHTML(word)}</div><div class="wp-e">${escapeHTML(meaning)}</div></div>
+    <button class="wp-speak" onclick="userHasInteracted=true;speakText('${escapeHTML(word)}',null)">🔊</button>`;
+  document.body.appendChild(popup);
+  wordPopupTimer = setTimeout(() => popup.remove(), 3000);
+}
+
+// ═══════════════════════════════════════════
+//  DAILY LESSON PATH
+// ═══════════════════════════════════════════
+function isDailyDoneToday() {
+  return state.dailyDoneDate === new Date().toDateString();
+}
+
+function startDailyLesson() {
+  // Mix of due SR words + new words from least-practiced lesson
+  const due = getDueWords();
+  let pool = [...due];
+  if (pool.length < 12) {
+    const allVocab = LESSONS.flatMap(l => l.vocab);
+    const unseen = shuffle(allVocab.filter(v => !state.wordScores[v.k]));
+    pool = pool.concat(unseen.slice(0, 12 - pool.length));
+  }
+  if (!pool.length) pool = shuffle(LESSONS.flatMap(l => l.vocab)).slice(0, 12);
+  // Dedupe
+  const seen = new Set(); const items = [];
+  for (const v of pool) { if (!seen.has(v.k)) { seen.add(v.k); items.push(v); } if (items.length >= 12) break; }
+
+  const types = assignExerciseTypes(items.length);
+  const questions = items.map((item, i) => ({ item, type: types[i], lessonId: 'daily' }));
+  state.session = { questions, lessonId: 'daily', lessonTitle: "Today's Lesson" };
+  state.qIndex = 0; state.score = 0; state.wrongItems = []; state.awaitingNext = false; state.lives = 3;
+  showScreen('exercise'); renderQuestion();
+}
+
+function markDailyDone() {
+  const today = new Date().toDateString();
+  if (state.dailyDoneDate !== today) {
+    state.dailyDoneDate = today;
+    state.dailyDoneCount = (state.dailyDoneCount || 0) + 1;
+    saveState(); checkAchievements();
+  }
+}
+
+// ═══════════════════════════════════════════
+//  PLACEMENT TEST
+// ═══════════════════════════════════════════
+function startPlacementTest() {
+  // 12 questions spanning easy → hard lessons
+  const easy = LESSONS.slice(0, 4).flatMap(l => l.vocab);
+  const mid = LESSONS.slice(8, 16).flatMap(l => l.vocab);
+  const hard = LESSONS.slice(20).flatMap(l => l.vocab);
+  const pick = (arr, n) => shuffle([...arr]).slice(0, n);
+  const items = [...pick(easy,4), ...pick(mid,4), ...pick(hard,4)];
+  const questions = items.map(item => ({ item, type: 'multiChoiceKriolu', lessonId: 'placement' }));
+  state.session = { questions, lessonId: 'placement', lessonTitle: 'Placement Test' };
+  state.qIndex = 0; state.score = 0; state.wrongItems = []; state.awaitingNext = false; state.lives = 99;
+  showScreen('exercise'); renderQuestion();
+}
+
+function finishPlacement(score, total) {
+  const pct = score / total;
+  let level = 'Beginner';
+  if (pct >= 0.8) level = 'Advanced';
+  else if (pct >= 0.5) level = 'Intermediate';
+  state.placementDone = true;
+  state.placementLevel = level;
+  saveState(); checkAchievements();
+  const recommended = level === 'Advanced' ? LESSONS.slice(20) : level === 'Intermediate' ? LESSONS.slice(8,20) : LESSONS.slice(0,8);
+  document.getElementById('results-card').innerHTML = `
+    <div class="results-emoji">🎓</div>
+    <div class="results-title">You're ${level}!</div>
+    <div class="results-sub">Based on ${score}/${total} correct</div>
+    <div class="results-xp">We recommend starting with these lessons:</div>
+    <div style="text-align:left;margin-bottom:16px">${recommended.slice(0,5).map(l => `<div style="padding:7px 0;border-bottom:1px solid var(--border);font-weight:700;color:var(--ocean)">${l.icon} ${l.title}</div>`).join('')}</div>
+    <button class="results-btn primary" onclick="showTab('lessons')">Go to Lessons</button>
+    <button class="results-btn secondary" onclick="showTab('home')">Home</button>`;
+  showScreen('results');
+}
+
+// ═══════════════════════════════════════════
+//  MISTAKE PATTERN ANALYSIS
+// ═══════════════════════════════════════════
+function getMistakeInsights() {
+  const insights = [];
+  // Find most-confused words
+  const struggles = LESSONS.flatMap(l => l.vocab).map(v => {
+    const s = state.wordScores[v.k];
+    if (!s || s.wrong === 0) return null;
+    return { word: v, wrong: s.wrong, ratio: s.wrong / (s.correct + s.wrong) };
+  }).filter(Boolean).sort((a,b) => b.wrong - a.wrong);
+
+  if (struggles.length) {
+    const top = struggles.slice(0, 3).map(s => s.word.k).join(', ');
+    insights.push(`📌 Your trickiest words right now: <b>${escapeHTML(top)}</b>`);
+  }
+  // Category with most mistakes
+  const catMistakes = {};
+  LESSONS.forEach(l => {
+    let w = 0;
+    l.vocab.forEach(v => { w += state.wordScores[v.k]?.wrong || 0; });
+    if (w > 0) catMistakes[l.title] = w;
+  });
+  const worstCat = Object.entries(catMistakes).sort((a,b) => b[1]-a[1])[0];
+  if (worstCat && worstCat[1] >= 3) {
+    insights.push(`📂 Most mistakes are in <b>${escapeHTML(worstCat[0])}</b> — worth a review session.`);
+  }
+  const dueCount = countDueWords();
+  if (dueCount > 0) insights.push(`⏰ <b>${dueCount}</b> word${dueCount===1?'':'s'} due for review today.`);
+
+  return insights;
 }
 
 // ═══════════════════════════════════════════
