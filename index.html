@@ -3222,10 +3222,17 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
 }
 
 function showTranslation(text, note) {
-  // Keep the raw text (with real newlines) for speaking/copying/swapping
-  lastTranslation.text = text;
+  // Normalize escaped/real newlines into a single form
+  const normalized = String(text || '')
+    .replace(/\\r\\n/g, '\n')   // literal backslash-r-n
+    .replace(/\\n/g, '\n')       // literal backslash-n
+    .replace(/\\r/g, '\n')       // literal backslash-r
+    .replace(/\r\n/g, '\n')      // real CRLF
+    .replace(/\r/g, '\n');       // real CR
+  // Keep the cleaned text (with real newlines) for speaking/copying/swapping
+  lastTranslation.text = normalized;
   // Escape HTML, then convert newlines to <br> so multi-line translations display properly
-  const safe = escapeHTML(text).replace(/\r?\n/g, '<br>');
+  const safe = escapeHTML(normalized).replace(/\n/g, '<br>');
   document.getElementById('translate-output').innerHTML = safe;
   document.getElementById('translate-note').textContent = note;
   document.getElementById('translate-result-card').style.display = 'block';
