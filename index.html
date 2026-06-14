@@ -2122,7 +2122,17 @@ function buildSpacedSession(vocab, limit = 15) {
     if (!seen.has(v.k)) { seen.add(v.k); items.push(v); }
     if (items.length >= limit) break;
   }
-  return items;
+  // Re-shuffle so question order isn't sorted hardest-first every session
+  return shuffle(items);
+}
+
+// Build a random sequence of exercise types with even coverage —
+// every type appears roughly equally, but in a different random order
+// each session, with no correlation to word difficulty or position.
+function assignExerciseTypes(n) {
+  const pool = [];
+  while (pool.length < n) pool.push(...shuffle([...EXERCISE_TYPES]));
+  return pool.slice(0, n);
 }
 
 // ═══════════════════════════════════════════
@@ -2134,8 +2144,9 @@ function buildSession(lessonId) {
   const lesson = LESSONS.find(l => l.id === lessonId);
   if (!lesson) return null;
   const items = buildSpacedSession(lesson.vocab);
+  const types = assignExerciseTypes(items.length);
   const questions = items.map((item, i) => ({
-    item, type: EXERCISE_TYPES[i % EXERCISE_TYPES.length], lessonId
+    item, type: types[i], lessonId
   }));
   return { questions, lessonId, lessonTitle: lesson.title };
 }
@@ -2143,8 +2154,9 @@ function buildSession(lessonId) {
 function buildMixedSession() {
   const allVocab = LESSONS.flatMap(l => l.vocab);
   const items = buildSpacedSession(allVocab, 20);
+  const types = assignExerciseTypes(items.length);
   const questions = items.map((item, i) => ({
-    item, type: EXERCISE_TYPES[i % EXERCISE_TYPES.length], lessonId: 'mixed'
+    item, type: types[i], lessonId: 'mixed'
   }));
   return { questions, lessonId:'mixed', lessonTitle:'Mix & Review' };
 }
@@ -2767,8 +2779,9 @@ function renderReview() {
 function startReviewSession() {
   const words = shuffle(getReviewWords()).slice(0, 15);
   if (!words.length) return;
+  const types = assignExerciseTypes(words.length);
   const questions = words.map((item, i) => ({
-    item, type: EXERCISE_TYPES[i % EXERCISE_TYPES.length], lessonId: 'review'
+    item, type: types[i], lessonId: 'review'
   }));
   state.session = { questions, lessonId: 'review', lessonTitle: 'Review Mistakes' };
   state.qIndex = 0; state.score = 0;
@@ -2909,6 +2922,8 @@ function toggleAutoSpeak() {
 
 function toggleMic() { isListening ? stopListening() : startListening(); }
 
+let lastInputWasSpeech = false;
+
 function startListening() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { alert('Speech recognition not supported. Use Chrome or Edge.'); return; }
@@ -2918,7 +2933,7 @@ function startListening() {
   const chatInput = document.getElementById('chat-input');
   recognition.onstart = () => { isListening=true; micBtn.classList.add('listening'); micBtn.textContent='⏹️'; chatInput.placeholder='🎤 Listening…'; };
   recognition.onresult = e => { chatInput.value = Array.from(e.results).map(r=>r[0].transcript).join(''); };
-  recognition.onend = () => { stopListening(); if(chatInput.value.trim()) sendMessage(); };
+  recognition.onend = () => { stopListening(); if(chatInput.value.trim()) { lastInputWasSpeech = true; sendMessage(); } };
   recognition.onerror = e => { stopListening(); if(e.error==='not-allowed') alert('Microphone access denied.'); };
   recognition.start();
 }
@@ -2944,7 +2959,11 @@ Rules:
 4. Keep sentences clear and learner-appropriate.
 5. Be encouraging and culturally informative about Cape Verde.
 6. Format bold with **word** syntax.
-7. Keep responses concise — 3-5 sentences max unless they ask for more.`;
+7. Keep responses concise — 3-5 sentences max unless they ask for more.
+8. VOICE MESSAGES: Messages prefixed with [VOICE] were spoken aloud by the learner and transcribed by a Portuguese speech recognizer. This is your chance to coach pronunciation:
+   - If the transcription contains odd words, Portuguese substitutions, or garbled phrases, the learner likely mispronounced the Kriolu. Work out what they probably meant to say, show the correct Kriolu, and give ONE simple pronunciation tip using readable syllables (e.g. "Kuma bu sta" → "KOO-mah boo STAH" — stress the last word).
+   - If the transcription is clean and correct Kriolu, briefly praise their pronunciation (e.g. "Bu pronunsia e bon! 👏") before continuing the conversation.
+   - Never mention the transcription system or that you received a transcript — speak as if you heard them directly.`;
 
 const SCENARIOS = {
   greet:      BASE_SYSTEM + '\n\nSCENARIO: Practice greetings and introductions. Start with a warm greeting and ask the learner\'s name.',
@@ -2991,21 +3010,25 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
   if (!getApiKey()) { appendBotMessage('Please save your API key first! ☝️', ''); return; }
+  const wasSpeech = lastInputWasSpeech;
+  lastInputWasSpeech = false;
   input.value = '';
-  appendUserMessage(text);
+  appendUserMessage(text, wasSpeech);
   state.chatMessages++; saveState(); checkAchievements();
   await callClaude(text);
 }
 
 function useStarter(text) { document.getElementById('chat-input').value = text; document.getElementById('chat-input').focus(); }
 
-function appendUserMessage(text) {
+function appendUserMessage(text, wasSpeech) {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg user';
-  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${escapeHTML(text)}</div>`;
+  const micTag = wasSpeech ? '<span style="opacity:.7;font-size:.78rem;margin-right:4px">🎤</span>' : '';
+  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${micTag}${escapeHTML(text)}</div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
-  state.chatHistory.push({role:'user', content:text});
+  // Tag voice messages so the tutor analyzes pronunciation; display stays clean
+  state.chatHistory.push({role:'user', content: wasSpeech ? '[VOICE] ' + text : text});
 }
 
 function appendBotMessage(kriolu, english) {
@@ -3048,9 +3071,13 @@ async function callClaude(userText) {
   if (sendBtn) sendBtn.disabled = true;
   showTyping();
 
-  const messages = state.chatHistory.length > 1
+  let messages = state.chatHistory.length > 0
     ? state.chatHistory.slice(-12)
     : [{ role:'user', content:userText }];
+  // API requires the first message to be from the user
+  if (messages[0]?.role === 'assistant') {
+    messages = [{ role:'user', content:'Start the conversation.' }, ...messages];
+  }
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
