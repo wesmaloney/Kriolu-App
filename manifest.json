@@ -1,0 +1,25 @@
+{
+  "name": "Kriolu — Learn Cape Verdean Creole",
+  "short_name": "Kriolu",
+  "description": "Learn Cape Verdean Creole with lessons, games, and an AI conversation tutor",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF3E0",
+  "theme_color": "#0B4F71",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
