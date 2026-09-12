@@ -1149,6 +1149,7 @@
       .readtab-btn{padding:10px 4px;letter-spacing:-.02em}
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1565,8 +1566,17 @@
       <button onclick="toggleComposeBox()" title="Write a post" style="width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--grad-sun);color:#fff;border:none;box-shadow:var(--shadow-coral);cursor:pointer;font-size:.95rem">✎</button>
     </div>
     <div id="community-compose" style="display:none;margin-bottom:14px">
-      <textarea id="community-compose-text" class="type-input" style="width:100%;min-height:64px;resize:vertical" placeholder="Share something with the community…"></textarea>
-      <button class="start-btn" style="margin-top:8px" onclick="postCommunityMessage()">Post</button>
+      <textarea id="community-compose-text" class="type-input" style="width:100%;min-height:64px;resize:vertical" maxlength="500" placeholder="Share something with the community…"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <select id="community-compose-category" class="voice-select">
+          <option value="questions">❓ Questions</option>
+          <option value="proverbs">📜 Proverbs</option>
+          <option value="music">🎵 Music</option>
+          <option value="recipes">🍲 Recipes</option>
+        </select>
+        <button class="start-btn" style="margin:0" onclick="postCommunityMessage()">Post</button>
+      </div>
+      <div id="community-compose-error" style="display:none;color:var(--wrong);font-size:.75rem;margin-top:6px"></div>
     </div>
     <div id="community-content"></div>
   </div>
@@ -14137,7 +14147,7 @@ function saveState() {
     chatXPDate:state.chatXPDate, chatXPToday:state.chatXPToday,
     chatHistory:(state.chatHistory||[]).slice(-40), tutorMemory:state.tutorMemory,
     savedFromChat:state.savedFromChat, dailyChallengeDate:state.dailyChallengeDate, dailyChallengesSeen:state.dailyChallengesSeen, chatDifficulty:state.chatDifficulty,
-    communityLikes:state.communityLikes, communityPosts:state.communityPosts, communityFilter:state.communityFilter,
+    communityFilter:state.communityFilter,
     notifEnabled:state.notifEnabled, reminderHour:state.reminderHour, lastReminderDate:state.lastReminderDate,
     checkpointsPassed:state.checkpointsPassed, grammarFocus:state.grammarFocus, shadowDone:state.shadowDone, lastWarmupDate:state.lastWarmupDate,
     onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
@@ -18889,26 +18899,79 @@ function proverbOfTheDay() {
   return PROVERBS[dayNum % PROVERBS.length];
 }
 
-const COMMUNITY_POSTS = [
-  { id:'p1', name:'Ana Lima', initials:'AL', color:'#088395', place:'Brockton, MA', time:'2h', category:'questions',
-    text:'Nha avó ta txoma "katxupa rika" só kel ki tem karni. Alguen mas na Boston ta fla asi, o é só na nha kaza?', likes:24 },
-  { id:'p2', name:'Djô Sanches', initials:'DJ', color:'#C2451A', place:'Mindelo', time:'5h', category:'questions',
-    text:'Modi ki nhos ta fla "bus stop" na Santiagu? Ki-li nu ta fla "paradinha".', likes:11 },
-  { id:'p3', name:'Isabel Rocha', initials:'IR', color:'#12796F', place:'Praia', time:'1d', category:'recipes',
-    text:'Segredu di un bon katxupa: kunpanha di ferru, fugu bas, txeu ora. Ka bu pressa!', likes:31 },
-  { id:'p4', name:'Marcus Tavares', initials:'MT', color:'#8A5A0B', place:'Providence, RI', time:'2d', category:'music',
-    text:'Sabi na morna di Cesária es simana — kal ki nhos favoritu?', likes:18 },
-];
+// ── Live Community backend (Supabase) ──────────────────────────────────
+// Public read/write, protected by Row Level Security rather than by any
+// login — this app has no accounts. `deviceId()` is a soft, unverified
+// per-browser identity used only for the like-toggle and the server-side
+// rate limit; see community-setup.sql for the actual safeguards (a
+// banned-word filter and a 1-post-per-60s limit enforced as DB triggers,
+// not just client-side checks that anyone could bypass).
+const SUPABASE_URL = 'https://icnbwjbcpjonzbuyhqvm.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_l9_aI03xoYR1tcvMwwvYgw_-tjh4b56';
+let _supabase = null;
+function getSupabase() {
+  if (!_supabase && window.supabase) _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return _supabase;
+}
+function deviceId() {
+  let id = localStorage.getItem('kriolu_device_id');
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : 'dev-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+    localStorage.setItem('kriolu_device_id', id);
+  }
+  return id;
+}
+const COMMUNITY_AVATAR_COLORS = ['#088395','#C2451A','#12796F','#8A5A0B','#5B3E96','#1B6B93'];
+function communityAvatarColor(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return COMMUNITY_AVATAR_COLORS[h % COMMUNITY_AVATAR_COLORS.length];
+}
+function communityInitials(name) {
+  return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+}
+function communityTimeAgo(iso) {
+  const secs = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (secs < 60) return 'now';
+  if (secs < 3600) return Math.floor(secs / 60) + 'm';
+  if (secs < 86400) return Math.floor(secs / 3600) + 'h';
+  return Math.floor(secs / 86400) + 'd';
+}
 
-function renderCommunity() {
+let communityChannel = null;
+function subscribeCommunityRealtime() {
+  const sb = getSupabase();
+  if (!sb || communityChannel) return;
+  const onChange = () => { if (document.getElementById('screen-community')?.classList.contains('active')) renderCommunity(); };
+  communityChannel = sb.channel('community-live')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_posts' }, onChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_likes' }, onChange)
+    .subscribe();
+}
+
+async function renderCommunity() {
   const el = document.getElementById('community-content');
   if (!el) return;
-  state.communityLikes = state.communityLikes || {};
-  const posts = state.communityPosts && state.communityPosts.length ? state.communityPosts : COMMUNITY_POSTS;
+  const sb = getSupabase();
+  if (!sb) { el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Community is unavailable right now.</div>`; return; }
+  if (!el.dataset.loaded) el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Loading community…</div>`;
+
+  const [{ data: posts, error }, { data: likeRows }, { data: myLikeRows }] = await Promise.all([
+    sb.from('community_posts').select('*').order('created_at', { ascending: false }).limit(100),
+    sb.from('community_likes').select('post_id'),
+    sb.from('community_likes').select('post_id').eq('device_id', deviceId()),
+  ]);
+  if (error) { el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Couldn't load the community feed. Check your connection and try again.</div>`; return; }
+  el.dataset.loaded = '1';
+
+  const likeCounts = {};
+  (likeRows || []).forEach(r => { likeCounts[r.post_id] = (likeCounts[r.post_id] || 0) + 1; });
+  const myLikes = new Set((myLikeRows || []).map(r => r.post_id));
+
   const filter = state.communityFilter || 'all';
   const cats = [['all','All'],['proverbs','Proverbs'],['music','Music'],['questions','Questions'],['recipes','Recipes']];
   const pv = proverbOfTheDay();
-  const shown = filter === 'all' ? posts : posts.filter(p => p.category === filter);
+  const shown = filter === 'all' ? (posts || []) : (posts || []).filter(p => p.category === filter);
 
   el.innerHTML = `
     <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:13px;padding-bottom:2px">
@@ -18923,16 +18986,17 @@ function renderCommunity() {
     </div>` : ''}
     <div style="display:flex;flex-direction:column;gap:11px">
       ${shown.map(p => {
-        const liked = !!state.communityLikes[p.id];
-        const likeCount = p.likes + (liked ? 1 : 0);
+        const liked = myLikes.has(p.id);
+        const likeCount = likeCounts[p.id] || 0;
         return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${p.color};color:#fff;display:flex;align-items:center;justify-content:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif">${p.initials}</div>
-            <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.8rem">${escapeHTML(p.name)}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${escapeHTML(p.place)} · ${p.time}</div></div>
+            <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${communityAvatarColor(p.author)};color:#fff;display:flex;align-items:center;justify-content:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif">${communityInitials(p.author)}</div>
+            <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.8rem">${escapeHTML(p.author)}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${communityTimeAgo(p.created_at)}</div></div>
           </div>
-          <div style="font-size:.85rem;line-height:1.55;margin-top:10px">${escapeHTML(p.text)}</div>
-          <div style="display:flex;align-items:center;gap:14px;margin-top:11px;padding-top:10px;border-top:1px solid var(--border)">
+          <div style="font-size:.85rem;line-height:1.55;margin-top:10px">${escapeHTML(p.body)}</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:11px;padding-top:10px;border-top:1px solid var(--border)">
             <div onclick="toggleCommunityLike('${p.id}')" style="font-weight:700;font-size:.72rem;cursor:pointer;color:${liked ? '#EF4757' : 'var(--muted)'}">${liked ? '❤️' : '🤍'} ${likeCount}</div>
+            <div onclick="reportCommunityPost('${p.id}')" style="font-weight:700;font-size:.72rem;cursor:pointer;color:var(--muted)">🚩 Report</div>
           </div>
         </div>`;
       }).join('') || `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Nothing here yet.</div>`}
@@ -18947,15 +19011,27 @@ function renderCommunity() {
       <div style="font-size:1rem;color:var(--ocean-2)">›</div>
     </div>
   `;
+  subscribeCommunityRealtime();
 }
 
 function setCommunityFilter(id) { state.communityFilter = id; saveState(); renderCommunity(); }
 
-function toggleCommunityLike(id) {
-  state.communityLikes = state.communityLikes || {};
-  state.communityLikes[id] = !state.communityLikes[id];
-  saveState();
+async function toggleCommunityLike(id) {
+  const sb = getSupabase();
+  if (!sb) return;
+  const dev = deviceId();
+  const { data: existing } = await sb.from('community_likes').select('post_id').eq('post_id', id).eq('device_id', dev).maybeSingle();
+  if (existing) await sb.from('community_likes').delete().eq('post_id', id).eq('device_id', dev);
+  else await sb.from('community_likes').insert({ post_id: id, device_id: dev });
   renderCommunity();
+}
+
+async function reportCommunityPost(id) {
+  const sb = getSupabase();
+  if (!sb) return;
+  if (!confirm('Report this post for review?')) return;
+  await sb.from('community_reports').insert({ post_id: id, device_id: deviceId() });
+  showToast('🚩 Reported — thank you');
 }
 
 function toggleComposeBox() {
@@ -18965,14 +19041,22 @@ function toggleComposeBox() {
   if (box.style.display === 'block') document.getElementById('community-compose-text')?.focus();
 }
 
-function postCommunityMessage() {
+async function postCommunityMessage() {
   const ta = document.getElementById('community-compose-text');
+  const category = document.getElementById('community-compose-category')?.value || 'questions';
+  const errEl = document.getElementById('community-compose-error');
   const text = (ta?.value || '').trim();
+  if (errEl) errEl.style.display = 'none';
   if (!text) return;
-  const posts = state.communityPosts && state.communityPosts.length ? state.communityPosts : [...COMMUNITY_POSTS];
-  posts.unshift({ id: 'you-' + Date.now(), name: 'You', initials: 'Y', color: 'var(--ocean)', place: 'This device', time: 'now', category: 'questions', text, likes: 0 });
-  state.communityPosts = posts;
-  saveState();
+  const sb = getSupabase();
+  if (!sb) return;
+  const { error } = await sb.from('community_posts').insert({
+    author: state.userName || 'You', category, body: text, device_id: deviceId(),
+  });
+  if (error) {
+    if (errEl) { errEl.textContent = error.message.includes('wait') ? '⏱️ ' + error.message : error.message.includes('blocked word') ? '⚠️ That post was rejected — please rephrase.' : "Couldn't post — try again."; errEl.style.display = 'block'; }
+    return;
+  }
   ta.value = '';
   document.getElementById('community-compose').style.display = 'none';
   renderCommunity();
