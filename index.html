@@ -1591,7 +1591,7 @@
     <div id="ai-status-card" style="border-radius:16px;padding:14px 16px;margin-bottom:16px"></div>
     <div class="checkpoint-topics-label" style="margin-bottom:8px">What the AI powers</div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2px 16px;box-shadow:var(--shadow);margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">💬</div><div><div style="font-weight:700;font-size:.85rem">Conversation with your tutor</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Sôr António and Prof. Amália</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">💬</div><div><div style="font-weight:700;font-size:.85rem">Conversation with your tutor</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Sôr António, in Kriolu and Portuguese</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">✍️</div><div><div style="font-weight:700;font-size:.85rem">Writing feedback</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Gentle corrections on what you write</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">🔊</div><div><div style="font-weight:700;font-size:.85rem">Natural voice</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Falls back to your device voice offline</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0"><div style="font-size:17px">🧠</div><div><div style="font-weight:700;font-size:.85rem">Tutor memory</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Remembers what you struggle with</div></div></div>
@@ -11376,7 +11376,7 @@ let LESSONS = [], LEARNING_PATH = [], GRAMMAR_SKILLS = [], GRAMMAR_SPOTLIGHTS = 
 const LANGS = {
   kriolu:     { code:'kriolu',     label:'Kriolu',     flag:'🇨🇻', mark:'🌊', native:'Kriolu',    tutor:'Sôr António', avatar:'🧔🏾', ttsLang:'pt-PT',
                 blurb:'Cape Verdean Creole (Santiago)' },
-  portuguese: { code:'portuguese', label:'Português',  flag:'🇵🇹', mark:'⛵', native:'Português', tutor:'Prof. Amália', avatar:'👩🏽‍🏫', ttsLang:'pt-PT',
+  portuguese: { code:'portuguese', label:'Português',  flag:'🇵🇹', mark:'⛵', native:'Português', tutor:'Sôr António', avatar:'🧔🏾', ttsLang:'pt-PT',
                 blurb:'European Portuguese — the official language' },
 };
 // Progress fields that must be kept apart per language
@@ -11401,9 +11401,9 @@ function aiLang() {
   return {
     name:    PT ? 'European Portuguese' : 'Kriolu',
     full:    PT ? 'European Portuguese (Portugal)' : 'Kriolu (Cape Verdean Creole, Santiago/Badiu variant)',
-    tutor:   PT ? 'Prof. Amália' : 'Sôr António',
+    tutor:   'Sôr António',
     persona: PT
-      ? 'You are Prof. Amália, a warm, precise European Portuguese teacher from Lisbon.'
+      ? 'You are Sôr António, a warm, encouraging tutor from Santiago, Cape Verde, who also teaches precise European Portuguese.'
       : 'You are Sôr António, a warm, encouraging Kriolu teacher from Santiago, Cape Verde.',
     culture: PT ? 'Portugal' : 'Cape Verde',
     note:    PT
@@ -17316,7 +17316,7 @@ function matchSelect(idx, side, btn) {
 // usage context, and word-by-word sentence breakdowns. Each is generated ONCE
 // per word (cached locally like the TTS audio), so repeats are instant & free.
 const ANTONIO_SYS_KR = "You are Sôr António, a warm Cape Verdean Kriolu tutor (Santiago/Badiu variety). Answer in English with Kriolu examples where helpful. Plain text only, no markdown. Be brief and encouraging.";
-const ANTONIO_SYS_PT = "You are Prof. Amália, a warm European Portuguese tutor. Use EUROPEAN Portuguese as spoken in Portugal and Cape Verde (tu/você, 'estou a fazer' not 'estou fazendo', autocarro, comboio, pequeno-almoço, casa de banho). Never use Brazilian forms. Answer in English with Portuguese examples where helpful. Plain text only, no markdown. Be brief and encouraging. The learner also speaks or is learning Cape Verdean Kriolu, so when a Portuguese word differs sharply from its Kriolu cousin, a one-line comparison is welcome.";
+const ANTONIO_SYS_PT = "You are Sôr António, a warm tutor from Cape Verde who also teaches European Portuguese. Use EUROPEAN Portuguese as spoken in Portugal and Cape Verde (tu/você, 'estou a fazer' not 'estou fazendo', autocarro, comboio, pequeno-almoço, casa de banho). Never use Brazilian forms. Answer in English with Portuguese examples where helpful. Plain text only, no markdown. Be brief and encouraging. The learner also speaks or is learning Cape Verdean Kriolu, so when a Portuguese word differs sharply from its Kriolu cousin, a one-line comparison is welcome.";
 // The chat and translator are shared across both courses — they follow the
 // language the learner is currently studying.
 Object.defineProperty(window, 'ANTONIO_SYS', { get(){ return isPT() ? ANTONIO_SYS_PT : ANTONIO_SYS_KR; } });
