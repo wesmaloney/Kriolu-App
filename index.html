@@ -21373,16 +21373,113 @@ const LONGFORM_META = {
     turn: 11,
     turnNote: 'The turn — the clerk agrees the letter was at fault, not him',
     tip: ['The clerk concedes with ', 'É uma crítica justa', ' — admitting the institution is at fault without accepting personal blame.'],
+    brief: {
+      minutes: 4,
+      desc: 'Sr. Pinto has come to dispute a debt notice for money he does not owe, tied to an address he has never lived at. The scene tracks how an institutional error gets acknowledged and resolved without either side losing face.',
+      speakers: [
+        { name:'Sr. Pinto', blurb:'Disputes a debt he does not recognise · practical, running out of patience', tone:'var(--ocean)' },
+        { name:'Funcionária', blurb:'Owns the institution’s mistake · calm, procedural', tone:'var(--coral)' },
+      ],
+      asks: [
+        'Bureaucratic hypotheticals — <b>Se o enviar por email, o processo continua?</b>',
+        'Accepting a complaint gracefully, without over-apologising — <b>É uma crítica justa.</b>',
+        'Deadline vocabulary under real stakes — <b>dias úteis</b>, working days',
+      ],
+    },
+    recap: {
+      intro: 'At B2 the challenge is not the vocabulary — it is recognising when a bureaucratic exchange is actually going well. Nobody raises their voice, but a real institutional failure gets owned along the way.',
+      beats: [
+        { sp:'Sr. Pinto', t:'"Venho por causa de uma carta que recebi sobre uma dívida que não reconheço."', move:'Opens with the problem stated plainly, not an accusation', tone:'var(--ocean)' },
+        { sp:'Funcionária', t:'"Deixe ver… O registo aqui refere uma morada em Setúbal."', move:'Starts investigating rather than defending the letter', tone:'var(--coral)' },
+        { sp:'Sr. Pinto', t:'"Nunca morei em Setúbal. Vivo na mesma casa há dezanove anos."', move:'Supplies the fact that breaks the case open', tone:'var(--ocean)' },
+        { sp:'Funcionária', t:'"É provável que seja um caso de nome semelhante. Acontece mais do que devia."', move:'Names the likely cause and admits it is not rare', tone:'var(--coral)' },
+        { sp:'Sr. Pinto', t:'"Isso não vinha na carta."', move:'Raises a fair complaint about the letter itself', tone:'var(--ocean)' },
+        { sp:'Funcionária', t:'"Pois não. É uma crítica justa e não é a primeira vez que a ouço."', move:'Concedes the criticism directly', tone:'var(--coral)' },
+        { sp:'Funcionária', t:'"Trinta dias úteis. Se passar disso, traga este comprovativo e pergunte por mim."', move:'Closes with a concrete, personal fallback plan', tone:'var(--coral)' },
+      ],
+      insight: 'Nobody admits total fault — the clerk concedes exactly one thing (the letter’s wording) while defending the process itself. That is what a real B2 complaint resolution sounds like: specific, not sweeping.',
+      phrases: [
+        { k:'É uma crítica justa.', e:'That is a fair criticism.' },
+        { k:'Isso não vinha na carta.', e:'That was not in the letter.' },
+        { k:'Acontece mais do que devia.', e:'It happens more often than it should.' },
+        { k:'Traga este comprovativo e pergunte por mim.', e:'Bring this receipt and ask for me.' },
+      ],
+    },
   },
   pt_c1_consulta: {
     turn: 8,
     turnNote: 'The turn — the doctor takes her share of the blame',
     tip: ['', 'A falha não é só sua', ' — the doctor takes a share of the blame, and that is the line that unlocks the rest of the consultation.'],
+    brief: {
+      minutes: 5,
+      desc: 'Dra. Lima has to tell a longtime patient his kidney results are abnormal — and that advice he has already ignored twice needs to actually change something this time. The scene is about getting someone to hear medical advice they have tuned out.',
+      speakers: [
+        { name:'Dra. Lima', blurb:'Delivers hard news plainly · takes her share of the blame for why it has not worked before', tone:'var(--ocean)' },
+        { name:'Sr. Tavares', blurb:'Skeptical from repetition · protective of home and tradition', tone:'var(--coral)' },
+      ],
+      asks: [
+        'Softening a diagnosis without minimising it — <b>Os valores estão alterados, mas não são alarmantes.</b>',
+        'Conceding a systemic failure without blaming the patient — <b>A falha não é só sua.</b>',
+        'The conditional for a hypothetical outcome — <b>Se cortasse só isso, mudava mais do que com qualquer comprimido.</b>',
+      ],
+    },
+    recap: {
+      intro: 'At C1 this scene is not testing whether you know "kidney" or "salt" — it is testing whether you can follow someone slowly agreeing to something they walked in refusing.',
+      beats: [
+        { sp:'Dra. Lima', t:'"Os valores estão alterados, mas não são alarmantes."', move:'Opens by softening the news without hiding it', tone:'var(--ocean)' },
+        { sp:'Sr. Tavares', t:'"Já ouvi isso três vezes em cinco anos."', move:'Pushes back with lived history, not denial', tone:'var(--coral)' },
+        { sp:'Dra. Lima', t:'"A falha não é só sua."', move:'Takes institutional blame for the repeated failure', tone:'var(--ocean)' },
+        { sp:'Dra. Lima', t:'"Não é o sal que põe no prato — é o que já vem na comida."', move:'Reframes the advice into something concrete and new', tone:'var(--ocean)' },
+        { sp:'Sr. Tavares', t:'"A minha mulher já cozinha para mim há quarenta anos. Não sou eu que decido o tempero."', move:'Raises the real obstacle: it is not his decision alone', tone:'var(--coral)' },
+        { sp:'Dra. Lima', t:'"O que mudou foi o que sabemos, não o que ela faz."', move:'Protects the wife from blame while still asking for change', tone:'var(--ocean)' },
+        { sp:'Sr. Tavares', t:'"Começo pelo sal. Não prometo o resto."', move:'Closes with a limited, honest commitment, not full compliance', tone:'var(--coral)' },
+      ],
+      insight: 'He never agrees to everything — he commits to exactly one thing and refuses to overpromise. That is a realistic C1 ending: partial, honest agreement beats a polite lie.',
+      phrases: [
+        { k:'A falha não é só sua.', e:'The failure is not only yours.' },
+        { k:'Não vou fingir que é pequeno.', e:'I will not pretend it is a small thing.' },
+        { k:'O que mudou foi o que sabemos.', e:'What changed is what we know.' },
+        { k:'Não prometo o resto.', e:'I promise nothing about the rest.' },
+      ],
+    },
   },
   pt_c1_escola_reuniao: {
     turn: 16,
     turnNote: 'The turn — he admits the objection he cannot answer',
     tip: ['', 'não tenho boa resposta', ' — conceding an objection you cannot answer is the most advanced move in the scene.'],
+    brief: {
+      minutes: 5,
+      desc: 'A teacher proposes splitting an unevenly-performing class into two groups, and has to defend the idea to two parents in real time — including the one objection he cannot actually answer: most families did not come to this meeting at all.',
+      speakers: [
+        { name:'Prof. Matos', blurb:'Proposes the change · concedes what he cannot defend', tone:'var(--ocean)' },
+        { name:'Sr.ª Delgado', blurb:'Wary of anything permanent · reassured by review frequency', tone:'var(--coral)' },
+        { name:'Sr. Barros', blurb:'Raises the labelling risk · names the meeting’s biggest gap', tone:'var(--gold)' },
+      ],
+      asks: [
+        'Conceding a real risk without abandoning the proposal — <b>É um risco real e não o vou negar.</b>',
+        'Reviewed vs permanent — the six-weeks/annual distinction carrying real weight',
+        'Admitting you lack an answer, to the people you are trying to persuade — <b>não tenho boa resposta</b>',
+      ],
+    },
+    recap: {
+      intro: 'Three speakers means three separate objections to track, not one back-and-forth — the shape of this scene is a teacher fielding each parent’s concern in turn, not winning a single argument.',
+      beats: [
+        { sp:'Prof. Matos', t:'"A turma tem tido um aproveitamento muito irregular."', move:'Opens with the problem, not the solution', tone:'var(--ocean)' },
+        { sp:'Sr. Barros', t:'"Isso é pôr um rótulo nas crianças."', move:'Names the labelling risk directly', tone:'var(--gold)' },
+        { sp:'Prof. Matos', t:'"É um risco real e não o vou negar."', move:'Concedes the risk instead of arguing it away', tone:'var(--ocean)' },
+        { sp:'Sr.ª Delgado', t:'"De seis em seis semanas é razoável. Se fosse anual, eu recusava."', move:'Accepts the plan only because it is reviewed, not permanent', tone:'var(--coral)' },
+        { sp:'Sr. Barros', t:'"Somos sete numa turma de trinta."', move:'Raises the meeting’s real weak point', tone:'var(--gold)' },
+        { sp:'Prof. Matos', t:'"Não tenho boa resposta."', move:'Admits he has no answer to the strongest objection', tone:'var(--ocean)' },
+        { sp:'Sr.ª Delgado', t:'"Com essa frase, ganhou o meu voto."', move:'Is won over by the admission itself, not a fix', tone:'var(--coral)' },
+      ],
+      insight: 'The line that wins her over is not a solution — it is an honest admission of a limit. At C1 that is the harder move: knowing when persuading means not pretending you have every answer.',
+      phrases: [
+        { k:'É um risco real e não o vou negar.', e:'That is a real risk and I will not deny it.' },
+        { k:'Não é uma sentença — é uma fotografia do momento.', e:'It is not a sentence — it is a snapshot of the moment.' },
+        { k:'Não tenho boa resposta.', e:'I have no good answer.' },
+        { k:'Com essa frase, ganhou o meu voto.', e:'With that sentence, you have my vote.' },
+      ],
+    },
   },
 };
 let lfState = {};                        // per-id { at, showEn }
@@ -21509,7 +21606,7 @@ function lfRenderReader(d, meta) {
       <div class="lab-mistake-icon">💡</div>
       <div>${escapeHTML(meta.tip[0])}<b>${escapeHTML(meta.tip[1])}</b>${escapeHTML(meta.tip[2])}</div>
     </div>` : ''}
-    ${meta.recap ? `<button class="due-btn" style="width:100%;margin-top:12px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="lfSetView('recap')">See how the argument moved →</button>` : ''}
+    ${meta.recap ? `<button class="due-btn" style="width:100%;margin-top:12px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="lfSetView('recap')">See how the conversation moved →</button>` : ''}
     <button class="due-btn" id="lf-playall" style="width:100%;margin-top:12px" onclick="lfTogglePlay()">${playing ? '❙❙ Pause the scene' : '▶ Play from line ' + (st.at + 1)}</button>
     <div style="font-weight:800;color:var(--ocean);margin:16px 0 8px" id="dlg-quiz-heading">❓ Quiz</div>
     <div id="dlg-quiz">
@@ -21525,7 +21622,7 @@ function lfRenderRecap(d, meta) {
   const r = meta.recap;
   return `
     <button class="back-btn" onclick="lfSetView('reader')">←</button>
-    <h2 style="margin:8px 0 12px">How the argument moved</h2>
+    <h2 style="margin:8px 0 12px">How the conversation moved</h2>
     <p style="font-size:.82rem;color:var(--muted);line-height:1.55">${escapeHTML(r.intro)}</p>
     <div class="lab-card" style="margin-top:12px">
       ${r.beats.map(b => `<div style="display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)">
