@@ -125,8 +125,20 @@
     .nav-tab.active{color:var(--ocean);background:rgba(8,131,149,.12);box-shadow:inset 0 0 0 1px rgba(8,131,149,.18)}
     [data-theme="dark"] .nav-tab.active{color:var(--sky);background:rgba(34,211,238,.13);box-shadow:inset 0 0 0 1px rgba(34,211,238,.22)}
 
+    /* ── BOTTOM NAV ── */
+    #bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:150;display:flex;background:rgba(255,255,255,.92);border-top:1px solid var(--border);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding-bottom:env(safe-area-inset-bottom)}
+    [data-theme="dark"] #bottom-nav{background:rgba(20,30,38,.92)}
+    .bottom-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 7px;background:none;border:none;cursor:pointer;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif}
+    .bnav-icon{font-size:1.15rem;line-height:1;opacity:.5}
+    .bnav-label{font:800 .62rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.05em;text-transform:uppercase}
+    .bottom-nav-btn.active{color:var(--ocean)}
+    .bottom-nav-btn.active .bnav-icon{opacity:1}
+    [data-theme="dark"] .bottom-nav-btn.active{color:var(--sky)}
+    body.nav-collapsed #bottom-nav,body.nav-collapsed #nav-tabs{display:none}
+    body.nav-collapsed #main{padding-bottom:20px}
+
     /* ── MAIN ── */
-    #main{width:100%;max-width:780px;padding:20px 14px 80px;flex:1}
+    #main{width:100%;max-width:780px;padding:20px 14px calc(80px + env(safe-area-inset-bottom));flex:1}
     .screen{display:none;animation:fadeIn .22s ease}
     .screen.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -137,6 +149,12 @@
     .settings-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));width:100%;max-width:780px;margin:0 auto;animation:slideUp .25s ease;max-height:88vh;max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
     @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
     .settings-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1.3rem;color:var(--ocean);margin-bottom:20px}
+    .profile-header{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+    .profile-avatar{width:50px;height:50px;flex:none;border-radius:50%;background:var(--grad-ocean);color:#fff;display:flex;align-items:center;justify-content:center;font:800 1.1rem/1 'Plus Jakarta Sans',sans-serif}
+    .profile-info{flex:1;min-width:0}
+    .profile-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.05rem;color:var(--text)}
+    .profile-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
+    .profile-edit-btn{flex:none;background:var(--bg);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:7px 13px;font:800 .7rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer}
     .setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
     .setting-row:last-child{border-bottom:none}
     .setting-label{font-weight:700;font-size:.9rem}
@@ -164,6 +182,20 @@
     .weekly-goal-bar{margin-top:10px}
     .weekly-goal-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:7px;overflow:hidden;margin-top:4px}
     .weekly-goal-fill{height:100%;background:#A8EDEA;border-radius:99px;transition:width .6s ease}
+    .weekly-day-strip{display:flex;gap:5px;margin-top:10px}
+    .wds-cell{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+    .wds-bar{width:100%;height:6px;border-radius:99px;background:rgba(255,255,255,.22)}
+    .wds-cell.active .wds-bar{background:var(--gold)}
+    .wds-label{font:800 .56rem/1 'Plus Jakarta Sans',sans-serif;opacity:.7}
+    .wds-cell.today .wds-label{opacity:1}
+    .wotd-card{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.72);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 15px;margin-bottom:16px}
+    [data-theme="dark"] .wotd-card{background:var(--card)}
+    .wotd-info{flex:1;min-width:0}
+    .wotd-label{font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+    .wotd-word{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.3rem;color:var(--ocean);margin-top:4px}
+    [data-theme="dark"] .wotd-word{color:var(--sky)}
+    .wotd-gloss{font-size:.78rem;color:var(--muted);line-height:1.4;margin-top:2px}
+    .wotd-play{width:38px;height:38px;flex:none;border-radius:50%;background:var(--bg);border:1.5px solid var(--sky);color:var(--ocean);display:flex;align-items:center;justify-content:center;font-size:.8rem;cursor:pointer}
 
     .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
     /* ── BENTO GRID ── */
@@ -246,6 +278,59 @@
     .wc-word{background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:5px 11px;font-size:.82rem;font-weight:700;color:var(--ocean);cursor:pointer;transition:all .15s}
     .wc-word:hover{background:var(--ocean);color:#fff}
     [data-theme="dark"] .wc-word{color:var(--sky)}
+    .dict-dir-tab{flex:1;text-align:center;padding:9px 4px;border-radius:9px;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;color:var(--muted);cursor:pointer}
+    .dict-dir-tab.active{background:var(--ocean);color:#fff}
+    .dict-chip{flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:7px 13px;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+    .dict-chip.active{background:var(--ocean-2);color:#fff;border-color:transparent}
+    .verb-chips{display:flex;gap:7px;overflow-x:auto;margin-bottom:11px;padding-bottom:2px}
+    .verb-chip{flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:8px 14px;font-weight:800;font-size:.72rem;color:var(--ocean);cursor:pointer;transition:all .15s}
+    .verb-chip:hover{background:var(--ocean);color:#fff;border-color:var(--ocean)}
+    [data-theme="dark"] .verb-chip{color:var(--sky)}
+    .dlg-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+    .dlg-row.reverse{flex-direction:row-reverse;text-align:right}
+    .dlg-row.dlg-role-active .dlg-bubble{background:var(--bg);border-color:var(--ocean-2)}
+    .lf-line{padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
+    .lf-line:last-child{border-bottom:none}
+    .lf-speaker{font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+    .lf-text{font-size:.9rem;line-height:1.6;color:var(--muted);font-weight:500}
+    .lf-text-current{font-weight:700;font-size:1rem;color:var(--text)}
+    .lf-en{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.5}
+    .lf-turn-badge{display:flex;align-items:center;gap:7px;margin-top:9px;background:#FFF4E0;border-radius:9px;padding:8px 11px;font:800 .68rem/1.4 'Plus Jakarta Sans',sans-serif;letter-spacing:.03em;text-transform:uppercase;color:#8A5A0B}
+    [data-theme="dark"] .lf-turn-badge{background:rgba(255,193,94,.12);color:var(--gold)}
+    .lf-insight{background:#E2EDDC;color:#33552F}
+    [data-theme="dark"] .lf-insight{background:rgba(46,196,182,.12);color:var(--sky)}
+    .dlg-bubble{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 13px;max-width:80%}
+    .dlg-speaker{font-size:.68rem;font-weight:800;color:var(--ocean)}
+    .dlg-text{font-weight:700}
+    .dlg-en{display:none;font-size:.78rem;color:var(--muted);margin-top:4px}
+    .track-card{position:relative;cursor:pointer;border-radius:var(--radius);padding:20px;color:#fff;margin-bottom:12px;opacity:.72;transition:opacity .2s,box-shadow .2s}
+    .track-card.active{opacity:1}
+    .track-card-kr{background:var(--grad-ocean)}
+    .track-card-kr.active{box-shadow:0 0 0 3px var(--sky),0 8px 24px rgba(10,77,104,.2)}
+    .track-card-pt{background:linear-gradient(135deg,#E76F51,#FFC15E)}
+    .track-card-pt.active{box-shadow:0 0 0 3px #FF6B35,0 8px 24px rgba(255,107,53,.22)}
+    .track-card-eyebrow{font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+    .track-card-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.6rem;margin-top:8px}
+    .track-card-sub{font-size:.78rem;opacity:.9;margin-top:3px}
+    .track-card-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+    .track-card-chips span{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:6px 11px;font:800 .66rem/1 'Plus Jakarta Sans',sans-serif}
+    .track-card-tick{position:absolute;top:20px;right:20px;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--ocean);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800}
+    .storage-card{display:flex;flex-direction:column}
+    .storage-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+    .storage-row:last-child{border-bottom:none}
+    .storage-icon{font-size:1.05rem;flex-shrink:0}
+    .storage-info{flex:1;min-width:0}
+    .storage-label{font-weight:700;font-size:.85rem}
+    .storage-sub{font-size:.7rem;color:var(--muted);margin-top:1px}
+    .storage-size{font-weight:800;font-size:.78rem;color:var(--ocean-2);flex-shrink:0}
+    .update-banner{display:none;align-items:center;gap:11px;background:var(--grad-ocean);color:#fff;padding:13px 16px;position:fixed;top:0;left:0;right:0;z-index:300;animation:slideDownBanner .3s ease}
+    .update-banner.show{display:flex}
+    .update-banner-icon{font-size:1.05rem;flex-shrink:0}
+    .update-banner-text{flex:1;min-width:0}
+    .update-banner-title{font-weight:800;font-size:.8rem}
+    .update-banner-sub{font-size:.68rem;opacity:.85;margin-top:1px}
+    .update-banner-btn{background:#fff;color:var(--ocean);border:none;border-radius:99px;padding:8px 13px;font-weight:800;font-size:.7rem;cursor:pointer;flex-shrink:0}
+    @keyframes slideDownBanner{0%{transform:translateY(-100%)}100%{transform:none}}
     .wc-textarea{width:100%;border:1.5px solid var(--border);border-radius:14px;padding:13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;color:var(--text);background:var(--card);resize:vertical;margin-bottom:10px}
     .wc-textarea:focus{outline:none;border-color:var(--ocean-2)}
     .wc-result{background:var(--bg);border-radius:12px;padding:15px;border-left:3px solid var(--gold);font-size:.88rem;line-height:1.6;margin-top:12px;text-align:left}
@@ -281,6 +366,9 @@
     [data-theme="dark"] .lab-pattern{color:var(--sky)}
     .lab-explain{font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.45}
     .lab-example{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--bg);border-radius:12px;margin-top:7px}
+    .lab-mistake{display:flex;align-items:flex-start;gap:10px;border-left:3px solid var(--gold);background:#FFF8E7;border-radius:0 12px 12px 0;padding:12px 14px;margin-top:14px;font-size:.82rem;line-height:1.55;color:var(--text)}
+    .lab-mistake-icon{font-size:.95rem;flex-shrink:0}
+    [data-theme="dark"] .lab-mistake{background:rgba(255,193,94,.12);color:var(--text)}
     .lab-speak{background:none;border:none;cursor:pointer;font-size:1.1rem;flex-shrink:0;opacity:.7;transition:opacity .15s,transform .15s}
     .lab-speak:hover{opacity:1;transform:scale(1.15)}
     .lab-ex-k{font-weight:700;color:var(--text);font-size:.95rem}
@@ -310,6 +398,9 @@
     [data-theme="dark"] .stage-item.active .stage-label{color:var(--sky)}
     .stage-next{font-size:.72rem;font-weight:800;color:var(--coral);text-transform:uppercase;letter-spacing:.04em}
     .lab-continue:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+    .lab-continue.sun{background:var(--grad-sun);box-shadow:var(--shadow-coral)}
+    .hearts-note{display:flex;align-items:center;gap:11px;background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:13px 15px;margin-bottom:14px;font-size:.86rem;line-height:1.5}
+    .hearts-note-icon{font-size:1.1rem;flex-shrink:0}
     .exercise-type-badge{display:inline-block;background:var(--bg);color:var(--muted);border-radius:99px;padding:4px 13px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:18px}
     .exercise-word{font-family:'Bricolage Grotesque',sans-serif;font-size:2.4rem;color:var(--ocean);font-weight:600;margin-bottom:6px;line-height:1.15;letter-spacing:-.02em}
     .exercise-example{font-size:.85rem;color:var(--muted);font-style:italic;margin-bottom:20px}
@@ -400,6 +491,37 @@
     @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
     .feedback-bar.correct{background:#D4F5F1;color:#1A7A6E}
     .feedback-bar.wrong{background:#FFE0E3;color:#A0222C}
+    .skill-why{border-radius:12px;padding:13px 15px;margin-top:10px;font-size:.85rem;line-height:1.55}
+    .skill-why-label{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+    .skill-why-text{margin-top:6px}
+    .skill-why.correct{background:#D4F5F1;color:#1A7A6E}
+    .skill-why.wrong{background:#FFF4E0;color:#4A3208}
+    .marker-key{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+    .marker-key-row{display:flex;align-items:baseline;gap:10px;background:var(--bg);border-radius:10px;padding:9px 12px;font-size:.82rem}
+    .marker-key-row.active{background:#D4F5F1;color:#1A7A6E}
+    .marker-key-m{font-weight:800;font-size:.82rem;width:56px;flex-shrink:0}
+    .checkpoint-topics-label{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .checkpoint-topics{display:flex;flex-direction:column;gap:9px;margin-top:11px}
+    .checkpoint-topic-row{display:flex;align-items:center;gap:11px}
+    .checkpoint-topic-check{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem}
+    .checkpoint-topic-check.grammar{background:var(--ocean)}
+    .checkpoint-topic-name{flex:1;font-weight:700;font-size:.85rem}
+    .checkpoint-topic-count{font-weight:700;font-size:.72rem;color:var(--muted)}
+    .checkpoint-review-link{display:block;width:100%;text-align:center;margin-top:10px;background:none;border:none;font-weight:700;font-size:.78rem;color:var(--muted);text-decoration:underline;cursor:pointer}
+    .dc-hero{position:relative;overflow:hidden;border-radius:var(--radius);padding:22px 20px;color:#fff;background:var(--grad-sun);box-shadow:var(--shadow-coral)}
+    .dc-hero-date{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.92}
+    .dc-hero-prompt{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.35rem;line-height:1.3;margin-top:10px}
+    .dc-hero-sub{font-size:.75rem;opacity:.92;margin-top:8px}
+    .dc-record-btn{width:78px;height:78px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;color:#fff;background:var(--coral);box-shadow:0 8px 22px rgba(194,69,26,.34);transition:transform .15s}
+    .dc-record-btn:hover{transform:scale(1.05)}
+    .dc-record-label{text-align:center;font-weight:800;font-size:.75rem;color:var(--ocean);margin-top:12px}
+    [data-theme="dark"] .dc-record-label{color:var(--sky)}
+    .dc-history{display:flex;flex-direction:column;gap:8px}
+    .dc-history-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+    .dc-history-row.locked{opacity:.5}
+    .dc-history-status{width:26px;height:26px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;background:var(--bg);border:1.5px solid var(--border);color:var(--muted)}
+    .dc-history-row.done .dc-history-status{background:var(--green);border-color:var(--green);color:#fff}
+    .dc-history-text{flex:1;font-size:.8rem;font-weight:700}
     .next-btn{width:100%;padding:15px;background:var(--grad-sun);color:#fff;border:none;border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:var(--shadow-coral)}
     .next-btn:active{transform:scale(.97)}
     .next-btn:hover{background:#E85A25}
@@ -552,11 +674,22 @@
     .antonio-listening-ring{position:absolute;inset:8px;border-radius:50%;border:3px solid var(--coral);opacity:0;pointer-events:none}
     .antonio.listening .antonio-listening-ring{animation:listen-pulse 1.2s ease-out infinite}
     @keyframes listen-pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}
-    /* Small António in the chat header */
-    .antonio-chat-avatar{width:56px;height:56px;flex-shrink:0;border-radius:50%;background:var(--grad-glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:var(--shadow)}
-    .antonio-chat-avatar .antonio{width:52px;height:52px}
-    .antonio-chat-avatar .antonio-emoji{font-size:36px;filter:none}
-    .antonio-chat-avatar .antonio-listening-ring{display:none}
+    /* António avatar, sized up as the hero of the Talk screen */
+    .antonio-chat-avatar{width:120px;height:120px;flex-shrink:0;border-radius:50%;background:var(--grad-glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:var(--shadow)}
+    .antonio-chat-avatar .antonio{width:112px;height:112px}
+    .antonio-chat-avatar .antonio-emoji{font-size:70px;filter:none}
+    .antonio-hero{display:flex;flex-direction:column;align-items:center;padding:6px 0 14px}
+    .antonio-hero-avatar{position:relative;cursor:pointer}
+    .antonio-hero-avatar .antonio-listening-ring{display:block}
+    .antonio-wave{display:flex;align-items:flex-end;justify-content:center;gap:3px;height:26px;margin-top:12px}
+    .wave-bar{width:3px;height:5px;border-radius:99px;background:rgba(8,131,149,.3);transition:height .15s}
+    .antonio-hero:has(.antonio.talking) .wave-bar,
+    .antonio-hero:has(.antonio.listening) .wave-bar{background:var(--coral);animation:wave-bounce .8s ease-in-out infinite}
+    .wave-bar:nth-child(odd){animation-delay:.15s}
+    .wave-bar:nth-child(3n){animation-delay:.3s}
+    @keyframes wave-bounce{0%,100%{height:5px}50%{height:22px}}
+    .antonio-hero-hint{font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;color:var(--ocean);margin-top:9px}
+    [data-theme="dark"] .antonio-hero-hint{color:var(--sky)}
 
     /* Apply to feedback */
     .feedback-bar.correct{animation:slideUp .2s ease, correct-glow .6s ease .1s}
@@ -683,6 +816,15 @@
     .story-word:hover,.story-word:active{background:var(--sky);color:#fff}
     .story-e{font-size:.82rem;color:var(--muted);font-style:italic;display:none}
     .story-line.show-trans .story-e{display:block}
+    .story-line.story-line-active{background:var(--bg);border-radius:12px;padding:10px;margin:0 -10px 18px}
+    .story-cover{width:100%;height:110px;border-radius:16px;background:repeating-linear-gradient(135deg,var(--bg) 0 9px,var(--card) 9px 18px);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2.6rem}
+    .story-player{background:var(--bg);border-radius:16px;padding:14px 16px;margin-top:14px}
+    .story-progress-wrap{background:var(--border);border-radius:99px;height:6px;overflow:hidden}
+    .story-progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--ocean));border-radius:99px;transition:width .3s}
+    .story-player-btn{background:none;border:none;font-size:.85rem;font-weight:800;color:var(--muted);cursor:pointer}
+    .story-play-btn{width:52px;height:52px;border-radius:50%;background:var(--grad-ocean);color:#fff;font-size:1.1rem;box-shadow:0 6px 18px rgba(10,77,104,.3)}
+    .story-rate-chip{background:var(--card);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:6px 12px;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+    .story-rate-chip.active{background:var(--ocean);color:#fff;border-color:transparent}
     .word-popup{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ocean);color:#fff;border-radius:14px;padding:12px 20px;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;max-width:90vw;animation:fadeIn .2s}
     .word-popup .wp-k{font-weight:800;font-size:1rem}
     .song-lyric{margin-top:8px;padding-left:10px;border-left:3px solid var(--ocean-2);display:flex;flex-direction:column;gap:5px}
@@ -1012,23 +1154,33 @@
   </div>
 </header>
 
-<nav id="nav-tabs">
-  <div class="nav-tab active" onclick="showTab('home')">🏠 Home</div>
-  <div class="nav-tab" onclick="showTab('path')">🧭 Path</div>
-  <div class="nav-tab" onclick="showTab('review')">📋 Practice</div>
-  <div class="nav-tab" onclick="showTab('conversation')">💬 Chat</div>
-  <div class="nav-tab" onclick="showTab('reading')">📖 Read</div>
-  <div class="nav-tab" onclick="showTab('grammar')">📐 Learn</div>
-  <div class="nav-tab" onclick="showTab('lessons')">📚 Lessons</div>
-  <div class="nav-tab" onclick="showTab('phrasebook')">📔 Phrases</div>
-  <div class="nav-tab" onclick="showTab('translate')">🔄 Translate</div>
-  <div class="nav-tab" onclick="showTab('achievements')">🏆 Badges</div>
+<!-- Sub-nav row: rebuilt by renderSubNav() to show only the active bottom tab's sub-screens -->
+<nav id="nav-tabs"></nav>
+
+<nav id="bottom-nav">
+  <button class="bottom-nav-btn active" data-tab="home" onclick="showMainTab('home')"><span class="bnav-icon">🏝️</span><span class="bnav-label">Home</span></button>
+  <button class="bottom-nav-btn" data-tab="learn" onclick="showMainTab('learn')"><span class="bnav-icon">🎓</span><span class="bnav-label">Learn</span></button>
+  <button class="bottom-nav-btn" data-tab="talk" onclick="showMainTab('talk')"><span class="bnav-icon">💬</span><span class="bnav-label">Talk</span></button>
+  <button class="bottom-nav-btn" data-tab="words" onclick="showMainTab('words')"><span class="bnav-icon">📖</span><span class="bnav-label">Words</span></button>
+  <button class="bottom-nav-btn" data-tab="community" onclick="showMainTab('community')"><span class="bnav-icon">🌐</span><span class="bnav-label">Community</span></button>
 </nav>
 
 <!-- SETTINGS PANEL -->
 <div id="settings-panel" onclick="closeSettings(event)">
   <div class="settings-sheet">
     <div class="settings-title">⚙️ Settings</div>
+    <div class="profile-header">
+      <div class="profile-avatar" id="profile-avatar">L</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profile-name-display">Learner</div>
+        <div class="profile-sub" id="profile-sub-display">Level 1</div>
+      </div>
+      <button class="profile-edit-btn" onclick="toggleProfileNameEdit()">Edit</button>
+    </div>
+    <div id="profile-name-edit" style="display:none;margin-bottom:14px">
+      <input type="text" id="profile-name-input" class="type-input" style="width:100%" placeholder="Your name" />
+      <button class="start-btn" style="margin-top:8px" onclick="saveProfileName()">Save</button>
+    </div>
     <div class="setting-row">
       <div><div class="setting-label">🌙 Dark Mode</div><div class="setting-sub">Easier on the eyes at night</div></div>
       <label class="toggle-switch"><input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()"><span class="toggle-slider"></span></label>
@@ -1043,6 +1195,14 @@
         <option value="kriolu">🇨🇻 Kriolu</option>
         <option value="portuguese">🇵🇹 Português</option>
       </select>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">🗺️ Language Tracks</div><div class="setting-sub">Compare progress and switch with more detail</div></div>
+      <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="closeSettings();showScreen('track');renderLanguageTrack()">View ›</button>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">🤖 AI Tutor Setup</div><div class="setting-sub">Connection status, what it powers, your API key</div></div>
+      <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="closeSettings();showScreen('ai');renderAiSetup()">View ›</button>
     </div>
     <div class="setting-row" id="dialect-row">
       <div><div class="setting-label">🏝️ Dialect Focus</div><div class="setting-sub">Base content is Santiago; São Vicente adds variant tips</div></div>
@@ -1089,6 +1249,12 @@
         <button class="font-btn" onclick="setFont('1.1rem','L')">L</button>
       </div>
     </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;text-align:center">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;color:var(--ocean);font-size:calc(var(--fs, 1rem) * 1.7)">sodadi</div>
+      <div style="font-weight:800;letter-spacing:.05em;color:var(--coral);margin-top:6px;font-size:calc(var(--fs, 1rem) * .68)">/so·DA·di/</div>
+      <div style="font-weight:700;margin-top:12px;font-size:calc(var(--fs, 1rem) * .9)">a deep longing for someone absent</div>
+      <div style="font-style:italic;color:var(--muted);margin-top:8px;font-size:calc(var(--fs, 1rem) * .78)">N ten sodadi di nha mãi.</div>
+    </div>
     <div class="setting-row">
       <div><div class="setting-label">🎯 Weekly XP Goal</div><div class="setting-sub">XP target per week</div></div>
       <select id="weekly-goal-select" onchange="setWeeklyGoal(this.value)" style="padding:6px 10px;border:2px solid var(--border);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;background:var(--card);color:var(--text)">
@@ -1097,6 +1263,18 @@
         <option value="200">200 XP</option>
         <option value="300">300 XP</option>
       </select>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">🗣️ Reading Voice</div><div class="setting-sub">Pick which voice reads Kriolu aloud</div></div>
+      <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="goToVoicePicker()">Choose ›</button>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">🔁 Auto-speak</div><div class="setting-sub">Read the tutor's replies aloud automatically in Talk</div></div>
+      <label class="toggle-switch"><input type="checkbox" id="settings-autospeak-toggle" onchange="settingsToggleAutoSpeak()"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="setting-row" style="cursor:pointer" onclick="showToast('👨‍👩‍👧 Multiple learner profiles aren\'t available yet.')">
+      <div style="flex:1"><div class="setting-label">👨‍👩‍👧 Add a Child Profile</div><div class="setting-sub">Shorter lessons, no chat, no purchases</div></div>
+      <div style="font-size:1rem;color:var(--ocean-2)">+</div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
       <div><div class="setting-label">🎙️ Premium Voice (ElevenLabs)</div><div class="setting-sub">Paste your Netlify TTS URL for natural voices. Leave blank for the free browser voice.</div></div>
@@ -1113,6 +1291,10 @@
         <input type="file" id="import-file" accept="application/json,.json" style="display:none" onchange="importProgress(event)" />
       </div>
     </div>
+    <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:2px">
+      <div class="setting-label" style="margin-bottom:8px">💾 On This Device</div>
+      <div id="storage-usage" class="storage-card"></div>
+    </div>
     <div class="setting-row" style="justify-content:center">
       <div style="text-align:center">
         <div class="setting-sub" id="build-version">Build —</div>
@@ -1123,6 +1305,15 @@
     </div>
     <button class="close-settings" onclick="closeSettings()">Done</button>
   </div>
+</div>
+
+<div id="update-banner" class="update-banner">
+  <span class="update-banner-icon">⬆️</span>
+  <div class="update-banner-text">
+    <div class="update-banner-title">A newer version is ready</div>
+    <div class="update-banner-sub" id="update-banner-sub"></div>
+  </div>
+  <button class="update-banner-btn" onclick="forceUpdate()">Reload</button>
 </div>
 
 <main id="main">
@@ -1137,6 +1328,7 @@
       <div class="weekly-goal-bar">
         <div style="font-size:.72rem;opacity:.8;margin-top:6px">Weekly goal: <span id="weekly-progress-label">0 / 100 XP</span></div>
         <div class="weekly-goal-wrap"><div class="weekly-goal-fill" id="weekly-goal-fill" style="width:0%"></div></div>
+        <div class="weekly-day-strip" id="weekly-day-strip"></div>
       </div>
     </div>
     <div class="bento">
@@ -1152,10 +1344,11 @@
     </div>
     <div id="level-slot"></div>
     <div id="daily-card-slot"></div>
+    <div id="wotd-slot"></div>
     <div id="placement-slot"></div>
     <div id="insights-slot"></div>
-    <h2 class="section-heading">🏆 Recent Badges</h2>
-    <div class="achievements-strip" id="home-badges"></div>
+    <h2 class="section-heading">🏆 Recent Badges<span style="margin-left:auto;font-size:.7rem;font-weight:800;color:var(--ocean-2);cursor:pointer" onclick="showScreen('achievements')">See all →</span></h2>
+    <div class="achievements-strip" id="home-badges" onclick="showScreen('achievements')" style="cursor:pointer"></div>
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
     <div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
@@ -1234,6 +1427,7 @@
     </div>
     <div id="learntab-verbs-content" style="display:none">
       <p id="verb-blurb" style="font-size:.85rem;color:var(--muted);margin-bottom:12px"></p>
+      <div id="verb-chips" class="verb-chips"></div>
       <input type="text" class="type-input" id="verb-search" placeholder="🔍 Search a verb (e.g. kume, bai)…" oninput="renderVerbList()" style="margin-bottom:14px"/>
       <div id="verb-list"></div>
       <div id="verb-detail" style="display:none"></div>
@@ -1242,6 +1436,13 @@
       <p id="writing-blurb" style="font-size:.85rem;color:var(--muted);margin-bottom:16px"></p>
       <div id="writing-content"></div>
     </div>
+  </div>
+
+  <!-- DIALOGUES -->
+  <div id="screen-dialogues" class="screen">
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Listen to real conversations, then answer questions about them.</p>
+    <div id="dlg-lib-list"></div>
+    <div id="dlg-lib-detail" style="display:none"></div>
   </div>
 
   <!-- READING -->
@@ -1301,6 +1502,7 @@
     <div class="translate-card" id="translate-result-card" style="display:none">
       <div class="translate-label" id="output-label">English</div>
       <div class="translate-output" id="translate-output"></div>
+      <div id="translate-variant" style="display:none;font-size:.72rem;color:var(--ocean-2);margin-top:6px"></div>
       <div class="translate-note" id="translate-note"></div>
       <div class="translate-controls">
         <button class="mic-btn" id="trans-speak-btn" onclick="speakTranslation()" title="Listen">🔊</button>
@@ -1317,6 +1519,7 @@
 
   <!-- ACHIEVEMENTS -->
   <div id="screen-achievements" class="screen">
+    <button class="back-btn" style="margin-bottom:10px" onclick="exitExercise()">←</button>
     <h2 class="section-heading">🏆 Achievements</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Earn badges by completing challenges</p>
     <div class="achievements-grid" id="achievements-grid"></div>
@@ -1324,19 +1527,96 @@
 
   <!-- PHRASEBOOK -->
   <div id="screen-phrasebook" class="screen">
-    <h2 class="section-heading">📖 Phrase Book</h2>
-    <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center">
-      <div style="font-size:.82rem;color:var(--muted)">⭐ <span id="fav-count">0</span> favourites saved</div>
-      <button onclick="showFavourites()" style="padding:5px 12px;border:1.5px solid var(--ocean);border-radius:99px;background:none;color:var(--ocean);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer">View Favourites</button>
+    <div id="dict-list-controls">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between">
+        <h2 class="section-heading" style="margin-bottom:4px">📔 Dictionary</h2>
+        <div style="font-size:.72rem;color:var(--muted);font-weight:700;padding-bottom:6px" id="dict-word-count"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin:11px 0;box-shadow:var(--shadow)">
+        <div style="font-size:.85rem;opacity:.5">🔍</div>
+        <input type="text" id="dict-search" class="type-input" style="flex:1;min-width:0;border:none;outline:none;background:transparent;padding:0" placeholder="Search Kriolu or English…" oninput="renderPhrasebook()" />
+      </div>
+      <div style="display:flex;background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:12px;padding:3px;margin-bottom:9px">
+        <div id="dict-dir-kr" class="dict-dir-tab active" onclick="setDictDirection(false)">Kriolu → English</div>
+        <div id="dict-dir-en" class="dict-dir-tab" onclick="setDictDirection(true)">English → Kriolu</div>
+      </div>
+      <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:13px;padding-bottom:2px" id="dict-filter-chips">
+        <div class="dict-chip active" onclick="setDictFilter('all',this)">All</div>
+        <div class="dict-chip" onclick="setDictFilter('santiago',this)">Santiago</div>
+        <div class="dict-chip" onclick="setDictFilter('saovicente',this)">S. Vicente</div>
+        <div class="dict-chip" onclick="setDictFilter('saved',this)">★ Saved</div>
+      </div>
+      <div id="phrasebook-content"></div>
     </div>
-    <div id="phrasebook-content"></div>
+    <div id="dict-detail" style="display:none"></div>
+  </div>
+
+  <!-- COMMUNITY -->
+  <div id="screen-community" class="screen">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <h2 class="section-heading" style="margin:0;flex:1">🌐 Community</h2>
+      <button onclick="toggleComposeBox()" title="Write a post" style="width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--grad-sun);color:#fff;border:none;box-shadow:var(--shadow-coral);cursor:pointer;font-size:.95rem">✎</button>
+    </div>
+    <div id="community-compose" style="display:none;margin-bottom:14px">
+      <textarea id="community-compose-text" class="type-input" style="width:100%;min-height:64px;resize:vertical" placeholder="Share something with the community…"></textarea>
+      <button class="start-btn" style="margin-top:8px" onclick="postCommunityMessage()">Post</button>
+    </div>
+    <div id="community-content"></div>
+  </div>
+
+  <!-- LANGUAGE TRACK -->
+  <div id="screen-track" class="screen">
+    <button class="back-btn" style="margin-bottom:10px" onclick="showScreen('home')">←</button>
+    <h2 class="section-heading">Which language today?</h2>
+    <p style="font-size:.85rem;color:var(--muted);line-height:1.5;margin-bottom:16px">Cabo Verde runs on both. Kriolu is what people speak; Portuguese is what school, paperwork and the news are written in.</p>
+    <div id="track-cards"></div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:15px 16px;box-shadow:var(--shadow)">
+      <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.85rem">Show both in the preview below</div><div style="font-size:.72rem;color:var(--muted);line-height:1.45;margin-top:2px">Adds a Portuguese line to the preview card here. (This app teaches one active course at a time — it doesn't yet add a Portuguese line under every word screen-wide.)</div></div>
+      <label class="toggle-switch"><input type="checkbox" id="track-both-toggle" onchange="renderLanguageTrack()"><span class="toggle-slider"></span></label>
+    </div>
+    <div id="track-preview" class="grammar-detail-card" style="margin-top:12px"></div>
+  </div>
+
+  <!-- AI TUTOR SETUP -->
+  <div id="screen-ai" class="screen">
+    <button class="back-btn" style="margin-bottom:10px" onclick="showScreen('home')">←</button>
+    <h2 class="section-heading">AI tutor setup</h2>
+    <div id="ai-status-card" style="border-radius:16px;padding:14px 16px;margin-bottom:16px"></div>
+    <div class="checkpoint-topics-label" style="margin-bottom:8px">What the AI powers</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2px 16px;box-shadow:var(--shadow);margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">💬</div><div><div style="font-weight:700;font-size:.85rem">Conversation with your tutor</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Sôr António and Prof. Amália</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">✍️</div><div><div style="font-weight:700;font-size:.85rem">Writing feedback</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Gentle corrections on what you write</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">🔊</div><div><div style="font-weight:700;font-size:.85rem">Natural voice</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Falls back to your device voice offline</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0"><div style="font-size:17px">🧠</div><div><div style="font-weight:700;font-size:.85rem">Tutor memory</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Remembers what you struggle with</div></div></div>
+    </div>
+    <div class="checkpoint-topics-label" style="margin-bottom:8px">Your own API key · optional</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px">
+      <div style="font-size:.78rem;line-height:1.55">Leave this blank and the app uses the shared connection. Add your own key for higher limits — it is stored on this device only and never sent anywhere but the model.</div>
+      <div style="display:flex;align-items:center;gap:9px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:12px">
+        <input type="password" id="ai-setup-key-input" style="flex:1;border:none;outline:none;background:transparent;font:600 .8rem/1 ui-monospace,Menlo,monospace;color:var(--text)" placeholder="sk-ant-..." />
+        <span onclick="toggleAiKeyVisibility(this)" style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;color:var(--ocean-2);cursor:pointer;flex-shrink:0">SHOW</span>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:11px">
+        <button style="flex:1;background:var(--ocean-fill,var(--ocean));color:#fff;border:none;border-radius:12px;padding:13px;font:800 .78rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer" onclick="saveApiKeyFromAiSetup()">Save key</button>
+        <button style="flex:none;background:var(--bg);border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:13px 16px;font:800 .78rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer" onclick="clearApiKeyFromAiSetup()">Clear</button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)">
+      <div style="font-size:1.1rem">📡</div>
+      <div style="font-size:.75rem;color:var(--muted);line-height:1.5">Lessons, review and the phrasebook all run without a connection — only the tutor chat, translate and writing feedback need one.</div>
+    </div>
+    <div style="text-align:center;font-size:.68rem;color:var(--muted);margin-top:16px;line-height:1.6">Nothing you write is used for training.<br>Clearing the key stops all AI features immediately.</div>
   </div>
 
   <!-- CONVERSATION -->
   <div id="screen-conversation" class="screen">
     <div class="convo-header">
-      <div class="antonio-chat-avatar">${''}</div>
       <div><h3 id="antonio-chat-name">Sôr António</h3><p id="antonio-chat-status">Your tutor • Powered by Claude</p></div>
+    </div>
+    <div class="antonio-hero">
+      <div class="antonio-hero-avatar" onclick="replayLastAntonio()"><div class="antonio-chat-avatar"></div></div>
+      <div class="antonio-wave" id="antonio-wave"></div>
+      <div class="antonio-hero-hint">Tap Sôr António to hear him again</div>
     </div>
     <div class="api-key-panel">
       <label>API Key:</label>
@@ -1363,7 +1643,7 @@
           <option value="native">Native speed</option>
         </select>
       </div>
-      <button class="challenge-btn" onclick="startDailyChallenge()">🎯 Daily Challenge</button>
+      <button class="challenge-btn" onclick="renderDailyChallengeScreen()">🎯 Daily Challenge</button>
     </div>
     <div class="chat-section-row">
       <span class="chat-label">🎭 Scenarios:</span>
@@ -10122,7 +10402,8 @@ const PT_DIALOGUES = [
       { q:'What does the customer order first?', opts:['Tea','Coffee','Juice','Beer'], a:1 },
       { q:'Does she want milk?', opts:['Yes','No','A little','She does not say'], a:1 },
       { q:'How much is it?', opts:['€2.50','€3.50','€1.50','€5.00'], a:0 },
-    ] },
+    ],
+    vocab:['se faz favor','com leite / sem leite','com gás / sem gás','Quanto é?'] },
   { id:'pt_direcoes', icon:'🗺️', title:'A Pedir Direções', titleE:'Asking for Directions', level:'A2',
     lines:[
       { sp:'Turista', k:'Desculpe, onde fica a estação de comboios?', e:'Excuse me, where is the train station?' },
@@ -10139,7 +10420,8 @@ const PT_DIALOGUES = [
       { q:'Which way after the traffic light?', opts:['Right','Left','Straight','Back'], a:1 },
       { q:'The station is next to:', opts:['The bank','The church','A café','The market'], a:0 },
       { q:'How long does it take on foot?', opts:['Five minutes','Fifteen minutes','Half an hour','An hour'], a:0 },
-    ] },
+    ],
+    vocab:['em frente','vire à esquerda','ao lado do','a pé'] },
   { id:'pt_medico', icon:'🩺', title:'No Médico', titleE:'At the Doctor', level:'B1',
     lines:[
       { sp:'Médica', k:'Boa tarde. Diga-me, o que sente?', e:'Good afternoon. Tell me, what do you feel?' },
@@ -10156,7 +10438,8 @@ const PT_DIALOGUES = [
       { q:'What hurts?', opts:['His head','His throat','His stomach','His back'], a:1 },
       { q:'What had he taken already?', opts:['Nothing but tea with honey','Antibiotics','Painkillers','A prescription'], a:0 },
       { q:'How often must he take the medicine?', opts:['Once a day','Twice a day','Three times','Only if worse'], a:1 },
-    ] },
+    ],
+    vocab:['dói-me a garganta','febre','receita','se piorar'] },
   { id:'pt_hotel', icon:'🏨', title:'No Hotel', titleE:'At the Hotel', level:'B1',
     lines:[
       { sp:'Rececionista', k:'Boa noite. Tem reserva?', e:'Good evening. Do you have a booking?' },
@@ -10173,7 +10456,8 @@ const PT_DIALOGUES = [
       { q:'How many nights is the booking?', opts:['One','Two','Three','A week'], a:2 },
       { q:'When is breakfast served?', opts:['7:30 to 10:00','6:00 to 9:00','8:00 to 11:00','It is not included'], a:0 },
       { q:'What does the guest ask to do tomorrow?', opts:['Extend the stay','Leave the suitcase','Change rooms','Order a taxi'], a:1 },
-    ] },
+    ],
+    vocab:['reserva','quarto duplo','pequeno-almoço','palavra-passe'] },
   { id:'pt_c1_heranca', icon:'🏚️', title:'A Casa da Avó', titleE:'Grandmother\'s House', level:'C1',
     lines:[
       { sp:'Sandra', k:'Recebeste o email do advogado?', e:'Did you get the lawyer\'s email?' },
@@ -10322,7 +10606,8 @@ const PT_DIALOGUES_EXTRA = [
       { q:'How many tomatoes does she buy?', opts:['Half a kilo','One kilo','Two kilos','A dozen'], a:1 },
       { q:'How much are the bananas per kilo?', opts:['€1.20','€3.50','€2.00','€0.50'], a:0 },
       { q:'What else does the seller offer?', opts:['Fresh beans','Potatoes','Fish','Bread'], a:0 },
-    ] },
+    ],
+    vocab:['quilo','apanhados hoje','a quanto estão','feijão fresco'] },
   { id:'pt_telefone', icon:'📞', title:'Ao Telefone', titleE:'On the Phone', level:'A2',
     lines:[
       { sp:'Rececionista', k:'Clínica São João, bom dia.', e:'São João Clinic, good morning.' },
@@ -10339,7 +10624,8 @@ const PT_DIALOGUES_EXTRA = [
       { q:'Why is she calling?', opts:['To cancel','To book an appointment','To ask for results','To complain'], a:1 },
       { q:'When is the appointment?', opts:['Thursday at eleven','Friday at ten','Monday at nine','Tuesday at eight'], a:0 },
       { q:'What must she bring?', opts:['Money only','Health card and previous exams','Nothing','A prescription'], a:1 },
-    ] },
+    ],
+    vocab:['marcar uma consulta','vaga','cartão de utente','exames anteriores'] },
   { id:'pt_farmacia', icon:'💊', title:'Na Farmácia', titleE:'At the Pharmacy', level:'A2',
     lines:[
       { sp:'Farmacêutico', k:'Boa tarde. Em que posso ajudar?', e:'Good afternoon. How can I help?' },
@@ -10356,7 +10642,8 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What is the problem?', opts:['A cough','Headaches for two days','A fever','A cut'], a:1 },
       { q:'How often should she take the tablets?', opts:['Every eight hours','Once a day','Every hour','Only at night'], a:0 },
       { q:'What if it does not improve?', opts:['Take more','See a doctor after three days','Stop eating','Come back tomorrow'], a:1 },
-    ] },
+    ],
+    vocab:['dores de cabeça','sem receita','de oito em oito horas','consulte um médico'] },
   { id:'pt_bilhete', icon:'🎫', title:'Comprar um Bilhete', titleE:'Buying a Ticket', level:'A2',
     lines:[
       { sp:'Passageiro', k:'Boa tarde. Um bilhete para Coimbra, se faz favor.', e:'Good afternoon. A ticket to Coimbra, please.' },
@@ -10373,7 +10660,8 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What kind of ticket?', opts:['One way','Return','Monthly pass','Group'], a:1 },
       { q:'Which platform?', opts:['Three','Ten','Fifteen','Two'], a:0 },
       { q:'How long is the journey?', opts:['About two hours','Half an hour','Four hours','Ten minutes'], a:0 },
-    ] },
+    ],
+    vocab:['ida e volta','cais','demora','aceita cartão'] },
   { id:'pt_banco2', icon:'🏦', title:'No Banco', titleE:'At the Bank', level:'B1',
     lines:[
       { sp:'Funcionário', k:'Boa tarde. Tem senha?', e:'Good afternoon. Do you have a queue ticket?' },
@@ -10390,7 +10678,9 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What does the client want?', opts:['To open an account','To transfer money to Cape Verde','A loan','A new card'], a:1 },
       { q:'What is needed for the transfer?', opts:['The recipient\'s IBAN','A passport photo','A witness','Nothing'], a:0 },
       { q:'How long does the money take?', opts:['Two working days','Immediately','A week','A month'], a:0 },
-    ] },
+    ],
+    vocab:['senha','transferência','IBAN','comissão','dias úteis'],
+    note:['A transfer home is the most common bank errand in the diaspora — note ', 'dias úteis', ', working days, not calendar days.'] },
   { id:'pt_casa2', icon:'🔑', title:'Arrendar uma Casa', titleE:'Renting a Flat', level:'B1',
     lines:[
       { sp:'Senhorio', k:'Boa tarde. Então, o que achou do apartamento?', e:'Good afternoon. So, what did you think of the flat?' },
@@ -10408,7 +10698,9 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What did she like most?', opts:['The light','The kitchen','The price','The neighbours'], a:0 },
       { q:'What is included in the rent?', opts:['Water only','Everything','Nothing','Gas and electricity'], a:0 },
       { q:'What does the landlord offer?', opts:['€25 off per month for a two-year contract','A free month','No deposit','New furniture'], a:0 },
-    ] },
+    ],
+    vocab:['renda','despesas','caução','virado a sul','contrato'],
+    note:['The negotiation turns on ', 'Se assinar por dois anos', ' — the conditional is how you ask for a discount without demanding one.'] },
   { id:'pt_emprego2', icon:'💼', title:'Entrevista de Emprego', titleE:'A Job Interview', level:'B1',
     lines:[
       { sp:'Diretora', k:'Fale-me um pouco do seu percurso.', e:'Tell me a little about your background.' },
@@ -10426,7 +10718,8 @@ const PT_DIALOGUES_EXTRA = [
       { q:'How long did he work in catering?', opts:['Five years','One year','Ten years','Six months'], a:0 },
       { q:'Why did he leave?', opts:['The restaurant closed','He was fired','Bad pay','He moved city'], a:0 },
       { q:'When could he start?', opts:['The first of next month','Immediately','In six months','He did not say'], a:0 },
-    ] },
+    ],
+    vocab:['percurso','restauração','habituado','a partir de'] },
   { id:'pt_jantar', icon:'🍲', title:'Jantar de Família', titleE:'Family Dinner', level:'B1',
     lines:[
       { sp:'Avó', k:'Senta-te, filho. Já puseste a mesa?', e:'Sit down, son. Have you set the table?' },
@@ -10443,7 +10736,9 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What is for dinner?', opts:['Cachupa','Fish soup','Rice and beans','Bread'], a:0 },
       { q:'Why is there no recipe?', opts:['She forgot it','You learn by watching','It is a secret','It was lost'], a:1 },
       { q:'What will the grandson do on Saturday?', opts:['Watch her cook','Cook alone','Go out','Write it down'], a:0 },
-    ] },
+    ],
+    vocab:['pôr a mesa','cachupa','receita','perdem-se'],
+    note:['', 'Aprende-se a ver', ' — you learn by watching. The impersonal se is everywhere in kitchen talk.'] },
   { id:'pt_escola2', icon:'🏫', title:'Reunião na Escola', titleE:'A School Meeting', level:'B1',
     lines:[
       { sp:'Professora', k:'Obrigada por ter vindo. Queria falar da Inês.', e:'Thank you for coming. I wanted to talk about Inês.' },
@@ -10460,7 +10755,8 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What is the concern about Inês?', opts:['Bad grades','She is quieter in class','She is late','She fights'], a:1 },
       { q:'What does the father link it to?', opts:['The move','A friend','Illness','Homework'], a:0 },
       { q:'What is the first step?', opts:['A working group with friendly classmates','Extra classes','Change school again','See a doctor'], a:0 },
-    ] },
+    ],
+    vocab:['nada de grave','mudança','grupo de trabalho','psicóloga'] },
   { id:'pt_servicos', icon:'📄', title:'Na Loja do Cidadão', titleE:'At the Citizen Shop', level:'B2',
     lines:[
       { sp:'Funcionária', k:'Senha quarenta e sete, balcão dois. Boa tarde.', e:'Ticket forty-seven, desk two. Good afternoon.' },
@@ -10478,7 +10774,9 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What is he renewing?', opts:['His residence permit','His passport','His driving licence','His health card'], a:0 },
       { q:'What document is missing?', opts:['Proof of social security contributions','His passport','Payslips','Proof of address'], a:0 },
       { q:'What is the deadline?', opts:['Friday','Monday','Six weeks','No deadline'], a:0 },
-    ] },
+    ],
+    vocab:['autorização de residência','comprovativo','descontos','prazo expira'],
+    note:['This is the scene that decides whether someone stays. ', 'o prazo expira', ' — the deadline expires — is the phrase to recognise instantly.'] },
   { id:'pt_discussao', icon:'🗣️', title:'Uma Discussão Amigável', titleE:'A Friendly Argument', level:'B2',
     lines:[
       { sp:'Rui', k:'Acho que devíamos emigrar. Aqui não há oportunidades.', e:'I think we should emigrate. There are no opportunities here.' },
@@ -10495,7 +10793,9 @@ const PT_DIALOGUES_EXTRA = [
       { q:'What does Rui want?', opts:['To emigrate','To study','To stay','To open a business'], a:0 },
       { q:'What is Sara\'s main counter-argument?', opts:['Life abroad costs double and you are far from everything','Salaries are lower','It is illegal','Nobody speaks the language'], a:0 },
       { q:'What does Sara suggest instead?', opts:['Changing field, studying at night','Emigrating sooner','Doing nothing','Moving city'], a:0 },
-    ] },
+    ],
+    vocab:['não concordo totalmente','por um lado','por outro','talvez'],
+    note:['Disagreeing politely is its own skill. ', 'Percebo o que dizes, mas…', ' is the softener that keeps an argument friendly.'] },
   { id:'pt_regresso', icon:'🛬', title:'Regresso às Ilhas', titleE:'Back to the Islands', level:'B2',
     lines:[
       { sp:'Amigo', k:'Então, quantos anos estiveste fora?', e:'So, how many years were you away?' },
@@ -10513,7 +10813,9 @@ const PT_DIALOGUES_EXTRA = [
       { q:'How long was he away?', opts:['Twenty-two years','Nineteen years','Ten years','Two years'], a:0 },
       { q:'What has changed most?', opts:['The roads','The people','The language','The food'], a:0 },
       { q:'What did he conclude?', opts:['He belongs to both places','He belongs nowhere','He should not have returned','He will leave again'], a:0 },
-    ] },
+    ],
+    vocab:['estiveste fora','alcatrão','pertencer','não se escolhe'],
+    note:['The whole scene builds to one line: ', 'pertenço aos dois sítios', ' — I belong to both places. This is the diaspora lesson.'] },
 ];
 
 const PT_READING_PASSAGES = [
@@ -11261,9 +11563,59 @@ function switchLanguage(lang) {
   } catch (e) {}
   saveState();
   applyLanguageChrome();
+  const trackScreen = document.getElementById('screen-track');
+  if (trackScreen && trackScreen.classList.contains('active')) renderLanguageTrack();
   if (!document.getElementById('onboard-overlay')) {
     showTab('home');
     showToast(LANGS[lang].flag + ' ' + LANGS[lang].label);
+  }
+}
+
+// Language Track screen — a bigger, side-by-side view of the same course
+// switch Settings already offers, with real per-language stats (masteredWords/
+// lessonsCompleted/learnerLevel are already tracked separately per language via
+// LANG_PROGRESS_FIELDS; XP and streak are shared across both, by design, so
+// they aren't shown per-card here).
+function pickLanguageTrack(lang) {
+  if (lang === currentLang()) return;
+  switchLanguage(lang);   // this internally navigates to Home when done
+  showScreen('track');    // ...so bring the user right back to this screen
+  renderLanguageTrack();
+}
+function renderLanguageTrack() {
+  const cardsEl = document.getElementById('track-cards');
+  if (!cardsEl) return;
+  const active = currentLang();
+  const levelLabel = { beginner: 'Beginner', some: 'Some words', conversational: 'Conversational' };
+  const statsFor = lang => {
+    if (lang === active) return { words: state.masteredWords || 0, lessons: state.lessonsCompleted || 0, level: state.learnerLevel };
+    const bucket = (state.langData && state.langData[lang]) || {};
+    return { words: bucket.masteredWords || 0, lessons: bucket.lessonsCompleted || 0, level: bucket.learnerLevel };
+  };
+  const trackCard = (lang, title, sub, gradClass) => {
+    const st = statsFor(lang);
+    const chips = [`${st.words} words`, `${st.lessons} lessons`, st.level ? (levelLabel[st.level] || st.level) : null].filter(Boolean);
+    return `<div class="track-card ${gradClass}${active === lang ? ' active' : ''}" onclick="pickLanguageTrack('${lang}')">
+      <div class="track-card-eyebrow">${active === lang ? 'Your main track' : 'Second track'}</div>
+      <div class="track-card-title">${title}</div>
+      <div class="track-card-sub">${sub}</div>
+      <div class="track-card-chips">${chips.map(c => `<span>${escapeHTML(c)}</span>`).join('')}</div>
+      <div class="track-card-tick">${active === lang ? '✓' : ''}</div>
+    </div>`;
+  };
+  cardsEl.innerHTML =
+    trackCard('kriolu', 'Kriolu', 'Cape Verdean Creole · Santiago &amp; S. Vicente', 'track-card-kr') +
+    trackCard('portuguese', 'Português', 'European Portuguese · the written language of the islands', 'track-card-pt');
+
+  const both = document.getElementById('track-both-toggle')?.checked;
+  const preview = document.getElementById('track-preview');
+  if (preview) {
+    preview.innerHTML = `
+      <div class="checkpoint-topics-label">Preview</div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.4rem;color:var(--ocean);margin-top:8px">sodadi</div>
+      <div style="font-size:.85rem;margin-top:6px">a deep longing for someone absent</div>
+      ${both ? `<div style="font-size:.85rem;color:var(--ocean-2);margin-top:3px">saudade · <span style="color:var(--muted)">substantivo feminino</span></div>` : ''}
+    `;
   }
 }
 // Rebuild progress that is DERIVED from word scores, against the active language's
@@ -13647,7 +13999,7 @@ let state = {
   streakFreezes: 1, streakFrozenDate: null, longestStreak: 0,
   xpHistory: {}, chatXPDate: null, chatXPToday: 0,
   session: null, qIndex: 0, score: 0, wrongItems: [], awaitingNext: false, writingChallengeDone: false,
-  lives: 3, chatHistory: [], tutorMemory: '', savedFromChat: [], dailyChallengeDate: null, chatDifficulty: 'auto', notifEnabled: false, reminderHour: 19, lastReminderDate: null, checkpointsPassed: {}, grammarFocus: [], shadowDone: 0, lastWarmupDate: null, onboarded: false, learnerGoal: null, learnerLevel: null, dialect: 'santiago', dialoguesDone: [], lastReviewDate: null, lastLessonDate: null, lastApplyDate: null, spotlightsDone: 0, markerCorrect: 0, podcastRuns: 0, microfixDone: 0, warmupDone: 0, antonioAsks: 0, grammarSkillsDone: {}, errorReports: [], dailyStats: {}, recentMiss: [], passagesDone: [], lang: 'kriolu', langData: {}, darkMode: false, sfx: true, fontSize: '1rem',
+  lives: 3, chatHistory: [], tutorMemory: '', savedFromChat: [], dailyChallengeDate: null, chatDifficulty: 'auto', notifEnabled: false, reminderHour: 19, lastReminderDate: null, checkpointsPassed: {}, grammarFocus: [], shadowDone: 0, lastWarmupDate: null, onboarded: false, learnerGoal: null, learnerLevel: null, dialect: 'santiago', alupecSpelling: true, userName: '', dialoguesDone: [], lastReviewDate: null, lastLessonDate: null, lastApplyDate: null, spotlightsDone: 0, markerCorrect: 0, podcastRuns: 0, microfixDone: 0, warmupDone: 0, antonioAsks: 0, grammarSkillsDone: {}, errorReports: [], dailyStats: {}, recentMiss: [], passagesDone: [], lang: 'kriolu', langData: {}, darkMode: false, sfx: true, fontSize: '1rem',
 };
 
 const MASTERY_THRESHOLD = 3; // correct answers needed to "master" a word
@@ -13777,10 +14129,11 @@ function saveState() {
     longestStreak:state.longestStreak, xpHistory:state.xpHistory,
     chatXPDate:state.chatXPDate, chatXPToday:state.chatXPToday,
     chatHistory:(state.chatHistory||[]).slice(-40), tutorMemory:state.tutorMemory,
-    savedFromChat:state.savedFromChat, dailyChallengeDate:state.dailyChallengeDate, chatDifficulty:state.chatDifficulty,
+    savedFromChat:state.savedFromChat, dailyChallengeDate:state.dailyChallengeDate, dailyChallengesSeen:state.dailyChallengesSeen, chatDifficulty:state.chatDifficulty,
+    communityLikes:state.communityLikes, communityPosts:state.communityPosts, communityFilter:state.communityFilter,
     notifEnabled:state.notifEnabled, reminderHour:state.reminderHour, lastReminderDate:state.lastReminderDate,
     checkpointsPassed:state.checkpointsPassed, grammarFocus:state.grammarFocus, shadowDone:state.shadowDone, lastWarmupDate:state.lastWarmupDate,
-    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, dialoguesDone:state.dialoguesDone,
+    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
     lastReviewDate:state.lastReviewDate, lastLessonDate:state.lastLessonDate, lastApplyDate:state.lastApplyDate,
     spotlightsDone:state.spotlightsDone, markerCorrect:state.markerCorrect, podcastRuns:state.podcastRuns, microfixDone:state.microfixDone, warmupDone:state.warmupDone, antonioAsks:state.antonioAsks, grammarSkillsDone:state.grammarSkillsDone, errorReports:state.errorReports, dailyStats:state.dailyStats, recentMiss:state.recentMiss, passagesDone:state.passagesDone,
     lang:state.lang, langData:state.langData,
@@ -13850,6 +14203,7 @@ function bumpStat(id) {
 
 function addXP(amount) {
   registerActivity();   // earning XP means the user practiced today
+  const levelBefore = Math.floor(state.xp / 100);
   state.xp += amount;
   state.weeklyXP += amount;
   // Track daily XP for the progress chart (LOCAL date, not UTC)
@@ -13862,6 +14216,21 @@ function addXP(amount) {
   }
   saveState(); updateHeader(); updateHomeStats(); checkAchievements();
   if (amount > 0) { floatXP(amount); bumpStat('stat-xp'); }
+  const levelAfter = Math.floor(state.xp / 100);
+  if (levelAfter > levelBefore) showLevelUpToast(levelAfter + 1);
+}
+
+// A distinct celebration for crossing a level boundary — until now, crossing
+// from e.g. 90 to 110 XP just silently updated the number on screen.
+function showLevelUpToast(levelNum) {
+  celebrate();
+  const toast = document.createElement('div');
+  toast.className = 'badge-toast';
+  toast.innerHTML = `<div class="badge-icon-lg">⚡</div>
+    <div class="badge-text"><b>Level ${levelNum} reached</b><span>Keep going — your Kriolu is leveling up.</span></div>`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3200);
 }
 
 // ═══════════════════════════════════════════
@@ -14034,12 +14403,49 @@ async function checkForNewerBuild() {
     if (server > running) {
       const el = document.getElementById('build-version');
       if (el) el.innerHTML += `<br><b style="color:var(--coral)">Update available: v${server}</b>`;
+      const banner = document.getElementById('update-banner');
+      if (banner) {
+        document.getElementById('update-banner-sub').textContent = `You are on ${APP_BUILD} · v${server} is on the server`;
+        banner.classList.add('show');
+      }
       showToast('🔄 Update available — tap Check for update');
     }
   } catch (e) {}
 }
 
+// Measures what's actually on the device instead of guessing: real cached-audio
+// bytes from the Cache API, real bundle size from the in-memory content arrays,
+// real localStorage payload size for progress.
+async function renderStorageUsage() {
+  const el = document.getElementById('storage-usage');
+  if (!el) return;
+  const fmt = b => b < 1024 ? b + ' B' : b < 1024 * 1024 ? Math.round(b / 1024) + ' KB' : (b / 1024 / 1024).toFixed(1) + ' MB';
+  let audioBytes = 0;
+  try {
+    if (window.caches) {
+      const cache = await caches.open(TTS_CACHE);
+      const keys = await cache.keys();
+      const sizes = await Promise.all(keys.map(async k => {
+        const r = await cache.match(k);
+        const b = r ? await r.blob() : null;
+        return b ? b.size : 0;
+      }));
+      audioBytes = sizes.reduce((a, b) => a + b, 0);
+    }
+  } catch (e) {}
+  let contentBytes = 0;
+  try { contentBytes = new Blob([JSON.stringify(LESSONS), JSON.stringify(STORIES || []), JSON.stringify(READING_PASSAGES || []), JSON.stringify(DIALOGUES || [])]).size; } catch (e) {}
+  let progressBytes = 0;
+  try { progressBytes = new Blob([localStorage.getItem('kriolu_state_v3') || '']).size; } catch (e) {}
+  el.innerHTML = `
+    <div class="storage-row"><span class="storage-icon">🔊</span><div class="storage-info"><div class="storage-label">Cached audio</div><div class="storage-sub">Every word you've heard, kept forever</div></div><div class="storage-size">${fmt(audioBytes)}</div></div>
+    <div class="storage-row"><span class="storage-icon">📚</span><div class="storage-info"><div class="storage-label">Lessons &amp; stories</div><div class="storage-sub">Both courses, all units</div></div><div class="storage-size">${fmt(contentBytes)}</div></div>
+    <div class="storage-row"><span class="storage-icon">📈</span><div class="storage-info"><div class="storage-label">Your progress</div><div class="storage-sub">Kept separately for each course</div></div><div class="storage-size">${fmt(progressBytes)}</div></div>
+  `;
+}
+
 function showBuildVersion() {
+  renderStorageUsage();
   const el = document.getElementById('build-version');
   if (!el) return;
   let sw = 'no service worker';
@@ -14082,7 +14488,59 @@ async function forceUpdate() {
 }
 
 function openSettings() {
-  showBuildVersion(); document.getElementById('settings-panel').classList.add('open'); document.body.style.overflow = 'hidden'; }
+  showBuildVersion(); renderProfileHeader();
+  const settingsAutospeak = document.getElementById('settings-autospeak-toggle');
+  if (settingsAutospeak) settingsAutospeak.checked = autoSpeak;
+  document.getElementById('settings-panel').classList.add('open'); document.body.style.overflow = 'hidden'; }
+
+// Local display name + level/streak summary at the top of Settings. No
+// accounts exist in this app — this is purely a local preference, like the
+// rest of `state`, not a signed-in profile.
+function renderProfileHeader() {
+  const name = state.userName || 'Learner';
+  const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('') || 'L';
+  const level = Math.floor(state.xp / 100) + 1;
+  const L = langInfo();
+  const dialectBit = L.code === 'kriolu' ? ` (${state.dialect === 'saovicente' ? 'São Vicente' : 'Santiago'})` : '';
+  const streakBit = state.streak > 0 ? ` · ${state.streak}d 🔥` : '';
+  const avatar = document.getElementById('profile-avatar');
+  if (avatar) avatar.textContent = initials;
+  const nameEl = document.getElementById('profile-name-display');
+  if (nameEl) nameEl.textContent = name;
+  const subEl = document.getElementById('profile-sub-display');
+  if (subEl) subEl.textContent = `Level ${level} · learning ${L.label}${dialectBit}${streakBit}`;
+}
+function toggleProfileNameEdit() {
+  const box = document.getElementById('profile-name-edit');
+  if (!box) return;
+  document.getElementById('profile-name-input').value = state.userName || '';
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+function saveProfileName() {
+  state.userName = document.getElementById('profile-name-input').value.trim();
+  saveState();
+  document.getElementById('profile-name-edit').style.display = 'none';
+  renderProfileHeader();
+}
+// Settings has no voice list of its own — it just takes you to the Talk
+// screen's existing voice picker rather than duplicating that logic.
+function goToVoicePicker() {
+  closeSettings();
+  showMainTab('talk');
+  setTimeout(() => {
+    const sel = document.getElementById('voice-select');
+    sel?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    sel?.focus();
+  }, 250);
+}
+function settingsToggleAutoSpeak() {
+  userHasInteracted = true;
+  autoSpeak = document.getElementById('settings-autospeak-toggle').checked;
+  const chatToggle = document.getElementById('autospeak-toggle');
+  if (chatToggle) chatToggle.checked = autoSpeak;
+  const label = document.getElementById('autospeak-label');
+  if (label) label.textContent = autoSpeak ? 'On' : 'Off';
+}
 function closeSettings(e) {
   if (!e || e.target === document.getElementById('settings-panel')) {
     document.getElementById('settings-panel').classList.remove('open');
@@ -14433,22 +14891,93 @@ function renderHomeBadges() {
 // ═══════════════════════════════════════════
 //  NAVIGATION
 // ═══════════════════════════════════════════
-const SCREENS = ['home','path','lessons','grammar','reading','exercise','sentencelab','study','results','review','translate','achievements','phrasebook','conversation'];
-const TABS    = ['home','path','review','conversation','reading','grammar','lessons','phrasebook','translate','achievements'];
+const SCREENS = ['home','path','lessons','grammar','dialogues','reading','exercise','sentencelab','study','results','review','translate','achievements','phrasebook','conversation','community','track','ai'];
 
-function showTab(id) {
+// Screens reached by "pushing" from wherever the user was, rather than being
+// a peer tab — they get a back arrow instead of bottom/sub nav, and remember
+// where to return to via `navReturn`.
+const PUSHED_SCREENS = ['exercise','sentencelab','study','results','achievements','track','ai'];
+
+// The 5 bottom-nav tabs and which screens live under each. Tabs with more
+// than one screen get a sub-nav row (rendered into #nav-tabs); single-screen
+// tabs (home, community) hide it.
+const MAIN_TABS = [
+  { id:'home', screens:['home'] },
+  { id:'learn', screens:['path','lessons','grammar','review','dialogues'] },
+  { id:'talk', screens:['conversation','translate'] },
+  { id:'words', screens:['phrasebook','reading'] },
+  { id:'community', screens:['community'] },
+];
+const SUB_NAV_LABELS = { // reuses the old top-bar's exact icon/label text
+  path:'🧭 Path', lessons:'📚 Lessons', grammar:'📐 Grammar', review:'📋 Review', dialogues:'🗨️ Dialogues',
+  conversation:'💬 Chat', translate:'🔄 Translate',
+  phrasebook:'📔 Dictionary', reading:'📖 Read',
+};
+let navReturn = null;        // { screen } to restore when leaving a pushed screen
+let mainTabSubScreen = {};   // remembers the last sub-screen visited per multi-screen tab
+
+function mainTabFor(screenId) {
+  return MAIN_TABS.find(t => t.screens.includes(screenId)) || MAIN_TABS[0];
+}
+
+// Shared by showTab()/showScreen() — does the actual DOM screen swap plus
+// nav-chrome bookkeeping, so both entry points stay in sync automatically.
+function activateScreen(id) {
+  const current = document.querySelector('#main .screen.active')?.id?.replace(/^screen-/, '');
+  if (current && !PUSHED_SCREENS.includes(current) && PUSHED_SCREENS.includes(id)) {
+    navReturn = { screen: current };
+  }
   SCREENS.forEach(s => document.getElementById('screen-'+s)?.classList.remove('active'));
   document.getElementById('screen-'+id)?.classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', TABS[i]===id));
+  updateNavChrome(id);
+}
+
+function updateNavChrome(id) {
+  const pushed = PUSHED_SCREENS.includes(id);
+  document.body.classList.toggle('nav-collapsed', pushed);
+  if (pushed) {
+    // Clear the inline display set by renderSubNav() — an inline style would
+    // otherwise outrank the body.nav-collapsed CSS rule and stay visible.
+    const nav = document.getElementById('nav-tabs');
+    if (nav) nav.style.display = '';
+    return;
+  }
+  const main = mainTabFor(id);
+  if (main.screens.length > 1) mainTabSubScreen[main.id] = id;
+  document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === main.id));
+  renderSubNav(main, id);
+}
+
+function renderSubNav(main, activeId) {
+  const nav = document.getElementById('nav-tabs');
+  if (!nav) return;
+  if (main.screens.length <= 1) { nav.style.display = 'none'; nav.innerHTML = ''; return; }
+  nav.style.display = 'flex';
+  nav.innerHTML = main.screens.map(s =>
+    `<div class="nav-tab${s === activeId ? ' active' : ''}" onclick="showTab('${s}')">${SUB_NAV_LABELS[s] || s}</div>`).join('');
+}
+
+// Bottom-nav button handler: jumps to whichever sub-screen was last open in
+// that tab (or its first screen), so switching tabs and back preserves place.
+function showMainTab(mainId) {
+  const main = MAIN_TABS.find(t => t.id === mainId);
+  if (!main) return;
+  showTab(mainTabSubScreen[mainId] || main.screens[0]);
+}
+
+function showTab(id) {
+  activateScreen(id);
   if (id==='home') { updateHomeStats(); renderHomeExtras(); }
   if (id==='phrasebook') renderPhrasebook();
   if (id==='achievements') renderAchievements();
   if (id==='review') renderReview();
   if (id==='translate') updateTranslateUI();
   if (id==='grammar') renderGrammar();
+  if (id==='dialogues') renderDialogueLibrary();
   if (id==='reading') renderReadingList();
   if (id==='path') renderPath();
   if (id==='conversation') initChatAntonio();
+  if (id==='community') renderCommunity();
 }
 
 // Inject the animated António into the chat header (once) and start him blinking
@@ -14456,6 +14985,10 @@ function initChatAntonio() {
   const slot = document.querySelector('.antonio-chat-avatar');
   if (slot && !slot.querySelector('.antonio-emoji')) {
     slot.innerHTML = antonioSVG().replace('id="antonio"', 'id="antonio-chat" data-chat="1"');
+  }
+  const wave = document.getElementById('antonio-wave');
+  if (wave && !wave.children.length) {
+    wave.innerHTML = Array.from({ length: 17 }).map(() => '<div class="wave-bar"></div>').join('');
   }
   antonioStartBlink();
   antonioSetState('idle');
@@ -14500,9 +15033,8 @@ function renderBotBubble(kriolu, english) {
 }
 
 function showScreen(id) {
-  SCREENS.forEach(s => document.getElementById('screen-'+s)?.classList.remove('active'));
-  document.getElementById('screen-'+id)?.classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', TABS[i]===id));
+  activateScreen(id);
+  if (id==='achievements') renderAchievements();
 }
 
 function goHome() { showTab('home'); }
@@ -14690,13 +15222,50 @@ function updateHomeStats() {
   document.getElementById('weekly-goal-fill').style.width = wPct + '%';
   document.getElementById('weekly-progress-label').textContent = `${state.weeklyXP} / ${state.weeklyGoal} XP`;
   document.getElementById('greeting-text').textContent = getGreeting();
+  const strip = document.getElementById('weekly-day-strip');
+  if (strip) strip.innerHTML = renderWeeklyDayStrip();
   renderHomeExtras();
+}
+
+// A compact S M T W T F S row under the weekly-goal bar — reuses the same
+// real per-day XP history (state.xpHistory) that renderProgressChart() uses,
+// just as a lighter-weight "were you active this day" strip.
+function renderWeeklyDayStrip() {
+  const hist = state.xpHistory || {};
+  const now = new Date();
+  const sunday = new Date(now);
+  sunday.setHours(12, 0, 0, 0);
+  sunday.setDate(now.getDate() - now.getDay());
+  const labels = ['S','M','T','W','T','F','S'];
+  const todayKey = localDateKey(now);
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sunday);
+    d.setDate(sunday.getDate() + i);
+    const key = localDateKey(d);
+    const active = (hist[key] || 0) > 0;
+    html += `<div class="wds-cell${active ? ' active' : ''}${key === todayKey ? ' today' : ''}"><div class="wds-bar"></div><div class="wds-label">${labels[i]}</div></div>`;
+  }
+  return html;
 }
 
 function renderHomeExtras() {
   // CEFR level card
   const levelSlot = document.getElementById('level-slot');
   if (levelSlot) levelSlot.innerHTML = renderLevelCard();
+  // Word of the day — same rotation as the AI tutor's WOTD, but Home shows it directly
+  const wotdSlot = document.getElementById('wotd-slot');
+  if (wotdSlot) {
+    const w = wordOfTheDay();
+    wotdSlot.innerHTML = `<div class="wotd-card">
+      <div class="wotd-info">
+        <div class="wotd-label">Word of the day</div>
+        <div class="wotd-word">${escapeHTML(w.k)}</div>
+        <div class="wotd-gloss">${escapeHTML(w.e || '')}</div>
+      </div>
+      <button class="wotd-play" onclick="userHasInteracted=true;speakText('${escapeJS(w.k)}',this)">▶</button>
+    </div>`;
+  }
   // Continue on path card — the recommended next structured lesson
   const pathSlot = document.getElementById('daily-card-slot');
   if (pathSlot) {
@@ -14999,6 +15568,11 @@ function renderPath() {
     ${nextId ? '' : '<div style="margin-top:10px;font-weight:700;color:var(--correct)">🎉 You\'ve completed the entire path! Bravo!</div>'}
   </div>`;
 
+  const dueCount = countDueWords();
+  if (dueCount > 0) {
+    html += `<button onclick="showTab('review')" style="display:block;width:100%;margin-bottom:16px;background:rgba(255,255,255,.85);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:14px;text-align:center;font:800 .82rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer">Jump to review · ${dueCount} due</button>`;
+  }
+
   // Units
   html += LEARNING_PATH.map((unit, ui) => {
     const unitLessons = unit.lessons.filter((id, i) => unit.lessons.indexOf(id) === i);
@@ -15042,7 +15616,7 @@ function renderPath() {
         const passed = (state.checkpointsPassed || {})[ui];
         const status = passed ? '🏆' : allDone ? '🎯' : '🔒';
         const cls = passed ? 'path-done' : allDone ? 'path-next' : 'path-locked';
-        return `<div class="path-lesson ${cls}" onclick="${allDone ? `startUnitCheckpoint(${ui})` : `pathLockedMsg()`}">
+        return `<div class="path-lesson ${cls}" onclick="${allDone ? `renderCheckpointIntro(${ui})` : `pathLockedMsg()`}">
           <span class="path-status">${status}</span>
           <span class="path-icon">📜</span>
           <span class="path-name">Unit Checkpoint<span class="path-sub"> · random test of the whole unit${passed ? ' — passed!' : ''}</span></span>
@@ -15219,8 +15793,9 @@ function renderStageRoadmap() {
       <div class="roadmap-title">${escapeHTML(lesson.title)}</div>
       <div class="roadmap-sub">${isStart ? 'Here\'s your lesson plan — each stage builds on the last. 🧗' : allDone ? 'You\'ve completed every stage! Tap any to revisit. 🎉' : 'Tap the next stage to continue — or revisit any completed one. ↻'}</div>
     </div>
+    ${!allDone ? `<div class="hearts-note"><span class="hearts-note-icon">♥</span><span>Hearts are off through Mastery — this is for practice, not penalties. They turn on for the Mastery Challenge, and for mixed, daily and review sessions.</span></div>` : ''}
     <div class="stage-list">${items}</div>
-    ${!allDone ? `<button class="lab-continue" onclick="playStage(${nextIdx})">${isStart ? 'Start Stage 1 →' : 'Continue: ' + escapeHTML(nextStage.label) + ' →'}</button>`
+    ${!allDone ? `<button class="lab-continue sun" onclick="playStage(${nextIdx})">${isStart ? 'Start Stage 1 →' : 'Continue: ' + escapeHTML(nextStage.label) + ' →'}</button>`
                : `<button class="lab-continue" onclick="finishSession()">See your results →</button>`}
   `;
 }
@@ -15432,18 +16007,18 @@ function beginWordPractice() {
 // One grammar point per lesson, taught with the lesson's own words ("focus on
 // form": tiny doses inside meaningful content, right when the learner needs it).
 const KR_GRAMMAR_SPOTLIGHTS = {
-  greetings:      { title:'sta = "to be" (how you are)', explain:'Use <b>sta</b> for states and feelings — how someone IS right now. Pattern: person + sta + state.', examples:[['N sta dretu.','I am fine.'],['Kuma bu sta?','How are you?'],['El sta kansadu.','He is tired.']] },
-  introductions:  { title:'e = "to be" (who you are)', explain:'Use <b>e</b> for identity — names, origins, professions. <b>sta</b> is for states; <b>e</b> is for who/what something IS.', examples:[['Nha nomi e Maria.','My name is Maria.'],['N e di Kabu Verdi.','I am from Cape Verde.'],['El e nha mai.','She is my mother.']] },
-  essentials:     { title:'ka makes anything negative', explain:'Put <b>ka</b> before the verb to say NOT. It works on everything.', examples:[['N ka sabe.','I don\'t know.'],['N ka ta intende.','I don\'t understand.'],['Ka ten problema.','No problem.']] },
-  numbers:        { title:'No plural endings needed', explain:'Kriolu nouns usually don\'t change for plural — the number does the work.', examples:[['un livru','one book'],['dos livru','two books (not "livrus")'],['tres irmon','three brothers']] },
-  family:         { title:'nha / bu = my / your', explain:'Possessives go BEFORE the noun, and never change form.', examples:[['nha mai','my mother'],['bu pai','your father'],['nhos kaza','your (plural) house']] },
-  verbs:          { title:'The 4 magic markers', explain:'Kriolu verbs never change — little words before them set the tense: <b>ta</b> (habit), <b>sta ta</b> (right now), <b>dja</b> (already), <b>ka</b> (not).', examples:[['N ta kume pexi.','I eat fish (habitually).'],['N sta ta kume.','I am eating right now.'],['N dja kume.','I already ate.']] },
-  questions:      { title:'Question word + ki', explain:'Most questions follow: question word + <b>ki</b> + sentence.', examples:[['Kuze ki bu kre?','What do you want?'],['Undi ki bu mora?','Where do you live?'],['Pamodi ki bu ben?','Why did you come?']] },
-  food:           { title:'kre vs ta gosta di', explain:'<b>N kre</b> = I want (now). <b>N ta gosta di</b> = I like (in general).', examples:[['N kre un kafé.','I want a coffee.'],['N ta gosta di katxupa.','I like katxupa.']] },
-  function_words: { title:'Ningen ka … (the double negative)', explain:'When the subject is <b>ningen</b> (nobody) or the object is <b>nada</b> (nothing), Kriolu still keeps <b>ka</b> before the verb. Two negatives are correct — they do not cancel out.', examples:[['Ningen ka ben.','Nobody came.'],['N ka odja nada.','I saw nothing.'],['Ningen ka sabe.','Nobody knows.']] },
-  kr_abstract:    { title:'Abstract nouns take no article', explain:'Kriolu drops the article in front of general abstract ideas: <i>Libardadi kusta karu</i> — freedom costs dearly, not "the freedom". Add <b>kel</b> only when pointing at a specific instance.', examples:[['Speransa e ultimu ki ta more.','Hope is the last thing to die.'],['Kel speransa ki nu tinha…','That hope we had…']] },
-  kr_media:       { title:'Reporting what others say', explain:'To report without vouching for it, Kriolu uses <b>sigundu</b> (according to) or an impersonal <b>es ta fla ki</b> (they say that). Both let you pass on information at a distance.', examples:[['Sigundu rádiu, vou ta atrasadu.','According to the radio, the flight is delayed.'],['Es ta fla ki lei ta muda.','They say the law is changing.']] },
-  casual_talk:    { title:'sta + adjective = instant slang', explain:'Casual reactions are just <b>sta</b> + a describing word.', examples:[['Sta fixe!','It\'s cool!'],['Sta sabi dimas!','It\'s so good!'],['Bu sta dretu?','You good?']] },
+  greetings:      { title:'sta = "to be" (how you are)', explain:'Use <b>sta</b> for states and feelings — how someone IS right now. Pattern: person + sta + state.', examples:[['N sta dretu.','I am fine.'],['Kuma bu sta?','How are you?'],['El sta kansadu.','He is tired.']], mistake:'Don\'t reach for <b>e</b> here — that one is for identity. "N e dretu" would mean <i>I am a fine person</i>.' },
+  introductions:  { title:'e = "to be" (who you are)', explain:'Use <b>e</b> for identity — names, origins, professions. <b>sta</b> is for states; <b>e</b> is for who/what something IS.', examples:[['Nha nomi e Maria.','My name is Maria.'],['N e di Kabu Verdi.','I am from Cape Verde.'],['El e nha mai.','She is my mother.']], mistake:'Don\'t reach for <b>sta</b> here — that one is for states and feelings, not identity.' },
+  essentials:     { title:'ka makes anything negative', explain:'Put <b>ka</b> before the verb to say NOT. It works on everything.', examples:[['N ka sabe.','I don\'t know.'],['N ka ta intende.','I don\'t understand.'],['Ka ten problema.','No problem.']], mistake:'<b>ka</b> always goes right before the verb (and any other marker) — never after it.' },
+  numbers:        { title:'No plural endings needed', explain:'Kriolu nouns usually don\'t change for plural — the number does the work.', examples:[['un livru','one book'],['dos livru','two books (not "livrus")'],['tres irmon','three brothers']], mistake:'Don\'t add "-s" to the noun — the number word already carries the plural.' },
+  family:         { title:'nha / bu = my / your', explain:'Possessives go BEFORE the noun, and never change form.', examples:[['nha mai','my mother'],['bu pai','your father'],['nhos kaza','your (plural) house']], mistake:'Possessives never take a gender or plural ending — <b>nha</b> stays <b>nha</b> for every noun.' },
+  verbs:          { title:'The 4 magic markers', explain:'Kriolu verbs never change — little words before them set the tense: <b>ta</b> (habit), <b>sta ta</b> (right now), <b>dja</b> (already), <b>ka</b> (not).', examples:[['N ta kume pexi.','I eat fish (habitually).'],['N sta ta kume.','I am eating right now.'],['N dja kume.','I already ate.']], mistake:'Don\'t mix markers that don\'t belong together — <b>sta ta</b> is one fixed unit, not sta and ta added separately.' },
+  questions:      { title:'Question word + ki', explain:'Most questions follow: question word + <b>ki</b> + sentence.', examples:[['Kuze ki bu kre?','What do you want?'],['Undi ki bu mora?','Where do you live?'],['Pamodi ki bu ben?','Why did you come?']], mistake:'Don\'t drop <b>ki</b> — without it, the sentence reads as a statement, not a question.' },
+  food:           { title:'kre vs ta gosta di', explain:'<b>N kre</b> = I want (now). <b>N ta gosta di</b> = I like (in general).', examples:[['N kre un kafé.','I want a coffee.'],['N ta gosta di katxupa.','I like katxupa.']], mistake:'They aren\'t interchangeable — <b>kre</b> is a want right now, not a standing preference.' },
+  function_words: { title:'Ningen ka … (the double negative)', explain:'When the subject is <b>ningen</b> (nobody) or the object is <b>nada</b> (nothing), Kriolu still keeps <b>ka</b> before the verb. Two negatives are correct — they do not cancel out.', examples:[['Ningen ka ben.','Nobody came.'],['N ka odja nada.','I saw nothing.'],['Ningen ka sabe.','Nobody knows.']], mistake:'Don\'t drop <b>ka</b> just because <i>ningen</i> or <i>nada</i> already sounds negative — Kriolu keeps both.' },
+  kr_abstract:    { title:'Abstract nouns take no article', explain:'Kriolu drops the article in front of general abstract ideas: <i>Libardadi kusta karu</i> — freedom costs dearly, not "the freedom". Add <b>kel</b> only when pointing at a specific instance.', examples:[['Speransa e ultimu ki ta more.','Hope is the last thing to die.'],['Kel speransa ki nu tinha…','That hope we had…']], mistake:'Don\'t add <b>kel</b> out of habit — it turns a general idea into one specific instance.' },
+  kr_media:       { title:'Reporting what others say', explain:'To report without vouching for it, Kriolu uses <b>sigundu</b> (according to) or an impersonal <b>es ta fla ki</b> (they say that). Both let you pass on information at a distance.', examples:[['Sigundu rádiu, vou ta atrasadu.','According to the radio, the flight is delayed.'],['Es ta fla ki lei ta muda.','They say the law is changing.']], mistake:'Don\'t state secondhand information as plain fact — <b>sigundu</b> or <b>es ta fla ki</b> signal you\'re passing it on, not vouching for it.' },
+  casual_talk:    { title:'sta + adjective = instant slang', explain:'Casual reactions are just <b>sta</b> + a describing word.', examples:[['Sta fixe!','It\'s cool!'],['Sta sabi dimas!','It\'s so good!'],['Bu sta dretu?','You good?']], mistake:'<b>sta</b> needs a describing word after it — on its own it just means "is/are," not a reaction.' },
 };
 function getSpotlight(lesson) {
   if (GRAMMAR_SPOTLIGHTS[lesson.id]) return GRAMMAR_SPOTLIGHTS[lesson.id];
@@ -15453,7 +16028,8 @@ function getSpotlight(lesson) {
   return {
     title: 'The 4 magic markers',
     explain: 'Kriolu verbs never change — the little words before them do all the work: <b>ta</b> (habit), <b>sta ta</b> (right now), <b>dja</b> (already), <b>ka</b> (not).',
-    examples: own.length ? own : [['N ta papia Kriolu.','I speak Kriolu.'],['N sta ta prende.','I am learning right now.'],['N dja odja.','I already saw.']]
+    examples: own.length ? own : [['N ta papia Kriolu.','I speak Kriolu.'],['N sta ta prende.','I am learning right now.'],['N dja odja.','I already saw.']],
+    mistake: 'Don\'t mix markers — each one does a different job, and the verb itself never changes.'
   };
 }
 function renderGrammarSpotlight(stage) {
@@ -15472,6 +16048,7 @@ function renderGrammarSpotlight(stage) {
           <button class="speak-btn" style="margin:0;font-size:.95rem" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>
           <div><div style="font-weight:700">${linkifyVerbs(k)}</div><div style="font-size:.8rem;color:var(--muted)">${escapeHTML(e)}</div></div>
         </div>`).join('')}
+      ${sp.mistake ? `<div class="lab-mistake"><span class="lab-mistake-icon">⚠️</span><span>${sp.mistake}</span></div>` : ''}
     </div>
     <button class="lab-continue" onclick="spotlightDrill()">Try it — quick drill →</button>`;
 }
@@ -15691,7 +16268,12 @@ function startMixedSession() {
   showScreen('exercise'); renderQuestion();
 }
 
-function exitExercise() { state.session = null; lessonPlan = null; showTab('lessons'); }
+function exitExercise() {
+  state.session = null; lessonPlan = null;
+  const target = navReturn ? navReturn.screen : 'lessons';
+  navReturn = null;
+  showTab(target);
+}
 
 function renderQuestion() {
   const { session, qIndex } = state;
@@ -15862,6 +16444,14 @@ function mcAnswer(btn, correct) {
       document.querySelectorAll('.choice-btn').forEach(b => { if(b.textContent===correctAns) b.classList.add('reveal-correct'); });
       showFeedback(false, `Correct: <em>${escapeHTML(correctAns)}</em>`);
     }
+  }
+  // Marker drill: show the full marker legend so the rule sticks beyond this one sentence.
+  if (q.type === 'markerDrill') {
+    const mk = findMarker(q.item.ex) || 'ta';
+    const legendRows = Object.entries(MARKER_INFO).map(([m, means]) =>
+      `<div class="marker-key-row${m === mk ? ' active' : ''}"><span class="marker-key-m">${escapeHTML(m)}</span><span>${escapeHTML(means)}</span></div>`).join('');
+    const bar = document.querySelector('#feedback-area .feedback-bar');
+    if (bar) bar.insertAdjacentHTML('afterend', `<div class="marker-key">${legendRows}</div>`);
   }
 }
 
@@ -16191,8 +16781,8 @@ function antonioMouth(shape) {
   if (m) m.style.transform = ANTONIO_MOUTH[shape] || ANTONIO_MOUTH.rest;
 }
 function antonioStartTalking() {
+  antonioStopTalking(); // clear any previous mouth-timer before starting a fresh one
   antonioSetState('talking');
-  antonioStopTalking();
   const shapes = ['open','small','wide','open','small'];
   let i = 0;
   antonioMouthTimer = setInterval(() => {
@@ -16632,6 +17222,14 @@ function checkSentence() {
     recordWordResult(q.item, false); playSound('wrong'); loseLife();
     document.getElementById('sb-answer').style.borderColor = 'var(--wrong)';
     showFeedback(false, `Correct: <em>${escapeHTML(sbState.target)}</em>${sbMeaningNote() ? '<br>' + sbMeaningNote() : ''}`);
+  }
+  // Kriolu sentences built around a tense marker (ta/sta ta/dja/ka) get a
+  // one-line grammar note — reuses the same MARKER_INFO glosses as the
+  // marker-drill legend, so no new content to maintain.
+  const mk = (typeof isPT !== 'function' || !isPT()) && findMarker(sbState.target);
+  if (mk) {
+    const bar = document.querySelector('#feedback-area .feedback-bar');
+    if (bar) bar.insertAdjacentHTML('afterend', `<div class="skill-why ${isCorrect ? 'correct' : 'wrong'}"><div class="skill-why-label">Grammar note</div><div class="skill-why-text"><b>${escapeHTML(mk)}</b> — ${escapeHTML(MARKER_INFO[mk] || '')}</div></div>`);
   }
 }
 
@@ -17251,6 +17849,38 @@ function startShadowSession() {
 
 // #3 UNIT CHECKPOINT: a random test over EVERYTHING in a completed path unit —
 // fights forgetting BETWEEN lessons (the classic testing effect).
+// Intro/summary screen shown before a checkpoint starts — sets expectations
+// (what it covers, hearts-on) instead of dropping the learner straight into it.
+function renderCheckpointIntro(unitIdx) {
+  const unit = LEARNING_PATH[unitIdx];
+  if (!unit) return;
+  document.getElementById('lab-title').textContent = '🎯 Checkpoint';
+  showScreen('sentencelab');
+  const container = document.getElementById('sentencelab-content');
+  const unitLessons = unit.lessons.filter((id, i) => unit.lessons.indexOf(id) === i);
+  const topicRows = unitLessons.map(id => {
+    const lesson = LESSONS.find(l => l.id === id);
+    if (!lesson) return '';
+    return `<div class="checkpoint-topic-row"><div class="checkpoint-topic-check">✓</div><div class="checkpoint-topic-name">${escapeHTML(lesson.title)}</div><div class="checkpoint-topic-count">${lesson.vocab.length} words</div></div>`;
+  }).join('') + GRAMMAR_SKILLS.filter(g => g.unit === unitIdx).map(sk =>
+    `<div class="checkpoint-topic-row"><div class="checkpoint-topic-check grammar">${sk.icon}</div><div class="checkpoint-topic-name">${escapeHTML(sk.title)}</div><div class="checkpoint-topic-count">grammar</div></div>`
+  ).join('');
+  container.innerHTML = `
+    <div style="text-align:center">
+      <div style="font-size:2.75rem;line-height:1">🎯</div>
+      <div class="roadmap-title" style="margin-top:10px">${escapeHTML(unit.unit)} checkpoint</div>
+      <div class="roadmap-sub">Up to 20 questions drawn from everything in this unit. Pass at 80% and the next unit unlocks.</div>
+    </div>
+    <div class="lab-card" style="margin-top:18px">
+      <div class="checkpoint-topics-label">What it covers</div>
+      <div class="checkpoint-topics">${topicRows}</div>
+    </div>
+    <div class="hearts-note" style="margin-top:11px"><span class="hearts-note-icon">♥♥♥</span><span>Hearts are on for checkpoints. Run out and you retry — nothing is lost.</span></div>
+    <button class="lab-continue sun" style="margin-top:16px" onclick="startUnitCheckpoint(${unitIdx})">Start the checkpoint</button>
+    <button class="checkpoint-review-link" onclick="exitExercise()">Review the unit first</button>
+  `;
+}
+
 function startUnitCheckpoint(unitIdx) {
   const unit = LEARNING_PATH[unitIdx];
   if (!unit) return;
@@ -17561,8 +18191,13 @@ function gcAnswer(btn, ok) {
     btn.classList.add('selected-wrong'); playSound('wrong');
     const correct = q.gq.opts[q.gq.a];
     document.querySelectorAll('.choice-btn').forEach(b => { if (b.textContent === correct) b.classList.add('reveal-correct'); });
-    showFeedback(false, `<b>${escapeHTML(correct)}</b> — ${escapeHTML(q.gq.why)}`);
+    showFeedback(false, '');
   }
+  // Always surface the "why" — it's the point of a grammar drill, right or wrong.
+  const whyText = ok ? escapeHTML(q.gq.why) : `<b>${escapeHTML(q.gq.opts[q.gq.a])}</b> — ${escapeHTML(q.gq.why)}`;
+  const whyPanel = `<div class="skill-why ${ok ? 'correct' : 'wrong'}"><div class="skill-why-label">${ok ? 'Correct' : 'Why'}</div><div class="skill-why-text">${whyText}</div></div>`;
+  const bar = document.querySelector('#feedback-area .feedback-bar');
+  if (bar) bar.insertAdjacentHTML('afterend', whyPanel);
 }
 
 // ── ERROR REPORTS: flag any word for native-speaker review ──
@@ -17642,29 +18277,125 @@ function startReviewSession() {
 // ═══════════════════════════════════════════
 //  PHRASEBOOK
 // ═══════════════════════════════════════════
+let dictReversed = false;
+function setDictDirection(reversed) {
+  dictReversed = reversed;
+  document.getElementById('dict-dir-kr').classList.toggle('active', !reversed);
+  document.getElementById('dict-dir-en').classList.toggle('active', reversed);
+  renderPhrasebook();
+}
+let dictFilter = 'all';
+function setDictFilter(f, el) {
+  dictFilter = f;
+  document.querySelectorAll('#dict-filter-chips .dict-chip').forEach(c => c.classList.remove('active'));
+  el?.classList.add('active');
+  renderPhrasebook();
+}
+
 function renderPhrasebook() {
   const container = document.getElementById('phrasebook-content');
-  container.innerHTML = LESSONS.map((lesson, li) => `
-    <div class="phrase-category">
-      <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="background:${lesson.color || 'var(--ocean)'}">
+  const search = (document.getElementById('dict-search')?.value || '').toLowerCase().trim();
+
+  if (dictFilter === 'saved') {
+    const words = state.favourites.filter(v => matchesDictSearch(v, search));
+    document.getElementById('dict-word-count').textContent = words.length + ' saved';
+    container.innerHTML = words.length ? words.map(v => renderDictRow(v, -1, -1)).join('')
+      : `<div style="text-align:center;padding:30px;color:var(--muted)">🤍 No favourites yet. Tap the heart on any word to save it.</div>`;
+    return;
+  }
+
+  // Santiago/São Vicente filters hide the OTHER dialect's dedicated lesson —
+  // the two dialects share everything else, since vocab isn't tagged per-word.
+  const lessons = LESSONS.filter(l =>
+    (dictFilter === 'santiago' && l.id === 'dialect_saovicente') ? false :
+    (dictFilter === 'saovicente' && l.id === 'dialect_santiago') ? false : true);
+
+  let total = 0;
+  const html = lessons.map((lesson, li) => {
+    const realLi = LESSONS.indexOf(lesson);
+    const rows = lesson.vocab
+      .map((v, vi) => ({ v, vi }))
+      .filter(({ v }) => matchesDictSearch(v, search));
+    total += rows.length;
+    if (!rows.length) return '';
+    return `<div class="phrase-category">
+      <div class="phrase-cat-header" onclick="togglePhraseCat(${realLi})" style="background:${lesson.color || 'var(--ocean)'}">
         ${lesson.icon} ${lesson.title} <span style="margin-left:auto">▾</span>
       </div>
-      <div class="phrase-cat-body" id="pc-${li}">
-        ${lesson.vocab.map((v, vi) => {
-          const isFav = state.favourites.some(f => f.k === v.k);
-          return `<div class="phrase-row">
-            <div><div class="phrase-kriolu">${escapeHTML(v.k)}</div>
-              <div class="phrase-english" style="font-size:.72rem;font-style:italic">${escapeHTML(v.ex)}</div></div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <div class="phrase-english">${escapeHTML(v.e)}</div>
-              <button class="fav-btn" onclick="addStoryWordToDeck('${escapeJS(v.k)}','${escapeJS(v.e)}')" title="Add to review deck">➕</button>
-              <button class="fav-btn" onclick="toggleFavByIndex(${li},${vi})">${isFav?'❤️':'🤍'}</button>
-            </div>
-          </div>`;
-        }).join('')}
+      <div class="phrase-cat-body" id="pc-${realLi}">
+        ${rows.map(({ v, vi }) => renderDictRow(v, realLi, vi)).join('')}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+  document.getElementById('dict-word-count').textContent = total + ' entries';
+  container.innerHTML = html || `<div style="text-align:center;padding:30px;color:var(--muted)">Nothing found. Try another search.</div>`;
   updateFavCount();
+}
+
+function matchesDictSearch(v, search) {
+  if (!search) return true;
+  return v.k.toLowerCase().includes(search) || v.e.toLowerCase().includes(search);
+}
+
+// One dictionary row — direction-aware (Kriolu-first vs English-first) and
+// works for both the lesson-grouped list (li/vi set) and the Saved list
+// (li/vi = -1, since favourites aren't tied to a lesson index).
+function renderDictRow(v, li, vi) {
+  const isFav = state.favourites.some(f => f.k === v.k);
+  const head = dictReversed ? escapeHTML(v.e) : escapeHTML(v.k);
+  const sub = dictReversed ? escapeHTML(v.k) : escapeHTML(v.e);
+  const favBtn = li >= 0
+    ? `<button class="fav-btn" onclick="event.stopPropagation();toggleFavByIndex(${li},${vi})">${isFav ? '❤️' : '🤍'}</button>`
+    : `<button class="fav-btn" onclick="event.stopPropagation();removeFavByIndex(${state.favourites.indexOf(v)})">❤️</button>`;
+  return `<div class="phrase-row" onclick="openDictWord('${escapeJS(v.k)}')" style="cursor:pointer">
+    <div style="flex:1;min-width:0">
+      <div class="phrase-kriolu">${head}</div>
+      <div class="phrase-english" style="font-size:.72rem;font-style:italic">${escapeHTML(v.ex || '')}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="phrase-english">${sub}</div>
+      <button class="fav-btn" onclick="event.stopPropagation();userHasInteracted=true;speakText('${escapeJS(v.k)}',this)" title="Play">🔊</button>
+      ${favBtn}
+    </div>
+  </div>`;
+}
+
+// Word detail — replaces the Dictionary list in place, same pattern as
+// openVerb()'s list/detail toggle. Only shows fields the vocab data
+// actually has (k, e, ex, exE, note) — no fabricated phonetics or culture text.
+function openDictWord(k) {
+  const v = LESSONS.flatMap(l => l.vocab).find(x => x.k === k);
+  if (!v) return;
+  document.getElementById('dict-list-controls').style.display = 'none';
+  const isFav = state.favourites.some(f => f.k === v.k);
+  const detail = document.getElementById('dict-detail');
+  detail.style.display = 'block';
+  detail.innerHTML = `
+    <button class="back-btn" style="margin-bottom:14px" onclick="closeDictWord()">←</button>
+    <div class="grammar-detail-card" style="text-align:center">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:2.2rem;color:var(--ocean)">${escapeHTML(v.k)}</div>
+      <div style="font-size:.95rem;color:var(--muted);margin-top:6px">${escapeHTML(v.e)}</div>
+      <button style="display:inline-flex;align-items:center;gap:8px;margin-top:15px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:12px 22px;font:800 .8rem/1 'Plus Jakarta Sans',sans-serif;box-shadow:0 4px 14px rgba(10,77,104,.28);cursor:pointer" onclick="userHasInteracted=true;speakText('${escapeJS(v.k)}',this)">🔊 Play</button>
+      ${v.ex ? `<div style="background:var(--bg);border-radius:14px;padding:14px;margin-top:18px;text-align:left">
+        <div style="font-weight:700;font-size:.95rem">${escapeHTML(v.ex)}</div>
+        ${v.exE ? `<div style="font-size:.8rem;color:var(--muted);font-style:italic;margin-top:4px">${escapeHTML(v.exE)}</div>` : ''}
+      </div>` : ''}
+      ${v.note ? `<div style="font-size:.8rem;color:var(--muted);line-height:1.5;margin-top:12px;text-align:left">${escapeHTML(v.note)}</div>` : ''}
+    </div>
+    <div style="display:flex;gap:9px;margin-top:14px">
+      <button style="flex:1;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:14px;font:800 .82rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer" onclick="addStoryWordToDeck('${escapeJS(v.k)}','${escapeJS(v.e)}');showToast('Added to review ✓')">Add to review</button>
+      <button style="flex:none;width:52px;background:var(--card);border:1px solid var(--border);border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer" onclick="shareDictWord('${escapeJS(v.k)}','${escapeJS(v.e)}')">⤴</button>
+    </div>
+  `;
+}
+function closeDictWord() {
+  document.getElementById('dict-detail').style.display = 'none';
+  document.getElementById('dict-list-controls').style.display = 'block';
+}
+function shareDictWord(k, e) {
+  const text = `${k} — ${e} (Kriolu, via Kriolu app)`;
+  if (navigator.share) navigator.share({ text }).catch(() => {});
+  else if (navigator.clipboard) { navigator.clipboard.writeText(text); showToast('Copied to clipboard ✓'); }
 }
 
 function togglePhraseCat(i) { document.getElementById('pc-'+i)?.classList.toggle('open'); }
@@ -17674,7 +18405,7 @@ function toggleFavByIndex(li, vi) {
   if (!v) return;
   const idx = state.favourites.findIndex(f => f.k === v.k);
   if (idx > -1) state.favourites.splice(idx, 1);
-  else state.favourites.push({k:v.k, e:v.e, ex:v.ex});
+  else state.favourites.push({k:v.k, e:v.e, ex:v.ex, source:'Dictionary'});
   saveState(); checkAchievements(); renderPhrasebook();
 }
 
@@ -17688,6 +18419,13 @@ function updateFavCount() {
   if (el) el.textContent = state.favourites.length;
 }
 
+let favFilter = 'all';
+function setFavFilter(source, el) {
+  favFilter = source;
+  document.querySelectorAll('#fav-filter-chips .dict-chip').forEach(c => c.classList.remove('active'));
+  el?.classList.add('active');
+  showFavourites();
+}
 function showFavourites() {
   const container = document.getElementById('phrasebook-content');
   if (!state.favourites.length) {
@@ -17696,8 +18434,21 @@ function showFavourites() {
     </div>`;
     return;
   }
+  // Filter chips reflect whatever sources are actually present — Dictionary
+  // and Translate today — rather than a fixed list, since those are the only
+  // two places favourites currently get saved from.
+  const sources = [...new Set(state.favourites.map(f => f.source || 'Other'))];
+  const chipsHTML = sources.length > 1 ? `<div id="fav-filter-chips" style="display:flex;gap:7px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px">
+    <div class="dict-chip${favFilter === 'all' ? ' active' : ''}" onclick="setFavFilter('all',this)">All ${state.favourites.length}</div>
+    ${sources.map(s => `<div class="dict-chip${favFilter === s ? ' active' : ''}" onclick="setFavFilter('${escapeJS(s)}',this)">${escapeHTML(s)} ${state.favourites.filter(f => (f.source || 'Other') === s).length}</div>`).join('')}
+  </div>` : '';
+
+  const indexed = state.favourites.map((v, i) => ({ v, i }));
+  const shown = favFilter === 'all' ? indexed : indexed.filter(({ v }) => (v.source || 'Other') === favFilter);
+
   container.innerHTML = `<div style="font-size:.82rem;font-weight:700;color:var(--ocean);margin-bottom:12px">❤️ Your Favourites (${state.favourites.length})</div>` +
-    state.favourites.map((v, i) => `<div class="review-word-card">
+    chipsHTML +
+    shown.map(({ v, i }) => `<div class="review-word-card">
       <div><div class="review-word-k">${escapeHTML(v.k)}</div>
         <div class="review-word-e">${escapeHTML(v.e)}</div>
         <div class="review-word-ex">"${escapeHTML(v.ex)}"</div></div>
@@ -17886,6 +18637,8 @@ function toggleAutoSpeak() {
   userHasInteracted = true;
   autoSpeak = document.getElementById('autospeak-toggle').checked;
   document.getElementById('autospeak-label').textContent = autoSpeak ? 'On' : 'Off';
+  const settingsToggle = document.getElementById('settings-autospeak-toggle');
+  if (settingsToggle) settingsToggle.checked = autoSpeak;
 }
 
 function toggleMic() { isListening ? stopListening() : startListening(); }
@@ -18038,6 +18791,63 @@ const DAILY_CHALLENGES = [
   'Describe your best friend.',
   'Tell me what you ate today.',
 ];
+// The challenge text for a given day offset from today (0 = today, -1 = yesterday, 1 = tomorrow).
+// Same deterministic day → challenge mapping as startDailyChallenge(), just parameterized.
+function dailyChallengeForOffset(offsetDays) {
+  const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + offsetDays);
+  const dayNum = Math.floor(d.getTime() / 86400000);
+  const idx = ((dayNum % DAILY_CHALLENGES.length) + DAILY_CHALLENGES.length) % DAILY_CHALLENGES.length;
+  return { dateStr: d.toDateString(), text: DAILY_CHALLENGES[idx] };
+}
+
+// Hub screen shown before the challenge chat opens: today's prompt, relevant
+// vocab, and a quick look at recently attempted / upcoming challenges.
+function renderDailyChallengeScreen() {
+  document.getElementById('lab-title').textContent = '🎯 Daily Challenge';
+  showScreen('sentencelab');
+  const container = document.getElementById('sentencelab-content');
+  const today = dailyChallengeForOffset(0);
+  const dateLabel = new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
+
+  // Surface real lesson vocab whose English gloss shows up in today's prompt —
+  // no invented word list, just a lookup over what's already taught.
+  const challengeLower = today.text.toLowerCase();
+  const usedKeys = new Set(), usedGlosses = new Set();
+  const wordChips = LESSONS.flatMap(l => l.vocab).filter(v => {
+    if (!v.e || usedKeys.has(v.k)) return false;
+    const gloss = v.e.toLowerCase().replace(/^to\s+/, '').split(/[/,;(]/)[0].trim();
+    if (gloss.length < 3 || usedGlosses.has(gloss) || !challengeLower.includes(gloss)) return false;
+    usedKeys.add(v.k); usedGlosses.add(gloss); return true;
+  }).slice(0, 6);
+
+  const seenMap = state.dailyChallengesSeen || {};
+  const pastRows = [-2, -1].map(off => {
+    const c = dailyChallengeForOffset(off);
+    const done = !!seenMap[c.dateStr];
+    return `<div class="dc-history-row${done ? ' done' : ''}"><div class="dc-history-status">${done ? '✓' : '○'}</div><div class="dc-history-text">${escapeHTML(c.text)}</div></div>`;
+  }).join('');
+  const nextChallenge = dailyChallengeForOffset(1);
+  const lockedRow = `<div class="dc-history-row locked"><div class="dc-history-status">🔒</div><div class="dc-history-text">${escapeHTML(nextChallenge.text)}</div></div>`;
+
+  container.innerHTML = `
+    <div class="dc-hero">
+      <div class="dc-hero-date">Today · ${escapeHTML(dateLabel)}</div>
+      <div class="dc-hero-prompt">${escapeHTML(today.text)}</div>
+      <div class="dc-hero-sub">Speak for about a minute. ${tutorName()} will listen and answer back.</div>
+    </div>
+    ${wordChips.length ? `<div class="lab-card" style="margin-top:12px">
+      <div class="checkpoint-topics-label">Words you'll want</div>
+      <div class="wc-words" style="margin-top:9px">${wordChips.map(v => `<span class="wc-word">${escapeHTML(v.k)}</span>`).join('')}</div>
+    </div>` : ''}
+    <div style="display:flex;justify-content:center;margin-top:20px">
+      <button class="dc-record-btn" onclick="startDailyChallenge()">🎙️</button>
+    </div>
+    <div class="dc-record-label">Tap to answer out loud</div>
+    <div class="checkpoint-topics-label" style="margin:22px 4px 9px">This week</div>
+    <div class="dc-history">${pastRows}${lockedRow}</div>
+  `;
+}
+
 function startDailyChallenge() {
   const key = getApiKey();
   if (!key) { appendBotMessage('Add your API key to start the daily challenge!', ''); return; }
@@ -18045,6 +18855,8 @@ function startDailyChallenge() {
   const dayNum = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
   const challenge = DAILY_CHALLENGES[dayNum % DAILY_CHALLENGES.length];
   state.dailyChallengeDate = new Date().toDateString();
+  state.dailyChallengesSeen = state.dailyChallengesSeen || {};
+  state.dailyChallengesSeen[state.dailyChallengeDate] = true;
   saveState();
   currentSystemPrompt = BASE_SYSTEM + `\n\nSCENARIO: Today's speaking challenge for the learner is: "${challenge}" Invite them warmly to try it in Kriolu, then help and encourage them as they attempt it. Give gentle corrections and praise.`;
   const win = document.getElementById('chat-window');
@@ -18053,6 +18865,110 @@ function startDailyChallenge() {
   div.innerHTML = `<div class="msg-avatar">🧔🏾</div><div><div class="msg-bubble">🎯 <b>Today's Challenge</b><br>${escapeHTML(challenge)}<br><span style="font-size:.8rem;color:var(--muted)">Try it in Kriolu — I'll help!</span></div></div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
   callClaude('Give me the daily challenge.');
+}
+
+// ═══════════════════════════════════════════
+//  COMMUNITY — local-only seeded feed (no backend: likes/posts persist to
+//  this browser's saved state only, same pattern as dailyChallengesSeen)
+// ═══════════════════════════════════════════
+const PROVERBS = [
+  { k:'Kel ki bu simia, kel ki bu ta kolhe.', e:'What you sow is what you reap.' },
+  { k:'Kada kabesa e un sentença.', e:'Every head is its own sentence — everyone has their own way of thinking.' },
+  { k:'Ku pasiensia e ku fé, tudu kusa ten remédiu.', e:'With patience and faith, everything has a remedy.' },
+  { k:'Un dedu ka ta pega pidra.', e:'One finger can’t pick up a stone — you need each other.' },
+];
+function proverbOfTheDay() {
+  const dayNum = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
+  return PROVERBS[dayNum % PROVERBS.length];
+}
+
+const COMMUNITY_POSTS = [
+  { id:'p1', name:'Ana Lima', initials:'AL', color:'#088395', place:'Brockton, MA', time:'2h', category:'questions',
+    text:'Nha avó ta txoma "katxupa rika" só kel ki tem karni. Alguen mas na Boston ta fla asi, o é só na nha kaza?', likes:24 },
+  { id:'p2', name:'Djô Sanches', initials:'DJ', color:'#C2451A', place:'Mindelo', time:'5h', category:'questions',
+    text:'Modi ki nhos ta fla "bus stop" na Santiagu? Ki-li nu ta fla "paradinha".', likes:11 },
+  { id:'p3', name:'Isabel Rocha', initials:'IR', color:'#12796F', place:'Praia', time:'1d', category:'recipes',
+    text:'Segredu di un bon katxupa: kunpanha di ferru, fugu bas, txeu ora. Ka bu pressa!', likes:31 },
+  { id:'p4', name:'Marcus Tavares', initials:'MT', color:'#8A5A0B', place:'Providence, RI', time:'2d', category:'music',
+    text:'Sabi na morna di Cesária es simana — kal ki nhos favoritu?', likes:18 },
+];
+
+function renderCommunity() {
+  const el = document.getElementById('community-content');
+  if (!el) return;
+  state.communityLikes = state.communityLikes || {};
+  const posts = state.communityPosts && state.communityPosts.length ? state.communityPosts : COMMUNITY_POSTS;
+  const filter = state.communityFilter || 'all';
+  const cats = [['all','All'],['proverbs','Proverbs'],['music','Music'],['questions','Questions'],['recipes','Recipes']];
+  const pv = proverbOfTheDay();
+  const shown = filter === 'all' ? posts : posts.filter(p => p.category === filter);
+
+  el.innerHTML = `
+    <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:13px;padding-bottom:2px">
+      ${cats.map(([id, label]) => `<div onclick="setCommunityFilter('${id}')" style="flex:none;border-radius:99px;padding:7px 13px;font:800 .66rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer;${filter === id ? 'background:var(--ocean-2);color:#fff' : 'background:var(--card);border:1px solid var(--border);color:var(--ocean)'}">${label}</div>`).join('')}
+    </div>
+    ${filter === 'all' || filter === 'proverbs' ? `
+    <div style="position:relative;overflow:hidden;border-radius:var(--radius);padding:18px;color:#fff;background:var(--grad-sun);box-shadow:var(--shadow-coral);margin-bottom:13px">
+      <div style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.9">Proverb of the day</div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.15rem;line-height:1.3;margin-top:9px">${escapeHTML(pv.k)}</div>
+      <div style="font-size:.75rem;opacity:.92;font-style:italic;margin-top:5px">${escapeHTML(pv.e)}</div>
+      <button style="margin-top:12px;background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:8px 13px;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;color:#fff;cursor:pointer" onclick="userHasInteracted=true;speakText('${escapeJS(pv.k)}',this)">▶ Play</button>
+    </div>` : ''}
+    <div style="display:flex;flex-direction:column;gap:11px">
+      ${shown.map(p => {
+        const liked = !!state.communityLikes[p.id];
+        const likeCount = p.likes + (liked ? 1 : 0);
+        return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${p.color};color:#fff;display:flex;align-items:center;justify-content:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif">${p.initials}</div>
+            <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.8rem">${escapeHTML(p.name)}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${escapeHTML(p.place)} · ${p.time}</div></div>
+          </div>
+          <div style="font-size:.85rem;line-height:1.55;margin-top:10px">${escapeHTML(p.text)}</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:11px;padding-top:10px;border-top:1px solid var(--border)">
+            <div onclick="toggleCommunityLike('${p.id}')" style="font-weight:700;font-size:.72rem;cursor:pointer;color:${liked ? '#EF4757' : 'var(--muted)'}">${liked ? '❤️' : '🤍'} ${likeCount}</div>
+          </div>
+        </div>`;
+      }).join('') || `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Nothing here yet.</div>`}
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;box-shadow:var(--shadow);margin-top:13px;cursor:pointer" onclick="showTab('reading');showReadTab('music')">
+      <div style="width:52px;height:52px;flex:none;border-radius:14px;background:repeating-linear-gradient(135deg,var(--bg) 0 7px,var(--card) 7px 14px);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem">🎵</div>
+      <div style="flex:1;min-width:0">
+        <div style="font:800 .66rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">This week's playlist</div>
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:.95rem;color:var(--ocean);margin-top:3px">Learn songs & lyrics</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:1px">${MUSIC_VOCAB.length} key words from Cape Verdean music</div>
+      </div>
+      <div style="font-size:1rem;color:var(--ocean-2)">›</div>
+    </div>
+  `;
+}
+
+function setCommunityFilter(id) { state.communityFilter = id; saveState(); renderCommunity(); }
+
+function toggleCommunityLike(id) {
+  state.communityLikes = state.communityLikes || {};
+  state.communityLikes[id] = !state.communityLikes[id];
+  saveState();
+  renderCommunity();
+}
+
+function toggleComposeBox() {
+  const box = document.getElementById('community-compose');
+  if (!box) return;
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  if (box.style.display === 'block') document.getElementById('community-compose-text')?.focus();
+}
+
+function postCommunityMessage() {
+  const ta = document.getElementById('community-compose-text');
+  const text = (ta?.value || '').trim();
+  if (!text) return;
+  const posts = state.communityPosts && state.communityPosts.length ? state.communityPosts : [...COMMUNITY_POSTS];
+  posts.unshift({ id: 'you-' + Date.now(), name: 'You', initials: 'Y', color: 'var(--ocean)', place: 'This device', time: 'now', category: 'questions', text, likes: 0 });
+  state.communityPosts = posts;
+  saveState();
+  ta.value = '';
+  document.getElementById('community-compose').style.display = 'none';
+  renderCommunity();
 }
 
 function startScenario(scenario) {
@@ -18079,6 +18995,49 @@ function saveApiKey() {
 }
 
 function getApiKey() { return localStorage.getItem('kriolu_api_key') || ''; }
+
+// AI Tutor Setup screen — a fuller explanation of what the shared/own-key
+// connection powers, on top of the same localStorage key the chat and
+// translate panels already read/write, so all three stay in sync.
+function renderAiSetup() {
+  const connected = !!getApiKey();
+  const card = document.getElementById('ai-status-card');
+  if (card) {
+    card.style.background = connected ? '#D4F5F1' : 'var(--bg)';
+    card.innerHTML = `<div style="display:flex;align-items:center;gap:12px">
+      <div style="width:10px;height:10px;flex:none;border-radius:50%;background:${connected ? 'var(--correct)' : 'var(--muted)'}"></div>
+      <div><div style="font-weight:800;font-size:.85rem;color:${connected ? '#1A7A6E' : 'var(--text)'}">${connected ? 'Connected' : 'Using the shared connection'}</div>
+      <div style="font-size:.72rem;color:${connected ? '#1A7A6E' : 'var(--muted)'};margin-top:1px">${connected ? 'Chat, feedback and voice are all live with your own key' : 'Add your own key below for higher limits'}</div></div>
+    </div>`;
+  }
+  const input = document.getElementById('ai-setup-key-input');
+  if (input) input.placeholder = connected ? '••••••••••••• (saved ✓)' : 'sk-ant-...';
+}
+function toggleAiKeyVisibility(el) {
+  const input = document.getElementById('ai-setup-key-input');
+  if (!input) return;
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  el.textContent = showing ? 'SHOW' : 'HIDE';
+}
+function saveApiKeyFromAiSetup() {
+  const input = document.getElementById('ai-setup-key-input');
+  const key = (input?.value || '').trim();
+  if (!key) return;
+  localStorage.setItem('kriolu_api_key', key);
+  input.value = '';
+  const chatField = document.getElementById('api-key-input');
+  if (chatField) chatField.placeholder = '••••••••••••• (saved ✓)';
+  showToast('API key saved ✓');
+  renderAiSetup();
+}
+function clearApiKeyFromAiSetup() {
+  localStorage.removeItem('kriolu_api_key');
+  const chatField = document.getElementById('api-key-input');
+  if (chatField) chatField.placeholder = 'sk-ant-...';
+  showToast('API key cleared');
+  renderAiSetup();
+}
 
 function initConversation() {
   if (!state.chatHistory.length) {
@@ -18142,6 +19101,17 @@ function showOnboarding() {
         <button class="due-btn" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardLang('kriolu')">🇨🇻 Kriolu — Cape Verdean Creole</button>
         <button class="due-btn" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardLang('portuguese')">🇵🇹 Português — European Portuguese</button>
       </div>
+      <div id="onboard-step-dialect" style="display:none">
+        <div style="font-size:1.25rem;font-weight:800;color:var(--ocean);margin-bottom:4px">Which Kriolu do you want to learn?</div>
+        <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">We'll always show you both, and you can switch any time.</div>
+        <button class="due-btn" id="onboard-dialect-santiago" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardDialectPick('santiago')">🇨🇻 Santiago · Badiu — Praia · Tarrafal · Assomada</button>
+        <button class="due-btn" id="onboard-dialect-visente" style="display:block;width:100%;margin-bottom:12px;text-align:left" onclick="onboardDialectPick('saovicente')">🇨🇻 São Vicente — Mindelu · Baía das Gatas</button>
+        <div style="display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:14px">
+          <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:.85rem">ALUPEC spelling</div><div style="font-size:.75rem;color:var(--muted);margin-top:2px">The official spelling system. Turn off to see Portuguese-style spelling too.</div></div>
+          <label class="toggle-switch"><input type="checkbox" id="onboard-alupec-toggle" checked onchange="state.alupecSpelling=this.checked"><span class="toggle-slider"></span></label>
+        </div>
+        <button class="due-btn" style="display:block;width:100%;text-align:center;background:var(--grad-sun)" onclick="onboardDialectContinue()">Continue</button>
+      </div>
       <div id="onboard-step1" style="display:none">
         <div style="font-size:1.25rem;font-weight:800;color:var(--ocean);margin-bottom:4px" id="onboard-goal-title">Ben-vindu!</div>
         <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px" id="onboard-goal-sub">Why are you learning? We\'ll tailor your path.</div>
@@ -18160,13 +19130,32 @@ function showOnboarding() {
 function onboardLang(lang) {
   if (lang !== currentLang()) switchLanguage(lang);
   else applyLanguageChrome();
+  document.getElementById('onboard-step0').style.display = 'none';
+  // Dialect only applies to the Kriolu track — Portuguese skips straight to goal.
+  if (lang === 'kriolu') {
+    onboardDialectPick(state.dialect === 'saovicente' ? 'saovicente' : 'santiago');
+    document.getElementById('onboard-step-dialect').style.display = 'block';
+  } else {
+    showOnboardGoalStep();
+  }
+}
+function onboardDialectPick(d) {
+  state.dialect = d;
+  const santiagoBtn = document.getElementById('onboard-dialect-santiago');
+  const visenteBtn = document.getElementById('onboard-dialect-visente');
+  if (santiagoBtn) santiagoBtn.style.outline = d === 'santiago' ? '2px solid var(--sky)' : 'none';
+  if (visenteBtn) visenteBtn.style.outline = d === 'saovicente' ? '2px solid var(--sky)' : 'none';
+}
+function onboardDialectContinue() {
+  document.getElementById('onboard-step-dialect').style.display = 'none';
+  showOnboardGoalStep();
+}
+function showOnboardGoalStep() {
   const L = langInfo();
   const t = document.getElementById('onboard-goal-title');
   const sub = document.getElementById('onboard-goal-sub');
   if (t) t.textContent = L.mark + ' ' + L.label;
   if (sub) sub.textContent = 'Why are you learning ' + L.label + '? We\'ll tailor your path.';
-  const s0 = document.getElementById('onboard-step0');
-  if (s0) s0.style.display = 'none';
   const s1 = document.getElementById('onboard-step1');
   if (s1) s1.style.display = 'block';
 }
@@ -18186,6 +19175,21 @@ function onboardLevel(lv) {
   } else {
     showToast('🎓 Tip: take the placement test on Home to skip ahead');
   }
+}
+
+// Shared by the AI tutor's context (buildTutorContext) and the Home "word of
+// the day" card, so both surfaces agree on which word today's word is.
+const WOTD_LIST = ['Sodadi (longing/nostalgia)','Morabeza (Cape Verdean warmth & hospitality)','Funaná (a music genre)','Cretcheu (sweetheart/beloved)','Txeu (a lot/many)','Fixe (cool/great)','Dexa (to leave/let)','Sabi (tasty/nice)','Pamodi (why/because)','Manera (way/how)','Konsigui (to manage/succeed)','Spritu (spirit/wit)'];
+function wordOfTheDay() {
+  const dayNum = Math.floor(new Date().setHours(0, 0, 0, 0) / 86400000);
+  const entry = WOTD_LIST[dayNum % WOTD_LIST.length];
+  const m = entry.match(/^(.+?)\s*\((.+)\)$/);
+  const headword = m ? m[1] : entry;
+  const parenGloss = m ? m[2] : '';
+  // Prefer the real lesson vocab's example sentence when this headword is
+  // actually taught somewhere, so the card isn't just a floating definition.
+  const vocab = LESSONS.flatMap(l => l.vocab).find(v => v.k && v.k.toLowerCase() === headword.toLowerCase());
+  return { k: headword, e: vocab ? vocab.e : parenGloss, ex: vocab ? vocab.ex : '' };
 }
 
 function buildTutorContext() {
@@ -18225,9 +19229,8 @@ function buildTutorContext() {
   };
   if (diffMap[diff]) ctx += diffMap[diff];
   // Word of the day — António naturally teaches one fresh word per day
-  const wotdList = ['Sodadi (longing/nostalgia)','Morabeza (Cape Verdean warmth & hospitality)','Funaná (a music genre)','Cretcheu (sweetheart/beloved)','Txeu (a lot/many)','Fixe (cool/great)','Dexa (to leave/let)','Sabi (tasty/nice)','Pamodi (why/because)','Manera (way/how)','Konsigui (to manage/succeed)','Spritu (spirit/wit)'];
   const dayNum = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
-  const wotd = wotdList[dayNum % wotdList.length];
+  const wotd = WOTD_LIST[dayNum % WOTD_LIST.length];
   ctx += `\nWORD OF THE DAY: If it fits naturally, weave in the word "${wotd}" during the conversation and briefly highlight it as today's word to learn. Don't force it.`;
   if (state.tutorMemory && state.tutorMemory.trim()) {
     ctx += `\n\n--- WHAT YOU REMEMBER ABOUT THIS LEARNER (from past conversations) ---\n${state.tutorMemory.trim()}`;
@@ -18333,6 +19336,15 @@ function appendBotMessage(kriolu, english) {
 }
 
 // Speak a chat reply with the header character lip-syncing
+// Tapping the big hero avatar replays whatever António last actually said —
+// reads it straight off the last bot bubble's own speak-button data, so it's
+// never out of sync with the real conversation.
+function replayLastAntonio() {
+  const bubbles = document.querySelectorAll('#chat-window .chat-msg.bot .speak-btn');
+  const last = bubbles[bubbles.length - 1];
+  if (last) { userHasInteracted = true; antonioChatSpeak(last.dataset.text, last); }
+}
+
 function antonioChatSpeak(text, btnEl) {
   const status = document.getElementById('antonio-chat-status');
   const prevStatus = status ? status.textContent : '';
@@ -18615,10 +19627,13 @@ async function doTranslate() {
   const TL = isPT()
     ? 'European Portuguese (as spoken in Portugal and Cape Verde — never Brazilian forms)'
     : 'Kriolu (Cape Verdean Creole, Santiago/Badiu variety)';
+  // Only English→Kriolu has a second dialect worth surfacing (São Vicente vs.
+  // Santiago) — every other direction leaves "variant" as an empty string.
+  const wantVariant = !k2e && !isPT();
   const sysPrompt = `You are an expert translator between ${TL} and English.
 Translate the user's text ${k2e ? `from ${TL} to natural English` : `from English to natural ${TL}`}.
 Respond with ONLY valid JSON, no markdown fences, in this exact format:
-{"translation":"the translated text","note":"a one-sentence note about word choice, grammar, or culture if helpful, else empty string"}`;
+{"translation":"the translated text","note":"a one-sentence note about word choice, grammar, or culture if helpful, else empty string"${wantVariant ? ',"variant":"the same sentence as it would actually be said in São Vicente Kriolu, if meaningfully different from the Santiago translation — else empty string"' : ''}}`;
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -18637,7 +19652,7 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
       const translated = parsed.translation || raw;
       lastTranslation = { text: translated, source: input };
       state.translationsCount = (state.translationsCount||0) + 1; saveState(); checkAchievements();
-      showTranslation(translated, parsed.note || '');
+      showTranslation(translated, parsed.note || '', parsed.variant || '');
     }
   } catch(e) {
     showTranslation('⚠️ Connection error. Check your internet and try again.', '');
@@ -18645,7 +19660,7 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
   btn.disabled = false; btn.textContent = 'Translate →';
 }
 
-function showTranslation(text, note) {
+function showTranslation(text, note, variant) {
   // Normalize escaped/real newlines into a single form
   const normalized = String(text || '')
     .replace(/\\r\\n/g, '\n')   // literal backslash-r-n
@@ -18659,6 +19674,9 @@ function showTranslation(text, note) {
   const safe = escapeHTML(normalized).replace(/\n/g, '<br>');
   document.getElementById('translate-output').innerHTML = safe;
   document.getElementById('translate-note').textContent = note;
+  const variantEl = document.getElementById('translate-variant');
+  if (variant) { variantEl.innerHTML = `🌊 <b>Also heard as</b> (São Vicente): ${escapeHTML(variant)}`; variantEl.style.display = 'block'; }
+  else { variantEl.style.display = 'none'; variantEl.innerHTML = ''; }
   document.getElementById('translate-result-card').style.display = 'block';
 }
 
@@ -18707,7 +19725,7 @@ function saveTranslationFav() {
   const fav = {
     k: k2e ? lastTranslation.source : lastTranslation.text,
     e: k2e ? lastTranslation.text : lastTranslation.source,
-    ex: '(saved from translator)'
+    ex: '(saved from translator)', source: 'Translate'
   };
   if (!state.favourites.some(f => f.k === fav.k)) {
     state.favourites.push(fav);
@@ -18778,10 +19796,21 @@ function showLearnTab(which) {
   else if (which === 'write') renderWriting();
 }
 
+// Fast-path chip row for the handful of highest-frequency verbs — the full
+// searchable list below still covers everything else.
+function renderVerbChips() {
+  const chipsEl = document.getElementById('verb-chips');
+  if (!chipsEl) return;
+  chipsEl.style.display = 'flex';
+  chipsEl.innerHTML = VERBS.slice(0, 6).map(v =>
+    `<span class="verb-chip" onclick="openVerb('${escapeJS(v.inf)}')">${escapeHTML(v.inf)}</span>`).join('');
+}
+
 function renderVerbList() {
   document.getElementById('verb-detail').style.display = 'none';
   const list = document.getElementById('verb-list');
   list.style.display = 'block';
+  renderVerbChips();
   const search = (document.getElementById('verb-search')?.value || '').toLowerCase().trim();
   const filtered = VERBS.filter(v => !search || v.inf.toLowerCase().includes(search) || v.e.toLowerCase().includes(search));
   if (!filtered.length) {
@@ -18801,6 +19830,8 @@ function openVerb(inf) {
   if (!state.verbsViewed) state.verbsViewed = [];
   if (!state.verbsViewed.includes(inf)) { state.verbsViewed.push(inf); saveState(); checkAchievements(); }
   document.getElementById('verb-list').style.display = 'none';
+  const chips = document.getElementById('verb-chips');
+  if (chips) chips.style.display = 'none';
   const detail = document.getElementById('verb-detail');
   detail.style.display = 'block';
   const tables = conjugate(verb);
@@ -18972,7 +20003,8 @@ function openGrammar(id) {
         <div class="g-point-exE">${escapeHTML(p.exE)}</div>
       </div>`).join('')}
       <div class="g-tip"><b>💡 Tip:</b> ${escapeHTML(g.tip)}</div>
-    </div>`;
+    </div>
+    ${GRAMMAR_SKILLS.some(sk => sk.id === 'gs_' + g.id) ? `<button class="due-btn" style="width:100%;margin-top:12px" onclick="startGrammarSkill('gs_${g.id}')">Practice this skill →</button>` : ''}`;
   window.scrollTo(0, 0);
 }
 
@@ -19998,15 +21030,52 @@ function renderDialogueCards() {
   return `<div style="font-weight:800;color:var(--ocean);margin:4px 0 10px">🎧 Dialogues — listen & answer</div>`
     + DIALOGUES.map(d => {
       const done = (state.dialoguesDone || []).includes(d.id);
-      return `<div class="story-card" onclick="openDialogue('${d.id}')">
+      const opener = DLG_LONGFORM_IDS.includes(d.id) ? `openLongform('${d.id}')` : `openDialogue('${d.id}')`;
+      return `<div class="story-card" onclick="${opener}">
         <div class="s-icon">${d.icon}</div>
         <div style="flex:1">
           <div class="s-title">${d.title} ${done ? '<span style="color:var(--correct)">✓</span>' : ''}</div>
-          <div class="s-titleE">${d.titleE} — ${d.lines.length} lines · 3 questions</div>
+          <div class="s-titleE">${d.titleE} — ${d.lines.length} lines · ${d.quiz.length} questions</div>
           <span class="s-level level-${d.level}">${d.level}</span>
         </div></div>`;
     }).join('')
     ;
+}
+
+// The 4 long-form dialogues (14-24 lines, 6-8 quiz questions) reuse the exact
+// same shape as the short scenes, so they're tagged rather than split into a
+// separate data structure.
+const DLG_LONGFORM_IDS = ['pt_b2_devolucao','pt_c1_heranca','pt_c1_consulta','pt_c1_escola_reuniao'];
+let dlgLibLevelFilter = 'All';
+function setDlgLibLevelFilter(level, el) {
+  dlgLibLevelFilter = level;
+  document.querySelectorAll('#dlg-lib-chips .dict-chip').forEach(c => c.classList.remove('active'));
+  el?.classList.add('active');
+  renderDialogueLibrary();
+}
+function renderDialogueLibrary() {
+  document.getElementById('dlg-lib-detail').style.display = 'none';
+  const list = document.getElementById('dlg-lib-list');
+  list.style.display = 'block';
+  const levels = ['All', ...new Set(DIALOGUES.map(d => d.level))];
+  const shown = DIALOGUES.filter(d => dlgLibLevelFilter === 'All' || d.level === dlgLibLevelFilter);
+  list.innerHTML = `
+    <div style="font-size:.78rem;color:var(--muted);margin-bottom:11px">${DIALOGUES.length} scenes · every line with audio</div>
+    ${levels.length > 2 ? `<div id="dlg-lib-chips" style="display:flex;gap:7px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px">
+        ${levels.map(l => `<div class="dict-chip${dlgLibLevelFilter === l ? ' active' : ''}" onclick="setDlgLibLevelFilter('${escapeJS(l)}',this)">${escapeHTML(l)}</div>`).join('')}
+      </div>` : ''}
+    ${shown.map(d => {
+      const done = (state.dialoguesDone || []).includes(d.id);
+      const long = DLG_LONGFORM_IDS.includes(d.id);
+      const opener = long ? `openLongform('${d.id}','dlglib')` : `openDialogue('${d.id}','dlglib')`;
+      return `<div class="story-card" onclick="${opener}">
+        <div class="s-icon">${d.icon}</div>
+        <div style="flex:1">
+          <div class="s-title">${d.title} ${done ? '<span style="color:var(--correct)">✓</span>' : ''}</div>
+          <div class="s-titleE">${d.titleE} — ${d.lines.length} lines${long ? ' · long-form' : ''}</div>
+          <span class="s-level level-${d.level}">${d.level}</span>
+        </div></div>`;
+    }).join('')}`;
 }
 
 function renderPassageCards() {
@@ -20025,6 +21094,21 @@ function renderPassageCards() {
 }
 
 const pzProgress = {};
+// Passage vocab lookup for tap-any-word — same technique openStory() already
+// uses for STORIES, just applied to READING_PASSAGES too. LESSONS already
+// points at whichever course is active, so this is language-correct for free.
+function linkifyReadingWords(text, vocabMap) {
+  if (!VERB_INF_SET) VERB_INF_SET = new Set(VERBS.map(v => v.inf.toLowerCase()).filter(x => x.length >= 2));
+  return text.split(/(\s+)/).map(token => {
+    if (/^\s+$/.test(token)) return token;
+    const clean = token.toLowerCase().replace(/[.,!?¡¿"«»]/g, '');
+    const meaning = vocabMap[clean];
+    if (meaning) return `<span class="story-word" onclick="event.stopPropagation();showWordPopup('${escapeJS(clean)}','${escapeJS(meaning)}')">${escapeHTML(token)}</span>`;
+    if (VERB_INF_SET.has(clean)) return `<span class="verb-tap" onclick="event.stopPropagation();showVerbCard('${clean}')">${escapeHTML(token)}</span>`;
+    return escapeHTML(token);
+  }).join('');
+}
+let pzReading = null;
 function openPassage(id) {
   const pz = READING_PASSAGES.find(x => x.id === id);
   if (!pz) return;
@@ -20032,21 +21116,37 @@ function openPassage(id) {
   document.getElementById('reading-list').style.display = 'none';
   const det = document.getElementById('reading-detail');
   det.style.display = 'block';
+
+  const vocabMap = {};
+  LESSONS.forEach(l => l.vocab.forEach(v => {
+    const clean = v.k.toLowerCase().replace(/[.,!?]/g, '');
+    vocabMap[clean] = v.e;
+    clean.split(/\s+/).forEach(w => { if (!vocabMap[w]) vocabMap[w] = v.e; });
+  }));
+
   det.innerHTML = `
-    <button class="back-btn" onclick="renderReadingList()">←</button>
+    <button class="back-btn" onclick="stopPzReadAloud();renderReadingList()">←</button>
     <h2 style="margin:8px 0 2px">${pz.icon} ${pz.title}</h2>
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:6px">${pz.titleE} · ${pz.level}</div>
-    <button class="due-btn" style="margin-bottom:12px" onclick="pzToggleEnglish(this)">🇬🇧 Show English</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <button class="due-btn" onclick="pzToggleEnglish(this)">🇬🇧 Show English</button>
+      <button class="due-btn" id="pz-readaloud-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="togglePzReadAloud('${pz.id}',this)">🔊 Read aloud to me</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin-bottom:12px">
+      <div style="font-size:15px">👆</div>
+      <div style="flex:1;min-width:0;font-size:.72rem;line-height:1.45;color:var(--ocean)">Tap any word you don't know — it translates in place and saves to review.</div>
+    </div>
     <div class="story-detail-card">
       ${pz.paras.map((para, i) => `
-        <div class="story-line">
+        <div class="story-line" id="pz-line-${i}">
           <div style="display:flex;gap:8px;align-items:flex-start">
             <button class="speak-btn" style="margin:0;font-size:.9rem;flex-shrink:0" onclick="pzSpeak('${pz.id}',${i},this)">🔊</button>
-            <div style="font-size:.95rem;line-height:1.75">${linkifyVerbs(para.k)}</div>
+            <div style="font-size:.95rem;line-height:1.75">${linkifyReadingWords(para.k, vocabMap)}</div>
           </div>
           <div class="pz-en" style="display:none;font-size:.82rem;color:var(--muted);margin-top:8px;padding-left:34px;line-height:1.6">${escapeHTML(para.e)}</div>
         </div>`).join('')}
     </div>
+    <div id="pz-saved-count" data-pz-id="${pz.id}" style="text-align:center;font-size:.68rem;color:var(--muted);margin-top:10px"></div>
     <div style="font-weight:800;color:var(--ocean);margin:16px 0 8px">❓ Comprehension & vocabulary</div>
     <div id="pz-quiz">
       ${pz.quiz.map((qq, qi) => `
@@ -20056,6 +21156,32 @@ function openPassage(id) {
         </div>`).join('')}
     </div>
     <div id="pz-result"></div>`;
+  refreshPzSavedCount(pz.id);
+}
+// A simple sequential-paragraph read-through — passages have no recorded
+// audio either, so this uses the same TTS-driven approach as the story
+// player, just without per-line scrubbing (prose doesn't need it).
+async function togglePzReadAloud(id, btn) {
+  if (pzReading) { stopPzReadAloud(); return; }
+  const pz = READING_PASSAGES.find(x => x.id === id);
+  if (!pz) return;
+  pzReading = { id, playing: true };
+  btn.textContent = '⏸ Stop reading';
+  for (let i = 0; i < pz.paras.length; i++) {
+    if (!pzReading || !pzReading.playing) return;
+    document.querySelectorAll('.story-line').forEach(el => el.classList.remove('story-line-active'));
+    document.getElementById('pz-line-' + i)?.classList.add('story-line-active');
+    await speakLineAwaitable(pz.paras[i].k, 1);
+    if (!pzReading || !pzReading.playing) return;
+  }
+  stopPzReadAloud();
+}
+function stopPzReadAloud() {
+  pzReading = null;
+  window.speechSynthesis?.cancel();
+  document.querySelectorAll('.story-line').forEach(el => el.classList.remove('story-line-active'));
+  const btn = document.getElementById('pz-readaloud-btn');
+  if (btn) btn.textContent = '🔊 Read aloud to me';
 }
 function dlgToggleEnglish(btn) {
   const shown = btn.textContent.includes('Hide');
@@ -20108,33 +21234,193 @@ function pzAnswer(btn, id, qi, ok) {
   }
 }
 
-function openDialogue(id) {
+// Per-scene analysis for the 4 long-form dialogues, ported verbatim from the
+// Screen 8 mockup's own authored content. Only pt_c1_heranca has a genuine
+// "brief" (character bios, what-this-level-asks bullets) and "recap"
+// (argument-beats timeline, key phrases) — the mockup itself never wrote
+// that content for the other 3 scenes, so they go straight from the library
+// into the reader rather than getting invented bios/beats.
+const LONGFORM_META = {
+  pt_c1_heranca: {
+    turn: 16,
+    turnNote: 'The turn — she stops arguing cost and names the real thing',
+    tip: ['', 'E se arrendássemos?', ' — the imperfect subjunctive is how Portuguese floats an idea without committing to it. It is what lets this argument end well.'],
+    brief: {
+      minutes: 6,
+      desc: 'Two siblings disagree about whether to sell the family house on the island. Nobody is wrong, nobody wins, and the ending is a compromise neither of them arrived with.',
+      speakers: [
+        { name:'Sandra', blurb:'Wants to sell · argues with numbers', tone:'var(--ocean)' },
+        { name:'Nuno', blurb:'Wants to keep it · argues with what numbers miss', tone:'var(--coral)' },
+      ],
+      asks: [
+        'Hypotheticals stacked on hypotheticals — <b>E se arrendássemos?</b>',
+        'Conceding a point without losing the argument — <b>Posto assim, percebo o teu ponto.</b>',
+        'Apologising mid-argument and continuing anyway',
+      ],
+    },
+    recap: {
+      intro: 'At C1 the vocabulary is not the hard part — following a position as it shifts is. This is the same scene as a shape.',
+      beats: [
+        { sp:'Sandra', t:'"Vendemos. A casa está vazia há sete anos."', move:'Opens with the decision already made', tone:'var(--ocean)' },
+        { sp:'Nuno', t:'"Está vazia porque nenhum de nós teve tempo de lá ir."', move:'Rejects the premise, not the conclusion', tone:'var(--coral)' },
+        { sp:'Sandra', t:'"Ao fim de dez anos são vinte e quatro mil euros."', move:'Escalates to the strongest version of her case', tone:'var(--ocean)' },
+        { sp:'Nuno', t:'"Posto assim, percebo o teu ponto. Mas…"', move:'Concedes ground and holds his position anyway', tone:'var(--coral)' },
+        { sp:'Sandra', t:'"Falam crioulo com sotaque." → "Peço desculpa."', move:'Goes too far, and repairs it immediately', tone:'var(--ocean)' },
+        { sp:'Sandra', t:'"E se arrendássemos?"', move:'Abandons her own position for a third option', tone:'var(--ocean)' },
+        { sp:'Nuno', t:'"Não resolve, mas dá-nos tempo para resolver bem."', move:'Accepts without pretending it is settled', tone:'var(--coral)' },
+      ],
+      insight: 'Neither of them arrived wanting to rent it out. That is what a real argument in a second language sounds like — and why this scene is C1 rather than B2.',
+      phrases: [
+        { k:'Posto assim, percebo o teu ponto.', e:'Put like that, I see your point.' },
+        { k:'Isso foi desnecessário.', e:'That was unnecessary.' },
+        { k:'E se arrendássemos?', e:'And if we rented it out?' },
+        { k:'Não resolve, mas dá-nos tempo.', e:'It does not settle it, but it gives us time.' },
+      ],
+    },
+  },
+  pt_b2_devolucao: {
+    turn: 11,
+    turnNote: 'The turn — the clerk agrees the letter was at fault, not him',
+    tip: ['The clerk concedes with ', 'É uma crítica justa', ' — admitting the institution is at fault without accepting personal blame.'],
+  },
+  pt_c1_consulta: {
+    turn: 8,
+    turnNote: 'The turn — the doctor takes her share of the blame',
+    tip: ['', 'A falha não é só sua', ' — the doctor takes a share of the blame, and that is the line that unlocks the rest of the consultation.'],
+  },
+  pt_c1_escola_reuniao: {
+    turn: 16,
+    turnNote: 'The turn — he admits the objection he cannot answer',
+    tip: ['', 'não tenho boa resposta', ' — conceding an objection you cannot answer is the most advanced move in the scene.'],
+  },
+};
+let lfState = {};                        // per-id { at, showEn }
+let lfPlayer = { id: null, playing: false };
+let lfCurrent = null;                    // { id, from, listId, detailId, view }
+
+function openLongform(id, from) {
   const d = DIALOGUES.find(x => x.id === id);
   if (!d) return;
-  dlgPlaying = false;
-  document.getElementById('reading-list').style.display = 'none';
-  const det = document.getElementById('reading-detail');
-  det.style.display = 'block';
-  det.innerHTML = `
-    <button class="back-btn" onclick="dlgPlaying=false;renderReadingList()">←</button>
+  const meta = LONGFORM_META[id] || { turn: -1, turnNote: '', tip: null };
+  lfPlayer = { id: null, playing: false };
+  if (!lfState[id]) lfState[id] = { at: 0, showEn: false };
+  const listId = from === 'dlglib' ? 'dlg-lib-list' : 'reading-list';
+  const detailId = from === 'dlglib' ? 'dlg-lib-detail' : 'reading-detail';
+  document.getElementById(listId).style.display = 'none';
+  document.getElementById(detailId).style.display = 'block';
+  lfCurrent = { id, from, listId, detailId, view: meta.brief ? 'brief' : 'reader' };
+  renderLongform();
+}
+function lfBack() {
+  lfPlayer.playing = false;
+  const meta = LONGFORM_META[lfCurrent.id] || {};
+  if (lfCurrent.view === 'reader' && meta.brief) { lfCurrent.view = 'brief'; renderLongform(); return; }
+  document.getElementById(lfCurrent.detailId).style.display = 'none';
+  document.getElementById(lfCurrent.listId).style.display = 'block';
+  if (lfCurrent.from === 'dlglib') renderDialogueLibrary(); else renderReadingList();
+}
+function lfSetView(view) {
+  lfPlayer.playing = false;
+  lfCurrent.view = view;
+  renderLongform();
+}
+function lfSetLine(i) {
+  lfState[lfCurrent.id].at = i;
+  renderLongform();
+}
+function lfToggleEn() {
+  const st = lfState[lfCurrent.id];
+  st.showEn = !st.showEn;
+  renderLongform();
+}
+async function lfTogglePlay() {
+  const id = lfCurrent.id;
+  const st = lfState[id];
+  const d = DIALOGUES.find(x => x.id === id);
+  if (lfPlayer.playing && lfPlayer.id === id) { lfPlayer.playing = false; renderLongform(); return; }
+  lfPlayer = { id, playing: true };
+  userHasInteracted = true;
+  for (let i = st.at; i < d.lines.length; i++) {
+    if (!lfPlayer.playing || lfPlayer.id !== id) return;
+    st.at = i;
+    renderLongform();
+    await speakLineAwaitable(d.lines[i].k, 0.8);
+    if (!lfPlayer.playing || lfPlayer.id !== id) return;
+  }
+  lfPlayer.playing = false;
+  renderLongform();
+}
+function renderLongform() {
+  const { id, view, detailId } = lfCurrent;
+  const d = DIALOGUES.find(x => x.id === id);
+  if (!d) return;
+  const meta = LONGFORM_META[id] || {};
+  const det = document.getElementById(detailId);
+  if (view === 'brief') { det.innerHTML = lfRenderBrief(d, meta); return; }
+  if (view === 'recap') { det.innerHTML = lfRenderRecap(d, meta); return; }
+  det.innerHTML = lfRenderReader(d, meta);
+}
+function lfRenderBrief(d, meta) {
+  const b = meta.brief;
+  return `
+    <button class="back-btn" onclick="lfBack()">←</button>
+    <div class="lab-card" style="margin-top:8px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:1.7rem">${d.icon}</div>
+        <span class="s-level level-${d.level}">${d.level}</span>
+      </div>
+      <h2 style="margin:12px 0 2px">${d.title}</h2>
+      <div style="color:var(--muted);font-size:.8rem">${d.titleE} · ${d.lines.length} lines${b.minutes ? ' · about ' + b.minutes + ' minutes' : ''}</div>
+      <p style="font-size:.9rem;line-height:1.6;margin-top:12px">${escapeHTML(b.desc)}</p>
+      <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+      <div class="checkpoint-topics-label">Who is speaking</div>
+      ${b.speakers.map(sp => `<div style="display:flex;gap:11px;align-items:center;margin-top:10px">
+        <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${sp.tone};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">${escapeHTML(sp.name[0])}</div>
+        <div style="min-width:0"><div style="font-weight:800;font-size:.85rem">${escapeHTML(sp.name)}</div><div style="font-size:.72rem;color:var(--muted)">${escapeHTML(sp.blurb)}</div></div>
+      </div>`).join('')}
+      <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+      <div class="checkpoint-topics-label">What ${d.level} asks of you here</div>
+      ${b.asks.map(a => `<div style="display:flex;gap:9px;align-items:flex-start;margin-top:8px"><div style="flex:none;font-size:.8rem">•</div><div style="font-size:.8rem;line-height:1.5;min-width:0">${a}</div></div>`).join('')}
+    </div>
+    <button class="due-btn" style="width:100%;margin-top:14px" onclick="lfSetView('reader')">Read the scene</button>
+    <div style="text-align:center;margin-top:10px"><a href="javascript:void(0)" onclick="lfSetView('reader');lfTogglePlay()" style="font-weight:700;font-size:.78rem;color:var(--muted);text-decoration:underline">Listen straight through first</a></div>`;
+}
+function lfRenderReader(d, meta) {
+  const st = lfState[d.id];
+  const n = d.lines.length;
+  const VOICES = ['var(--ocean)', 'var(--coral)', 'var(--gold)'];
+  const speakers = [];
+  d.lines.forEach(l => { if (!speakers.includes(l.sp)) speakers.push(l.sp); });
+  const pct = Math.round(((st.at + 1) / n) * 100);
+  const playing = lfPlayer.playing && lfPlayer.id === d.id;
+  return `
+    <button class="back-btn" onclick="lfBack()">←</button>
     <h2 style="margin:8px 0 2px">${d.icon} ${d.title}</h2>
-    <div style="color:var(--muted);font-size:.85rem;margin-bottom:12px">${d.titleE} — listen first, then take the quiz</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="due-btn" id="dlg-playall" onclick="playDialogue('${d.id}')">▶ Play the whole dialogue</button>
-      <button class="due-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="dlgToggleEnglish(this)">🇬🇧 Show English</button>
+    <div style="color:var(--muted);font-size:.85rem;margin-bottom:10px">${d.titleE} · ${d.level}</div>
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+      <div style="flex:1;height:5px;border-radius:99px;background:var(--border);overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--grad-ocean);width:${pct}%"></div></div>
+      <div style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;color:var(--muted);flex:none">${st.at + 1} / ${n}</div>
+      <div class="dict-chip${st.showEn ? ' active' : ''}" style="flex:none" onclick="lfToggleEn()">EN</div>
     </div>
-    <div style="margin-top:14px">
-      ${d.lines.map((L, i) => `
-        <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;${L.sp === d.lines[0].sp ? '' : 'flex-direction:row-reverse;text-align:right'}">
-          <button class="speak-btn" style="margin:0;font-size:.9rem;flex-shrink:0" onclick="dlgSpeak('${d.id}',${i},this)">🔊</button>
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 13px;max-width:80%">
-            <div style="font-size:.68rem;font-weight:800;color:var(--ocean)">${L.sp}</div>
-            <div style="font-weight:700">${escapeHTML(L.k)}</div>
-            <div class="dlg-en" style="display:none;font-size:.78rem;color:var(--muted);margin-top:4px">${escapeHTML(L.e)}</div>
-          </div>
-        </div>`).join('')}
+    <div class="lab-card">
+      ${d.lines.map((L, i) => {
+        const cur = i === st.at;
+        const prev = i > 0 ? d.lines[i - 1].sp : null;
+        return `<div class="lf-line" onclick="lfSetLine(${i})">
+          ${L.sp !== prev ? `<div class="lf-speaker" style="color:${VOICES[speakers.indexOf(L.sp) % VOICES.length]}">${escapeHTML(L.sp)}</div>` : ''}
+          <div class="lf-text${cur ? ' lf-text-current' : ''}">${escapeHTML(L.k)}</div>
+          ${st.showEn || cur ? `<div class="lf-en">${escapeHTML(L.e)}</div>` : ''}
+          ${i === meta.turn ? `<div class="lf-turn-badge">↝ ${escapeHTML(meta.turnNote)}</div>` : ''}
+        </div>`;
+      }).join('')}
     </div>
-    <div style="font-weight:800;color:var(--ocean);margin:14px 0 8px">❓ Quiz</div>
+    ${meta.tip ? `<div class="lab-mistake" style="margin-top:12px">
+      <div class="lab-mistake-icon">💡</div>
+      <div>${escapeHTML(meta.tip[0])}<b>${escapeHTML(meta.tip[1])}</b>${escapeHTML(meta.tip[2])}</div>
+    </div>` : ''}
+    ${meta.recap ? `<button class="due-btn" style="width:100%;margin-top:12px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="lfSetView('recap')">See how the argument moved →</button>` : ''}
+    <button class="due-btn" id="lf-playall" style="width:100%;margin-top:12px" onclick="lfTogglePlay()">${playing ? '❙❙ Pause the scene' : '▶ Play from line ' + (st.at + 1)}</button>
+    <div style="font-weight:800;color:var(--ocean);margin:16px 0 8px" id="dlg-quiz-heading">❓ Quiz</div>
     <div id="dlg-quiz">
       ${d.quiz.map((qq, qi) => `
         <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;border:1px solid var(--border)">
@@ -20143,6 +21429,149 @@ function openDialogue(id) {
         </div>`).join('')}
     </div>
     <div id="dlg-result"></div>`;
+}
+function lfRenderRecap(d, meta) {
+  const r = meta.recap;
+  return `
+    <button class="back-btn" onclick="lfSetView('reader')">←</button>
+    <h2 style="margin:8px 0 12px">How the argument moved</h2>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.55">${escapeHTML(r.intro)}</p>
+    <div class="lab-card" style="margin-top:12px">
+      ${r.beats.map(b => `<div style="display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="width:10px;height:10px;flex:none;border-radius:50%;margin-top:5px;background:${b.tone}"></div>
+        <div style="min-width:0">
+          <div style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:${b.tone}">${escapeHTML(b.sp)}</div>
+          <div style="font-size:.85rem;margin-top:3px">${escapeHTML(b.t)}</div>
+          <div style="font-size:.72rem;color:var(--muted);font-style:italic;margin-top:3px">${escapeHTML(b.move)}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="lf-insight" style="display:flex;gap:10px;align-items:flex-start;border-radius:14px;padding:13px 15px;margin-top:12px">
+      <div style="font-size:1.05rem;flex:none">🤝</div>
+      <div style="font-size:.8rem;line-height:1.55;min-width:0">${escapeHTML(r.insight)}</div>
+    </div>
+    <div class="checkpoint-topics-label" style="margin:16px 0 8px">Phrases that did the work</div>
+    ${r.phrases.map(p => `<div style="display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin-bottom:8px">
+      <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.85rem;color:var(--ocean)">${escapeHTML(p.k)}</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px">${escapeHTML(p.e)}</div></div>
+      <button class="speak-btn" style="margin:0" onclick="speakText('${escapeJS(p.k)}',this)">🔊</button>
+    </div>`).join('')}
+    <button class="due-btn" style="width:100%;margin-top:8px" onclick="lfSetView('reader');setTimeout(()=>document.getElementById('dlg-quiz-heading')?.scrollIntoView({behavior:'smooth'}),50)">❓ ${d.quiz.length} questions</button>`;
+}
+
+let dlgRate = 0.8;
+function setDlgRate(rate, el) {
+  dlgRate = rate;
+  document.querySelectorAll('.story-rate-chip').forEach(c => c.classList.remove('active'));
+  el?.classList.add('active');
+}
+function openDialogue(id, from) {
+  const d = DIALOGUES.find(x => x.id === id);
+  if (!d) return;
+  dlgPlaying = false;
+  rolePlay = null;
+  const listId = from === 'dlglib' ? 'dlg-lib-list' : 'reading-list';
+  const detailId = from === 'dlglib' ? 'dlg-lib-detail' : 'reading-detail';
+  const backCall = from === 'dlglib' ? 'renderDialogueLibrary()' : 'renderReadingList()';
+  document.getElementById(listId).style.display = 'none';
+  const det = document.getElementById(detailId);
+  det.style.display = 'block';
+  det.innerHTML = `
+    <button class="back-btn" onclick="dlgPlaying=false;rolePlay=null;${backCall}">←</button>
+    <h2 style="margin:8px 0 2px">${d.icon} ${d.title}</h2>
+    <div style="color:var(--muted);font-size:.85rem;margin-bottom:12px">${d.titleE} — listen first, then take the quiz</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="due-btn" id="dlg-playall" onclick="playDialogue('${d.id}')">▶ Play the whole dialogue</button>
+      <button class="due-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="dlgToggleEnglish(this)">🇬🇧 Show English</button>
+      <div style="display:flex;gap:4px;margin-left:auto">
+        <div class="story-rate-chip${dlgRate===0.8?' active':''}" onclick="setDlgRate(0.8,this)">0.8×</div>
+        <div class="story-rate-chip${dlgRate===1?' active':''}" onclick="setDlgRate(1,this)">1×</div>
+        <div class="story-rate-chip${dlgRate===1.2?' active':''}" onclick="setDlgRate(1.2,this)">1.2×</div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      ${d.lines.map((L, i) => `
+        <div class="dlg-row${L.sp === d.lines[0].sp ? '' : ' reverse'}">
+          <button class="speak-btn" style="margin:0;font-size:.9rem;flex-shrink:0" onclick="dlgSpeak('${d.id}',${i},this)">🔊</button>
+          <div class="dlg-bubble">
+            <div class="dlg-speaker">${L.sp}</div>
+            <div class="dlg-text">${escapeHTML(L.k)}</div>
+            <div class="dlg-en">${escapeHTML(L.e)}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${d.note ? `<div class="lab-mistake">
+      <div class="lab-mistake-icon">💡</div>
+      <div>${escapeHTML(d.note[0])}<b>${escapeHTML(d.note[1])}</b>${escapeHTML(d.note[2])}</div>
+    </div>` : ''}
+    ${d.vocab && d.vocab.length ? `<div class="lab-card" style="margin-top:14px">
+      <div class="checkpoint-topics-label">Words from this scene</div>
+      <div class="wc-words" style="margin-top:9px">${d.vocab.map(w => `<span class="wc-word">${escapeHTML(w)}</span>`).join('')}</div>
+    </div>` : ''}
+    <div style="display:flex;gap:9px;margin-top:14px">
+      <button class="due-btn" style="flex:1;background:var(--card);color:var(--ocean);border:1.5px dashed var(--ocean-2)" onclick="dlgStartRolePlay('${d.id}')">🎭 Take a role</button>
+      <button class="due-btn" style="flex:1" onclick="document.getElementById('dlg-quiz-heading')?.scrollIntoView({behavior:'smooth',block:'start'})">❓ ${d.quiz.length} questions</button>
+    </div>
+    <div id="dlg-role-box" style="margin-top:12px"></div>
+    <div id="dlg-quiz-heading" style="font-weight:800;color:var(--ocean);margin:14px 0 8px">❓ Quiz</div>
+    <div id="dlg-quiz">
+      ${d.quiz.map((qq, qi) => `
+        <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;border:1px solid var(--border)">
+          <div style="font-weight:700;font-size:.9rem;margin-bottom:8px">${qi+1}. ${qq.q}</div>
+          ${qq.opts.map((o, oi) => `<button class="choice-btn" style="display:block;width:100%;margin-bottom:6px" onclick="dlgAnswer(this,'${d.id}',${qi},${oi === qq.a})">${o}</button>`).join('')}
+        </div>`).join('')}
+    </div>
+    <div id="dlg-result"></div>`;
+}
+
+// No speech-recognition in this app, so "taking a role" means: the app voices
+// the OTHER speaker's lines automatically, and pauses on your own lines so
+// you can read/say them aloud before continuing.
+let rolePlay = null;
+function dlgStartRolePlay(id) {
+  const d = DIALOGUES.find(x => x.id === id);
+  if (!d) return;
+  const speakers = [...new Set(d.lines.map(l => l.sp))];
+  const box = document.getElementById('dlg-role-box');
+  if (!box) return;
+  box.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px">
+      <div style="font-weight:700;font-size:.85rem;margin-bottom:9px">Which role do you want to play?</div>
+      <div style="display:flex;gap:8px">
+        ${speakers.map(sp => `<button class="due-btn" style="flex:1;background:var(--bg);color:var(--ocean);border:1.5px solid var(--border)" onclick="dlgRunRolePlay('${escapeJS(id)}','${escapeJS(sp)}')">${escapeHTML(sp)}</button>`).join('')}
+      </div>
+    </div>`;
+}
+let dlgRoleResolve = null;
+async function dlgRunRolePlay(id, myRole) {
+  const d = DIALOGUES.find(x => x.id === id);
+  if (!d) return;
+  userHasInteracted = true;
+  rolePlay = { id, active: true };
+  const box = document.getElementById('dlg-role-box');
+  const rows = document.querySelectorAll('#screen-dialogues .dlg-row, #screen-reading .dlg-row');
+  for (let i = 0; i < d.lines.length; i++) {
+    if (!rolePlay || !rolePlay.active) return;
+    rows.forEach(el => el.classList.remove('dlg-role-active'));
+    rows[i]?.classList.add('dlg-role-active');
+    const L = d.lines[i];
+    if (L.sp === myRole) {
+      box.innerHTML = `<div style="text-align:center;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:9px">Your line — read it aloud, then continue</div>
+        <button class="due-btn" onclick="dlgRoleContinue()">Continue ›</button>
+      </div>`;
+      await new Promise(res => { dlgRoleResolve = res; });
+    } else {
+      box.innerHTML = `<div style="text-align:center;padding:10px;font-size:.78rem;color:var(--muted)">🔊 ${escapeHTML(L.sp)} is speaking…</div>`;
+      await speakLineAwaitable(L.k, dlgRate);
+    }
+    if (!rolePlay || !rolePlay.active) return;
+  }
+  rows.forEach(el => el.classList.remove('dlg-role-active'));
+  box.innerHTML = `<div style="text-align:center;padding:12px;font-weight:800;color:var(--ocean)">🎉 Scene complete!</div>`;
+  rolePlay = null;
+}
+function dlgRoleContinue() {
+  if (dlgRoleResolve) { const r = dlgRoleResolve; dlgRoleResolve = null; r(); }
 }
 
 const dlgProgress = {};
@@ -20187,7 +21616,7 @@ function dlgSpeak(id, i, btn) {
   const d = DIALOGUES.find(x => x.id === id);
   if (!d || !d.lines[i]) return;
   userHasInteracted = true;
-  speakText(d.lines[i].k, btn);
+  speakText(d.lines[i].k, btn, dlgRate);
 }
 
 async function playDialogue(id) {
@@ -20199,8 +21628,8 @@ async function playDialogue(id) {
   if (btn) btn.textContent = '⏹ Stop';
   for (const L of d.lines) {
     if (!dlgPlaying) break;
-    speakText(L.k, null);
-    await sleep(Math.max(1800, L.k.length * 95));
+    speakText(L.k, null, dlgRate);
+    await sleep(Math.max(1800, L.k.length * 95) / dlgRate);
     if (!dlgPlaying) break;
     await sleep(500);
   }
@@ -20208,13 +21637,25 @@ async function playDialogue(id) {
   if (btn) btn.textContent = '▶ Play the whole dialogue';
 }
 
+let storyLevelFilter = 'All';
+function setStoryLevelFilter(level, el) {
+  storyLevelFilter = level;
+  document.querySelectorAll('#story-level-chips .dict-chip').forEach(c => c.classList.remove('active'));
+  el?.classList.add('active');
+  renderReadingList();
+}
 function renderReadingList() {
   document.getElementById('reading-detail').style.display = 'none';
   const list = document.getElementById('reading-list');
   list.style.display = 'block';
+  const levels = ['All', ...new Set(STORIES.map(s => s.level))];
+  const shownStories = STORIES.filter(s => storyLevelFilter === 'All' || s.level === storyLevelFilter);
   list.innerHTML = renderDialogueCards() + renderPassageCards()
     + `<div style="font-weight:800;color:var(--ocean);margin:18px 0 10px">📚 Stories</div>`
-    + STORIES.map(s => {
+    + (levels.length > 2 ? `<div id="story-level-chips" style="display:flex;gap:7px;overflow-x:auto;margin-bottom:11px;padding-bottom:2px">
+        ${levels.map(l => `<div class="dict-chip${storyLevelFilter === l ? ' active' : ''}" onclick="setStoryLevelFilter('${escapeJS(l)}',this)">${escapeHTML(l)}</div>`).join('')}
+      </div>` : '')
+    + shownStories.map(s => {
     const read = (state.storiesRead || []).includes(s.id);
     return `<div class="story-card" onclick="openStory('${s.id}')">
       <div class="s-icon">${s.icon}</div>
@@ -20472,7 +21913,7 @@ function renderMusic() {
       <div style="font-size:.82rem;opacity:.92">Learn the ${MUSIC_VOCAB.length} key words that fill Cape Verdean songs — sodadi, mar, korason…</div></div>
     <button class="ml-btn" onclick="startMusicLesson()">${done ? 'Practice Again' : 'Start →'}</button>
   </div>`;
-  list.innerHTML = lessonCard + ARTISTS.map(a => `
+  list.innerHTML = lessonCard + ARTISTS.map((a, ai) => `
     <div class="music-card">
       <div class="music-head">
         <div class="music-icon">${a.icon}</div>
@@ -20480,6 +21921,7 @@ function renderMusic() {
       </div>
       <div class="music-blurb">${escapeHTML(a.blurb)}</div>
       <div class="music-why">🎯 ${escapeHTML(a.why)}</div>
+      <div id="music-songs-${ai}" style="display:none;margin-top:11px">
       ${a.songs.map(s => {
         const q = encodeURIComponent(a.name + ' ' + s.title);
         return `<div class="song-row">
@@ -20496,7 +21938,18 @@ function renderMusic() {
           </div>
         </div>`;
       }).join('')}
+      </div>
+      <div class="music-more" onclick="toggleMusicSongs(${ai})" style="margin-top:9px;text-align:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;color:var(--ocean-2);cursor:pointer">Show ${a.songs.length} song${a.songs.length === 1 ? '' : 's'} ▾</div>
     </div>`).join('');
+}
+function toggleMusicSongs(i) {
+  const el = document.getElementById('music-songs-' + i);
+  if (!el) return;
+  const btn = el.nextElementSibling;
+  const opening = el.style.display === 'none';
+  el.style.display = opening ? 'block' : 'none';
+  const n = ARTISTS[i]?.songs.length || 0;
+  if (btn) btn.textContent = opening ? 'Hide songs ▴' : `Show ${n} song${n === 1 ? '' : 's'} ▾`;
 }
 
 // Build an exercise session from the music vocabulary
@@ -20510,6 +21963,11 @@ function startMusicLesson() {
   showScreen('exercise'); renderQuestion();
 }
 
+function openNextStory(currentId) {
+  const idx = STORIES.findIndex(s => s.id === currentId);
+  const next = STORIES[(idx + 1) % STORIES.length];
+  if (next) { stopStoryPlayback(); openStory(next.id); }
+}
 function openStory(id) {
   const story = STORIES.find(s => s.id === id);
   if (!story) return;
@@ -20545,19 +22003,122 @@ function openStory(id) {
     </div>`;
   }).join('');
 
+  storyPlayer = { id, lineIdx: 0, playing: false, rate: 1, lineCount: story.lines.length };
   detail.innerHTML = `
-    <button class="back-btn" style="margin-bottom:14px" onclick="renderReadingList()">←</button>
+    <button class="back-btn" style="margin-bottom:14px" onclick="stopStoryPlayback();renderReadingList()">←</button>
     <div class="story-detail-card">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
-        <div style="font-size:2rem">${story.icon}</div>
-        <div><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${story.title}</div>
-        <div style="font-size:.82rem;color:var(--muted);font-style:italic">${story.titleE}</div></div>
+      <div class="story-cover">${story.icon}</div>
+      <div style="text-align:center;margin-top:10px">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${story.title}</div>
+        <div style="font-size:.82rem;color:var(--muted);font-style:italic">${story.titleE}</div>
       </div>
-      <div style="font-size:.75rem;color:var(--muted);margin-bottom:16px">💡 Tap a <span style="border-bottom:1.5px dotted var(--sky)">dotted word</span> for its meaning, or tap a line to reveal its full translation.</div>
+      <div class="story-player">
+        <div class="story-progress-wrap"><div class="story-progress-fill" id="story-progress-fill" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;font:700 .68rem/1 'Plus Jakarta Sans',sans-serif;color:var(--muted);margin-top:5px">
+          <span id="story-progress-label">Line 1 / ${story.lines.length}</span>
+          <span id="story-rate-label">1×</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:20px;margin-top:12px">
+          <button class="story-player-btn" onclick="storySkip(-1)" title="Previous line">⏮</button>
+          <button class="story-player-btn story-play-btn" id="story-play-btn" onclick="toggleStoryPlay()">▶</button>
+          <button class="story-player-btn" onclick="storySkip(1)" title="Next line">⏭</button>
+        </div>
+        <div style="display:flex;justify-content:center;gap:7px;margin-top:11px">
+          <div class="story-rate-chip active" onclick="setStoryRate(0.8,this)">0.8×</div>
+          <div class="story-rate-chip" onclick="setStoryRate(1,this)">1×</div>
+          <div class="story-rate-chip" onclick="setStoryRate(1.2,this)">1.2×</div>
+        </div>
+      </div>
+      <div style="font-size:.75rem;color:var(--muted);margin:16px 0">💡 Tap a <span style="border-bottom:1.5px dotted var(--sky)">dotted word</span> for its meaning, or tap a line to reveal its full translation.</div>
       ${linesHTML}
       <button class="reveal-btn" style="margin-top:10px;width:100%" onclick="toggleAllTrans(this)">Show all translations</button>
-    </div>`;
+    </div>
+    ${(() => {
+      // "Words worth keeping" — the real vocab words this story actually
+      // contains (from the same vocabMap used for tap-to-translate above),
+      // not a curated/fabricated list.
+      const seen = new Set();
+      story.lines.forEach(l => l.k.toLowerCase().split(/\s+/).forEach(w => {
+        const clean = w.replace(/[.,!?¡¿"]/g, '');
+        if (vocabMap[clean]) seen.add(clean);
+      }));
+      const words = [...seen].slice(0, 8);
+      if (!words.length) return '';
+      return `<div class="lab-card" style="margin-top:12px">
+        <div class="checkpoint-topics-label">Words worth keeping</div>
+        <div class="wc-words" style="margin-top:9px">${words.map(w => `<span class="wc-word" onclick="showWordPopup('${escapeJS(w)}','${escapeJS(vocabMap[w])}')">${escapeHTML(w)}</span>`).join('')}</div>
+      </div>`;
+    })()}
+    <button class="due-btn" style="width:100%;margin-top:12px" onclick="openNextStory('${story.id}')">Next story ›</button>`;
   window.scrollTo(0, 0);
+}
+
+// Simulated audio player — KR_STORIES has no recorded audio, so "playback" is
+// TTS reading each line in sequence, with a progress bar and highlighted
+// current line standing in for a real scrubber. Speed maps to the TTS rate.
+let storyPlayer = null;
+function updateStoryPlayerUI() {
+  if (!storyPlayer) return;
+  const pct = Math.round((storyPlayer.lineIdx / Math.max(1, storyPlayer.lineCount - 1)) * 100);
+  const fill = document.getElementById('story-progress-fill');
+  if (fill) fill.style.width = pct + '%';
+  const label = document.getElementById('story-progress-label');
+  if (label) label.textContent = `Line ${storyPlayer.lineIdx + 1} / ${storyPlayer.lineCount}`;
+  document.querySelectorAll('.story-line').forEach((el, i) => el.classList.toggle('story-line-active', i === storyPlayer.lineIdx));
+  const btn = document.getElementById('story-play-btn');
+  if (btn) btn.textContent = storyPlayer.playing ? '❙❙' : '▶';
+}
+function setStoryRate(rate, el) {
+  if (!storyPlayer) return;
+  storyPlayer.rate = rate;
+  document.querySelectorAll('.story-rate-chip').forEach(c => c.classList.remove('active'));
+  el?.classList.add('active');
+  document.getElementById('story-rate-label').textContent = rate + '×';
+}
+function storySkip(delta) {
+  if (!storyPlayer) return;
+  storyPlayer.lineIdx = Math.max(0, Math.min(storyPlayer.lineCount - 1, storyPlayer.lineIdx + delta));
+  updateStoryPlayerUI();
+  if (storyPlayer.playing) { window.speechSynthesis?.cancel(); runStoryPlayback(); }
+}
+async function toggleStoryPlay() {
+  if (!storyPlayer) return;
+  if (storyPlayer.playing) { stopStoryPlayback(); return; }
+  if (storyPlayer.lineIdx >= storyPlayer.lineCount - 1) storyPlayer.lineIdx = 0;
+  storyPlayer.playing = true;
+  updateStoryPlayerUI();
+  runStoryPlayback();
+}
+function stopStoryPlayback() {
+  if (storyPlayer) storyPlayer.playing = false;
+  window.speechSynthesis?.cancel();
+  updateStoryPlayerUI();
+}
+async function runStoryPlayback() {
+  const story = STORIES.find(s => s.id === storyPlayer?.id);
+  if (!story) return;
+  while (storyPlayer && storyPlayer.playing && storyPlayer.lineIdx < story.lines.length) {
+    updateStoryPlayerUI();
+    await speakLineAwaitable(story.lines[storyPlayer.lineIdx].k, storyPlayer.rate);
+    if (!storyPlayer || !storyPlayer.playing) return;
+    storyPlayer.lineIdx++;
+  }
+  if (storyPlayer) { storyPlayer.playing = false; storyPlayer.lineIdx = Math.min(storyPlayer.lineIdx, story.lines.length - 1); updateStoryPlayerUI(); }
+}
+function speakLineAwaitable(text, rate) {
+  return new Promise(resolve => {
+    if (!window.speechSynthesis) { resolve(); return; }
+    window.speechSynthesis.cancel();
+    const clean = cleanForSpeech(text);
+    if (!clean) { resolve(); return; }
+    const utter = new SpeechSynthesisUtterance(clean);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice?.lang || 'pt-PT';
+    utter.rate = Math.max(0.4, (rate || 1) * 0.82);
+    utter.onend = resolve;
+    utter.onerror = resolve;
+    window.speechSynthesis.speak(utter);
+  });
 }
 
 function toggleLineTrans(li) {
@@ -20631,6 +22192,23 @@ function addStoryWordToDeck(word, meaning) {
     showToast('Already in your deck ✓');
   }
   document.querySelector('.word-popup')?.remove();
+  refreshPzSavedCountIfOpen();
+}
+// If a reading passage is currently open, refresh its "N new words saved"
+// line — cheap no-op otherwise, so it's safe to call from anywhere words
+// get added to the review deck.
+function refreshPzSavedCountIfOpen() {
+  const el = document.getElementById('pz-saved-count');
+  if (el && el.dataset.pzId) refreshPzSavedCount(el.dataset.pzId);
+}
+function refreshPzSavedCount(id) {
+  const pz = READING_PASSAGES.find(x => x.id === id);
+  const el = document.getElementById('pz-saved-count');
+  if (!pz || !el) return;
+  const passageWords = new Set();
+  pz.paras.forEach(p => p.k.split(/\s+/).forEach(w => passageWords.add(w.toLowerCase().replace(/[.,!?¡¿"«»]/g, ''))));
+  const saved = (state.savedFromChat || []).filter(w => passageWords.has(w.k.toLowerCase())).length;
+  el.textContent = saved > 0 ? `${saved} new word${saved === 1 ? '' : 's'} saved from this passage` : '';
 }
 
 // Small reusable toast (rides the xp-toast styling)
