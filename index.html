@@ -1149,6 +1149,7 @@
       .readtab-btn{padding:10px 4px;letter-spacing:-.02em}
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1289,6 +1290,10 @@
         <input type="text" id="tts-endpoint-input" class="api-input" placeholder="https://your-site.netlify.app/api/tts" style="flex:1" />
         <button class="api-save-btn" onclick="saveTtsEndpoint()">Save</button>
       </div>
+    </div>
+    <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+      <div><div class="setting-label">☁️ Account & Sync</div><div class="setting-sub">Sign in with just your email to keep your progress across devices — no password needed.</div></div>
+      <div id="account-panel"></div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
       <div><div class="setting-label">💾 Backup Your Progress</div><div class="setting-sub">Your data lives only in this browser. Export a backup file to keep it safe, then import it on any device or after clearing data.</div></div>
@@ -1565,8 +1570,17 @@
       <button onclick="toggleComposeBox()" title="Write a post" style="width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--grad-sun);color:#fff;border:none;box-shadow:var(--shadow-coral);cursor:pointer;font-size:.95rem">✎</button>
     </div>
     <div id="community-compose" style="display:none;margin-bottom:14px">
-      <textarea id="community-compose-text" class="type-input" style="width:100%;min-height:64px;resize:vertical" placeholder="Share something with the community…"></textarea>
-      <button class="start-btn" style="margin-top:8px" onclick="postCommunityMessage()">Post</button>
+      <textarea id="community-compose-text" class="type-input" style="width:100%;min-height:64px;resize:vertical" maxlength="500" placeholder="Share something with the community…"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <select id="community-compose-category" class="voice-select">
+          <option value="questions">❓ Questions</option>
+          <option value="proverbs">📜 Proverbs</option>
+          <option value="music">🎵 Music</option>
+          <option value="recipes">🍲 Recipes</option>
+        </select>
+        <button class="start-btn" style="margin:0" onclick="postCommunityMessage()">Post</button>
+      </div>
+      <div id="community-compose-error" style="display:none;color:var(--wrong);font-size:.75rem;margin-top:6px"></div>
     </div>
     <div id="community-content"></div>
   </div>
@@ -1591,7 +1605,7 @@
     <div id="ai-status-card" style="border-radius:16px;padding:14px 16px;margin-bottom:16px"></div>
     <div class="checkpoint-topics-label" style="margin-bottom:8px">What the AI powers</div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2px 16px;box-shadow:var(--shadow);margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">💬</div><div><div style="font-weight:700;font-size:.85rem">Conversation with your tutor</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Sôr António and Prof. Amália</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">💬</div><div><div style="font-weight:700;font-size:.85rem">Conversation with your tutor</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Sôr António, in Kriolu and Portuguese</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">✍️</div><div><div style="font-weight:700;font-size:.85rem">Writing feedback</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Gentle corrections on what you write</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">🔊</div><div><div style="font-weight:700;font-size:.85rem">Natural voice</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Falls back to your device voice offline</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0"><div style="font-size:17px">🧠</div><div><div style="font-weight:700;font-size:.85rem">Tutor memory</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Remembers what you struggle with</div></div></div>
@@ -11376,7 +11390,7 @@ let LESSONS = [], LEARNING_PATH = [], GRAMMAR_SKILLS = [], GRAMMAR_SPOTLIGHTS = 
 const LANGS = {
   kriolu:     { code:'kriolu',     label:'Kriolu',     flag:'🇨🇻', mark:'🌊', native:'Kriolu',    tutor:'Sôr António', avatar:'🧔🏾', ttsLang:'pt-PT',
                 blurb:'Cape Verdean Creole (Santiago)' },
-  portuguese: { code:'portuguese', label:'Português',  flag:'🇵🇹', mark:'⛵', native:'Português', tutor:'Prof. Amália', avatar:'👩🏽‍🏫', ttsLang:'pt-PT',
+  portuguese: { code:'portuguese', label:'Português',  flag:'🇵🇹', mark:'⛵', native:'Português', tutor:'Sôr António', avatar:'🧔🏾', ttsLang:'pt-PT',
                 blurb:'European Portuguese — the official language' },
 };
 // Progress fields that must be kept apart per language
@@ -11401,9 +11415,9 @@ function aiLang() {
   return {
     name:    PT ? 'European Portuguese' : 'Kriolu',
     full:    PT ? 'European Portuguese (Portugal)' : 'Kriolu (Cape Verdean Creole, Santiago/Badiu variant)',
-    tutor:   PT ? 'Prof. Amália' : 'Sôr António',
+    tutor:   'Sôr António',
     persona: PT
-      ? 'You are Prof. Amália, a warm, precise European Portuguese teacher from Lisbon.'
+      ? 'You are Sôr António, a warm, encouraging tutor from Santiago, Cape Verde, who also teaches precise European Portuguese.'
       : 'You are Sôr António, a warm, encouraging Kriolu teacher from Santiago, Cape Verde.',
     culture: PT ? 'Portugal' : 'Cape Verde',
     note:    PT
@@ -14137,7 +14151,7 @@ function saveState() {
     chatXPDate:state.chatXPDate, chatXPToday:state.chatXPToday,
     chatHistory:(state.chatHistory||[]).slice(-40), tutorMemory:state.tutorMemory,
     savedFromChat:state.savedFromChat, dailyChallengeDate:state.dailyChallengeDate, dailyChallengesSeen:state.dailyChallengesSeen, chatDifficulty:state.chatDifficulty,
-    communityLikes:state.communityLikes, communityPosts:state.communityPosts, communityFilter:state.communityFilter,
+    communityFilter:state.communityFilter,
     notifEnabled:state.notifEnabled, reminderHour:state.reminderHour, lastReminderDate:state.lastReminderDate,
     checkpointsPassed:state.checkpointsPassed, grammarFocus:state.grammarFocus, shadowDone:state.shadowDone, lastWarmupDate:state.lastWarmupDate,
     onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
@@ -14147,6 +14161,7 @@ function saveState() {
     darkMode:state.darkMode, sfx:state.sfx, fontSize:state.fontSize,
   };
   localStorage.setItem('kriolu_state_v3', JSON.stringify(s));
+  scheduleCloudSync();
 }
 
 // Advances the day-streak the first time the user completes an activity each day.
@@ -17316,7 +17331,7 @@ function matchSelect(idx, side, btn) {
 // usage context, and word-by-word sentence breakdowns. Each is generated ONCE
 // per word (cached locally like the TTS audio), so repeats are instant & free.
 const ANTONIO_SYS_KR = "You are Sôr António, a warm Cape Verdean Kriolu tutor (Santiago/Badiu variety). Answer in English with Kriolu examples where helpful. Plain text only, no markdown. Be brief and encouraging.";
-const ANTONIO_SYS_PT = "You are Prof. Amália, a warm European Portuguese tutor. Use EUROPEAN Portuguese as spoken in Portugal and Cape Verde (tu/você, 'estou a fazer' not 'estou fazendo', autocarro, comboio, pequeno-almoço, casa de banho). Never use Brazilian forms. Answer in English with Portuguese examples where helpful. Plain text only, no markdown. Be brief and encouraging. The learner also speaks or is learning Cape Verdean Kriolu, so when a Portuguese word differs sharply from its Kriolu cousin, a one-line comparison is welcome.";
+const ANTONIO_SYS_PT = "You are Sôr António, a warm tutor from Cape Verde who also teaches European Portuguese. Use EUROPEAN Portuguese as spoken in Portugal and Cape Verde (tu/você, 'estou a fazer' not 'estou fazendo', autocarro, comboio, pequeno-almoço, casa de banho). Never use Brazilian forms. Answer in English with Portuguese examples where helpful. Plain text only, no markdown. Be brief and encouraging. The learner also speaks or is learning Cape Verdean Kriolu, so when a Portuguese word differs sharply from its Kriolu cousin, a one-line comparison is welcome.";
 // The chat and translator are shared across both courses — they follow the
 // language the learner is currently studying.
 Object.defineProperty(window, 'ANTONIO_SYS', { get(){ return isPT() ? ANTONIO_SYS_PT : ANTONIO_SYS_KR; } });
@@ -18889,26 +18904,205 @@ function proverbOfTheDay() {
   return PROVERBS[dayNum % PROVERBS.length];
 }
 
-const COMMUNITY_POSTS = [
-  { id:'p1', name:'Ana Lima', initials:'AL', color:'#088395', place:'Brockton, MA', time:'2h', category:'questions',
-    text:'Nha avó ta txoma "katxupa rika" só kel ki tem karni. Alguen mas na Boston ta fla asi, o é só na nha kaza?', likes:24 },
-  { id:'p2', name:'Djô Sanches', initials:'DJ', color:'#C2451A', place:'Mindelo', time:'5h', category:'questions',
-    text:'Modi ki nhos ta fla "bus stop" na Santiagu? Ki-li nu ta fla "paradinha".', likes:11 },
-  { id:'p3', name:'Isabel Rocha', initials:'IR', color:'#12796F', place:'Praia', time:'1d', category:'recipes',
-    text:'Segredu di un bon katxupa: kunpanha di ferru, fugu bas, txeu ora. Ka bu pressa!', likes:31 },
-  { id:'p4', name:'Marcus Tavares', initials:'MT', color:'#8A5A0B', place:'Providence, RI', time:'2d', category:'music',
-    text:'Sabi na morna di Cesária es simana — kal ki nhos favoritu?', likes:18 },
-];
+// ── Live Community backend (Supabase) ──────────────────────────────────
+// Public read/write, protected by Row Level Security rather than by any
+// login — this app has no accounts. `deviceId()` is a soft, unverified
+// per-browser identity used only for the like-toggle and the server-side
+// rate limit; see community-setup.sql for the actual safeguards (a
+// banned-word filter and a 1-post-per-60s limit enforced as DB triggers,
+// not just client-side checks that anyone could bypass).
+const SUPABASE_URL = 'https://icnbwjbcpjonzbuyhqvm.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_l9_aI03xoYR1tcvMwwvYgw_-tjh4b56';
+let _supabase = null;
+function getSupabase() {
+  if (!_supabase && window.supabase) _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return _supabase;
+}
+function deviceId() {
+  let id = localStorage.getItem('kriolu_device_id');
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : 'dev-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+    localStorage.setItem('kriolu_device_id', id);
+  }
+  return id;
+}
 
-function renderCommunity() {
+// ── Account & cloud sync (Supabase Auth + a one-row-per-user progress table) ──
+// Signing in is optional — this app works fully offline/local without it.
+// When signed in, saveState() also pushes the same localStorage payload it
+// already writes up to `user_progress`, debounced so rapid-fire XP/progress
+// saves during a lesson collapse into one network write instead of dozens.
+let currentUser = null;
+let cloudSyncTimer = null;
+
+function initAccountSync() {
+  const sb = getSupabase();
+  if (!sb) return;
+  sb.auth.onAuthStateChange((event, session) => {
+    currentUser = session?.user || null;
+    renderAccountPanel();
+    if (event === 'SIGNED_IN') handleSignedIn();
+  });
+  sb.auth.getSession().then(({ data }) => {
+    currentUser = data?.session?.user || null;
+    renderAccountPanel();
+  });
+}
+
+async function sendMagicLink() {
+  const sb = getSupabase();
+  if (!sb) return;
+  const input = document.getElementById('account-email-input');
+  const email = (input?.value || '').trim();
+  const msgEl = document.getElementById('account-message');
+  const showMsg = (text) => { if (msgEl) { msgEl.textContent = text; msgEl.style.display = 'block'; } };
+  if (!email || !email.includes('@')) { showMsg('Enter a valid email address.'); return; }
+  const btn = document.getElementById('account-send-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
+  if (btn) { btn.disabled = false; btn.textContent = 'Send magic link'; }
+  showMsg(error ? ('⚠️ ' + error.message) : '✅ Check your email for a sign-in link.');
+}
+
+async function signOutAccount() {
+  const sb = getSupabase();
+  if (!sb) return;
+  await sb.auth.signOut();
+  currentUser = null;
+  renderAccountPanel();
+  showToast('Signed out — your progress stays on this device');
+}
+
+function renderAccountPanel() {
+  const el = document.getElementById('account-panel');
+  if (!el) return;
+  if (currentUser) {
+    el.innerHTML = `
+      <div style="font-size:.82rem;color:var(--text)">Signed in as <b>${escapeHTML(currentUser.email)}</b></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:2px" id="sync-status">Synced ✓</div>
+      <button class="due-btn" style="margin-top:8px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="signOutAccount()">Sign out</button>`;
+  } else {
+    el.innerHTML = `
+      <input type="email" id="account-email-input" class="type-input" style="width:100%" placeholder="you@example.com" autocomplete="email" />
+      <button class="start-btn" style="margin-top:8px" id="account-send-btn" onclick="sendMagicLink()">Send magic link</button>
+      <div id="account-message" style="display:none;font-size:.75rem;margin-top:6px;color:var(--muted)"></div>`;
+  }
+}
+
+// First sign-in on a device with an existing cloud row means two independent
+// progress histories exist — same all-or-nothing choice the manual Import
+// Backup flow already asks, rather than attempting a field-by-field merge
+// that could double-count XP or otherwise produce a state nothing wrote.
+async function handleSignedIn() {
+  const sb = getSupabase();
+  const { data, error } = await sb.from('user_progress').select('state, updated_at').eq('user_id', currentUser.id).maybeSingle();
+  if (error) return;
+  if (!data) {
+    await pushStateToCloud();
+    showToast('☁️ Progress backed up to your account');
+  } else {
+    showSyncConflictDialog(data.state, data.updated_at);
+  }
+}
+
+function showSyncConflictDialog(cloudStateJson, updatedAt) {
+  let cloud; try { cloud = JSON.parse(cloudStateJson); } catch (e) { cloud = {}; }
+  const overlay = document.createElement('div');
+  overlay.id = 'sync-conflict-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML = `
+    <div style="background:var(--card);border-radius:var(--radius);padding:22px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.1rem;color:var(--ocean)">Two versions of your progress</div>
+      <div style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.5">This device has progress, and your account already has different progress (last synced ${escapeHTML(new Date(updatedAt).toLocaleDateString())}). Pick which one to keep — the other will be replaced.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+        <button class="due-btn" onclick="resolveSyncConflict('device')">Keep this device — ${state.xp || 0} XP · ${state.streak || 0} day streak</button>
+        <button class="due-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="resolveSyncConflict('cloud')">Keep my account — ${cloud.xp || 0} XP · ${cloud.streak || 0} day streak</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  window.__pendingCloudState = cloud;
+}
+
+async function resolveSyncConflict(choice) {
+  document.getElementById('sync-conflict-overlay')?.remove();
+  if (choice === 'device') {
+    await pushStateToCloud();
+    showToast('☁️ This device’s progress is now saved to your account');
+  } else {
+    localStorage.setItem('kriolu_state_v3', JSON.stringify(window.__pendingCloudState || {}));
+    showToast('☁️ Restoring your account’s progress…');
+    setTimeout(() => location.reload(), 900);
+  }
+}
+
+function scheduleCloudSync() {
+  if (!currentUser) return;
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(pushStateToCloud, 2000);
+}
+
+async function pushStateToCloud() {
+  if (!currentUser) return;
+  const sb = getSupabase();
+  const payload = localStorage.getItem('kriolu_state_v3');
+  if (!sb || !payload) return;
+  const statusEl = document.getElementById('sync-status');
+  const { error } = await sb.from('user_progress')
+    .upsert({ user_id: currentUser.id, state: payload, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+  if (statusEl) statusEl.textContent = error ? '⚠️ Sync failed — will retry' : 'Synced ✓';
+}
+
+const COMMUNITY_AVATAR_COLORS = ['#088395','#C2451A','#12796F','#8A5A0B','#5B3E96','#1B6B93'];
+function communityAvatarColor(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return COMMUNITY_AVATAR_COLORS[h % COMMUNITY_AVATAR_COLORS.length];
+}
+function communityInitials(name) {
+  return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+}
+function communityTimeAgo(iso) {
+  const secs = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (secs < 60) return 'now';
+  if (secs < 3600) return Math.floor(secs / 60) + 'm';
+  if (secs < 86400) return Math.floor(secs / 3600) + 'h';
+  return Math.floor(secs / 86400) + 'd';
+}
+
+let communityChannel = null;
+function subscribeCommunityRealtime() {
+  const sb = getSupabase();
+  if (!sb || communityChannel) return;
+  const onChange = () => { if (document.getElementById('screen-community')?.classList.contains('active')) renderCommunity(); };
+  communityChannel = sb.channel('community-live')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_posts' }, onChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_likes' }, onChange)
+    .subscribe();
+}
+
+async function renderCommunity() {
   const el = document.getElementById('community-content');
   if (!el) return;
-  state.communityLikes = state.communityLikes || {};
-  const posts = state.communityPosts && state.communityPosts.length ? state.communityPosts : COMMUNITY_POSTS;
+  const sb = getSupabase();
+  if (!sb) { el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Community is unavailable right now.</div>`; return; }
+  if (!el.dataset.loaded) el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Loading community…</div>`;
+
+  const [{ data: posts, error }, { data: likeRows }, { data: myLikeRows }] = await Promise.all([
+    sb.from('community_posts').select('*').order('created_at', { ascending: false }).limit(100),
+    sb.from('community_likes').select('post_id'),
+    sb.from('community_likes').select('post_id').eq('device_id', deviceId()),
+  ]);
+  if (error) { el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Couldn't load the community feed. Check your connection and try again.</div>`; return; }
+  el.dataset.loaded = '1';
+
+  const likeCounts = {};
+  (likeRows || []).forEach(r => { likeCounts[r.post_id] = (likeCounts[r.post_id] || 0) + 1; });
+  const myLikes = new Set((myLikeRows || []).map(r => r.post_id));
+
   const filter = state.communityFilter || 'all';
   const cats = [['all','All'],['proverbs','Proverbs'],['music','Music'],['questions','Questions'],['recipes','Recipes']];
   const pv = proverbOfTheDay();
-  const shown = filter === 'all' ? posts : posts.filter(p => p.category === filter);
+  const shown = filter === 'all' ? (posts || []) : (posts || []).filter(p => p.category === filter);
 
   el.innerHTML = `
     <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:13px;padding-bottom:2px">
@@ -18923,16 +19117,17 @@ function renderCommunity() {
     </div>` : ''}
     <div style="display:flex;flex-direction:column;gap:11px">
       ${shown.map(p => {
-        const liked = !!state.communityLikes[p.id];
-        const likeCount = p.likes + (liked ? 1 : 0);
+        const liked = myLikes.has(p.id);
+        const likeCount = likeCounts[p.id] || 0;
         return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${p.color};color:#fff;display:flex;align-items:center;justify-content:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif">${p.initials}</div>
-            <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.8rem">${escapeHTML(p.name)}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${escapeHTML(p.place)} · ${p.time}</div></div>
+            <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${communityAvatarColor(p.author)};color:#fff;display:flex;align-items:center;justify-content:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif">${communityInitials(p.author)}</div>
+            <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.8rem">${escapeHTML(p.author)}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${communityTimeAgo(p.created_at)}</div></div>
           </div>
-          <div style="font-size:.85rem;line-height:1.55;margin-top:10px">${escapeHTML(p.text)}</div>
-          <div style="display:flex;align-items:center;gap:14px;margin-top:11px;padding-top:10px;border-top:1px solid var(--border)">
+          <div style="font-size:.85rem;line-height:1.55;margin-top:10px">${escapeHTML(p.body)}</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:11px;padding-top:10px;border-top:1px solid var(--border)">
             <div onclick="toggleCommunityLike('${p.id}')" style="font-weight:700;font-size:.72rem;cursor:pointer;color:${liked ? '#EF4757' : 'var(--muted)'}">${liked ? '❤️' : '🤍'} ${likeCount}</div>
+            <div onclick="reportCommunityPost('${p.id}')" style="font-weight:700;font-size:.72rem;cursor:pointer;color:var(--muted)">🚩 Report</div>
           </div>
         </div>`;
       }).join('') || `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Nothing here yet.</div>`}
@@ -18947,15 +19142,27 @@ function renderCommunity() {
       <div style="font-size:1rem;color:var(--ocean-2)">›</div>
     </div>
   `;
+  subscribeCommunityRealtime();
 }
 
 function setCommunityFilter(id) { state.communityFilter = id; saveState(); renderCommunity(); }
 
-function toggleCommunityLike(id) {
-  state.communityLikes = state.communityLikes || {};
-  state.communityLikes[id] = !state.communityLikes[id];
-  saveState();
+async function toggleCommunityLike(id) {
+  const sb = getSupabase();
+  if (!sb) return;
+  const dev = deviceId();
+  const { data: existing } = await sb.from('community_likes').select('post_id').eq('post_id', id).eq('device_id', dev).maybeSingle();
+  if (existing) await sb.from('community_likes').delete().eq('post_id', id).eq('device_id', dev);
+  else await sb.from('community_likes').insert({ post_id: id, device_id: dev });
   renderCommunity();
+}
+
+async function reportCommunityPost(id) {
+  const sb = getSupabase();
+  if (!sb) return;
+  if (!confirm('Report this post for review?')) return;
+  await sb.from('community_reports').insert({ post_id: id, device_id: deviceId() });
+  showToast('🚩 Reported — thank you');
 }
 
 function toggleComposeBox() {
@@ -18965,14 +19172,22 @@ function toggleComposeBox() {
   if (box.style.display === 'block') document.getElementById('community-compose-text')?.focus();
 }
 
-function postCommunityMessage() {
+async function postCommunityMessage() {
   const ta = document.getElementById('community-compose-text');
+  const category = document.getElementById('community-compose-category')?.value || 'questions';
+  const errEl = document.getElementById('community-compose-error');
   const text = (ta?.value || '').trim();
+  if (errEl) errEl.style.display = 'none';
   if (!text) return;
-  const posts = state.communityPosts && state.communityPosts.length ? state.communityPosts : [...COMMUNITY_POSTS];
-  posts.unshift({ id: 'you-' + Date.now(), name: 'You', initials: 'Y', color: 'var(--ocean)', place: 'This device', time: 'now', category: 'questions', text, likes: 0 });
-  state.communityPosts = posts;
-  saveState();
+  const sb = getSupabase();
+  if (!sb) return;
+  const { error } = await sb.from('community_posts').insert({
+    author: state.userName || 'You', category, body: text, device_id: deviceId(),
+  });
+  if (error) {
+    if (errEl) { errEl.textContent = error.message.includes('wait') ? '⏱️ ' + error.message : error.message.includes('blocked word') ? '⚠️ That post was rejected — please rephrase.' : "Couldn't post — try again."; errEl.style.display = 'block'; }
+    return;
+  }
   ta.value = '';
   document.getElementById('community-compose').style.display = 'none';
   renderCommunity();
@@ -21289,16 +21504,113 @@ const LONGFORM_META = {
     turn: 11,
     turnNote: 'The turn — the clerk agrees the letter was at fault, not him',
     tip: ['The clerk concedes with ', 'É uma crítica justa', ' — admitting the institution is at fault without accepting personal blame.'],
+    brief: {
+      minutes: 4,
+      desc: 'Sr. Pinto has come to dispute a debt notice for money he does not owe, tied to an address he has never lived at. The scene tracks how an institutional error gets acknowledged and resolved without either side losing face.',
+      speakers: [
+        { name:'Sr. Pinto', blurb:'Disputes a debt he does not recognise · practical, running out of patience', tone:'var(--ocean)' },
+        { name:'Funcionária', blurb:'Owns the institution’s mistake · calm, procedural', tone:'var(--coral)' },
+      ],
+      asks: [
+        'Bureaucratic hypotheticals — <b>Se o enviar por email, o processo continua?</b>',
+        'Accepting a complaint gracefully, without over-apologising — <b>É uma crítica justa.</b>',
+        'Deadline vocabulary under real stakes — <b>dias úteis</b>, working days',
+      ],
+    },
+    recap: {
+      intro: 'At B2 the challenge is not the vocabulary — it is recognising when a bureaucratic exchange is actually going well. Nobody raises their voice, but a real institutional failure gets owned along the way.',
+      beats: [
+        { sp:'Sr. Pinto', t:'"Venho por causa de uma carta que recebi sobre uma dívida que não reconheço."', move:'Opens with the problem stated plainly, not an accusation', tone:'var(--ocean)' },
+        { sp:'Funcionária', t:'"Deixe ver… O registo aqui refere uma morada em Setúbal."', move:'Starts investigating rather than defending the letter', tone:'var(--coral)' },
+        { sp:'Sr. Pinto', t:'"Nunca morei em Setúbal. Vivo na mesma casa há dezanove anos."', move:'Supplies the fact that breaks the case open', tone:'var(--ocean)' },
+        { sp:'Funcionária', t:'"É provável que seja um caso de nome semelhante. Acontece mais do que devia."', move:'Names the likely cause and admits it is not rare', tone:'var(--coral)' },
+        { sp:'Sr. Pinto', t:'"Isso não vinha na carta."', move:'Raises a fair complaint about the letter itself', tone:'var(--ocean)' },
+        { sp:'Funcionária', t:'"Pois não. É uma crítica justa e não é a primeira vez que a ouço."', move:'Concedes the criticism directly', tone:'var(--coral)' },
+        { sp:'Funcionária', t:'"Trinta dias úteis. Se passar disso, traga este comprovativo e pergunte por mim."', move:'Closes with a concrete, personal fallback plan', tone:'var(--coral)' },
+      ],
+      insight: 'Nobody admits total fault — the clerk concedes exactly one thing (the letter’s wording) while defending the process itself. That is what a real B2 complaint resolution sounds like: specific, not sweeping.',
+      phrases: [
+        { k:'É uma crítica justa.', e:'That is a fair criticism.' },
+        { k:'Isso não vinha na carta.', e:'That was not in the letter.' },
+        { k:'Acontece mais do que devia.', e:'It happens more often than it should.' },
+        { k:'Traga este comprovativo e pergunte por mim.', e:'Bring this receipt and ask for me.' },
+      ],
+    },
   },
   pt_c1_consulta: {
     turn: 8,
     turnNote: 'The turn — the doctor takes her share of the blame',
     tip: ['', 'A falha não é só sua', ' — the doctor takes a share of the blame, and that is the line that unlocks the rest of the consultation.'],
+    brief: {
+      minutes: 5,
+      desc: 'Dra. Lima has to tell a longtime patient his kidney results are abnormal — and that advice he has already ignored twice needs to actually change something this time. The scene is about getting someone to hear medical advice they have tuned out.',
+      speakers: [
+        { name:'Dra. Lima', blurb:'Delivers hard news plainly · takes her share of the blame for why it has not worked before', tone:'var(--ocean)' },
+        { name:'Sr. Tavares', blurb:'Skeptical from repetition · protective of home and tradition', tone:'var(--coral)' },
+      ],
+      asks: [
+        'Softening a diagnosis without minimising it — <b>Os valores estão alterados, mas não são alarmantes.</b>',
+        'Conceding a systemic failure without blaming the patient — <b>A falha não é só sua.</b>',
+        'The conditional for a hypothetical outcome — <b>Se cortasse só isso, mudava mais do que com qualquer comprimido.</b>',
+      ],
+    },
+    recap: {
+      intro: 'At C1 this scene is not testing whether you know "kidney" or "salt" — it is testing whether you can follow someone slowly agreeing to something they walked in refusing.',
+      beats: [
+        { sp:'Dra. Lima', t:'"Os valores estão alterados, mas não são alarmantes."', move:'Opens by softening the news without hiding it', tone:'var(--ocean)' },
+        { sp:'Sr. Tavares', t:'"Já ouvi isso três vezes em cinco anos."', move:'Pushes back with lived history, not denial', tone:'var(--coral)' },
+        { sp:'Dra. Lima', t:'"A falha não é só sua."', move:'Takes institutional blame for the repeated failure', tone:'var(--ocean)' },
+        { sp:'Dra. Lima', t:'"Não é o sal que põe no prato — é o que já vem na comida."', move:'Reframes the advice into something concrete and new', tone:'var(--ocean)' },
+        { sp:'Sr. Tavares', t:'"A minha mulher já cozinha para mim há quarenta anos. Não sou eu que decido o tempero."', move:'Raises the real obstacle: it is not his decision alone', tone:'var(--coral)' },
+        { sp:'Dra. Lima', t:'"O que mudou foi o que sabemos, não o que ela faz."', move:'Protects the wife from blame while still asking for change', tone:'var(--ocean)' },
+        { sp:'Sr. Tavares', t:'"Começo pelo sal. Não prometo o resto."', move:'Closes with a limited, honest commitment, not full compliance', tone:'var(--coral)' },
+      ],
+      insight: 'He never agrees to everything — he commits to exactly one thing and refuses to overpromise. That is a realistic C1 ending: partial, honest agreement beats a polite lie.',
+      phrases: [
+        { k:'A falha não é só sua.', e:'The failure is not only yours.' },
+        { k:'Não vou fingir que é pequeno.', e:'I will not pretend it is a small thing.' },
+        { k:'O que mudou foi o que sabemos.', e:'What changed is what we know.' },
+        { k:'Não prometo o resto.', e:'I promise nothing about the rest.' },
+      ],
+    },
   },
   pt_c1_escola_reuniao: {
     turn: 16,
     turnNote: 'The turn — he admits the objection he cannot answer',
     tip: ['', 'não tenho boa resposta', ' — conceding an objection you cannot answer is the most advanced move in the scene.'],
+    brief: {
+      minutes: 5,
+      desc: 'A teacher proposes splitting an unevenly-performing class into two groups, and has to defend the idea to two parents in real time — including the one objection he cannot actually answer: most families did not come to this meeting at all.',
+      speakers: [
+        { name:'Prof. Matos', blurb:'Proposes the change · concedes what he cannot defend', tone:'var(--ocean)' },
+        { name:'Sr.ª Delgado', blurb:'Wary of anything permanent · reassured by review frequency', tone:'var(--coral)' },
+        { name:'Sr. Barros', blurb:'Raises the labelling risk · names the meeting’s biggest gap', tone:'var(--gold)' },
+      ],
+      asks: [
+        'Conceding a real risk without abandoning the proposal — <b>É um risco real e não o vou negar.</b>',
+        'Reviewed vs permanent — the six-weeks/annual distinction carrying real weight',
+        'Admitting you lack an answer, to the people you are trying to persuade — <b>não tenho boa resposta</b>',
+      ],
+    },
+    recap: {
+      intro: 'Three speakers means three separate objections to track, not one back-and-forth — the shape of this scene is a teacher fielding each parent’s concern in turn, not winning a single argument.',
+      beats: [
+        { sp:'Prof. Matos', t:'"A turma tem tido um aproveitamento muito irregular."', move:'Opens with the problem, not the solution', tone:'var(--ocean)' },
+        { sp:'Sr. Barros', t:'"Isso é pôr um rótulo nas crianças."', move:'Names the labelling risk directly', tone:'var(--gold)' },
+        { sp:'Prof. Matos', t:'"É um risco real e não o vou negar."', move:'Concedes the risk instead of arguing it away', tone:'var(--ocean)' },
+        { sp:'Sr.ª Delgado', t:'"De seis em seis semanas é razoável. Se fosse anual, eu recusava."', move:'Accepts the plan only because it is reviewed, not permanent', tone:'var(--coral)' },
+        { sp:'Sr. Barros', t:'"Somos sete numa turma de trinta."', move:'Raises the meeting’s real weak point', tone:'var(--gold)' },
+        { sp:'Prof. Matos', t:'"Não tenho boa resposta."', move:'Admits he has no answer to the strongest objection', tone:'var(--ocean)' },
+        { sp:'Sr.ª Delgado', t:'"Com essa frase, ganhou o meu voto."', move:'Is won over by the admission itself, not a fix', tone:'var(--coral)' },
+      ],
+      insight: 'The line that wins her over is not a solution — it is an honest admission of a limit. At C1 that is the harder move: knowing when persuading means not pretending you have every answer.',
+      phrases: [
+        { k:'É um risco real e não o vou negar.', e:'That is a real risk and I will not deny it.' },
+        { k:'Não é uma sentença — é uma fotografia do momento.', e:'It is not a sentence — it is a snapshot of the moment.' },
+        { k:'Não tenho boa resposta.', e:'I have no good answer.' },
+        { k:'Com essa frase, ganhou o meu voto.', e:'With that sentence, you have my vote.' },
+      ],
+    },
   },
 };
 let lfState = {};                        // per-id { at, showEn }
@@ -21425,7 +21737,7 @@ function lfRenderReader(d, meta) {
       <div class="lab-mistake-icon">💡</div>
       <div>${escapeHTML(meta.tip[0])}<b>${escapeHTML(meta.tip[1])}</b>${escapeHTML(meta.tip[2])}</div>
     </div>` : ''}
-    ${meta.recap ? `<button class="due-btn" style="width:100%;margin-top:12px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="lfSetView('recap')">See how the argument moved →</button>` : ''}
+    ${meta.recap ? `<button class="due-btn" style="width:100%;margin-top:12px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="lfSetView('recap')">See how the conversation moved →</button>` : ''}
     <button class="due-btn" id="lf-playall" style="width:100%;margin-top:12px" onclick="lfTogglePlay()">${playing ? '❙❙ Pause the scene' : '▶ Play from line ' + (st.at + 1)}</button>
     <div style="font-weight:800;color:var(--ocean);margin:16px 0 8px" id="dlg-quiz-heading">❓ Quiz</div>
     <div id="dlg-quiz">
@@ -21441,7 +21753,7 @@ function lfRenderRecap(d, meta) {
   const r = meta.recap;
   return `
     <button class="back-btn" onclick="lfSetView('reader')">←</button>
-    <h2 style="margin:8px 0 12px">How the argument moved</h2>
+    <h2 style="margin:8px 0 12px">How the conversation moved</h2>
     <p style="font-size:.82rem;color:var(--muted);line-height:1.55">${escapeHTML(r.intro)}</p>
     <div class="lab-card" style="margin-top:12px">
       ${r.beats.map(b => `<div style="display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)">
@@ -22449,6 +22761,7 @@ function init() {
   step('renderHomeBadges', renderHomeBadges);
   initVoice();
   checkAchievements();
+  step('initAccountSync', initAccountSync);
 
   // Restore settings UI
   document.getElementById('dark-mode-toggle').checked = state.darkMode;
