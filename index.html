@@ -1292,6 +1292,10 @@
       </div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
+      <div><div class="setting-label">☁️ Account & Sync</div><div class="setting-sub">Sign in with just your email to keep your progress across devices — no password needed.</div></div>
+      <div id="account-panel"></div>
+    </div>
+    <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
       <div><div class="setting-label">💾 Backup Your Progress</div><div class="setting-sub">Your data lives only in this browser. Export a backup file to keep it safe, then import it on any device or after clearing data.</div></div>
       <div style="display:flex;gap:8px">
         <button class="api-save-btn" style="flex:1;background:var(--ocean)" onclick="exportProgress()">⬇️ Export Backup</button>
@@ -14157,6 +14161,7 @@ function saveState() {
     darkMode:state.darkMode, sfx:state.sfx, fontSize:state.fontSize,
   };
   localStorage.setItem('kriolu_state_v3', JSON.stringify(s));
+  scheduleCloudSync();
 }
 
 // Advances the day-streak the first time the user completes an activity each day.
@@ -18921,6 +18926,132 @@ function deviceId() {
   }
   return id;
 }
+
+// ── Account & cloud sync (Supabase Auth + a one-row-per-user progress table) ──
+// Signing in is optional — this app works fully offline/local without it.
+// When signed in, saveState() also pushes the same localStorage payload it
+// already writes up to `user_progress`, debounced so rapid-fire XP/progress
+// saves during a lesson collapse into one network write instead of dozens.
+let currentUser = null;
+let cloudSyncTimer = null;
+
+function initAccountSync() {
+  const sb = getSupabase();
+  if (!sb) return;
+  sb.auth.onAuthStateChange((event, session) => {
+    currentUser = session?.user || null;
+    renderAccountPanel();
+    if (event === 'SIGNED_IN') handleSignedIn();
+  });
+  sb.auth.getSession().then(({ data }) => {
+    currentUser = data?.session?.user || null;
+    renderAccountPanel();
+  });
+}
+
+async function sendMagicLink() {
+  const sb = getSupabase();
+  if (!sb) return;
+  const input = document.getElementById('account-email-input');
+  const email = (input?.value || '').trim();
+  const msgEl = document.getElementById('account-message');
+  const showMsg = (text) => { if (msgEl) { msgEl.textContent = text; msgEl.style.display = 'block'; } };
+  if (!email || !email.includes('@')) { showMsg('Enter a valid email address.'); return; }
+  const btn = document.getElementById('account-send-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
+  if (btn) { btn.disabled = false; btn.textContent = 'Send magic link'; }
+  showMsg(error ? ('⚠️ ' + error.message) : '✅ Check your email for a sign-in link.');
+}
+
+async function signOutAccount() {
+  const sb = getSupabase();
+  if (!sb) return;
+  await sb.auth.signOut();
+  currentUser = null;
+  renderAccountPanel();
+  showToast('Signed out — your progress stays on this device');
+}
+
+function renderAccountPanel() {
+  const el = document.getElementById('account-panel');
+  if (!el) return;
+  if (currentUser) {
+    el.innerHTML = `
+      <div style="font-size:.82rem;color:var(--text)">Signed in as <b>${escapeHTML(currentUser.email)}</b></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:2px" id="sync-status">Synced ✓</div>
+      <button class="due-btn" style="margin-top:8px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="signOutAccount()">Sign out</button>`;
+  } else {
+    el.innerHTML = `
+      <input type="email" id="account-email-input" class="type-input" style="width:100%" placeholder="you@example.com" autocomplete="email" />
+      <button class="start-btn" style="margin-top:8px" id="account-send-btn" onclick="sendMagicLink()">Send magic link</button>
+      <div id="account-message" style="display:none;font-size:.75rem;margin-top:6px;color:var(--muted)"></div>`;
+  }
+}
+
+// First sign-in on a device with an existing cloud row means two independent
+// progress histories exist — same all-or-nothing choice the manual Import
+// Backup flow already asks, rather than attempting a field-by-field merge
+// that could double-count XP or otherwise produce a state nothing wrote.
+async function handleSignedIn() {
+  const sb = getSupabase();
+  const { data, error } = await sb.from('user_progress').select('state, updated_at').eq('user_id', currentUser.id).maybeSingle();
+  if (error) return;
+  if (!data) {
+    await pushStateToCloud();
+    showToast('☁️ Progress backed up to your account');
+  } else {
+    showSyncConflictDialog(data.state, data.updated_at);
+  }
+}
+
+function showSyncConflictDialog(cloudStateJson, updatedAt) {
+  let cloud; try { cloud = JSON.parse(cloudStateJson); } catch (e) { cloud = {}; }
+  const overlay = document.createElement('div');
+  overlay.id = 'sync-conflict-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML = `
+    <div style="background:var(--card);border-radius:var(--radius);padding:22px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.1rem;color:var(--ocean)">Two versions of your progress</div>
+      <div style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.5">This device has progress, and your account already has different progress (last synced ${escapeHTML(new Date(updatedAt).toLocaleDateString())}). Pick which one to keep — the other will be replaced.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+        <button class="due-btn" onclick="resolveSyncConflict('device')">Keep this device — ${state.xp || 0} XP · ${state.streak || 0} day streak</button>
+        <button class="due-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="resolveSyncConflict('cloud')">Keep my account — ${cloud.xp || 0} XP · ${cloud.streak || 0} day streak</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  window.__pendingCloudState = cloud;
+}
+
+async function resolveSyncConflict(choice) {
+  document.getElementById('sync-conflict-overlay')?.remove();
+  if (choice === 'device') {
+    await pushStateToCloud();
+    showToast('☁️ This device’s progress is now saved to your account');
+  } else {
+    localStorage.setItem('kriolu_state_v3', JSON.stringify(window.__pendingCloudState || {}));
+    showToast('☁️ Restoring your account’s progress…');
+    setTimeout(() => location.reload(), 900);
+  }
+}
+
+function scheduleCloudSync() {
+  if (!currentUser) return;
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(pushStateToCloud, 2000);
+}
+
+async function pushStateToCloud() {
+  if (!currentUser) return;
+  const sb = getSupabase();
+  const payload = localStorage.getItem('kriolu_state_v3');
+  if (!sb || !payload) return;
+  const statusEl = document.getElementById('sync-status');
+  const { error } = await sb.from('user_progress')
+    .upsert({ user_id: currentUser.id, state: payload, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+  if (statusEl) statusEl.textContent = error ? '⚠️ Sync failed — will retry' : 'Synced ✓';
+}
+
 const COMMUNITY_AVATAR_COLORS = ['#088395','#C2451A','#12796F','#8A5A0B','#5B3E96','#1B6B93'];
 function communityAvatarColor(name) {
   let h = 0;
@@ -22630,6 +22761,7 @@ function init() {
   step('renderHomeBadges', renderHomeBadges);
   initVoice();
   checkAchievements();
+  step('initAccountSync', initAccountSync);
 
   // Restore settings UI
   document.getElementById('dark-mode-toggle').checked = state.darkMode;
