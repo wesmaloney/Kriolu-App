@@ -21589,8 +21589,8 @@ function submitDictation() {
 function renderFillBlank(q, container) {
   // (meaning line injected below via meaningLine)
   const sentence = q.item.ex || '';
-  // Try the full key, then each "A / B" variant, case-insensitively
-  const variants = [q.item.k, ...q.item.k.split(' / ')].filter(Boolean);
+  // Try the full key, then each gendered/spelling variant (e.g. "Braba/u" or "Mai / Mamã"), case-insensitively
+  const variants = rawFormVariants(q.item.k);
   let blanked = null, answer = q.item.k;
   for (const v of variants) {
     const idx = sentence.toLowerCase().indexOf(v.toLowerCase());
@@ -21627,9 +21627,9 @@ function submitFill() {
   state.awaitingNext = true;
   const q = state.session.questions[state.qIndex];
   const val = normalizeText(input.value);
-  const target = normalizeText(state.fillAnswer || q.item.k);
-  // Accept any "A / B" variant too
-  const variants = [target, ...q.item.k.split(' / ').map(normalizeText)];
+  // Accept any gendered/spelling variant of the target word (e.g. "Braba/u" → "braba" or "brabu"),
+  // since the sentence itself doesn't pin down which form is required.
+  const variants = answerVariants(q.item.k);
   const isCorrect = variants.some(v => levenshtein(val, v) <= Math.max(1, Math.floor(v.length * 0.2)));
   input.classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
   input.disabled = true;
@@ -27575,25 +27575,34 @@ function shuffle(arr) { for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.
 // "Casado / Casada" → both; "Obrigadu/a" → obrigadu AND obrigada; "Alto (pessoa)" → alto.
 // Crucially, an item that specifies ONE gender (e.g. "Obrigada — said by a woman")
 // has no slash, so only that form is accepted — the form must match the use.
-function answerVariants(raw) {
-  const out = new Set();
-  const add = v => { const n = normalizeText(v); if (n) out.add(n); };
-  const text = String(raw || '');
-  add(text);
+// Raw (un-normalized) surface forms for a "k"/"e" field, e.g. "Braba/u" → ["Braba/u","Braba","Brabu"].
+// Used both to build the normalized answerVariants() below and to locate a word's
+// actual spelling inside an example sentence (renderFillBlank).
+function rawFormVariants(raw) {
+  const out = [];
+  const push = v => { if (v && !out.includes(v)) out.push(v); };
+  const text = String(raw || '').trim();
+  push(text);
   const noParen = text.replace(/\([^)]*\)/g, ' ').replace(/\s{2,}/g, ' ').trim();
-  add(noParen);
+  push(noParen);
   const parts = noParen.split('/').map(x => x.trim()).filter(Boolean);
   if (parts.length > 1) {
     const first = parts[0];
     parts.forEach(part => {
       if (part.length <= 3 && first.length > part.length) {
         // suffix-style alternative: "obrigadu" + "/a" → "obrigada"
-        add(first.slice(0, first.length - part.length) + part);
+        push(first.slice(0, first.length - part.length) + part);
       } else {
-        add(part);
+        push(part);
       }
     });
   }
+  return out;
+}
+
+function answerVariants(raw) {
+  const out = new Set();
+  rawFormVariants(raw).forEach(v => { const n = normalizeText(v); if (n) out.add(n); });
   return [...out];
 }
 
