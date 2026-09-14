@@ -14652,6 +14652,28 @@ const KR_LESSONS = [
       { k: 'Seka pesa na orizontal', e: 'drying a garment flat', ex: 'Seka pesa na orizontal ta mantenba forma orijinal di tesidu.' },
     ]
   },
+  {
+    id: 'kr_taste_smell_depth1', title: 'Taste & Smell Depth', titleKriolu: 'Sabor i Txeru Más Fundu', icon: '👅', color: '#BC6C25',
+    desc: 'Intense bitter taste and mild, sweetish taste',
+    vocab: [
+      { k: 'Sabor margu intensu', e: 'intense bitter taste', ex: 'Sabor margu intensu di kafé puru ta surpriende kenha ki ka staba kostumadu.' },
+      { k: 'Gostu adosikadu suavi', e: 'mild, sweetish taste', ex: 'Gostu adosikadu suavi di fruta ta agrada tii kriansa.' },
+    ]
+  },
+  {
+    id: 'kr_personal_grooming1', title: 'Personal Grooming & Spa', titleKriolu: 'Kuidadu Pesoal i Spa', icon: '💆', color: '#F4A261',
+    desc: 'Nighttime skincare, facial exfoliant, sunscreen, moisturizer, serum, waxing, gel manicure, and shoulder massage',
+    vocab: [
+      { k: 'Rejimi di kuidadu di peli noturnu', e: 'nighttime skincare routine', ex: 'Rejimi di kuidadu di peli noturnu ta inklui limpeza, séru ku idratanti.' },
+      { k: 'Esfoliadu fasial suavi', e: 'gentle facial exfoliant', ex: 'Esfoliadu fasial suavi ta remove sélula mortu sen irita peli.' },
+      { k: 'Protetor solar di amplu espektru', e: 'broad-spectrum sunscreen', ex: 'Protetor solar di amplu espektru ta proteje kontra dôs tipu di raiu UV.' },
+      { k: 'Idratanti pa peli oleozu', e: 'moisturizer for oily skin', ex: 'Idratanti pa peli oleozu tinha un tekstura levi ku ka gordurozu.' },
+      { k: 'Séru fasial konsentradu', e: 'concentrated facial serum', ex: 'Séru fasial konsentradu ta ben aplikadu antis di idratanti.' },
+      { k: 'Depilason ku sera kentxi', e: 'hot wax hair removal', ex: 'Depilason ku sera kentxi ta dura simana sen presiza ripiti.' },
+      { k: 'Manikure ku esmalti di gel', e: 'gel polish manicure', ex: 'Manikure ku esmalti di gel ta dura más tempu sen deskaska.' },
+      { k: 'Masaji relaxanti na ombru', e: 'relaxing shoulder massage', ex: 'Masaji relaxanti na ombru ta alivia tenson akumuladu na dia.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -15723,6 +15745,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_gardening_tools_depth1','kr_home_security2','kr_texture_quality_adjectives1'] },
   { unit:'Unit 147 — Sound & Color Adjectives, Clothing Care', icon:'🏷️', desc:'Sound and auditory adjectives, visual and color depth, and clothing care and laundry symbols',
     lessons:['kr_sound_auditory_adjectives1','kr_visual_color_depth1','kr_clothing_care1'] },
+  { unit:'Unit 148 — Taste & Smell, Personal Grooming', icon:'💅', desc:'Taste and smell depth, and personal grooming and spa vocabulary',
+    lessons:['kr_taste_smell_depth1','kr_personal_grooming1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -28258,6 +28282,28 @@ const PT_LESSONS = [
       { k: 'secar peça na horizontal', e: 'drying a garment flat', ex: 'Secar a peça na horizontal mantinha a forma original do tecido.' },
     ]
   },
+  {
+    id: 'pt_taste_smell_depth1', title: 'Taste & Smell Depth', titleKriolu: 'Taste & Smell Depth', icon: '👅', color: '#BC6C25',
+    desc: 'Intense bitter taste and mild, sweetish taste',
+    vocab: [
+      { k: 'sabor amargo intenso', e: 'intense bitter taste', ex: 'O sabor amargo intenso do café puro surpreendia quem não estava acostumado.' },
+      { k: 'gosto adocicado suave', e: 'mild, sweetish taste', ex: 'O gosto adocicado suave da fruta agradava até as crianças.' },
+    ]
+  },
+  {
+    id: 'pt_personal_grooming1', title: 'Personal Grooming & Spa', titleKriolu: 'Personal Grooming & Spa', icon: '💆', color: '#F4A261',
+    desc: 'Nighttime skincare, facial exfoliant, sunscreen, moisturizer, serum, waxing, gel manicure, and shoulder massage',
+    vocab: [
+      { k: 'regime de skincare noturno', e: 'nighttime skincare routine', ex: 'O regime de skincare noturno incluía limpeza, sérum e hidratante.' },
+      { k: 'esfoliante facial suave', e: 'gentle facial exfoliant', ex: 'O esfoliante facial suave removia células mortas sem irritar a pele.' },
+      { k: 'protetor solar de amplo espectro', e: 'broad-spectrum sunscreen', ex: 'O protetor solar de amplo espectro protegia contra os dois tipos de raios UV.' },
+      { k: 'hidratante para pele oleosa', e: 'moisturizer for oily skin', ex: 'O hidratante para pele oleosa tinha uma textura leve e não gordurosa.' },
+      { k: 'sérum facial concentrado', e: 'concentrated facial serum', ex: 'O sérum facial concentrado era aplicado antes do hidratante.' },
+      { k: 'depilação com cera quente', e: 'hot wax hair removal', ex: 'A depilação com cera quente durava semanas sem precisar repetir.' },
+      { k: 'manicure com esmalte em gel', e: 'gel polish manicure', ex: 'A manicure com esmalte em gel durava mais tempo sem descascar.' },
+      { k: 'massagem relaxante nos ombros', e: 'relaxing shoulder massage', ex: 'A massagem relaxante nos ombros aliviava a tensão acumulada no dia.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -28565,6 +28611,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_gardening_tools_depth1','pt_home_security2','pt_texture_quality_adjectives1'] },
   { unit:'Unidade 149 — Adjetivos de Som e Cor, Cuidados com a Roupa', icon:'🏷️', desc:'Adjetivos de som e audição, cor e visual aprofundados, e cuidados com a roupa e símbolos de lavagem',
     lessons:['pt_sound_auditory_adjectives1','pt_visual_color_depth1','pt_clothing_care1'] },
+  { unit:'Unidade 150 — Sabor e Cheiro, Cuidados Pessoais', icon:'💅', desc:'Sabor e cheiro aprofundados, e vocabulário de cuidados pessoais e spa',
+    lessons:['pt_taste_smell_depth1','pt_personal_grooming1'] },
 ];
 
 
