@@ -14891,6 +14891,31 @@ const KR_LESSONS = [
       { k: 'Renovason di kontratu di aluguel', e: 'lease renewal', ex: 'Renovason di kontratu di aluguel fue fetu pa más dozi mes.' },
     ]
   },
+  {
+    id: 'kr_banking_accounts1', title: 'Opening a Bank Account', titleKriolu: 'Abertura di Konta Bankáriu', icon: '🏦', color: '#1D3557',
+    desc: 'Opening accounts, proof of address, debit cards, savings, overdraft limits, transfers, and statements',
+    vocab: [
+      { k: 'Abertura di konta bankáriu', e: 'opening a bank account', ex: 'Abertura di konta bankáriu ta izeji dokumentu di identidadi ku konprovanti di rendimentu.' },
+      { k: 'Konprovanti di residénsia', e: 'proof of address', ex: 'Konprovanti di residénsia podeba ser un konta di água ô luz resenti.' },
+      { k: 'Karton di débitu internasional', e: 'international debit card', ex: 'Karton di débitu internasional ta funsiona na kaxa eletróniku di otu país.' },
+      { k: 'Konta di poupansa dijital', e: 'digital savings account', ex: 'Konta di poupansa dijital ta rende juru automátikamenti tudu mes.' },
+      { k: 'Limiti di xeki spesial', e: 'overdraft limit', ex: 'Limiti di xeki spesial ta evita ki konta fika negativu.' },
+      { k: 'Transferénsia entri konta', e: 'transfer between accounts', ex: 'Transferénsia entri konta fue fetu instantáneamenti pa aplikativu.' },
+      { k: 'Extratu bankáriu di kada mes', e: 'monthly bank statement', ex: 'Extratu bankáriu di kada mes ta mostra tudu movimentason di konta.' },
+    ]
+  },
+  {
+    id: 'kr_drivers_license1', title: 'Getting a Driver\'s License', titleKriolu: 'Ojeta di Kartera di Motorista', icon: '🚗', color: '#457B9D',
+    desc: 'Written and practical driving tests, driving lessons, provisional licenses, renewals, and points',
+    vocab: [
+      { k: 'Exami teóriku di tránzitu', e: 'written driving test', ex: 'Exami teóriku di tránzitu ta kobri regra básiku di sirkulason.' },
+      { k: 'Aula prátiku di direson', e: 'practical driving lesson', ex: 'Aula prátiku di direson ta inxina staciona na spasu pikinoti.' },
+      { k: 'Exami prátiku di direson', e: 'practical driving test', ex: 'Exami prátiku di direson ta avalia kandidatu na tránzitu real.' },
+      { k: 'Kartera di abilitason provizóriu', e: 'provisional driver\'s license', ex: 'Kartera di abilitason provizóriu tinha validadi di un anu.' },
+      { k: 'Renovason di kartera di motorista', e: 'driver\'s license renewal', ex: 'Renovason di kartera di motorista ta izeji un exami médiku atualizadu.' },
+      { k: 'Pontu na kartera di motorista', e: 'points on driver\'s license', ex: 'Pontu na kartera di motorista podeba leba pa suspenson di direitu di dirigi.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -15982,6 +16007,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_postal_services1','kr_hospital_depth1'] },
   { unit:'Unit 157 — Job Hunting & Apartment Renting', icon:'💼', desc:'Job interviews and résumés, and the apartment renting process',
     lessons:['kr_job_interview1','kr_apartment_renting1'] },
+  { unit:'Unit 158 — Bank Accounts & Driver\'s License', icon:'🏦', desc:'Opening a bank account, and getting a driver\'s license',
+    lessons:['kr_banking_accounts1','kr_drivers_license1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -28756,6 +28783,31 @@ const PT_LESSONS = [
       { k: 'renovação do contrato de aluguel', e: 'lease renewal', ex: 'A renovação do contrato de aluguel foi feita por mais doze meses.' },
     ]
   },
+  {
+    id: 'pt_banking_accounts1', title: 'Opening a Bank Account', titleKriolu: 'Opening a Bank Account', icon: '🏦', color: '#1D3557',
+    desc: 'Opening accounts, proof of address, debit cards, savings, overdraft limits, transfers, and statements',
+    vocab: [
+      { k: 'abertura de conta bancária', e: 'opening a bank account', ex: 'A abertura de conta bancária exigia documento de identidade e comprovante de renda.' },
+      { k: 'comprovante de residência', e: 'proof of address', ex: 'O comprovante de residência podia ser uma conta de água ou luz recente.' },
+      { k: 'cartão de débito internacional', e: 'international debit card', ex: 'O cartão de débito internacional funcionava em caixas eletrônicos de outros países.' },
+      { k: 'conta poupança digital', e: 'digital savings account', ex: 'A conta poupança digital rendia juros automaticamente todo mês.' },
+      { k: 'limite de cheque especial', e: 'overdraft limit', ex: 'O limite de cheque especial evitava que a conta ficasse negativa.' },
+      { k: 'transferência entre contas', e: 'transfer between accounts', ex: 'A transferência entre contas foi feita instantaneamente pelo aplicativo.' },
+      { k: 'extrato bancário mensal', e: 'monthly bank statement', ex: 'O extrato bancário mensal mostrava todas as movimentações da conta.' },
+    ]
+  },
+  {
+    id: 'pt_drivers_license1', title: 'Getting a Driver\'s License', titleKriolu: 'Getting a Driver\'s License', icon: '🚗', color: '#457B9D',
+    desc: 'Written and practical driving tests, driving lessons, provisional licenses, renewals, and points',
+    vocab: [
+      { k: 'exame teórico de trânsito', e: 'written driving test', ex: 'O exame teórico de trânsito cobria as regras básicas de circulação.' },
+      { k: 'aula prática de direção', e: 'practical driving lesson', ex: 'A aula prática de direção ensinava a estacionar em espaços pequenos.' },
+      { k: 'exame prático de direção', e: 'practical driving test', ex: 'O exame prático de direção avaliava o candidato em trânsito real.' },
+      { k: 'carteira de habilitação provisória', e: 'provisional driver\'s license', ex: 'A carteira de habilitação provisória tinha validade de um ano.' },
+      { k: 'renovação da carteira de motorista', e: 'driver\'s license renewal', ex: 'A renovação da carteira de motorista exigia um exame médico atualizado.' },
+      { k: 'pontos na carteira de motorista', e: 'points on driver\'s license', ex: 'Os pontos na carteira de motorista podiam levar à suspensão do direito de dirigir.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -29083,6 +29135,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_postal_services1','pt_hospital_depth1'] },
   { unit:'Unidade 159 — Busca de Emprego e Aluguel de Apartamento', icon:'💼', desc:'Entrevistas de emprego e currículos, e o processo de aluguel de apartamento',
     lessons:['pt_job_interview1','pt_apartment_renting1'] },
+  { unit:'Unidade 160 — Conta Bancária e Carteira de Motorista', icon:'🏦', desc:'Abertura de conta bancária, e obtenção da carteira de motorista',
+    lessons:['pt_banking_accounts1','pt_drivers_license1'] },
 ];
 
 
