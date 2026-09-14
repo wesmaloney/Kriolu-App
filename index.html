@@ -15576,6 +15576,30 @@ const KR_LESSONS = [
       { k: 'Rekursu di desizon judisial', e: 'appeal of a court decision', ex: 'Rekursu di desizon judisial ta permitiba kontesta sentensa na un tribunal superior.' },
     ]
   },
+  {
+    id: 'kr_organ_donation1', title: 'Organ Donation & Transplant', titleKriolu: 'Doason di Órgãu i Transplanti', icon: '🫀', color: '#9D0208',
+    desc: 'Organ donation after death, donor cards, transplant waiting lists, donor-recipient compatibility, transplant surgery, and immunosuppressants',
+    vocab: [
+      { k: 'Doason di órgãu dipôs di morti', e: 'organ donation after death', ex: 'Doason di órgãu dipôs di morti ta pode salva vários vida.' },
+      { k: 'Karton di doador di órgãu', e: 'organ donor card', ex: 'Karton di doador di órgãu ta indikaba vontadi di algen di dua.' },
+      { k: 'Lista di spera pa transplanti', e: 'transplant waiting list', ex: 'Lista di spera pa transplanti ta pode dura anu dipendendu di órgãu.' },
+      { k: 'Konpatibilidadi entri doador ku resetor', e: 'donor-recipient compatibility', ex: 'Konpatibilidadi entri doador ku resetor éra testadu antis di sirurjia.' },
+      { k: 'Sirurjia di transplanti di rin', e: 'kidney transplant surgery', ex: 'Sirurjia di transplanti di rin ta durada vários óra.' },
+      { k: 'Remédiu imunosupresor', e: 'immunosuppressant medication', ex: 'Remédiu imunosupresor ta evitaba ki korpu rejeita órgãu.' },
+    ]
+  },
+  {
+    id: 'kr_citizen_science1', title: 'Citizen Science & Volunteer Research', titleKriolu: 'Siénsia Sidadon i Peskiza Voluntáriu', icon: '🔬', color: '#40916C',
+    desc: 'Citizen science projects, volunteer bird watching, environmental data collection, nature monitoring apps, and species sighting records',
+    vocab: [
+      { k: 'Projetu di siénsia sidadon', e: 'citizen science project', ex: 'Projetu di siénsia sidadon ta permitiba kualker algen kontribui pa peskiza.' },
+      { k: 'Observason voluntáriu di pássaru', e: 'volunteer bird watching', ex: 'Observason voluntáriu di pássaru ta djudaba sientista mapea spesi migratóriu.' },
+      { k: 'Kolheta di dadu anbiental pur voluntáriu', e: 'volunteer environmental data collection', ex: 'Kolheta di dadu anbiental pur voluntáriu ta fortaleseba studu sobri poluison lokal.' },
+      { k: 'Aplikativu di monitorizason di natureza', e: 'nature monitoring app', ex: 'Aplikativu di monitorizason di natureza ta rejistaba avistamentu di animal na tenpu real.' },
+      { k: 'Partisipanti na peskiza kolaborativu', e: 'participant in collaborative research', ex: 'Partisipanti na peskiza kolaborativu ta kontribuiba ku observason di se dia-a-dia.' },
+      { k: 'Rejistu di avistamentu di spesi', e: 'species sighting record', ex: 'Rejistu di avistamentu di spesi ta djudaba monitoriza biodiversidadi lokal.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -16731,6 +16755,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_adoption_foster1','kr_labor_union1'] },
   { unit:'Unit 189 — Mental Health Crisis & Legal Aid', icon:'⚖', desc:'Mental health crisis intervention, and small claims court and legal aid',
     lessons:['kr_mental_health_crisis1','kr_small_claims_court1'] },
+  { unit:'Unit 190 — Organ Donation & Citizen Science', icon:'🔬', desc:'Organ donation and transplant, and citizen science and volunteer research',
+    lessons:['kr_organ_donation1','kr_citizen_science1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -30190,6 +30216,30 @@ const PT_LESSONS = [
       { k: 'recurso de decisão judicial', e: 'appeal of a court decision', ex: 'O recurso de decisão judicial permitia contestar a sentença num tribunal superior.' },
     ]
   },
+  {
+    id: 'pt_organ_donation1', title: 'Organ Donation & Transplant', titleKriolu: 'Organ Donation & Transplant', icon: '🫀', color: '#9D0208',
+    desc: 'Organ donation after death, donor cards, transplant waiting lists, donor-recipient compatibility, transplant surgery, and immunosuppressants',
+    vocab: [
+      { k: 'doação de órgãos após a morte', e: 'organ donation after death', ex: 'A doação de órgãos após a morte podia salvar várias vidas.' },
+      { k: 'cartão de doador de órgãos', e: 'organ donor card', ex: 'O cartão de doador de órgãos indicava a vontade da pessoa em doar.' },
+      { k: 'lista de espera para transplante', e: 'transplant waiting list', ex: 'A lista de espera para transplante podia durar anos dependendo do órgão.' },
+      { k: 'compatibilidade entre doador e recetor', e: 'donor-recipient compatibility', ex: 'A compatibilidade entre doador e recetor era testada antes da cirurgia.' },
+      { k: 'cirurgia de transplante de rim', e: 'kidney transplant surgery', ex: 'A cirurgia de transplante de rim durava várias horas.' },
+      { k: 'medicamento imunossupressor', e: 'immunosuppressant medication', ex: 'O medicamento imunossupressor evitava que o corpo rejeitasse o órgão.' },
+    ]
+  },
+  {
+    id: 'pt_citizen_science1', title: 'Citizen Science & Volunteer Research', titleKriolu: 'Citizen Science & Volunteer Research', icon: '🔬', color: '#40916C',
+    desc: 'Citizen science projects, volunteer bird watching, environmental data collection, nature monitoring apps, and species sighting records',
+    vocab: [
+      { k: 'projeto de ciência cidadã', e: 'citizen science project', ex: 'O projeto de ciência cidadã permitia a qualquer pessoa contribuir para a pesquisa.' },
+      { k: 'observação voluntária de aves', e: 'volunteer bird watching', ex: 'A observação voluntária de aves ajudava cientistas a mapear espécies migratórias.' },
+      { k: 'recolha de dados ambientais por voluntários', e: 'volunteer environmental data collection', ex: 'A recolha de dados ambientais por voluntários fortalecia estudos sobre poluição local.' },
+      { k: 'aplicativo de monitorização da natureza', e: 'nature monitoring app', ex: 'O aplicativo de monitorização da natureza registava avistamentos de animais em tempo real.' },
+      { k: 'participante em pesquisa colaborativa', e: 'participant in collaborative research', ex: 'O participante em pesquisa colaborativa contribuía com observações do seu dia a dia.' },
+      { k: 'registo de avistamento de espécies', e: 'species sighting record', ex: 'O registo de avistamento de espécies ajudava a monitorizar a biodiversidade local.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -30581,6 +30631,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_adoption_foster1','pt_labor_union1'] },
   { unit:'Unidade 191 — Crise de Saúde Mental e Assistência Jurídica', icon:'⚖', desc:'Intervenção em crise de saúde mental, e tribunal de pequenas causas e assistência jurídica',
     lessons:['pt_mental_health_crisis1','pt_small_claims_court1'] },
+  { unit:'Unidade 192 — Doação de Órgãos e Ciência Cidadã', icon:'🔬', desc:'Doação de órgãos e transplante, e ciência cidadã e pesquisa voluntária',
+    lessons:['pt_organ_donation1','pt_citizen_science1'] },
 ];
 
 
