@@ -15528,6 +15528,30 @@ const KR_LESSONS = [
       { k: 'Konprovanti di kompra obrigatóriu', e: 'mandatory proof of purchase', ex: 'Konprovanti di kompra obrigatóriu éra exijidu pa kualker troka ô reembolsu.' },
     ]
   },
+  {
+    id: 'kr_adoption_foster1', title: 'Adoption & Foster Care', titleKriolu: 'Adoson i Akolhimentu Familiar', icon: '👨‍👩‍👧‍👦', color: '#C08497',
+    desc: 'Legal adoption process, adoptive families, temporary foster care, adoption certificates, and child protection social workers',
+    vocab: [
+      { k: 'Prosesu di adoson legal', e: 'legal adoption process', ex: 'Prosesu di adoson legal ta podeba demora vários mes até ser konkluídu.' },
+      { k: 'Família adotivu', e: 'adoptive family', ex: 'Família adotivu ta resebeba kriansa ku txeu karinhu.' },
+      { k: 'Akolhimentu familiar temporáriu', e: 'temporary foster care', ex: 'Akolhimentu familiar temporáriu ta ofereseba un lar seguru até situason resolve.' },
+      { k: 'Sertidon di adoson', e: 'adoption certificate', ex: 'Sertidon di adoson ta konprovaba legalmenti nobu filiason.' },
+      { k: 'Kriansa na akolhimentu', e: 'child in foster care', ex: 'Kriansa na akolhimentu tinha diritu na akonpanhamentu psikolójiku regular.' },
+      { k: 'Asistenti sosial di proteson infantil', e: 'child protection social worker', ex: 'Asistenti sosial di proteson infantil ta vizitaba família kada simana.' },
+    ]
+  },
+  {
+    id: 'kr_labor_union1', title: 'Labor Unions & Collective Bargaining', titleKriolu: 'Sindikatu i Negosiason Koletivu', icon: '✊', color: '#BC4749',
+    desc: 'Labor unions, collective wage bargaining, workers\' strikes, union representatives, collective labor agreements, and the right to strike',
+    vocab: [
+      { k: 'Sindikatu di trabadjador', e: 'labor union', ex: 'Sindikatu di trabadjador ta defendeba midjor kondison di trabadju.' },
+      { k: 'Negosiason koletivu di saláriu', e: 'collective wage bargaining', ex: 'Negosiason koletivu di saláriu ta enbolveba representanti di enpreza ku trabadjador.' },
+      { k: 'Greve jeral di trabadjador', e: 'general workers\' strike', ex: 'Greve jeral di trabadjador ta paralizaba transporti públiku na sidadi.' },
+      { k: 'Representanti sindikal na lokal di trabadju', e: 'workplace union representative', ex: 'Representanti sindikal na lokal di trabadju ta mediaba konflitu entri patronu ku funsionáriu.' },
+      { k: 'Akordu koletivu di trabadju', e: 'collective labor agreement', ex: 'Akordu koletivu di trabadju ta stabeleseba saláriu mínimu pa tudu kategoria.' },
+      { k: 'Diritu di greve', e: 'right to strike', ex: 'Diritu di greve éra protejedu pur konstituison na txeu país.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -16679,6 +16703,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_disability_rights1','kr_climate_resilience1'] },
   { unit:'Unit 187 — Co-Parenting & Consumer Rights', icon:'🛡', desc:'Co-parenting and blended families, and consumer protection and warranty rights',
     lessons:['kr_coparenting1','kr_consumer_rights1'] },
+  { unit:'Unit 188 — Adoption & Labor Unions', icon:'✊', desc:'Adoption and foster care, and labor unions and collective bargaining',
+    lessons:['kr_adoption_foster1','kr_labor_union1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -30090,6 +30116,30 @@ const PT_LESSONS = [
       { k: 'comprovante de compra obrigatório', e: 'mandatory proof of purchase', ex: 'O comprovante de compra obrigatório era exigido para qualquer troca ou reembolso.' },
     ]
   },
+  {
+    id: 'pt_adoption_foster1', title: 'Adoption & Foster Care', titleKriolu: 'Adoption & Foster Care', icon: '👨‍👩‍👧‍👦', color: '#C08497',
+    desc: 'Legal adoption process, adoptive families, temporary foster care, adoption certificates, and child protection social workers',
+    vocab: [
+      { k: 'processo de adoção legal', e: 'legal adoption process', ex: 'O processo de adoção legal podia demorar vários meses até ser concluído.' },
+      { k: 'família adotiva', e: 'adoptive family', ex: 'A família adotiva recebeu a criança com muito carinho.' },
+      { k: 'acolhimento familiar temporário', e: 'temporary foster care', ex: 'O acolhimento familiar temporário oferecia um lar seguro até a situação se resolver.' },
+      { k: 'certidão de adoção', e: 'adoption certificate', ex: 'A certidão de adoção comprovava legalmente a nova filiação.' },
+      { k: 'criança em acolhimento', e: 'child in foster care', ex: 'A criança em acolhimento tinha direito a acompanhamento psicológico regular.' },
+      { k: 'assistente social de proteção infantil', e: 'child protection social worker', ex: 'A assistente social de proteção infantil visitava a família semanalmente.' },
+    ]
+  },
+  {
+    id: 'pt_labor_union1', title: 'Labor Unions & Collective Bargaining', titleKriolu: 'Labor Unions & Collective Bargaining', icon: '✊', color: '#BC4749',
+    desc: 'Labor unions, collective wage bargaining, workers\' strikes, union representatives, collective labor agreements, and the right to strike',
+    vocab: [
+      { k: 'sindicato de trabalhadores', e: 'labor union', ex: 'O sindicato de trabalhadores defendia melhores condições de trabalho.' },
+      { k: 'negociação coletiva de salários', e: 'collective wage bargaining', ex: 'A negociação coletiva de salários envolvia representantes da empresa e dos trabalhadores.' },
+      { k: 'greve geral de trabalhadores', e: 'general workers\' strike', ex: 'A greve geral de trabalhadores paralisou o transporte público na cidade.' },
+      { k: 'representante sindical no local de trabalho', e: 'workplace union representative', ex: 'O representante sindical no local de trabalho mediava conflitos entre patrões e funcionários.' },
+      { k: 'acordo coletivo de trabalho', e: 'collective labor agreement', ex: 'O acordo coletivo de trabalho estabelecia salários mínimos para toda a categoria.' },
+      { k: 'direito à greve', e: 'right to strike', ex: 'O direito à greve era protegido pela constituição em muitos países.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -30477,6 +30527,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_disability_rights1','pt_climate_resilience1'] },
   { unit:'Unidade 189 — Coparentalidade e Direitos do Consumidor', icon:'🛡', desc:'Coparentalidade e famílias mistas, e proteção ao consumidor e direitos de garantia',
     lessons:['pt_coparenting1','pt_consumer_rights1'] },
+  { unit:'Unidade 190 — Adoção e Sindicatos', icon:'✊', desc:'Adoção e acolhimento familiar, e sindicatos e negociação coletiva',
+    lessons:['pt_adoption_foster1','pt_labor_union1'] },
 ];
 
 
