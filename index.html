@@ -14798,6 +14798,33 @@ const KR_LESSONS = [
       { k: 'Insentivu fiskal pa enerjia limpu', e: 'clean energy tax incentive', ex: 'Insentivu fiskal pa enerjia limpu ta stimula família pa instala painel solar.' },
     ]
   },
+  {
+    id: 'kr_water_utilities1', title: 'Water Utilities', titleKriolu: 'Servisu di Água', icon: '🚰', color: '#219EBC',
+    desc: 'Water treatment plants, meters, sewage pipes, leaks, reservoirs, bills, wells, and rainwater harvesting',
+    vocab: [
+      { k: 'Stason di tratamentu di água', e: 'water treatment plant', ex: 'Stason di tratamentu di água ta purifika água antis di distribuí-l pa sidadi.' },
+      { k: 'Medidor di água rezidensial', e: 'residential water meter', ex: 'Medidor di água rezidensial ta rejistra konsumu di kada mes di kaza.' },
+      { k: 'Tubulason di ezgotu', e: 'sewage pipe', ex: 'Tubulason di ezgotu tinha mesti di manutenson dipos di anu di usu.' },
+      { k: 'Vazamentu di água na rua', e: 'street water leak', ex: 'Vazamentu di água na rua ta inunda kalsada durante noti.' },
+      { k: 'Rezervatóriu di água munisipal', e: 'municipal water reservoir', ex: 'Rezervatóriu di água munisipal ta abastese tudu sidadi durante seka.' },
+      { k: 'Konta di água di kada mes', e: 'monthly water bill', ex: 'Konta di água di kada mes ta oumenta durante mes más seku.' },
+      { k: 'Posu artezianu', e: 'artesian well', ex: 'Posu artezianu ta forsi água limpu mésmu durante períodu di estiaji.' },
+      { k: 'Sistema di kaptason di água di txuba', e: 'rainwater harvesting system', ex: 'Sistema di kaptason di água di txuba ta redusi desperdísiu di água potável.' },
+    ]
+  },
+  {
+    id: 'kr_waste_management1', title: 'Waste Management & Recycling', titleKriolu: 'Jestion di Lixu i Reciklaji', icon: '🗑️', color: '#606C38',
+    desc: 'Garbage trucks, selective collection, landfills, composting, e-waste, and communal containers',
+    vocab: [
+      { k: 'Kaminhon di lixu', e: 'garbage truck', ex: 'Kaminhon di lixu ta pasa na rua tudu tersa i sesta-fera.' },
+      { k: 'Koleta seletivu di lixu', e: 'selective waste collection', ex: 'Koleta seletivu di lixu ta separa material resiklável di lixu komun.' },
+      { k: 'Aterru sanitáriu', e: 'sanitary landfill', ex: 'Aterru sanitáriu ta risebe lixu ki ka podeba ser resikladu.' },
+      { k: 'Usina di konpostaji', e: 'composting plant', ex: 'Usina di konpostaji ta transforma restu orgániku na adubu.' },
+      { k: 'Pontu di koleta di lixu eletróniku', e: 'e-waste collection point', ex: 'Pontu di koleta di lixu eletróniku ta seita telemóvel ku konputador velhu.' },
+      { k: 'Kontêiner di lixu komunitáriu', e: 'communal waste container', ex: 'Kontêiner di lixu komunitáriu ta fika na kantu di bairu.' },
+      { k: 'Separason di lixu orgániku ku resiklável', e: 'separation of organic and recyclable waste', ex: 'Separason di lixu orgániku ku resiklável éra obrigatóriu na txeu kondomíniu.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -15881,6 +15908,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_corporate3','kr_ev_bicycle_depth1'] },
   { unit:'Unit 153 — Public Transit & Renewable Energy', icon:'🚇', desc:'Metro and bus transit systems, and renewable energy and solar power in depth',
     lessons:['kr_public_transit1','kr_renewable_energy2'] },
+  { unit:'Unit 154 — Water Utilities & Waste Management', icon:'🚰', desc:'Water treatment and utilities, and waste management and recycling',
+    lessons:['kr_water_utilities1','kr_waste_management1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -28562,6 +28591,33 @@ const PT_LESSONS = [
       { k: 'incentivo fiscal para energia limpa', e: 'clean energy tax incentive', ex: 'O incentivo fiscal para energia limpa estimulava famílias a instalar painéis solares.' },
     ]
   },
+  {
+    id: 'pt_water_utilities1', title: 'Water Utilities', titleKriolu: 'Water Utilities', icon: '🚰', color: '#219EBC',
+    desc: 'Water treatment plants, meters, sewage pipes, leaks, reservoirs, bills, wells, and rainwater harvesting',
+    vocab: [
+      { k: 'estação de tratamento de água', e: 'water treatment plant', ex: 'A estação de tratamento de água purificava a água antes de distribuí-la à cidade.' },
+      { k: 'medidor de água residencial', e: 'residential water meter', ex: 'O medidor de água residencial registrava o consumo mensal da casa.' },
+      { k: 'tubulação de esgoto', e: 'sewage pipe', ex: 'A tubulação de esgoto precisava de manutenção depois de anos de uso.' },
+      { k: 'vazamento de água na rua', e: 'street water leak', ex: 'O vazamento de água na rua inundava a calçada durante a noite.' },
+      { k: 'reservatório de água municipal', e: 'municipal water reservoir', ex: 'O reservatório de água municipal abastecia toda a cidade durante a seca.' },
+      { k: 'conta de água mensal', e: 'monthly water bill', ex: 'A conta de água mensal aumentava durante os meses mais secos.' },
+      { k: 'poço artesiano', e: 'artesian well', ex: 'O poço artesiano fornecia água limpa mesmo durante períodos de estiagem.' },
+      { k: 'sistema de captação de água da chuva', e: 'rainwater harvesting system', ex: 'O sistema de captação de água da chuva reduzia o desperdício de água potável.' },
+    ]
+  },
+  {
+    id: 'pt_waste_management1', title: 'Waste Management & Recycling', titleKriolu: 'Waste Management & Recycling', icon: '🗑️', color: '#606C38',
+    desc: 'Garbage trucks, selective collection, landfills, composting, e-waste, and communal containers',
+    vocab: [
+      { k: 'caminhão de lixo', e: 'garbage truck', ex: 'O caminhão de lixo passava na rua toda terça e sexta-feira.' },
+      { k: 'coleta seletiva de lixo', e: 'selective waste collection', ex: 'A coleta seletiva de lixo separava materiais recicláveis do lixo comum.' },
+      { k: 'aterro sanitário', e: 'sanitary landfill', ex: 'O aterro sanitário recebia o lixo que não podia ser reciclado.' },
+      { k: 'usina de compostagem', e: 'composting plant', ex: 'A usina de compostagem transformava restos orgânicos em adubo.' },
+      { k: 'ponto de coleta de lixo eletrônico', e: 'e-waste collection point', ex: 'O ponto de coleta de lixo eletrônico aceitava celulares e computadores velhos.' },
+      { k: 'contêiner de lixo comunitário', e: 'communal waste container', ex: 'O contêiner de lixo comunitário ficava na esquina do bairro.' },
+      { k: 'separação de lixo orgânico e reciclável', e: 'separation of organic and recyclable waste', ex: 'A separação de lixo orgânico e reciclável era obrigatória em muitos condomínios.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -28881,6 +28937,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_corporate3','pt_ev_bicycle_depth1'] },
   { unit:'Unidade 155 — Transporte Público e Energia Renovável', icon:'🚇', desc:'Sistemas de trânsito de metrô e ônibus, e energia renovável e energia solar aprofundadas',
     lessons:['pt_public_transit1','pt_renewable_energy2'] },
+  { unit:'Unidade 156 — Serviços de Água e Gestão de Resíduos', icon:'🚰', desc:'Tratamento e serviços de água, e gestão de resíduos e reciclagem',
+    lessons:['pt_water_utilities1','pt_waste_management1'] },
 ];
 
 
