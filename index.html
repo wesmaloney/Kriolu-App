@@ -15816,6 +15816,30 @@ const KR_LESSONS = [
       { k: 'Dizenvolvimentu abitasional di uzu mistu', e: 'mixed-use housing development', ex: 'Dizenvolvimentu abitasional di uzu mistu ta konbinaba kaza, loja ku skritóriu na mesmu spasu.' },
     ]
   },
+  {
+    id: 'kr_freelance_tax1', title: 'Freelance Tax & Self-Employment Filing', titleKriolu: 'Inpostu di Freelancer i Deklarason di Trabadju Independenti', icon: '🧾', color: '#264653',
+    desc: 'Self-employed tax returns, freelancer invoices, simplified tax regimes, expense deductions, social security contributions, and filing deadlines',
+    vocab: [
+      { k: 'Deklarason di inpostu pa trabadjador independenti', e: 'tax return for a self-employed worker', ex: 'Deklarason di inpostu pa trabadjador independenti ta enkluiba tudu rendimentu di anu.' },
+      { k: 'Fatura elektróniku di freelancer', e: 'electronic invoice for a freelancer', ex: 'Fatura elektróniku di freelancer ta mandadu diretamenti pa klienti ku administrason fiskal.' },
+      { k: 'Rejimi fiskal simplifikadu', e: 'simplified tax regime', ex: 'Rejimi fiskal simplifikadu ta fasilitaba kontabilidadi pa pikinoti negósiu.' },
+      { k: 'Deduson di despeza profisional', e: 'deduction of professional expenses', ex: 'Deduson di despeza profisional ta reduziba valor total di inpostu pa paga.' },
+      { k: 'Kontribuison pa siguransa sosial di trabadjador independenti', e: 'social security contribution for a self-employed worker', ex: 'Kontribuison pa siguransa sosial di trabadjador independenti ta garantiba asesu a benefísiu futuru.' },
+      { k: 'Prazu di entrega di deklarason anual', e: 'annual tax filing deadline', ex: 'Prazu di entrega di deklarason anual ta anunsiadu ku mes di antisedénsia.' },
+    ]
+  },
+  {
+    id: 'kr_bike_share_depth1', title: 'Bike-Share Programs in Depth', titleKriolu: 'Programa di Bisikleta Partiladu Más Fundu', icon: '🚲', color: '#2A9D8F',
+    desc: 'Bike-share stations, bike-share programs, shared electric bikes, app-based unlocking, cyclist safety helmets, and dedicated bike routes',
+    vocab: [
+      { k: 'Stason di bisikleta partiladu', e: 'bike-share station', ex: 'Stason di bisikleta partiladu ta fikaba pértu di entrada di parki.' },
+      { k: 'Programa di bisikleta partiladu', e: 'bike-share program', ex: 'Programa di bisikleta partiladu ta insentivaba mobilidadi sustentável na sidadi.' },
+      { k: 'Bisikleta elétriku partiladu', e: 'shared electric bike', ex: 'Bisikleta elétriku partiladu ta fasilitaba persursu más longu sen kansera.' },
+      { k: 'Dizbloki di bisikleta pur aplikativu', e: 'bike unlock via app', ex: 'Dizbloki di bisikleta pur aplikativu ta funsionaba ku un simplis kódigu QR.' },
+      { k: 'Kapaseti di siguransa pa siklista urbanu', e: 'safety helmet for urban cyclist', ex: 'Kapaseti di siguransa pa siklista urbanu ta reduziba risku di lezon grave.' },
+      { k: 'Rota siklável dedikadu na sidadi', e: 'dedicated bike route in the city', ex: 'Rota siklável dedikadu na sidadi ta ligaba vários bairu di manera seguru.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -16991,6 +17015,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_vertical_farming1','kr_telehealth_therapy1'] },
   { unit:'Unit 199 — Workplace Mentorship & Affordable Housing', icon:'🏘', desc:'Workplace mentorship and onboarding, and community land trusts and affordable housing',
     lessons:['kr_workplace_mentorship1','kr_affordable_housing1'] },
+  { unit:'Unit 200 — Freelance Tax & Bike-Share Programs', icon:'🧾', desc:'Freelance tax and self-employment filing, and bike-share programs in depth',
+    lessons:['kr_freelance_tax1','kr_bike_share_depth1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -30690,6 +30716,30 @@ const PT_LESSONS = [
       { k: 'desenvolvimento habitacional de uso misto', e: 'mixed-use housing development', ex: 'O desenvolvimento habitacional de uso misto combinava casas, lojas e escritórios no mesmo espaço.' },
     ]
   },
+  {
+    id: 'pt_freelance_tax1', title: 'Freelance Tax & Self-Employment Filing', titleKriolu: 'Freelance Tax & Self-Employment Filing', icon: '🧾', color: '#264653',
+    desc: 'Self-employed tax returns, freelancer invoices, simplified tax regimes, expense deductions, social security contributions, and filing deadlines',
+    vocab: [
+      { k: 'declaração de imposto para trabalhador independente', e: 'tax return for a self-employed worker', ex: 'A declaração de imposto para trabalhador independente incluía todos os rendimentos do ano.' },
+      { k: 'fatura eletrónica de freelancer', e: 'electronic invoice for a freelancer', ex: 'A fatura eletrónica de freelancer era enviada diretamente ao cliente e à administração fiscal.' },
+      { k: 'regime fiscal simplificado', e: 'simplified tax regime', ex: 'O regime fiscal simplificado facilitava a contabilidade para pequenos negócios.' },
+      { k: 'dedução de despesas profissionais', e: 'deduction of professional expenses', ex: 'A dedução de despesas profissionais reduzia o valor total de imposto a pagar.' },
+      { k: 'contribuição para a segurança social de trabalhador independente', e: 'social security contribution for a self-employed worker', ex: 'A contribuição para a segurança social de trabalhador independente garantia acesso a benefícios futuros.' },
+      { k: 'prazo de entrega da declaração anual', e: 'annual tax filing deadline', ex: 'O prazo de entrega da declaração anual era anunciado com meses de antecedência.' },
+    ]
+  },
+  {
+    id: 'pt_bike_share_depth1', title: 'Bike-Share Programs in Depth', titleKriolu: 'Bike-Share Programs in Depth', icon: '🚲', color: '#2A9D8F',
+    desc: 'Bike-share stations, bike-share programs, shared electric bikes, app-based unlocking, cyclist safety helmets, and dedicated bike routes',
+    vocab: [
+      { k: 'estação de bicicleta partilhada', e: 'bike-share station', ex: 'A estação de bicicleta partilhada ficava perto da entrada do parque.' },
+      { k: 'programa de bicicletas partilhadas', e: 'bike-share program', ex: 'O programa de bicicletas partilhadas incentivava a mobilidade sustentável na cidade.' },
+      { k: 'bicicleta elétrica partilhada', e: 'shared electric bike', ex: 'A bicicleta elétrica partilhada facilitava percursos mais longos sem cansaço.' },
+      { k: 'desbloqueio de bicicleta por aplicativo', e: 'bike unlock via app', ex: 'O desbloqueio de bicicleta por aplicativo funcionava com um simples código QR.' },
+      { k: 'capacete de segurança para ciclista urbano', e: 'safety helmet for urban cyclist', ex: 'O capacete de segurança para ciclista urbano reduzia o risco de lesões graves.' },
+      { k: 'rota ciclável dedicada na cidade', e: 'dedicated bike route in the city', ex: 'A rota ciclável dedicada na cidade ligava vários bairros de forma segura.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -31101,6 +31151,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_vertical_farming1','pt_telehealth_therapy1'] },
   { unit:'Unidade 201 — Mentoria no Trabalho e Habitação Acessível', icon:'🏘', desc:'Mentoria e integração no trabalho, e fideicomissos comunitários de terra e habitação acessível',
     lessons:['pt_workplace_mentorship1','pt_affordable_housing1'] },
+  { unit:'Unidade 202 — Impostos de Freelancer e Bicicletas Partilhadas', icon:'🧾', desc:'Impostos e declaração para trabalhadores independentes, e programas de bicicletas partilhadas aprofundados',
+    lessons:['pt_freelance_tax1','pt_bike_share_depth1'] },
 ];
 
 
