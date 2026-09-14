@@ -14697,6 +14697,28 @@ const KR_LESSONS = [
       { k: 'Troka aria di gatu', e: 'changing the cat\'s litter', ex: 'Troka aria di gatu regularmenti ta evita txeru na kaza.' },
     ]
   },
+  {
+    id: 'kr_weekend_commute1', title: 'Weekend Routine & Commute', titleKriolu: 'Rotina di Fin di Simana i Deslokamentu', icon: '🚌', color: '#264653',
+    desc: 'Sleeping in, Saturday shopping, washing the car, crowded buses, delayed trains, traffic, and parking',
+    vocab: [
+      { k: 'Durmi tii tardi na fin di simana', e: 'sleeping in on the weekend', ex: 'Durmi tii tardi na fin di simana ta djuda rekupera sonu perdidu.' },
+      { k: 'Fazi kompra di simana na sábadu', e: 'doing the weekly grocery shopping on Saturday', ex: 'Fazi kompra di simana na sábadu ta evita koridu durante simana.' },
+      { k: 'Laba karu na fin di simana', e: 'washing the car on the weekend', ex: 'Laba karu na fin di simana é un tarefa relaxanti.' },
+      { k: 'Panha autokarru lotadu pa manhan', e: 'catching the crowded morning bus', ex: 'Panha autokarru lotadu pa manhan pidi pasénsia ku txega sedu.' },
+      { k: 'Spera tren atrazadu', e: 'waiting for the delayed train', ex: 'Spera tren atrazadu na plataforma ta testa pasénsia di tudu algen.' },
+      { k: 'Verifika tránzitu antis di sai', e: 'checking traffic before leaving', ex: 'Verifika tránzitu antis di sai ta djuda skodji midjor rota.' },
+      { k: 'Stasiona na vaga apertadu', e: 'parking in a tight spot', ex: 'Stasiona na vaga apertadu pidi manobra presizu.' },
+    ]
+  },
+  {
+    id: 'kr_parenting2', title: 'Parenting & Childcare Depth', titleKriolu: 'Kriason di Fidju Más Fundu', icon: '🧸', color: '#E76F51',
+    desc: 'A young child\'s tantrum, bedtime storytime, and natural consequences for bad behavior',
+    vocab: [
+      { k: 'Birra di kriansa pikinoti', e: 'a young child\'s tantrum', ex: 'Birra di kriansa pikinoti na supermerkadu ta dexa pai avergonhadu.' },
+      { k: 'Ora di konta stória antis di durmi', e: 'bedtime storytime', ex: 'Ora di konta stória antis di durmi torna un ritual spesial.' },
+      { k: 'Konsekuénsia natural pa mau komportamentu', e: 'natural consequence for bad behavior', ex: 'Konsekuénsia natural pa mau komportamentu ta ensina rezponsabilidadi sen punison severu.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -15772,6 +15794,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_taste_smell_depth1','kr_personal_grooming1'] },
   { unit:'Unit 149 — Daily Routine, Pet Care Depth', icon:'🐕', desc:'Morning and bedtime routine, and pet care in depth',
     lessons:['kr_daily_routine1','kr_pet_care_depth1'] },
+  { unit:'Unit 150 — Weekend & Commute, Parenting Depth', icon:'🧸', desc:'Weekend routine and commute vocabulary, and parenting and childcare depth',
+    lessons:['kr_weekend_commute1','kr_parenting2'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -28352,6 +28376,28 @@ const PT_LESSONS = [
       { k: 'trocar a areia do gato', e: 'changing the cat\'s litter', ex: 'Trocar a areia do gato regularmente evitava odores na casa.' },
     ]
   },
+  {
+    id: 'pt_weekend_commute1', title: 'Weekend Routine & Commute', titleKriolu: 'Weekend Routine & Commute', icon: '🚌', color: '#264653',
+    desc: 'Sleeping in, Saturday shopping, washing the car, crowded buses, delayed trains, traffic, and parking',
+    vocab: [
+      { k: 'dormir até tarde no fim de semana', e: 'sleeping in on the weekend', ex: 'Dormir até tarde no fim de semana ajudava a recuperar o sono perdido.' },
+      { k: 'fazer compras da semana no sábado', e: 'doing the weekly grocery shopping on Saturday', ex: 'Fazer compras da semana no sábado evitava correria durante a semana.' },
+      { k: 'lavar o carro no fim de semana', e: 'washing the car on the weekend', ex: 'Lavar o carro no fim de semana era uma tarefa relaxante.' },
+      { k: 'pegar o ônibus lotado de manhã', e: 'catching the crowded morning bus', ex: 'Pegar o ônibus lotado de manhã exigia paciência e chegar cedo.' },
+      { k: 'esperar o trem atrasado', e: 'waiting for the delayed train', ex: 'Esperar o trem atrasado na plataforma testava a paciência de todos.' },
+      { k: 'verificar o trânsito antes de sair', e: 'checking traffic before leaving', ex: 'Verificar o trânsito antes de sair ajudava a escolher a melhor rota.' },
+      { k: 'estacionar em vaga apertada', e: 'parking in a tight spot', ex: 'Estacionar em vaga apertada exigia manobras precisas.' },
+    ]
+  },
+  {
+    id: 'pt_parenting2', title: 'Parenting & Childcare Depth', titleKriolu: 'Parenting & Childcare Depth', icon: '🧸', color: '#E76F51',
+    desc: 'A young child\'s tantrum, bedtime storytime, and natural consequences for bad behavior',
+    vocab: [
+      { k: 'birra de criança pequena', e: 'a young child\'s tantrum', ex: 'A birra de criança pequena no supermercado deixava os pais envergonhados.' },
+      { k: 'hora de contar histórias antes de dormir', e: 'bedtime storytime', ex: 'A hora de contar histórias antes de dormir se tornou um ritual especial.' },
+      { k: 'consequência natural para mau comportamento', e: 'natural consequence for bad behavior', ex: 'A consequência natural para mau comportamento ensinava responsabilidade sem punição severa.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -28663,6 +28709,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_taste_smell_depth1','pt_personal_grooming1'] },
   { unit:'Unidade 151 — Rotina Diária, Cuidados com Animais de Estimação', icon:'🐕', desc:'Rotina de manhã e noite, e cuidados com animais de estimação aprofundados',
     lessons:['pt_daily_routine1','pt_pet_care_depth1'] },
+  { unit:'Unidade 152 — Rotina de Fim de Semana e Desloc, Criação de Filhos', icon:'🧸', desc:'Rotina de fim de semana e vocabulário de deslocamento, e criação de filhos aprofundada',
+    lessons:['pt_weekend_commute1','pt_parenting2'] },
 ];
 
 
