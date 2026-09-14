@@ -15307,6 +15307,29 @@ const KR_LESSONS = [
       { k: 'Rezerva di vaga di rekarga', e: 'charging spot reservation', ex: 'Rezerva di vaga di rekarga ta garanti ki motorista ka perde tenpu speranda.' },
     ]
   },
+  {
+    id: 'kr_freelancing1', title: 'Freelancing & Gig Economy', titleKriolu: 'Trabadju Freelance i Ekonomia Gig', icon: '💻', color: '#457B9D',
+    desc: 'Freelance workers, work platforms, service contracts, recurring clients, portfolios, and hourly rates',
+    vocab: [
+      { k: 'Trabadjador autónomu', e: 'freelance worker', ex: 'Trabadjador autónomu ta defini se própriu oráriu di trabadju.' },
+      { k: 'Plataforma di trabadju freelance', e: 'freelance work platform', ex: 'Plataforma di trabadju freelance ta konekta klienti ku profisional kalifikadu.' },
+      { k: 'Kontratu di prestason di servisu', e: 'service provision contract', ex: 'Kontratu di prestason di servisu ta defini prazu ku valor akordadu.' },
+      { k: 'Klienti rekorrenti', e: 'recurring client', ex: 'Klienti rekorrenti ta kontrata mésmu profisional regularmenti.' },
+      { k: 'Portfóliu di trabadju freelance', e: 'freelance work portfolio', ex: 'Portfóliu di trabadju freelance ta mostra projetu anterior di profisional.' },
+      { k: 'Taxa pa ora di freelancer', e: 'freelancer hourly rate', ex: 'Taxa pa ora di freelancer ta varia konforme esperiénsia di profisional.' },
+    ]
+  },
+  {
+    id: 'kr_digital_nomad1', title: 'Coworking & Digital Nomad Life', titleKriolu: 'Kowórkin i Vida di Nómadi Dijital', icon: '🌍', color: '#2A9D8F',
+    desc: 'Digital nomads, shared work desks, private meeting rooms, nomad visas, and remote work communities',
+    vocab: [
+      { k: 'Nómadi dijital', e: 'digital nomad', ex: 'Nómadi dijital ta trabadja di diferenti país durante anu.' },
+      { k: 'Meza kompartidjadu di trabadju', e: 'shared work desk', ex: 'Meza kompartidjadu di trabadju podeba ser rezervadu pa ora.' },
+      { k: 'Sala di reunion privadu', e: 'private meeting room', ex: 'Sala di reunion privadu ta ser uzadu pa txamada ku klienti.' },
+      { k: 'Vistu di nómadi dijital', e: 'digital nomad visa', ex: 'Vistu di nómadi dijital ta permiti mora na país tí un anu.' },
+      { k: 'Komunidadi di trabadju remotu', e: 'remote work community', ex: 'Komunidadi di trabadju remotu ta organiza enkontru di kada mes pa networking.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -16440,6 +16463,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_pet_training1','kr_food_delivery1'] },
   { unit:'Unit 178 — Smart Doorbells & EV Charging', icon:'🔔', desc:'Smart doorbells and home security in depth, and EV charging infrastructure',
     lessons:['kr_home_security3','kr_ev_charging1'] },
+  { unit:'Unit 179 — Freelancing & Digital Nomad Life', icon:'💻', desc:'Freelancing and the gig economy, and coworking and digital nomad life',
+    lessons:['kr_freelancing1','kr_digital_nomad1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -29630,6 +29655,29 @@ const PT_LESSONS = [
       { k: 'reserva de vaga de recarga', e: 'charging spot reservation', ex: 'A reserva de vaga de recarga garantia que o motorista não perdesse tempo esperando.' },
     ]
   },
+  {
+    id: 'pt_freelancing1', title: 'Freelancing & Gig Economy', titleKriolu: 'Freelancing & Gig Economy', icon: '💻', color: '#457B9D',
+    desc: 'Freelance workers, work platforms, service contracts, recurring clients, portfolios, and hourly rates',
+    vocab: [
+      { k: 'trabalhador autônomo', e: 'freelance worker', ex: 'O trabalhador autônomo definia seus próprios horários de trabalho.' },
+      { k: 'plataforma de trabalho freelance', e: 'freelance work platform', ex: 'A plataforma de trabalho freelance conectava clientes a profissionais qualificados.' },
+      { k: 'contrato de prestação de serviço', e: 'service provision contract', ex: 'O contrato de prestação de serviço definia os prazos e valores acordados.' },
+      { k: 'cliente recorrente', e: 'recurring client', ex: 'O cliente recorrente contratava o mesmo profissional regularmente.' },
+      { k: 'portfólio de trabalho freelance', e: 'freelance work portfolio', ex: 'O portfólio de trabalho freelance mostrava projetos anteriores do profissional.' },
+      { k: 'taxa por hora de freelancer', e: 'freelancer hourly rate', ex: 'A taxa por hora de freelancer variava conforme a experiência do profissional.' },
+    ]
+  },
+  {
+    id: 'pt_digital_nomad1', title: 'Coworking & Digital Nomad Life', titleKriolu: 'Coworking & Digital Nomad Life', icon: '🌍', color: '#2A9D8F',
+    desc: 'Digital nomads, shared work desks, private meeting rooms, nomad visas, and remote work communities',
+    vocab: [
+      { k: 'nômade digital', e: 'digital nomad', ex: 'O nômade digital trabalhava de diferentes países ao longo do ano.' },
+      { k: 'mesa compartilhada de trabalho', e: 'shared work desk', ex: 'A mesa compartilhada de trabalho podia ser reservada por hora.' },
+      { k: 'sala de reunião privada', e: 'private meeting room', ex: 'A sala de reunião privada era usada para chamadas com clientes.' },
+      { k: 'visto de nômade digital', e: 'digital nomad visa', ex: 'O visto de nômade digital permitia morar no país por até um ano.' },
+      { k: 'comunidade de trabalho remoto', e: 'remote work community', ex: 'A comunidade de trabalho remoto organizava encontros mensais para networking.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -29999,6 +30047,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_pet_training1','pt_food_delivery1'] },
   { unit:'Unidade 180 — Campainhas Inteligentes e Recarga de VE', icon:'🔔', desc:'Campainhas inteligentes e segurança residencial aprofundadas, e infraestrutura de recarga de veículos elétricos',
     lessons:['pt_home_security3','pt_ev_charging1'] },
+  { unit:'Unidade 181 — Freelancing e Vida de Nômade Digital', icon:'💻', desc:'Trabalho freelance e economia gig, e coworking e vida de nômade digital',
+    lessons:['pt_freelancing1','pt_digital_nomad1'] },
 ];
 
 
