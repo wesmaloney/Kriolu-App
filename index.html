@@ -14842,6 +14842,30 @@ const KR_LESSONS = [
       { k: 'Ekipamentu di proteson di bonberu', e: 'firefighter protective equipment', ex: 'Ekipamentu di proteson di bonberu ta inklui kapaseti rezistenti á kalor.' },
     ]
   },
+  {
+    id: 'kr_postal_services1', title: 'Postal & Courier Services', titleKriolu: 'Servisu di Korreiu i Enkomenda', icon: '📮', color: '#8D6A4E',
+    desc: 'Post office branches, registered letters, express packages, mail carriers, and postage stamps',
+    vocab: [
+      { k: 'Ajénsia di korreiu', e: 'post office branch', ex: 'Ajénsia di korreiu ta fika abertu tí seis di tardi.' },
+      { k: 'Karta rejistradu', e: 'registered letter', ex: 'Karta rejistradu tinha mesti di asinatura na ómenti di entrega.' },
+      { k: 'Enkomenda espresu', e: 'express package', ex: 'Enkomenda espresu txiga na sô dôs dia.' },
+      { k: 'Karteru', e: 'mail carrier', ex: 'Karteru ta entrega karta tudu manhan.' },
+      { k: 'Kaxa di korreiu komunitáriu', e: 'communal mailbox', ex: 'Kaxa di korreiu komunitáriu ta fika na entrada di kondomíniu.' },
+      { k: 'Selu postal', e: 'postage stamp', ex: 'Selu postal tinha un imajen di un pássaru raru.' },
+      { k: 'Taxa di envio internasional', e: 'international shipping fee', ex: 'Taxa di envio internasional ta varia konforme pezu di pakoti.' },
+    ]
+  },
+  {
+    id: 'kr_hospital_depth1', title: 'Public Health & Hospitals in Depth', titleKriolu: 'Saúdi Públiku i Ospital Más Fundu', icon: '🏥', color: '#E63946',
+    desc: 'Intensive care units, community health posts, vaccination campaigns, patient triage, and routine checkups',
+    vocab: [
+      { k: 'Unidadi di terapia intensivu', e: 'intensive care unit', ex: 'Unidadi di terapia intensivu ta monitora pasienti na stadu grabi.' },
+      { k: 'Postu di saúdi komunitáriu', e: 'community health post', ex: 'Postu di saúdi komunitáriu ta oferese konsulta grátis pa bairu.' },
+      { k: 'Kanpanha di vasinason públiku', e: 'public vaccination campaign', ex: 'Kanpanha di vasinason públiku alkansa míl di kriansa es anu.' },
+      { k: 'Triaji di pasienti', e: 'patient triage', ex: 'Triaji di pasienti ta determina ordi di atendimentu na emerjénsia.' },
+      { k: 'Xami di rotina anual', e: 'annual routine checkup', ex: 'Xami di rotina anual ta djuda detekta problema di saúdi sedu.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -15929,6 +15953,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_water_utilities1','kr_waste_management1'] },
   { unit:'Unit 155 — Public Safety & Emergency Services', icon:'🚒', desc:'Fire stations, emergency dispatch, rescue teams, and disaster response',
     lessons:['kr_public_safety1'] },
+  { unit:'Unit 156 — Postal Services & Public Health', icon:'📮', desc:'Postal and courier services, and public health and hospitals in depth',
+    lessons:['kr_postal_services1','kr_hospital_depth1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -28654,6 +28680,30 @@ const PT_LESSONS = [
       { k: 'equipamento de proteção do bombeiro', e: 'firefighter protective equipment', ex: 'O equipamento de proteção do bombeiro incluía capacete resistente ao calor.' },
     ]
   },
+  {
+    id: 'pt_postal_services1', title: 'Postal & Courier Services', titleKriolu: 'Postal & Courier Services', icon: '📮', color: '#8D6A4E',
+    desc: 'Post office branches, registered letters, express packages, mail carriers, and postage stamps',
+    vocab: [
+      { k: 'agência dos correios', e: 'post office branch', ex: 'A agência dos correios ficava aberta até as seis da tarde.' },
+      { k: 'carta registrada', e: 'registered letter', ex: 'A carta registrada precisava de assinatura no momento da entrega.' },
+      { k: 'encomenda expressa', e: 'express package', ex: 'A encomenda expressa chegou em apenas dois dias.' },
+      { k: 'carteiro', e: 'mail carrier', ex: 'O carteiro entregava as cartas todas as manhãs.' },
+      { k: 'caixa de correio comunitária', e: 'communal mailbox', ex: 'A caixa de correio comunitária ficava na entrada do condomínio.' },
+      { k: 'selo postal', e: 'postage stamp', ex: 'O selo postal tinha uma imagem de um pássaro raro.' },
+      { k: 'taxa de envio internacional', e: 'international shipping fee', ex: 'A taxa de envio internacional variava conforme o peso do pacote.' },
+    ]
+  },
+  {
+    id: 'pt_hospital_depth1', title: 'Public Health & Hospitals in Depth', titleKriolu: 'Public Health & Hospitals in Depth', icon: '🏥', color: '#E63946',
+    desc: 'Intensive care units, community health posts, vaccination campaigns, patient triage, and routine checkups',
+    vocab: [
+      { k: 'unidade de terapia intensiva', e: 'intensive care unit', ex: 'A unidade de terapia intensiva monitorava pacientes em estado grave.' },
+      { k: 'posto de saúde comunitário', e: 'community health post', ex: 'O posto de saúde comunitário oferecia consultas gratuitas ao bairro.' },
+      { k: 'campanha de vacinação pública', e: 'public vaccination campaign', ex: 'A campanha de vacinação pública alcançou milhares de crianças este ano.' },
+      { k: 'triagem de pacientes', e: 'patient triage', ex: 'A triagem de pacientes determinava a ordem de atendimento na emergência.' },
+      { k: 'exame de rotina anual', e: 'annual routine checkup', ex: 'O exame de rotina anual ajudava a detectar problemas de saúde cedo.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -28977,6 +29027,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_water_utilities1','pt_waste_management1'] },
   { unit:'Unidade 157 — Segurança Pública e Serviços de Emergência', icon:'🚒', desc:'Corpos de bombeiros, central de emergência, equipes de resgate, e resposta a desastres',
     lessons:['pt_public_safety1'] },
+  { unit:'Unidade 158 — Serviços Postais e Saúde Pública', icon:'📮', desc:'Serviços de correio e encomendas, e saúde pública e hospitais aprofundados',
+    lessons:['pt_postal_services1','pt_hospital_depth1'] },
 ];
 
 
