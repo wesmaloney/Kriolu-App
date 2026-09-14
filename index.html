@@ -13264,6 +13264,56 @@ const KR_LESSONS = [
       { k: 'Integrason kontínuu', e: 'continuous integration', ex: 'Integrason kontínuu ta testaba códigu automatikamenti kada mudansa.' },
     ]
   },
+  {
+    id: 'kr_world_capitals5', title: 'World Capitals V', titleKriolu: 'Kapital Mundial V', icon: '🏛️', color: '#6A040F',
+    desc: 'Capitals of Central Asia, the Middle East, and small European nations',
+    vocab: [
+      { k: 'Kapital di Kazakstan', e: 'capital of Kazakhstan', ex: 'Astana é kapital di Kazakstan.' },
+      { k: 'Kapital di Turkmenistan', e: 'capital of Turkmenistan', ex: 'Asgabate é kapital di Turkmenistan.' },
+      { k: 'Kapital di Tajikistan', e: 'capital of Tajikistan', ex: 'Duchambe é kapital di Tajikistan.' },
+      { k: 'Kapital di Kirgistan', e: 'capital of Kyrgyzstan', ex: 'Bisqueque é kapital di Kirgistan.' },
+      { k: 'Kapital di Líbanu', e: 'capital of Lebanon', ex: 'Beirute é kapital di Líbanu.' },
+      { k: 'Kapital di Jordánia', e: 'capital of Jordan', ex: 'Amã é kapital di Jordánia.' },
+      { k: 'Kapital di Iraki', e: 'capital of Iraq', ex: 'Bagdá é kapital di Iraki.' },
+      { k: 'Kapital di Iran', e: 'capital of Iran', ex: 'Teerã é kapital di Iran.' },
+      { k: 'Kapital di Iémen', e: 'capital of Yemen', ex: 'Sanaa é kapital di Iémen.' },
+      { k: 'Kapital di Katar', e: 'capital of Qatar', ex: 'Doha é kapital di Katar.' },
+      { k: 'Kapital di Kuwait', e: 'capital of Kuwait', ex: 'Sidadi di Kuwait é kapital di Kuwait.' },
+      { k: 'Kapital di Bahrein', e: 'capital of Bahrain', ex: 'Manama é kapital di Bahrein.' },
+      { k: 'Kapital di Luxemburgu', e: 'capital of Luxembourg', ex: 'Sidadi di Luxemburgu é kapital di Luxemburgu.' },
+      { k: 'Kapital di Malta', e: 'capital of Malta', ex: 'Valeta é kapital di Malta.' },
+      { k: 'Kapital di Xipri', e: 'capital of Cyprus', ex: 'Nicósia é kapital di Xipri.' },
+    ]
+  },
+  {
+    id: 'kr_databases_devops1', title: 'Databases & DevOps', titleKriolu: 'Baze di Dadu i DevOps', icon: '🗄️', color: '#264653',
+    desc: 'Relational databases, deployment pipelines, and container orchestration',
+    vocab: [
+      { k: 'Baze di dadu relasional', e: 'relational database', ex: 'Baze di dadu relasional ta organizaba informason na tabela.' },
+      { k: 'Baze di dadu non-relasional', e: 'non-relational database', ex: 'Baze di dadu non-relasional ta armazenaba dokumentu flexível.' },
+      { k: 'Índisi di baze di dadu', e: 'database index', ex: 'Índisi di baze di dadu asilera konsulta.' },
+      { k: 'Normalizason di dadu', e: 'data normalization', ex: 'Normalizason di dadu redusi redundánsia na tabela.' },
+      { k: 'Pipeline di implantason', e: 'deployment pipeline', ex: 'Pipeline di implantason automatiza lansamentu di software.' },
+      { k: 'Infraestrutura komu códigu', e: 'infrastructure as code', ex: 'Infraestrutura komu códigu fasilita replikason di servidor.' },
+      { k: 'Orkestrason di kontenedor', e: 'container orchestration', ex: 'Orkestrason di kontenedor ta jerensiaba dizena di servisu automatikamenti.' },
+      { k: 'Monitoramentu di sistema', e: 'system monitoring', ex: 'Monitoramentu di sistema alerta ekipa sobri falha.' },
+    ]
+  },
+  {
+    id: 'kr_african_caribbean_dishes1', title: 'African & Caribbean Dishes', titleKriolu: 'Pratu di África i Karibi', icon: '🍛', color: '#2B9348',
+    desc: 'Jollof rice, injera, fufu, callaloo, and other African and Caribbean classics',
+    vocab: [
+      { k: 'Jollof rice', e: 'jollof rice', ex: 'Jollof rice ben temperadu ku tomati ku pimenta.' },
+      { k: 'Injera etíope', e: 'Ethiopian injera', ex: 'Injera etíope ta sirbiba di pratu ku utensíliu na mesmu tenpu.' },
+      { k: 'Fufu', e: 'fufu', ex: 'Fufu ben fetu di mandioka ku inhami masadu.' },
+      { k: 'Biltong', e: 'biltong', ex: 'Biltong é un karni seku temperadu típiku di África di Sul.' },
+      { k: 'Bunny chow', e: 'bunny chow', ex: 'Bunny chow ben un pon renxidu ku curry.' },
+      { k: 'Ackee ku pexi saladu', e: 'ackee and saltfish', ex: 'Ackee ku pexi saladu é pratu nasional di Jamaika.' },
+      { k: 'Callaloo', e: 'callaloo', ex: 'Callaloo ben un inzopadu di folha verdi karibenhu.' },
+      { k: 'Roti karibenhu', e: 'Caribbean roti', ex: 'Roti karibenhu ben renxidu ku curry di gaiot.' },
+      { k: 'Pastelitu kubanu', e: 'Cuban pastelitos', ex: 'Pastelitu kubanu ben renxidu ku goiabada ku kejo.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -14257,6 +14307,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_world_capitals3','kr_cybersecurity1','kr_extended_family1','kr_japanese_cuisine1'] },
   { unit:'Unit 108 — More Capitals, World Dishes & UX Design', icon:'🌍', desc:'More world capitals, Asian/Middle Eastern dishes, and UX/UI design and programming',
     lessons:['kr_world_capitals4','kr_asian_middle_eastern_dishes1','kr_ux_ui_design1'] },
+  { unit:'Unit 109 — More Capitals, Databases & World Dishes', icon:'🗄️', desc:'More world capitals, databases and DevOps, and African/Caribbean dishes',
+    lessons:['kr_world_capitals5','kr_databases_devops1','kr_african_caribbean_dishes1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -25404,6 +25456,56 @@ const PT_LESSONS = [
       { k: 'integração contínua', e: 'continuous integration', ex: 'A integração contínua testava o código automaticamente a cada mudança.' },
     ]
   },
+  {
+    id: 'pt_world_capitals5', title: 'World Capitals V', titleKriolu: 'World Capitals V', icon: '🏛️', color: '#6A040F',
+    desc: 'Capitals of Central Asia, the Middle East, and small European nations',
+    vocab: [
+      { k: 'capital do Cazaquistão', e: 'capital of Kazakhstan', ex: 'Astana é a capital do Cazaquistão.' },
+      { k: 'capital do Turcomenistão', e: 'capital of Turkmenistan', ex: 'Asgabate é a capital do Turcomenistão.' },
+      { k: 'capital do Tajiquistão', e: 'capital of Tajikistan', ex: 'Duchambe é a capital do Tajiquistão.' },
+      { k: 'capital do Quirguistão', e: 'capital of Kyrgyzstan', ex: 'Bisqueque é a capital do Quirguistão.' },
+      { k: 'capital do Líbano', e: 'capital of Lebanon', ex: 'Beirute é a capital do Líbano.' },
+      { k: 'capital da Jordânia', e: 'capital of Jordan', ex: 'Amã é a capital da Jordânia.' },
+      { k: 'capital do Iraque', e: 'capital of Iraq', ex: 'Bagdá é a capital do Iraque.' },
+      { k: 'capital do Irã', e: 'capital of Iran', ex: 'Teerã é a capital do Irã.' },
+      { k: 'capital do Iêmen', e: 'capital of Yemen', ex: 'Sanaa é a capital do Iêmen.' },
+      { k: 'capital do Catar', e: 'capital of Qatar', ex: 'Doha é a capital do Catar.' },
+      { k: 'capital do Kuwait', e: 'capital of Kuwait', ex: 'Cidade do Kuwait é a capital do Kuwait.' },
+      { k: 'capital do Bahrein', e: 'capital of Bahrain', ex: 'Manama é a capital do Bahrein.' },
+      { k: 'capital de Luxemburgo', e: 'capital of Luxembourg', ex: 'Cidade do Luxemburgo é a capital de Luxemburgo.' },
+      { k: 'capital de Malta', e: 'capital of Malta', ex: 'Valeta é a capital de Malta.' },
+      { k: 'capital de Chipre', e: 'capital of Cyprus', ex: 'Nicósia é a capital de Chipre.' },
+    ]
+  },
+  {
+    id: 'pt_databases_devops1', title: 'Databases & DevOps', titleKriolu: 'Databases & DevOps', icon: '🗄️', color: '#264653',
+    desc: 'Relational databases, deployment pipelines, and container orchestration',
+    vocab: [
+      { k: 'banco de dados relacional', e: 'relational database', ex: 'O banco de dados relacional organizava as informações em tabelas.' },
+      { k: 'banco de dados não relacional', e: 'non-relational database', ex: 'O banco de dados não relacional armazenava documentos flexíveis.' },
+      { k: 'índice de banco de dados', e: 'database index', ex: 'O índice de banco de dados acelerou as consultas.' },
+      { k: 'normalização de dados', e: 'data normalization', ex: 'A normalização de dados reduziu a redundância nas tabelas.' },
+      { k: 'pipeline de implantação', e: 'deployment pipeline', ex: 'O pipeline de implantação automatizou o lançamento do software.' },
+      { k: 'infraestrutura como código', e: 'infrastructure as code', ex: 'A infraestrutura como código facilitou a replicação dos servidores.' },
+      { k: 'orquestração de contêineres', e: 'container orchestration', ex: 'A orquestração de contêineres gerenciava dezenas de serviços automaticamente.' },
+      { k: 'monitoramento de sistemas', e: 'system monitoring', ex: 'O monitoramento de sistemas alertou a equipe sobre a falha.' },
+    ]
+  },
+  {
+    id: 'pt_african_caribbean_dishes1', title: 'African & Caribbean Dishes', titleKriolu: 'African & Caribbean Dishes', icon: '🍛', color: '#2B9348',
+    desc: 'Jollof rice, injera, fufu, callaloo, and other African and Caribbean classics',
+    vocab: [
+      { k: 'jollof rice', e: 'jollof rice', ex: 'O jollof rice foi temperado com tomate e pimenta.' },
+      { k: 'injera etíope', e: 'Ethiopian injera', ex: 'O injera etíope servia de prato e utensílio ao mesmo tempo.' },
+      { k: 'fufu', e: 'fufu', ex: 'O fufu foi feito de mandioca e inhame amassados.' },
+      { k: 'biltong', e: 'biltong', ex: 'O biltong é uma carne seca temperada típica da África do Sul.' },
+      { k: 'bunny chow', e: 'bunny chow', ex: 'O bunny chow era um pão recheado com curry.' },
+      { k: 'ackee com peixe salgado', e: 'ackee and saltfish', ex: 'O ackee com peixe salgado é o prato nacional da Jamaica.' },
+      { k: 'callaloo', e: 'callaloo', ex: 'O callaloo era um ensopado de folhas verdes caribenho.' },
+      { k: 'roti caribenho', e: 'Caribbean roti', ex: 'O roti caribenho era recheado com curry de frango.' },
+      { k: 'pastelitos cubanos', e: 'Cuban pastelitos', ex: 'Os pastelitos cubanos eram recheados com goiabada e queijo.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -25633,6 +25735,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_world_capitals3','pt_cybersecurity1','pt_extended_family1','pt_japanese_cuisine1'] },
   { unit:'Unidade 110 — Mais Capitais, Pratos Mundiais e Design UX', icon:'🌍', desc:'Mais capitais mundiais, pratos asiáticos/do Oriente Médio, e design UX/UI e programação',
     lessons:['pt_world_capitals4','pt_asian_middle_eastern_dishes1','pt_ux_ui_design1'] },
+  { unit:'Unidade 111 — Mais Capitais, Bancos de Dados e Pratos Mundiais', icon:'🗄️', desc:'Mais capitais mundiais, bancos de dados e DevOps, e pratos africanos/caribenhos',
+    lessons:['pt_world_capitals5','pt_databases_devops1','pt_african_caribbean_dishes1'] },
 ];
 
 
