@@ -14769,6 +14769,35 @@ const KR_LESSONS = [
       { k: 'Kompartidjamentu di karu elétriku', e: 'electric car sharing', ex: 'Kompartidjamentu di karu elétriku ta redusi númeru di veíkulu na rua.' },
     ]
   },
+  {
+    id: 'kr_public_transit1', title: 'Public Transit & Metro Systems', titleKriolu: 'Transporti Públiku i Sistema di Metro', icon: '🚇', color: '#264653',
+    desc: 'Busy metro stations, contactless tickets, circular lines, bus lanes, and rush hour',
+    vocab: [
+      { k: 'Stason di metro mobimentadu', e: 'busy metro station', ex: 'Stason di metro mobimentadu ta fika xeiu durante ora di pontu.' },
+      { k: 'Bilheti di metro sen kontatu', e: 'contactless metro ticket', ex: 'Bilheti di metro sen kontatu ta fasilita entrada na katraka.' },
+      { k: 'Linha di metro sirkular', e: 'circular metro line', ex: 'Linha di metro sirkular ta konekta tudu bairu sentral di sidadi.' },
+      { k: 'Mapa di sistema di transporti públiku', e: 'public transport system map', ex: 'Mapa di sistema di transporti públiku ta mostra tudu linha di ónibus ku metro.' },
+      { k: 'Ónibus artikuladu', e: 'articulated bus', ex: 'Ónibus artikuladu ta transporta más pasajeru na rota mobimentadu.' },
+      { k: 'Faixa exklusivu di ónibus', e: 'dedicated bus lane', ex: 'Faixa exklusivu di ónibus ta redusi tenpu di viaji na ora di tránzitu intensu.' },
+      { k: 'Karton di transporti rekarregável', e: 'rechargeable transit card', ex: 'Karton di transporti rekarregável podeba ser karregadu na kualker stason.' },
+      { k: 'Ora di pontu di metro', e: 'metro rush hour', ex: 'Ora di pontu di metro éra ómenti más xeiu di dia.' },
+      { k: 'Skada rolanti di stason', e: 'station escalator', ex: 'Skada rolanti di stason staba kebradu i ta kauza fila longu.' },
+      { k: 'Anúnsiu di próximu paradu', e: 'next-stop announcement', ex: 'Anúnsiu di próximu paradu ta djuda pasajeru sabe undi dixi.' },
+    ]
+  },
+  {
+    id: 'kr_renewable_energy2', title: 'Renewable Energy & Solar Power II', titleKriolu: 'Enerjia Renovável i Enerjia Solar II', icon: '☀️', color: '#F4A261',
+    desc: 'Offshore wind turbines, small-scale hydroelectric plants, residential solar roofs, and clean energy incentives',
+    vocab: [
+      { k: 'Turbina eóliku offshore', e: 'offshore wind turbine', ex: 'Turbina eóliku offshore ta jera enerjia limpu lonji di kosta.' },
+      { k: 'Usina idrelétriku di pikinoti portu', e: 'small-scale hydroelectric plant', ex: 'Usina idrelétriku di pikinoti portu ta abastese sô komunidadi lokal.' },
+      { k: 'Teladu solar rezidensial', e: 'residential solar roof', ex: 'Teladu solar rezidensial ta redusi konta di luz di família.' },
+      { k: 'Sertifikadu di enerjia renovável', e: 'renewable energy certificate', ex: 'Sertifikadu di enerjia renovável ta konprova orijen limpu di eletrisidadi.' },
+      { k: 'Efisiénsia enerjétiku di eletrodoméstiku', e: 'appliance energy efficiency', ex: 'Efisiénsia enerjétiku di eletrodoméstiku ta djuda redusi konsumu di kada mes.' },
+      { k: 'Inversor di enerjia solar', e: 'solar power inverter', ex: 'Inversor di enerjia solar ta transforma korenti kontínuu na korenti alternadu.' },
+      { k: 'Insentivu fiskal pa enerjia limpu', e: 'clean energy tax incentive', ex: 'Insentivu fiskal pa enerjia limpu ta stimula família pa instala painel solar.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -15850,6 +15879,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_rideshare_carpool1','kr_elderly_senior_care1','kr_world_capitals13'] },
   { unit:'Unit 152 — Office Culture, Electric Bikes & Vehicles', icon:'🚲', desc:'Workplace and office culture depth, and electric bikes and vehicles in depth',
     lessons:['kr_corporate3','kr_ev_bicycle_depth1'] },
+  { unit:'Unit 153 — Public Transit & Renewable Energy', icon:'🚇', desc:'Metro and bus transit systems, and renewable energy and solar power in depth',
+    lessons:['kr_public_transit1','kr_renewable_energy2'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -28502,6 +28533,35 @@ const PT_LESSONS = [
       { k: 'compartilhamento de carro elétrico', e: 'electric car sharing', ex: 'O compartilhamento de carro elétrico reduzia o número de veículos nas ruas.' },
     ]
   },
+  {
+    id: 'pt_public_transit1', title: 'Public Transit & Metro Systems', titleKriolu: 'Public Transit & Metro Systems', icon: '🚇', color: '#264653',
+    desc: 'Busy metro stations, contactless tickets, circular lines, bus lanes, and rush hour',
+    vocab: [
+      { k: 'estação de metrô movimentada', e: 'busy metro station', ex: 'A estação de metrô movimentada ficava lotada durante o horário de pico.' },
+      { k: 'bilhete de metrô sem contato', e: 'contactless metro ticket', ex: 'O bilhete de metrô sem contato facilitava a entrada nas catracas.' },
+      { k: 'linha de metrô circular', e: 'circular metro line', ex: 'A linha de metrô circular conectava todos os bairros centrais da cidade.' },
+      { k: 'mapa do sistema de transporte público', e: 'public transport system map', ex: 'O mapa do sistema de transporte público mostrava todas as linhas de ônibus e metrô.' },
+      { k: 'ônibus articulado', e: 'articulated bus', ex: 'O ônibus articulado transportava mais passageiros nas rotas movimentadas.' },
+      { k: 'faixa exclusiva de ônibus', e: 'dedicated bus lane', ex: 'A faixa exclusiva de ônibus reduzia o tempo de viagem nos horários de trânsito intenso.' },
+      { k: 'cartão de transporte recarregável', e: 'rechargeable transit card', ex: 'O cartão de transporte recarregável podia ser carregado em qualquer estação.' },
+      { k: 'horário de pico do metrô', e: 'metro rush hour', ex: 'O horário de pico do metrô era o momento mais lotado do dia.' },
+      { k: 'escada rolante da estação', e: 'station escalator', ex: 'A escada rolante da estação estava quebrada e causava filas longas.' },
+      { k: 'anúncio de próxima parada', e: 'next-stop announcement', ex: 'O anúncio de próxima parada ajudava os passageiros a saber onde descer.' },
+    ]
+  },
+  {
+    id: 'pt_renewable_energy2', title: 'Renewable Energy & Solar Power II', titleKriolu: 'Renewable Energy & Solar Power II', icon: '☀️', color: '#F4A261',
+    desc: 'Offshore wind turbines, small-scale hydroelectric plants, residential solar roofs, and clean energy incentives',
+    vocab: [
+      { k: 'turbina eólica offshore', e: 'offshore wind turbine', ex: 'A turbina eólica offshore gerava energia limpa longe da costa.' },
+      { k: 'usina hidrelétrica de pequeno porte', e: 'small-scale hydroelectric plant', ex: 'A usina hidrelétrica de pequeno porte abastecia apenas a comunidade local.' },
+      { k: 'telhado solar residencial', e: 'residential solar roof', ex: 'O telhado solar residencial reduzia a conta de luz da família.' },
+      { k: 'certificado de energia renovável', e: 'renewable energy certificate', ex: 'O certificado de energia renovável comprovava a origem limpa da eletricidade.' },
+      { k: 'eficiência energética de eletrodomésticos', e: 'appliance energy efficiency', ex: 'A eficiência energética de eletrodomésticos ajudava a reduzir o consumo mensal.' },
+      { k: 'inversor de energia solar', e: 'solar power inverter', ex: 'O inversor de energia solar transformava corrente contínua em corrente alternada.' },
+      { k: 'incentivo fiscal para energia limpa', e: 'clean energy tax incentive', ex: 'O incentivo fiscal para energia limpa estimulava famílias a instalar painéis solares.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -28819,6 +28879,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_rideshare_carpool1','pt_elderly_senior_care1','pt_world_capitals13'] },
   { unit:'Unidade 154 — Cultura de Escritório, Bicicletas e Veículos Elétricos', icon:'🚲', desc:'Cultura de trabalho e escritório aprofundada, e bicicletas e veículos elétricos aprofundados',
     lessons:['pt_corporate3','pt_ev_bicycle_depth1'] },
+  { unit:'Unidade 155 — Transporte Público e Energia Renovável', icon:'🚇', desc:'Sistemas de trânsito de metrô e ônibus, e energia renovável e energia solar aprofundadas',
+    lessons:['pt_public_transit1','pt_renewable_energy2'] },
 ];
 
 
