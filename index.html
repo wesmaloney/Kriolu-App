@@ -14501,6 +14501,36 @@ const KR_LESSONS = [
       { k: 'Svazia lixu doméstiku', e: 'emptying household trash', ex: 'Svazia lixu doméstiku é un tarefa simplis má nesesáriu tudu dia.' },
     ]
   },
+  {
+    id: 'kr_cooking_prep1', title: 'Cooking Preparation Verbs', titleKriolu: 'Verbu di Preparason di Kumida', icon: '🔪', color: '#E76F51',
+    desc: 'Dicing onions, seasoning meat in advance, letting dough rest, and sifting flour',
+    vocab: [
+      { k: 'Pika sebola na kubu pikinoti', e: 'dicing onion into small cubes', ex: 'Pika sebola na kubu pikinoti ta dexa rifogadu más uniformi.' },
+      { k: 'Tempera karni ku antesedénsia', e: 'seasoning meat in advance', ex: 'Tempera karni ku antesedénsia ta djuda sabor penetra midjor.' },
+      { k: 'Dexa masa deskansa', e: 'letting the dough rest', ex: 'Dexa masa deskansa pa un ora ta mudjora tekstura di pon.' },
+      { k: 'Penera farinha antis di mistura', e: 'sifting flour before mixing', ex: 'Penera farinha antis di mistura ta evita grumu na masa di bolu.' },
+    ]
+  },
+  {
+    id: 'kr_home_maintenance1', title: 'Home Maintenance', titleKriolu: 'Manutenson di Kaza', icon: '🛠️', color: '#606C38',
+    desc: 'Fixing a dripping faucet, replacing a lightbulb, painting with a roller, and fixing a roof tile',
+    vocab: [
+      { k: 'Repara torneira ki ta goteja', e: 'fixing a dripping faucet', ex: 'Repara torneira ki ta goteja ta ekonomiza agu ku evita dizperdísiu.' },
+      { k: 'Troka lámpada kimadu', e: 'replacing a burnt-out lightbulb', ex: 'Troka lámpada kimadu é un tarefa rápidu ku skada sertu.' },
+      { k: 'Pinta paredi ku rolu', e: 'painting a wall with a roller', ex: 'Pinta paredi ku rolu ta kubri área más rápidu ki ku pinsel.' },
+      { k: 'Konserta telha kebradu', e: 'fixing a broken roof tile', ex: 'Konserta telha kebradu ta evita infiltrason durante txuba.' },
+    ]
+  },
+  {
+    id: 'kr_social_smalltalk1', title: 'Social Small Talk', titleKriolu: 'Konversa Sosial', icon: '☕', color: '#F4A261',
+    desc: 'Greeting with a handshake, asking about the day, bringing up the weather, and inviting for coffee',
+    vocab: [
+      { k: 'Kumprimenta ku apertu di mô', e: 'greeting with a handshake', ex: 'Kumprimenta ku apertu di mô é komun na reunion formal.' },
+      { k: 'Pergunta kuma dia foi', e: 'asking how the day went', ex: 'Pergunta kuma dia foi ta mostra interesi jenuinu pa otu algen.' },
+      { k: 'Puxa konversa sobri tempu', e: 'bringing up the weather as a topic', ex: 'Puxa konversa sobri tempu é un manera fásil di kebra jelu.' },
+      { k: 'Konvida pa toma un kafé', e: 'inviting someone for coffee', ex: 'Konvida pa toma un kafé é un jeitu simplis di rekonekta ku amigu.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -15562,6 +15592,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_scandinavian_cuisine1','kr_caribbean_cuisine_depth1','kr_emotions_psychology2'] },
   { unit:'Unit 142 — More African & Central Asian Food, Household Chores', icon:'🧹', desc:'More West/East African cuisine, more Central Asian cuisine, and household chores',
     lessons:['kr_west_african_cuisine2','kr_central_asian_cuisine1','kr_household_chores1'] },
+  { unit:'Unit 143 — Cooking Prep, Home Maintenance, Small Talk', icon:'☕', desc:'Cooking preparation verbs, home maintenance tasks, and social small talk',
+    lessons:['kr_cooking_prep1','kr_home_maintenance1','kr_social_smalltalk1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -27946,6 +27978,36 @@ const PT_LESSONS = [
       { k: 'esvaziar o lixo doméstico', e: 'emptying household trash', ex: 'Esvaziar o lixo doméstico era uma tarefa simples mas necessária todos os dias.' },
     ]
   },
+  {
+    id: 'pt_cooking_prep1', title: 'Cooking Preparation Verbs', titleKriolu: 'Cooking Preparation Verbs', icon: '🔪', color: '#E76F51',
+    desc: 'Dicing onions, seasoning meat in advance, letting dough rest, and sifting flour',
+    vocab: [
+      { k: 'picar cebola em cubos pequenos', e: 'dicing onion into small cubes', ex: 'Picar cebola em cubos pequenos deixava o refogado mais uniforme.' },
+      { k: 'temperar carne com antecedência', e: 'seasoning meat in advance', ex: 'Temperar carne com antecedência ajudava os sabores a penetrarem melhor.' },
+      { k: 'deixar a massa descansar', e: 'letting the dough rest', ex: 'Deixar a massa descansar por uma hora melhorava a textura do pão.' },
+      { k: 'peneirar farinha antes de misturar', e: 'sifting flour before mixing', ex: 'Peneirar farinha antes de misturar evitava grumos na massa do bolo.' },
+    ]
+  },
+  {
+    id: 'pt_home_maintenance1', title: 'Home Maintenance', titleKriolu: 'Home Maintenance', icon: '🛠️', color: '#606C38',
+    desc: 'Fixing a dripping faucet, replacing a lightbulb, painting with a roller, and fixing a roof tile',
+    vocab: [
+      { k: 'reparar torneira que goteja', e: 'fixing a dripping faucet', ex: 'Reparar a torneira que goteja economizava água e evitava o desperdício.' },
+      { k: 'trocar lâmpada queimada', e: 'replacing a burnt-out lightbulb', ex: 'Trocar a lâmpada queimada era uma tarefa rápida com a escada certa.' },
+      { k: 'pintar parede com rolo', e: 'painting a wall with a roller', ex: 'Pintar a parede com rolo cobria a área mais rápido do que com pincel.' },
+      { k: 'consertar telha quebrada', e: 'fixing a broken roof tile', ex: 'Consertar a telha quebrada evitava infiltrações durante a chuva.' },
+    ]
+  },
+  {
+    id: 'pt_social_smalltalk1', title: 'Social Small Talk', titleKriolu: 'Social Small Talk', icon: '☕', color: '#F4A261',
+    desc: 'Greeting with a handshake, asking about the day, bringing up the weather, and inviting for coffee',
+    vocab: [
+      { k: 'cumprimentar com aperto de mão', e: 'greeting with a handshake', ex: 'Cumprimentar com aperto de mão era comum em reuniões formais.' },
+      { k: 'perguntar como foi o dia', e: 'asking how the day went', ex: 'Perguntar como foi o dia mostrava interesse genuíno pela outra pessoa.' },
+      { k: 'puxar assunto sobre o tempo', e: 'bringing up the weather as a topic', ex: 'Puxar assunto sobre o tempo era uma forma fácil de quebrar o gelo.' },
+      { k: 'convidar para tomar um café', e: 'inviting someone for coffee', ex: 'Convidar para tomar um café era um jeito simples de reconectar com amigos.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -28243,6 +28305,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_scandinavian_cuisine1','pt_caribbean_cuisine_depth1','pt_emotions_psychology2'] },
   { unit:'Unidade 144 — Mais Comida Africana e da Ásia Central, Tarefas Domésticas', icon:'🧹', desc:'Mais culinária da África Ocidental/Oriental, mais culinária da Ásia Central, e tarefas domésticas',
     lessons:['pt_west_african_cuisine2','pt_central_asian_cuisine1','pt_household_chores1'] },
+  { unit:'Unidade 145 — Preparo de Comida, Manutenção de Casa, Conversa Social', icon:'☕', desc:'Verbos de preparo culinário, tarefas de manutenção doméstica, e conversa social informal',
+    lessons:['pt_cooking_prep1','pt_home_maintenance1','pt_social_smalltalk1'] },
 ];
 
 
