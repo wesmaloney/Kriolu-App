@@ -15600,6 +15600,30 @@ const KR_LESSONS = [
       { k: 'Rejistu di avistamentu di spesi', e: 'species sighting record', ex: 'Rejistu di avistamentu di spesi ta djudaba monitoriza biodiversidadi lokal.' },
     ]
   },
+  {
+    id: 'kr_apprenticeship1', title: 'Apprenticeship & Vocational Training', titleKriolu: 'Aprendizajen Profisional i Formason Vokasional', icon: '🔧', color: '#8D6A4E',
+    desc: 'Apprenticeship programs, work-study training, technical certificates, master craftsmen, paid internships, and certification exams',
+    vocab: [
+      { k: 'Programa di aprendizajen profisional', e: 'professional apprenticeship program', ex: 'Programa di aprendizajen profisional ta konbinaba formason prátiku ku aula teóriku.' },
+      { k: 'Formason en alternánsia', e: 'work-study training', ex: 'Formason en alternánsia ta permitiba trabadja na un enpreza enkuantu staba studa.' },
+      { k: 'Sertifikadu di konpeténsia téknika', e: 'technical skills certificate', ex: 'Sertifikadu di konpeténsia téknika éra exijidu pa vários vaga di trabadju.' },
+      { k: 'Mestri di ofísiu', e: 'master craftsman', ex: 'Mestri di ofísiu ta inzinaba nobu jerason di aprendiz.' },
+      { k: 'Estáju remuneradu', e: 'paid internship', ex: 'Estáju remuneradu ta daba spiriénsia prátiku ku un pikinoti saláriu.' },
+      { k: 'Exami di sertifikason profisional', e: 'professional certification exam', ex: 'Exami di sertifikason profisional ta konprovaba domíniu di un abilidadi spesífiku.' },
+    ]
+  },
+  {
+    id: 'kr_humanitarian_aid1', title: 'Disaster Relief & Humanitarian Aid', titleKriolu: 'Ajuda Umanitáriu i Rezposta a Dizastri', icon: '🆘', color: '#D62828',
+    desc: 'International humanitarian aid, refugee camps, emergency supply distribution, disaster response teams, temporary shelters, and humanitarian corridors',
+    vocab: [
+      { k: 'Ajuda umanitáriu internasional', e: 'international humanitarian aid', ex: 'Ajuda umanitáriu internasional ta txigaba rápidamenti dipôs di terramotu.' },
+      { k: 'Kanpu di refujiadu', e: 'refugee camp', ex: 'Kanpu di refujiadu ta abrigaba mil algen dizlokadu.' },
+      { k: 'Distribuison di suprimentu di emerjénsia', e: 'emergency supply distribution', ex: 'Distribuison di suprimentu di emerjénsia ta enkluiba agu, kumida ku kobertor.' },
+      { k: 'Ekipa di resposta a dizastri', e: 'disaster response team', ex: 'Ekipa di resposta a dizastri ta txigaba na primeru óra dipôs di katástrofi.' },
+      { k: 'Abrigu temporáriu pa dizalojadu', e: 'temporary shelter for the displaced', ex: 'Abrigu temporáriu pa dizalojadu ta ofereseba kama, kumida ku apoiu médiku.' },
+      { k: 'Korredor umanitáriu', e: 'humanitarian corridor', ex: 'Korredor umanitáriu ta permitiba pasajen seguru di sivil ku ajuda internasional.' },
+    ]
+  },
 ];
 
 // ═══════════════════════════════════════════
@@ -16757,6 +16781,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_mental_health_crisis1','kr_small_claims_court1'] },
   { unit:'Unit 190 — Organ Donation & Citizen Science', icon:'🔬', desc:'Organ donation and transplant, and citizen science and volunteer research',
     lessons:['kr_organ_donation1','kr_citizen_science1'] },
+  { unit:'Unit 191 — Apprenticeship & Humanitarian Aid', icon:'🆘', desc:'Apprenticeship and vocational training, and disaster relief and humanitarian aid logistics',
+    lessons:['kr_apprenticeship1','kr_humanitarian_aid1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -30240,6 +30266,30 @@ const PT_LESSONS = [
       { k: 'registo de avistamento de espécies', e: 'species sighting record', ex: 'O registo de avistamento de espécies ajudava a monitorizar a biodiversidade local.' },
     ]
   },
+  {
+    id: 'pt_apprenticeship1', title: 'Apprenticeship & Vocational Training', titleKriolu: 'Apprenticeship & Vocational Training', icon: '🔧', color: '#8D6A4E',
+    desc: 'Apprenticeship programs, work-study training, technical certificates, master craftsmen, paid internships, and certification exams',
+    vocab: [
+      { k: 'programa de aprendizagem profissional', e: 'professional apprenticeship program', ex: 'O programa de aprendizagem profissional combinava formação prática com aulas teóricas.' },
+      { k: 'formação em alternância', e: 'work-study training', ex: 'A formação em alternância permitia trabalhar numa empresa enquanto estudava.' },
+      { k: 'certificado de competências técnicas', e: 'technical skills certificate', ex: 'O certificado de competências técnicas era exigido para várias vagas de trabalho.' },
+      { k: 'mestre de ofício', e: 'master craftsman', ex: 'O mestre de ofício ensinava a nova geração de aprendizes.' },
+      { k: 'estágio remunerado', e: 'paid internship', ex: 'O estágio remunerado dava experiência prática e um pequeno salário.' },
+      { k: 'exame de certificação profissional', e: 'professional certification exam', ex: 'O exame de certificação profissional comprovava o domínio de uma habilidade específica.' },
+    ]
+  },
+  {
+    id: 'pt_humanitarian_aid1', title: 'Disaster Relief & Humanitarian Aid', titleKriolu: 'Disaster Relief & Humanitarian Aid', icon: '🆘', color: '#D62828',
+    desc: 'International humanitarian aid, refugee camps, emergency supply distribution, disaster response teams, temporary shelters, and humanitarian corridors',
+    vocab: [
+      { k: 'ajuda humanitária internacional', e: 'international humanitarian aid', ex: 'A ajuda humanitária internacional chegou rapidamente após o terremoto.' },
+      { k: 'campo de refugiados', e: 'refugee camp', ex: 'O campo de refugiados abrigava milhares de pessoas deslocadas.' },
+      { k: 'distribuição de suprimentos de emergência', e: 'emergency supply distribution', ex: 'A distribuição de suprimentos de emergência incluía água, comida e cobertores.' },
+      { k: 'equipa de resposta a desastres', e: 'disaster response team', ex: 'A equipa de resposta a desastres chegava nas primeiras horas após a catástrofe.' },
+      { k: 'abrigo temporário para desalojados', e: 'temporary shelter for the displaced', ex: 'O abrigo temporário para desalojados oferecia camas, comida e apoio médico.' },
+      { k: 'corredor humanitário', e: 'humanitarian corridor', ex: 'O corredor humanitário permitia a passagem segura de civis e ajuda internacional.' },
+    ]
+  },
 ];
 
 const PT_LEARNING_PATH = [
@@ -30633,6 +30683,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_mental_health_crisis1','pt_small_claims_court1'] },
   { unit:'Unidade 192 — Doação de Órgãos e Ciência Cidadã', icon:'🔬', desc:'Doação de órgãos e transplante, e ciência cidadã e pesquisa voluntária',
     lessons:['pt_organ_donation1','pt_citizen_science1'] },
+  { unit:'Unidade 193 — Aprendizagem Profissional e Ajuda Humanitária', icon:'🆘', desc:'Aprendizagem profissional e formação vocacional, e ajuda humanitária e logística de desastres',
+    lessons:['pt_apprenticeship1','pt_humanitarian_aid1'] },
 ];
 
 
