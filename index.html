@@ -17677,6 +17677,24 @@ const KR_LESSONS = [
         { k: 'Fila di klienti sperandu pertu di food truck', e: 'line of customers waiting by the food truck', ex: 'Fila di klienti sperandu pertu di food truck ta kresiba duranti ora di almosu.' },
         { k: 'Lisensa munisipal nesesáriu pa operá un food truck', e: 'municipal license required to operate a food truck', ex: 'Lisensa munisipal nesesáriu pa operá un food truck ta variaba di sidadi pa sidadi.' },
     ]},
+  { id: 'kr_parkour1', title: 'Parkour & Free Running', titleKriolu: 'Parkour i Kurida Livri', icon: '🤸', color: 'stone',
+    desc: 'Parkour and free running vocabulary', vocab: [
+        { k: 'Saltu entri obstákulu urbanu praktikadu na parkour', e: 'jump between urban obstacles practiced in parkour', ex: 'Saltu entri obstákulu urbanu praktikadu na parkour ta izijiba koordenason ku koraji.' },
+        { k: 'Pasajen rápidu riba di un muru na parkour', e: 'quick vault over a wall in parkour', ex: 'Pasajen rápidu riba di un muru na parkour ta uzaba mon pa inpulsiona korpu.' },
+        { k: 'Aterajen amortesidu dipos di un saltu di altura', e: 'cushioned landing after a jump from height', ex: 'Aterajen amortesidu dipos di un saltu di altura ta protejeba jinju di praktikanti.' },
+        { k: 'Rota kriativu traseadu através di anbienti urbanu', e: 'creative route traced through the urban environment', ex: 'Rota kriativu traseadu através di anbienti urbanu ta konektaba teladu ku skada.' },
+        { k: 'Trenu di forsa funsional pa praktikanti di parkour', e: 'functional strength training for parkour practitioners', ex: 'Trenu di forsa funsional pa praktikanti di parkour ta midjoraba kontrolu di korpu.' },
+        { k: 'Presizon na apoiu di pé duranti skalada urbanu', e: 'precision foot placement during urban climbing', ex: 'Presizon na apoiu di pé duranti skalada urbanu ta evitaba skoregon perigozu.' },
+    ]},
+  { id: 'kr_geocaching1', title: 'Geocaching', titleKriolu: 'Geocaching', icon: '📍', color: 'lime',
+    desc: 'GPS-based geocaching treasure hunting vocabulary', vocab: [
+        { k: 'Kaxa skondidu sperandu ser atxadu na geocaching', e: 'hidden box waiting to be found in geocaching', ex: 'Kaxa skondidu sperandu ser atxadu na geocaching ta staba baxu di un pedra.' },
+        { k: 'Koordenada di GPS uzadu pa lokaliza geocache', e: 'GPS coordinates used to locate the geocache', ex: 'Koordenada di GPS uzadu pa lokaliza geocache ta ser partilhadu online.' },
+        { k: 'Kadernu di rejistu dentu di geocache', e: 'logbook inside the geocache', ex: 'Kadernu di rejistu dentu di geocache ta guardaba nomi di tudu algen ki atxa-l.' },
+        { k: 'Objetu pikinoti di troka dexadu dentu di geocache', e: 'small trade item left inside the geocache', ex: 'Objetu pikinoti di troka dexadu dentu di geocache ta podeba ser sustituídu pa otu.' },
+        { k: 'Pista en kódigu uzadu pa atxa geocache difísil', e: 'coded hint used to find the difficult geocache', ex: 'Pista en kódigu uzadu pa atxa geocache difísil ta izijiba pasénsia pa dessifra.' },
+        { k: 'Komunidadi online di kasadô di geocache', e: 'online community of geocache hunters', ex: 'Komunidadi online di kasadô di geocache ta partilhaba pista ku lokalizason novu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19034,6 +19052,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_donutmaking1','kr_pretzelmaking1'] },
   { unit:'Unit 290 — Bubble Tea & Food Trucks', icon:'🧋', desc:'Artisanal bubble tea (boba) making vocabulary, and food truck operations vocabulary',
     lessons:['kr_bubbletea1','kr_foodtruck1'] },
+  { unit:'Unit 291 — Parkour & Geocaching', icon:'🤸', desc:'Parkour and free running vocabulary, and GPS-based geocaching treasure hunting vocabulary',
+    lessons:['kr_parkour1','kr_geocaching1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -34594,6 +34614,24 @@ const PT_LESSONS = [
         { k: 'fila de clientes à espera junto ao food truck', e: 'line of customers waiting by the food truck', ex: 'A fila de clientes à espera junto ao food truck crescia durante a hora de almoço.' },
         { k: 'licença municipal necessária para operar um food truck', e: 'municipal license required to operate a food truck', ex: 'A licença municipal necessária para operar um food truck variava de cidade para cidade.' },
     ]},
+  { id: 'pt_parkour1', title: 'Parkour & Free Running', titleKriolu: 'Parkour e Corrida Livre', icon: '🤸', color: 'stone',
+    desc: 'Vocabulário de parkour e corrida livre', vocab: [
+        { k: 'salto entre obstáculos urbanos praticado no parkour', e: 'jump between urban obstacles practiced in parkour', ex: 'O salto entre obstáculos urbanos praticado no parkour exigia coordenação e coragem.' },
+        { k: 'passagem rápida por cima de um muro no parkour', e: 'quick vault over a wall in parkour', ex: 'A passagem rápida por cima de um muro no parkour usava as mãos para impulsionar o corpo.' },
+        { k: 'aterragem amortecida após um salto de altura', e: 'cushioned landing after a jump from height', ex: 'A aterragem amortecida após um salto de altura protegia os joelhos do praticante.' },
+        { k: 'rota criativa traçada através do ambiente urbano', e: 'creative route traced through the urban environment', ex: 'A rota criativa traçada através do ambiente urbano conectava telhados e escadas.' },
+        { k: 'treino de força funcional para praticantes de parkour', e: 'functional strength training for parkour practitioners', ex: 'O treino de força funcional para praticantes de parkour melhorava o controlo do corpo.' },
+        { k: 'precisão no apoio dos pés durante a escalada urbana', e: 'precision foot placement during urban climbing', ex: 'A precisão no apoio dos pés durante a escalada urbana evitava escorregões perigosos.' },
+    ]},
+  { id: 'pt_geocaching1', title: 'Geocaching', titleKriolu: 'Geocaching', icon: '📍', color: 'lime',
+    desc: 'Vocabulário de geocaching (caça ao tesouro por GPS)', vocab: [
+        { k: 'caixa escondida à espera de ser encontrada no geocaching', e: 'hidden box waiting to be found in geocaching', ex: 'A caixa escondida à espera de ser encontrada no geocaching estava debaixo de uma pedra.' },
+        { k: 'coordenadas de GPS usadas para localizar a geocache', e: 'GPS coordinates used to locate the geocache', ex: 'As coordenadas de GPS usadas para localizar a geocache eram partilhadas online.' },
+        { k: 'caderno de registo dentro da geocache', e: 'logbook inside the geocache', ex: 'O caderno de registo dentro da geocache guardava o nome de todos que a encontravam.' },
+        { k: 'pequeno objeto de troca deixado dentro da geocache', e: 'small trade item left inside the geocache', ex: 'O pequeno objeto de troca deixado dentro da geocache podia ser substituído por outro.' },
+        { k: 'dica em código usada para encontrar a geocache difícil', e: 'coded hint used to find the difficult geocache', ex: 'A dica em código usada para encontrar a geocache difícil exigia paciência para decifrar.' },
+        { k: 'comunidade online de caçadores de geocache', e: 'online community of geocache hunters', ex: 'A comunidade online de caçadores de geocache partilhava dicas e localizações novas.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -35187,6 +35225,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_donutmaking1','pt_pretzelmaking1'] },
   { unit:'Unidade 292 — Chá de Bolhas e Food Trucks', icon:'🧋', desc:'Vocabulário de fabricação artesanal de chá de bolhas, e vocabulário de operações de food truck',
     lessons:['pt_bubbletea1','pt_foodtruck1'] },
+  { unit:'Unidade 293 — Parkour e Geocaching', icon:'🤸', desc:'Vocabulário de parkour e corrida livre, e vocabulário de geocaching por GPS',
+    lessons:['pt_parkour1','pt_geocaching1'] },
 ];
 
 
