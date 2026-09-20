@@ -17875,6 +17875,24 @@ const KR_LESSONS = [
         { k: 'Pon dobradu na meiu ku recheiu', e: 'bread folded in half with filling', ex: 'Pon dobradu na meiu ku recheiu ta ser kumida rápidu.' },
         { k: 'Panu di algodon ki manteba pon kenti', e: 'cotton cloth that keeps the bread warm', ex: 'Panu di algodon ki manteba pon kenti ta kubriba sestu.' },
     ]},
+  { id: 'kr_coldbrew1', title: 'Cold Brew Coffee Making', titleKriolu: 'Fasi Kafé di Infuson Friu', icon: '🧊', color: 'amber',
+    desc: 'Cold brew coffee making vocabulary', vocab: [
+        { k: 'Kafé moídu grosu dexadu na água friu', e: 'coarse ground coffee left in cold water', ex: 'Kafé moídu grosu dexadu na água friu ta da sabor divagar.' },
+        { k: 'Infuson lentu di dozi ora na frigorífiku', e: 'slow twelve-hour infusion in the fridge', ex: 'Infuson lentu di dozi ora na frigorífiku ta prisizaba di pasénsia.' },
+        { k: 'Frasku grandi di vidru uzadu pa infuson', e: 'large glass jar used for the infusion', ex: 'Frasku grandi di vidru uzadu pa infuson ta kabeba un litru.' },
+        { k: 'Filtru di papel ki ta reteba pó di kafé', e: 'paper filter that holds back the coffee grounds', ex: 'Filtru di papel ki ta reteba pó di kafé ta dexaba bébida limpu.' },
+        { k: 'Kafé konsentradu suavi ku poku amargu', e: 'smooth concentrated coffee with little bitterness', ex: 'Kafé konsentradu suavi ku poku amargu ta ser bon pa bebe na kalor.' },
+        { k: 'Kafé gelado servidu ku kubu di jelu', e: 'iced coffee served with ice cubes', ex: 'Kafé gelado servidu ku kubu di jelu ta ser refreskanti na dia di kalor.' },
+    ]},
+  { id: 'kr_gingerbeer1', title: 'Homemade Ginger Beer', titleKriolu: 'Fasi Servesa di Jinjibri', icon: '🫚', color: 'yellow',
+    desc: 'Homemade ginger beer making vocabulary', vocab: [
+        { k: 'Servesa di jinjibri fetu ku fermentu natural', e: 'ginger beer made with a natural starter', ex: 'Servesa di jinjibri fetu ku fermentu natural ta ser bébida kazeiru.' },
+        { k: 'Raiz di jinjibri kortadu fininhu misturadu ku asukra', e: 'ginger root sliced very thin and mixed with sugar', ex: 'Raiz di jinjibri kortadu fininhu misturadu ku asukra ta daba sabor forti.' },
+        { k: 'Mistura dexadu pa fermenta durante alguns dia', e: 'mixture left to ferment for a few days', ex: 'Mistura dexadu pa fermenta durante alguns dia ta prisizaba di un lugar kenti.' },
+        { k: 'Bolha di gaz ki ta forma na líkidu', e: 'gas bubbles forming in the liquid', ex: 'Bolha di gaz ki ta forma na líkidu ta mostraba ki fermentason ta funsiona.' },
+        { k: 'Garafa bon fitxadu ki ta akumula gaz', e: 'tightly closed bottle that builds up gas', ex: 'Garafa bon fitxadu ki ta akumula gaz ta izijiba kuidadu na abri.' },
+        { k: 'Limãu kortadu djuntadu antis di servi', e: 'cut lemon added before serving', ex: 'Limãu kortadu djuntadu antis di servi ta da sabor sítriku.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19254,6 +19272,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_gyotaku1','kr_marblerun1'] },
   { unit:'Unit 301 — Fermented Hot Sauce & Flatbread', icon:'🌶', desc:'Fermented hot sauce making vocabulary, and homemade flatbread baking vocabulary',
     lessons:['kr_hotsauce1','kr_flatbread1'] },
+  { unit:'Unit 302 — Cold Brew Coffee & Ginger Beer', icon:'🧊', desc:'Cold brew coffee making vocabulary, and homemade ginger beer making vocabulary',
+    lessons:['kr_coldbrew1','kr_gingerbeer1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35012,6 +35032,24 @@ const PT_LESSONS = [
         { k: 'pão dobrado ao meio com recheio', e: 'bread folded in half with filling', ex: 'O pão dobrado ao meio com recheio era um lanche rápido.' },
         { k: 'pano de algodão que mantém o pão quente', e: 'cotton cloth that keeps the bread warm', ex: 'O pano de algodão que mantém o pão quente cobria o cesto.' },
     ]},
+  { id: 'pt_coldbrew1', title: 'Cold Brew Coffee Making', titleKriolu: 'Preparação de Café em Infusão a Frio', icon: '🧊', color: 'amber',
+    desc: 'Vocabulário de preparação de café em infusão a frio', vocab: [
+        { k: 'café moído grosso deixado em água fria', e: 'coarse ground coffee left in cold water', ex: 'O café moído grosso deixado em água fria libertava o sabor devagar.' },
+        { k: 'infusão lenta de doze horas no frigorífico', e: 'slow twelve-hour infusion in the fridge', ex: 'A infusão lenta de doze horas no frigorífico exigia paciência.' },
+        { k: 'frasco grande de vidro usado para a infusão', e: 'large glass jar used for the infusion', ex: 'O frasco grande de vidro usado para a infusão levava um litro.' },
+        { k: 'filtro de papel que retém o pó do café', e: 'paper filter that holds back the coffee grounds', ex: 'O filtro de papel que retém o pó do café deixava a bebida limpa.' },
+        { k: 'café concentrado suave e pouco amargo', e: 'smooth concentrated coffee with little bitterness', ex: 'O café concentrado suave e pouco amargo era bom para beber com calor.' },
+        { k: 'café gelado servido com cubos de gelo', e: 'iced coffee served with ice cubes', ex: 'O café gelado servido com cubos de gelo era refrescante num dia de calor.' },
+    ]},
+  { id: 'pt_gingerbeer1', title: 'Homemade Ginger Beer', titleKriolu: 'Cerveja de Gengibre Caseira', icon: '🫚', color: 'yellow',
+    desc: 'Vocabulário de cerveja de gengibre caseira', vocab: [
+        { k: 'cerveja de gengibre feita com fermento natural', e: 'ginger beer made with a natural starter', ex: 'A cerveja de gengibre feita com fermento natural era uma bebida caseira.' },
+        { k: 'raiz de gengibre cortada bem fina misturada com açúcar', e: 'ginger root sliced very thin and mixed with sugar', ex: 'A raiz de gengibre cortada bem fina misturada com açúcar dava um sabor forte.' },
+        { k: 'mistura deixada a fermentar durante alguns dias', e: 'mixture left to ferment for a few days', ex: 'A mistura deixada a fermentar durante alguns dias precisava de um lugar quente.' },
+        { k: 'bolhas de gás que se formam no líquido', e: 'gas bubbles forming in the liquid', ex: 'As bolhas de gás que se formam no líquido mostravam que a fermentação funcionava.' },
+        { k: 'garrafa bem fechada que acumula gás', e: 'tightly closed bottle that builds up gas', ex: 'A garrafa bem fechada que acumula gás exigia cuidado ao abrir.' },
+        { k: 'limão cortado adicionado antes de servir', e: 'cut lemon added before serving', ex: 'O limão cortado adicionado antes de servir dava um sabor cítrico.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -35627,6 +35665,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_gyotaku1','pt_marblerun1'] },
   { unit:'Unidade 303 — Molho Picante Fermentado e Pão Fino', icon:'🌶', desc:'Vocabulário de fabricação de molho picante fermentado, e vocabulário de pão fino caseiro',
     lessons:['pt_hotsauce1','pt_flatbread1'] },
+  { unit:'Unidade 304 — Café em Infusão a Frio e Cerveja de Gengibre', icon:'🧊', desc:'Vocabulário de preparação de café em infusão a frio, e vocabulário de cerveja de gengibre caseira',
+    lessons:['pt_coldbrew1','pt_gingerbeer1'] },
 ];
 
 
