@@ -18091,6 +18091,24 @@ const KR_LESSONS = [
         { k: 'Fogu brandu ki ta kenta alambike', e: 'low heat under the still', ex: 'Fogu brandu ki ta kenta alambike ta dura txeu ora.' },
         { k: 'Grogue guardadu na tonel durante mes', e: 'grogue kept in the cask for months', ex: 'Grogue guardadu na tonel durante mes ta fika midjor.' },
     ]},
+  { id: 'kr_katxupa1', title: 'Cooking Katxupa', titleKriolu: 'Fasi Katxupa', icon: '🥣', color: 'orange',
+    desc: 'Cooking katxupa vocabulary', vocab: [
+        { k: 'Midju piladu dexadu na agu', e: 'pounded corn left to soak', ex: 'Midju piladu dexadu na agu ta fika moli.' },
+        { k: 'Fejon nsopadu di vésperu', e: 'beans soaked since the night before', ex: 'Fejon nsopadu di vésperu ta kuzinha más dipresa.' },
+        { k: 'Kaldeiron grandi na fogu brandu', e: 'large pot over low heat', ex: 'Kaldeiron grandi na fogu brandu ta fika txeu ora.' },
+        { k: 'Kuzinha dibagar durante ora', e: 'slow cooking for hours', ex: 'Kuzinha dibagar durante ora ta fasi katxupa sabi.' },
+        { k: 'Mandioka i batata-dosi djuntu ku midju', e: 'cassava and sweet potato together with the corn', ex: 'Mandioka i batata-dosi djuntu ku midju ta inxi pratu.' },
+        { k: 'Karni i linguisa pa katxupa riku', e: 'meat and sausage for the rich cachupa', ex: 'Karni i linguisa pa katxupa riku e pa festa.' },
+    ]},
+  { id: 'kr_grainpound1', title: 'Pounding Corn in the Mortar', titleKriolu: 'Pila Midju na Pilon', icon: '🪵', color: 'lime',
+    desc: 'Pounding corn in the mortar vocabulary', vocab: [
+        { k: 'Midju seku na pilon', e: 'dry corn in the mortar', ex: 'Midju seku na pilon ta ser piladu ku pau grosu.' },
+        { k: 'Pau grosu levantadu i batidu', e: 'thick stick raised and struck', ex: 'Pau grosu levantadu i batidu ta dexa brasu kansadu.' },
+        { k: 'Batida forti i igual', e: 'strong and regular beat', ex: 'Batida forti i igual ta kria ritmu.' },
+        { k: 'Kaska solta i lebadu pa ventu', e: 'husk loosened and carried away by the wind', ex: 'Kaska solta i lebadu pa ventu ta ka fika na midju.' },
+        { k: 'Midju kebradu na pedasu pekenu', e: 'corn broken into small pieces', ex: 'Midju kebradu na pedasu pekenu ta kuzinha dipresa.' },
+        { k: 'Mudjer ki ta pila djuntu na kintal', e: 'women pounding together in the yard', ex: 'Mudjer ki ta pila djuntu na kintal ta kanta.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19494,6 +19512,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_saltpan1','kr_haymaking1'] },
   { unit:'Unit 313 — Sugar Cane & Grogue', icon:'🍯', desc:'Sugar cane pressing vocabulary, and grogue distilling vocabulary',
     lessons:['kr_canepress1','kr_grogue1'] },
+  { unit:'Unit 314 — Katxupa & Corn Pounding', icon:'🥣', desc:'Cooking katxupa vocabulary, and pounding corn in the mortar vocabulary',
+    lessons:['kr_katxupa1','kr_grainpound1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35468,6 +35488,24 @@ const PT_LESSONS = [
         { k: 'fogo brando debaixo do alambique', e: 'low heat under the still', ex: 'O fogo brando debaixo do alambique durava muitas horas.' },
         { k: 'grogue guardado no tonel durante meses', e: 'grogue kept in the cask for months', ex: 'O grogue guardado no tonel durante meses ficava melhor.' },
     ]},
+  { id: 'pt_katxupa1', title: 'Cooking Cachupa', titleKriolu: 'Preparação de Cachupa', icon: '🥣', color: 'orange',
+    desc: 'Vocabulário de preparação de cachupa', vocab: [
+        { k: 'milho pilado deixado de molho', e: 'pounded corn left to soak', ex: 'O milho pilado deixado de molho ficava mole.' },
+        { k: 'feijão demolhado desde a véspera', e: 'beans soaked since the night before', ex: 'O feijão demolhado desde a véspera cozia mais depressa.' },
+        { k: 'panela grande em lume brando', e: 'large pot over low heat', ex: 'A panela grande em lume brando ficava muitas horas.' },
+        { k: 'cozedura lenta durante horas', e: 'slow cooking for hours', ex: 'A cozedura lenta durante horas fazia a cachupa saborosa.' },
+        { k: 'mandioca e batata-doce juntas com o milho', e: 'cassava and sweet potato together with the corn', ex: 'A mandioca e a batata-doce juntas com o milho enchiam o prato.' },
+        { k: 'carne e chouriço para a cachupa rica', e: 'meat and sausage for the rich cachupa', ex: 'A carne e o chouriço para a cachupa rica eram para a festa.' },
+    ]},
+  { id: 'pt_grainpound1', title: 'Pounding Corn in the Mortar', titleKriolu: 'Pilar Milho no Pilão', icon: '🪵', color: 'lime',
+    desc: 'Vocabulário de pilar milho no pilão', vocab: [
+        { k: 'milho seco no pilão', e: 'dry corn in the mortar', ex: 'O milho seco no pilão era pilado com um pau grosso.' },
+        { k: 'pau grosso levantado e batido', e: 'thick stick raised and struck', ex: 'O pau grosso levantado e batido deixava os braços cansados.' },
+        { k: 'batida forte e regular', e: 'strong and regular beat', ex: 'A batida forte e regular criava um ritmo.' },
+        { k: 'casca solta levada pelo vento', e: 'husk loosened and carried away by the wind', ex: 'A casca solta levada pelo vento não ficava no milho.' },
+        { k: 'milho partido em pedaços pequenos', e: 'corn broken into small pieces', ex: 'O milho partido em pedaços pequenos cozia depressa.' },
+        { k: 'mulheres a pilar juntas no quintal', e: 'women pounding together in the yard', ex: 'As mulheres a pilar juntas no quintal cantavam.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36107,6 +36145,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_saltpan1','pt_haymaking1'] },
   { unit:'Unidade 315 — Cana-de-Açúcar e Grogue', icon:'🍯', desc:'Vocabulário de prensagem de cana-de-açúcar, e vocabulário de destilação de grogue',
     lessons:['pt_canepress1','pt_grogue1'] },
+  { unit:'Unidade 316 — Cachupa e Pilão', icon:'🥣', desc:'Vocabulário de preparação de cachupa, e vocabulário de pilar milho no pilão',
+    lessons:['pt_katxupa1','pt_grainpound1'] },
 ];
 
 
