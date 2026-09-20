@@ -18001,6 +18001,24 @@ const KR_LESSONS = [
         { k: 'Nu firmi na ponta di korda', e: 'firm knot at the end of the rope', ex: 'Nu firmi na ponta di korda ta ka solta.' },
         { k: 'Korda forti ki ta karga txeu peso', e: 'strong rope that carries a lot of weight', ex: 'Korda forti ki ta karga txeu peso ta ser midjor pa barku.' },
     ]},
+  { id: 'kr_thatching1', title: 'Straw Thatching', titleKriolu: 'Fasi Teladu di Palha', icon: '🛖', color: 'yellow',
+    desc: 'Straw thatching vocabulary', vocab: [
+        { k: 'Palha seku kortadu i djuntadu', e: 'dry straw cut and gathered', ex: 'Palha seku kortadu i djuntadu ta bai pa kaza.' },
+        { k: 'Viga di madera ki ta guarda teladu', e: 'wooden beams that hold up the roof', ex: 'Viga di madera ki ta guarda teladu ta ser forti.' },
+        { k: 'Kamada di palha djuntadu na viga', e: 'layers of straw fixed to the beams', ex: 'Kamada di palha djuntadu na viga ta kubriba teladu.' },
+        { k: 'Teladu inklinadu ki proteje di txuba', e: 'sloped roof that protects from rain', ex: 'Teladu inklinadu ki proteje di txuba ta fika seku.' },
+        { k: 'Palha prensadu i lisu', e: 'straw tightly pressed and smooth', ex: 'Palha prensadu i lisu ta ka dexa agu entra.' },
+        { k: 'Kaza di palha fresku na kalor', e: 'straw house cool in the heat', ex: 'Kaza di palha fresku na kalor ta ser sabi.' },
+    ]},
+  { id: 'kr_drystone1', title: 'Dry Stone Walling', titleKriolu: 'Fasi Muru di Pedra Seku', icon: '🪨', color: 'gray',
+    desc: 'Dry stone walling vocabulary', vocab: [
+        { k: 'Pedra enpilhadu sen argamasa', e: 'stones stacked without mortar', ex: 'Pedra enpilhadu sen argamasa ta fikaba firmi.' },
+        { k: 'Pedra grandi na baze di muru', e: 'large stone at the base of the wall', ex: 'Pedra grandi na baze di muru ta guarda tudu.' },
+        { k: 'Pedra pekenu ki ta inxi furu', e: 'small stones that fill the gaps', ex: 'Pedra pekenu ki ta inxi furu ta djuda muru.' },
+        { k: 'Muru di kontenson di pedra na terasu', e: 'stone retaining wall on the terrace', ex: 'Muru di kontenson di pedra na terasu ta guarda terra.' },
+        { k: 'Pedra skolhidu un pa un', e: 'stones chosen one by one', ex: 'Pedra skolhidu un pa un ta ser trabadjadu ku kuidadu.' },
+        { k: 'Muru firmi ki ta dura txeu anu', e: 'firm wall that lasts many years', ex: 'Muru firmi ki ta dura txeu anu ta proteje terasu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19394,6 +19412,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_pannacotta1','kr_pavlova1'] },
   { unit:'Unit 308 — Boat Building & Rope Making', icon:'🛶', desc:'Wooden boat building vocabulary, and traditional rope making vocabulary',
     lessons:['kr_boatbuilding1','kr_ropemaking1'] },
+  { unit:'Unit 309 — Thatching & Dry Stone Walls', icon:'🛖', desc:'Straw thatching vocabulary, and dry stone walling vocabulary',
+    lessons:['kr_thatching1','kr_drystone1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35278,6 +35298,24 @@ const PT_LESSONS = [
         { k: 'nó firme na ponta da corda', e: 'firm knot at the end of the rope', ex: 'O nó firme na ponta da corda não se soltava.' },
         { k: 'corda forte que aguenta muito peso', e: 'strong rope that carries a lot of weight', ex: 'A corda forte que aguenta muito peso era a melhor para o barco.' },
     ]},
+  { id: 'pt_thatching1', title: 'Straw Thatching', titleKriolu: 'Colmar Telhados de Palha', icon: '🛖', color: 'yellow',
+    desc: 'Vocabulário de colmar telhados de palha', vocab: [
+        { k: 'palha seca cortada e reunida', e: 'dry straw cut and gathered', ex: 'A palha seca cortada e reunida ia para a casa.' },
+        { k: 'vigas de madeira que sustentam o telhado', e: 'wooden beams that hold up the roof', ex: 'As vigas de madeira que sustentam o telhado eram fortes.' },
+        { k: 'camadas de palha presas às vigas', e: 'layers of straw fixed to the beams', ex: 'As camadas de palha presas às vigas cobriam o telhado.' },
+        { k: 'telhado inclinado que protege da chuva', e: 'sloped roof that protects from rain', ex: 'O telhado inclinado que protege da chuva mantinha tudo seco.' },
+        { k: 'palha bem apertada e lisa', e: 'straw tightly pressed and smooth', ex: 'A palha bem apertada e lisa não deixava entrar a água.' },
+        { k: 'casa de palha fresca no calor', e: 'straw house cool in the heat', ex: 'A casa de palha fresca no calor era agradável.' },
+    ]},
+  { id: 'pt_drystone1', title: 'Dry Stone Walling', titleKriolu: 'Muros de Pedra Seca', icon: '🪨', color: 'gray',
+    desc: 'Vocabulário de construção de muros de pedra seca', vocab: [
+        { k: 'pedras empilhadas sem argamassa', e: 'stones stacked without mortar', ex: 'As pedras empilhadas sem argamassa ficavam firmes.' },
+        { k: 'pedra grande na base do muro', e: 'large stone at the base of the wall', ex: 'A pedra grande na base do muro guardava tudo.' },
+        { k: 'pedras pequenas que enchem os buracos', e: 'small stones that fill the gaps', ex: 'As pedras pequenas que enchem os buracos ajudavam o muro.' },
+        { k: 'muro de suporte de pedra no terraço', e: 'stone retaining wall on the terrace', ex: 'O muro de suporte de pedra no terraço guardava a terra.' },
+        { k: 'pedras escolhidas uma a uma', e: 'stones chosen one by one', ex: 'As pedras escolhidas uma a uma eram trabalhadas com cuidado.' },
+        { k: 'muro firme que dura muitos anos', e: 'firm wall that lasts many years', ex: 'O muro firme que dura muitos anos protegia o terraço.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -35907,6 +35945,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_pannacotta1','pt_pavlova1'] },
   { unit:'Unidade 310 — Construção de Barcos e Corda', icon:'🛶', desc:'Vocabulário de construção de barcos de madeira, e vocabulário de fabrico de corda tradicional',
     lessons:['pt_boatbuilding1','pt_ropemaking1'] },
+  { unit:'Unidade 311 — Colmo e Muros de Pedra Seca', icon:'🛖', desc:'Vocabulário de colmar telhados de palha, e vocabulário de construção de muros de pedra seca',
+    lessons:['pt_thatching1','pt_drystone1'] },
 ];
 
 
