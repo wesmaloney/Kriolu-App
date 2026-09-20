@@ -18127,6 +18127,24 @@ const KR_LESSONS = [
         { k: 'Kor vivu pa karnaval', e: 'bright colors for the carnival', ex: 'Kor vivu pa karnaval e txeu bunitu.' },
         { k: 'Grupu ki ta dansa na rua', e: 'group dancing in the street', ex: 'Grupu ki ta dansa na rua ta da alegria pa povu.' },
     ]},
+  { id: 'kr_batuku1', title: 'Batuku Singing Circle', titleKriolu: 'Sírkulu di Batuku', icon: '🪘', color: 'violet',
+    desc: 'Batuku singing circle vocabulary', vocab: [
+        { k: 'Mudjer sentadu na roda', e: 'women seated in a circle', ex: 'Mudjer sentadu na roda ta kumesa kanta.' },
+        { k: 'Ritmu di txabeta batidu na panu', e: 'txabeta rhythm beaten on the cloth', ex: 'Ritmu di txabeta batidu na panu e forti.' },
+        { k: 'Finason kantadu pa un mudjer', e: 'finason sung by one woman', ex: 'Finason kantadu pa un mudjer ta konta un stória.' },
+        { k: 'Koru ki ta responde finason', e: 'chorus that answers the finason', ex: 'Koru ki ta responde finason ta kanta djuntu.' },
+        { k: 'Palma forti na mesmu ritmu', e: 'strong claps in the same rhythm', ex: 'Palma forti na mesmu ritmu ta fasi batuku animadu.' },
+        { k: 'Korpu ki ta dansa ku múzika', e: 'body dancing with the music', ex: 'Korpu ki ta dansa ku múzika ta senti ritmu.' },
+    ]},
+  { id: 'kr_tabanka1', title: 'Tabanka Festival Procession', titleKriolu: 'Prosison di Tabanka', icon: '🚩', color: 'green',
+    desc: 'Tabanka festival procession vocabulary', vocab: [
+        { k: 'Prosison ku tanbor na rua', e: 'procession with drums through the street', ex: 'Prosison ku tanbor na rua ta leba txeu gentis.' },
+        { k: 'Bandeira levantadu na ar', e: 'flag raised in the air', ex: 'Bandeira levantadu na ar ta mostra kor vivu.' },
+        { k: 'Rei i rainha di festa', e: 'king and queen of the festival', ex: 'Rei i rainha di festa ta bai na frenti.' },
+        { k: 'Santu kargadu pa povu', e: 'saint carried by the people', ex: 'Santu kargadu pa povu ta pasa na rua.' },
+        { k: 'Povu ki ta kanta i dansa djuntu', e: 'people singing and dancing together', ex: 'Povu ki ta kanta i dansa djuntu ta fasi festa grandi.' },
+        { k: 'Tradison pasadu di pai pa fidju', e: 'tradition passed from father to son', ex: 'Tradison pasadu di pai pa fidju ta kontinua.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19534,6 +19552,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_katxupa1','kr_grainpound1'] },
   { unit:'Unit 315 — Fish Curing & Carnival Costumes', icon:'🐟', desc:'Salting and drying fish vocabulary, and carnival costume making vocabulary',
     lessons:['kr_fishcuring1','kr_carnivalcostume1'] },
+  { unit:'Unit 316 — Batuku & Tabanka', icon:'🪘', desc:'Batuku singing circle vocabulary, and tabanka festival procession vocabulary',
+    lessons:['kr_batuku1','kr_tabanka1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35544,6 +35564,24 @@ const PT_LESSONS = [
         { k: 'cores vivas para o carnaval', e: 'bright colors for the carnival', ex: 'As cores vivas para o carnaval eram bonitas.' },
         { k: 'grupo a dançar na rua', e: 'group dancing in the street', ex: 'O grupo a dançar na rua dava alegria ao povo.' },
     ]},
+  { id: 'pt_batuku1', title: 'Batuku Singing Circle', titleKriolu: 'Roda de Batuque', icon: '🪘', color: 'violet',
+    desc: 'Vocabulário da roda de batuque', vocab: [
+        { k: 'mulheres sentadas em roda', e: 'women seated in a circle', ex: 'As mulheres sentadas em roda começavam a cantar.' },
+        { k: 'ritmo da txabeta batido no pano', e: 'txabeta rhythm beaten on the cloth', ex: 'O ritmo da txabeta batido no pano era forte.' },
+        { k: 'finason cantado por uma mulher', e: 'finason sung by one woman', ex: 'O finason cantado por uma mulher contava uma história.' },
+        { k: 'coro que responde ao finason', e: 'chorus that answers the finason', ex: 'O coro que responde ao finason cantava todo junto.' },
+        { k: 'palmas fortes no mesmo ritmo', e: 'strong claps in the same rhythm', ex: 'As palmas fortes no mesmo ritmo animavam o batuku.' },
+        { k: 'corpo a dançar com a música', e: 'body dancing with the music', ex: 'O corpo a dançar com a música sentia o ritmo.' },
+    ]},
+  { id: 'pt_tabanka1', title: 'Tabanka Festival Procession', titleKriolu: 'Procissão de Tabanka', icon: '🚩', color: 'green',
+    desc: 'Vocabulário da procissão de tabanka', vocab: [
+        { k: 'procissão com tambores pela rua', e: 'procession with drums through the street', ex: 'A procissão com tambores pela rua levava muita gente.' },
+        { k: 'bandeira levantada no ar', e: 'flag raised in the air', ex: 'A bandeira levantada no ar mostrava cores vivas.' },
+        { k: 'rei e rainha da festa', e: 'king and queen of the festival', ex: 'O rei e a rainha da festa iam à frente.' },
+        { k: 'santo levado pelo povo', e: 'saint carried by the people', ex: 'O santo levado pelo povo passava na rua.' },
+        { k: 'povo a cantar e a dançar junto', e: 'people singing and dancing together', ex: 'O povo a cantar e a dançar junto fazia uma grande festa.' },
+        { k: 'tradição passada de pai para filho', e: 'tradition passed from father to son', ex: 'A tradição passada de pai para filho continuava.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36187,6 +36225,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_katxupa1','pt_grainpound1'] },
   { unit:'Unidade 317 — Salga de Peixe e Fatos de Carnaval', icon:'🐟', desc:'Vocabulário de salga e secagem de peixe, e vocabulário de confeção de fatos de carnaval',
     lessons:['pt_fishcuring1','pt_carnivalcostume1'] },
+  { unit:'Unidade 318 — Batuque e Tabanka', icon:'🪘', desc:'Vocabulário da roda de batuque, e vocabulário da procissão de tabanka',
+    lessons:['pt_batuku1','pt_tabanka1'] },
 ];
 
 
