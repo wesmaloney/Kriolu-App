@@ -18073,6 +18073,24 @@ const KR_LESSONS = [
         { k: 'Erva seku djuntadu na munti', e: 'dry grass gathered into a pile', ex: 'Erva seku djuntadu na munti ta ser guardadu.' },
         { k: 'Erva seku guardadu pa inverno', e: 'dry grass stored for the winter', ex: 'Erva seku guardadu pa inverno ta da kume pa animal.' },
     ]},
+  { id: 'kr_canepress1', title: 'Sugar Cane Pressing', titleKriolu: 'Prensa di Kana-di-Azukar', icon: '🍯', color: 'amber',
+    desc: 'Sugar cane pressing vocabulary', vocab: [
+        { k: 'Kana-di-azukar kortadu na kampu', e: 'sugar cane cut in the field', ex: 'Kana-di-azukar kortadu na kampu ta bai pa trapiche.' },
+        { k: 'Rolu di feru ki ta prensa kana', e: 'iron rollers that press the cane', ex: 'Rolu di feru ki ta prensa kana e pezadu.' },
+        { k: 'Sumo dosi ki ta kai na kaldeiron', e: 'sweet juice falling into the large pot', ex: 'Sumo dosi ki ta kai na kaldeiron ta ser guardadu.' },
+        { k: 'Resto seku di kana prensadu', e: 'dry leftovers of the pressed cane', ex: 'Resto seku di kana prensadu ta fika na txon.' },
+        { k: 'Mel di kana fervidu na kaldeiron', e: 'cane syrup boiled in the large pot', ex: 'Mel di kana fervidu na kaldeiron ta fikaba densu.' },
+        { k: 'Mel di kana skuru i dosi', e: 'dark and sweet cane syrup', ex: 'Mel di kana skuru i dosi ta ser sabi na pon.' },
+    ]},
+  { id: 'kr_grogue1', title: 'Grogue Distilling', titleKriolu: 'Destilason di Grogue', icon: '🥃', color: 'brown',
+    desc: 'Grogue distilling vocabulary', vocab: [
+        { k: 'Sumo di kana fermentadu na tonel', e: 'cane juice fermented in the cask', ex: 'Sumo di kana fermentadu na tonel ta dura dia.' },
+        { k: 'Vapor ki ta subi na alambike di kobri', e: 'steam rising in the copper still', ex: 'Vapor ki ta subi na alambike di kobri ta bai pa kanu.' },
+        { k: 'Kanu friu ki ta kondensa vapor', e: 'cold pipe that condenses the steam', ex: 'Kanu friu ki ta kondensa vapor ta muda vapor pa líkidu.' },
+        { k: 'Grogue forti ki ta kai na garrafa', e: 'strong grogue falling into the bottle', ex: 'Grogue forti ki ta kai na garrafa ta ser guardadu.' },
+        { k: 'Fogu brandu ki ta kenta alambike', e: 'low heat under the still', ex: 'Fogu brandu ki ta kenta alambike ta dura txeu ora.' },
+        { k: 'Grogue guardadu na tonel durante mes', e: 'grogue kept in the cask for months', ex: 'Grogue guardadu na tonel durante mes ta fika midjor.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19474,6 +19492,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_windmill1','kr_brickmaking1'] },
   { unit:'Unit 312 — Salt Harvest & Haymaking', icon:'🧂', desc:'Sea salt harvesting vocabulary, and scything and haymaking vocabulary',
     lessons:['kr_saltpan1','kr_haymaking1'] },
+  { unit:'Unit 313 — Sugar Cane & Grogue', icon:'🍯', desc:'Sugar cane pressing vocabulary, and grogue distilling vocabulary',
+    lessons:['kr_canepress1','kr_grogue1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35430,6 +35450,24 @@ const PT_LESSONS = [
         { k: 'erva seca juntada num monte', e: 'dry grass gathered into a pile', ex: 'A erva seca juntada num monte era guardada.' },
         { k: 'erva seca guardada para o inverno', e: 'dry grass stored for the winter', ex: 'A erva seca guardada para o inverno alimentava os animais.' },
     ]},
+  { id: 'pt_canepress1', title: 'Sugar Cane Pressing', titleKriolu: 'Prensagem de Cana-de-Açúcar', icon: '🍯', color: 'amber',
+    desc: 'Vocabulário de prensagem de cana-de-açúcar', vocab: [
+        { k: 'cana-de-açúcar cortada no campo', e: 'sugar cane cut in the field', ex: 'A cana-de-açúcar cortada no campo ia para o trapiche.' },
+        { k: 'rolos de ferro que prensam a cana', e: 'iron rollers that press the cane', ex: 'Os rolos de ferro que prensam a cana eram pesados.' },
+        { k: 'sumo doce a cair no caldeirão', e: 'sweet juice falling into the large pot', ex: 'O sumo doce a cair no caldeirão era guardado.' },
+        { k: 'restos secos da cana prensada', e: 'dry leftovers of the pressed cane', ex: 'Os restos secos da cana prensada ficavam no chão.' },
+        { k: 'mel de cana fervido no caldeirão', e: 'cane syrup boiled in the large pot', ex: 'O mel de cana fervido no caldeirão ficava denso.' },
+        { k: 'mel de cana escuro e doce', e: 'dark and sweet cane syrup', ex: 'O mel de cana escuro e doce sabia bem no pão.' },
+    ]},
+  { id: 'pt_grogue1', title: 'Grogue Distilling', titleKriolu: 'Destilação de Grogue', icon: '🥃', color: 'brown',
+    desc: 'Vocabulário de destilação de grogue', vocab: [
+        { k: 'sumo de cana fermentado no tonel', e: 'cane juice fermented in the cask', ex: 'O sumo de cana fermentado no tonel demorava dias.' },
+        { k: 'vapor a subir no alambique de cobre', e: 'steam rising in the copper still', ex: 'O vapor a subir no alambique de cobre ia para o cano.' },
+        { k: 'cano frio que condensa o vapor', e: 'cold pipe that condenses the steam', ex: 'O cano frio que condensa o vapor transformava-o em líquido.' },
+        { k: 'grogue forte a cair na garrafa', e: 'strong grogue falling into the bottle', ex: 'O grogue forte a cair na garrafa era guardado.' },
+        { k: 'fogo brando debaixo do alambique', e: 'low heat under the still', ex: 'O fogo brando debaixo do alambique durava muitas horas.' },
+        { k: 'grogue guardado no tonel durante meses', e: 'grogue kept in the cask for months', ex: 'O grogue guardado no tonel durante meses ficava melhor.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36067,6 +36105,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_windmill1','pt_brickmaking1'] },
   { unit:'Unidade 314 — Sal Marinho e Feno', icon:'🧂', desc:'Vocabulário de colheita de sal marinho, e vocabulário de ceifa de erva e feno',
     lessons:['pt_saltpan1','pt_haymaking1'] },
+  { unit:'Unidade 315 — Cana-de-Açúcar e Grogue', icon:'🍯', desc:'Vocabulário de prensagem de cana-de-açúcar, e vocabulário de destilação de grogue',
+    lessons:['pt_canepress1','pt_grogue1'] },
 ];
 
 
