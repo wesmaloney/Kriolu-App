@@ -18037,6 +18037,24 @@ const KR_LESSONS = [
         { k: 'Barra di aso pa ajusta fiu di faka', e: 'steel rod to adjust the knife edge', ex: 'Barra di aso pa ajusta fiu di faka ta ser uzadu tudu dia.' },
         { k: 'Prova di fiu ku korti di papel', e: 'edge test by cutting paper', ex: 'Prova di fiu ku korti di papel ta mostra faka afiadu.' },
     ]},
+  { id: 'kr_windmill1', title: 'Traditional Windmill Milling', titleKriolu: 'Moinhu di Ventu Tradisional', icon: '🌬', color: 'sky',
+    desc: 'Traditional windmill milling vocabulary', vocab: [
+        { k: 'Torre di pedra ku teladu ki ta vira', e: 'stone tower with a rotating roof', ex: 'Torre di pedra ku teladu ki ta vira ta fika riba di monti.' },
+        { k: 'Vela grandi ki ta vira ku ventu', e: 'large sails that turn with the wind', ex: 'Vela grandi ki ta vira ku ventu ta puxa roda.' },
+        { k: 'Roda di madera drentu di torre', e: 'wooden wheel inside the tower', ex: 'Roda di madera drentu di torre ta vira ku forsa.' },
+        { k: 'Grãu di milhu ki ta kai entri dos pedra', e: 'corn grain falling between two stones', ex: 'Grãu di milhu ki ta kai entri dos pedra ta fika moídu.' },
+        { k: 'Pedra grandi ki ta vira riba di otu pedra', e: 'large stone that turns on top of another stone', ex: 'Pedra grandi ki ta vira riba di otu pedra ta fasi farinha.' },
+        { k: 'Farinha fininhu ki ta kai na saku', e: 'fine flour falling into the sack', ex: 'Farinha fininhu ki ta kai na saku ta ser guardadu.' },
+    ]},
+  { id: 'kr_brickmaking1', title: 'Clay Brick Making', titleKriolu: 'Fasi Blóku di Argila', icon: '🧱', color: 'red',
+    desc: 'Clay brick making vocabulary', vocab: [
+        { k: 'Argila misturadu ku agu i palha', e: 'clay mixed with water and straw', ex: 'Argila misturadu ku agu i palha ta fika moli.' },
+        { k: 'Masa prensadu na molde di madera', e: 'mixture pressed into a wooden mould', ex: 'Masa prensadu na molde di madera ta toma formu di blóku.' },
+        { k: 'Blóku di argila sekadu na sol durante dia', e: 'bricks dried in the sun for days', ex: 'Blóku di argila sekadu na sol durante dia ta fika duru.' },
+        { k: 'Kozedura di blóku na forno grandi', e: 'firing the bricks in a large kiln', ex: 'Kozedura di blóku na forno grandi ta dura txeu ora.' },
+        { k: 'Blóku enpilhadu na fila', e: 'bricks stacked in a row', ex: 'Blóku enpilhadu na fila ta fasi paredi.' },
+        { k: 'Paredi firmi fetu di blóku', e: 'firm wall made of bricks', ex: 'Paredi firmi fetu di blóku ta dura txeu anu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19434,6 +19452,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_thatching1','kr_drystone1'] },
   { unit:'Unit 310 — Sailmaking & Knife Sharpening', icon:'⛵', desc:'Traditional sailmaking vocabulary, and knife sharpening vocabulary',
     lessons:['kr_sailmaking1','kr_knifesharp1'] },
+  { unit:'Unit 311 — Windmill & Brick Making', icon:'🌬', desc:'Traditional windmill milling vocabulary, and clay brick making vocabulary',
+    lessons:['kr_windmill1','kr_brickmaking1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35354,6 +35374,24 @@ const PT_LESSONS = [
         { k: 'barra de aço para ajustar o fio da faca', e: 'steel rod to adjust the knife edge', ex: 'A barra de aço para ajustar o fio da faca era usada todos os dias.' },
         { k: 'prova do fio a cortar papel', e: 'edge test by cutting paper', ex: 'A prova do fio a cortar papel mostrava uma faca afiada.' },
     ]},
+  { id: 'pt_windmill1', title: 'Traditional Windmill Milling', titleKriolu: 'Moagem em Moinho de Vento', icon: '🌬', color: 'sky',
+    desc: 'Vocabulário de moagem em moinho de vento', vocab: [
+        { k: 'torre de pedra com o telhado giratório', e: 'stone tower with a rotating roof', ex: 'A torre de pedra com o telhado giratório ficava no alto do monte.' },
+        { k: 'velas grandes que giram com o vento', e: 'large sails that turn with the wind', ex: 'As velas grandes que giram com o vento puxavam a roda.' },
+        { k: 'roda de madeira dentro da torre', e: 'wooden wheel inside the tower', ex: 'A roda de madeira dentro da torre girava com força.' },
+        { k: 'grão de milho a cair entre duas pedras', e: 'corn grain falling between two stones', ex: 'O grão de milho a cair entre duas pedras ficava moído.' },
+        { k: 'pedra grande que gira sobre outra pedra', e: 'large stone that turns on top of another stone', ex: 'A pedra grande que gira sobre outra pedra fazia a farinha.' },
+        { k: 'farinha fina a cair no saco', e: 'fine flour falling into the sack', ex: 'A farinha fina a cair no saco era guardada.' },
+    ]},
+  { id: 'pt_brickmaking1', title: 'Clay Brick Making', titleKriolu: 'Fabrico de Tijolos de Argila', icon: '🧱', color: 'red',
+    desc: 'Vocabulário de fabrico de tijolos de argila', vocab: [
+        { k: 'argila misturada com água e palha', e: 'clay mixed with water and straw', ex: 'A argila misturada com água e palha ficava mole.' },
+        { k: 'massa apertada num molde de madeira', e: 'mixture pressed into a wooden mould', ex: 'A massa apertada num molde de madeira tomava a forma do tijolo.' },
+        { k: 'tijolos secos ao sol durante dias', e: 'bricks dried in the sun for days', ex: 'Os tijolos secos ao sol durante dias ficavam duros.' },
+        { k: 'cozedura dos tijolos em forno grande', e: 'firing the bricks in a large kiln', ex: 'A cozedura dos tijolos em forno grande durava muitas horas.' },
+        { k: 'tijolos empilhados em fila', e: 'bricks stacked in a row', ex: 'Os tijolos empilhados em fila formavam a parede.' },
+        { k: 'parede firme feita de tijolos', e: 'firm wall made of bricks', ex: 'A parede firme feita de tijolos durava muitos anos.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -35987,6 +36025,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_thatching1','pt_drystone1'] },
   { unit:'Unidade 312 — Velas e Afiação de Facas', icon:'⛵', desc:'Vocabulário de fabrico de velas tradicionais, e vocabulário de afiação de facas',
     lessons:['pt_sailmaking1','pt_knifesharp1'] },
+  { unit:'Unidade 313 — Moinho de Vento e Tijolos', icon:'🌬', desc:'Vocabulário de moagem em moinho de vento, e vocabulário de fabrico de tijolos de argila',
+    lessons:['pt_windmill1','pt_brickmaking1'] },
 ];
 
 
