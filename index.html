@@ -18055,6 +18055,24 @@ const KR_LESSONS = [
         { k: 'Blóku enpilhadu na fila', e: 'bricks stacked in a row', ex: 'Blóku enpilhadu na fila ta fasi paredi.' },
         { k: 'Paredi firmi fetu di blóku', e: 'firm wall made of bricks', ex: 'Paredi firmi fetu di blóku ta dura txeu anu.' },
     ]},
+  { id: 'kr_saltpan1', title: 'Sea Salt Harvesting', titleKriolu: 'Kolheita di Sal di Mar', icon: '🧂', color: 'gray',
+    desc: 'Sea salt harvesting vocabulary', vocab: [
+        { k: 'Agu di mar ki ta entra na lagoa baxu', e: 'seawater entering the shallow lagoon', ex: 'Agu di mar ki ta entra na lagoa baxu ta fika kenti na sol.' },
+        { k: 'Sol forti ki ta kenta agu', e: 'strong sun that heats the water', ex: 'Sol forti ki ta kenta agu ta trabadja dia interu.' },
+        { k: 'Agu ki ta fika pokutim ku kalor', e: 'water shrinking in the heat', ex: 'Agu ki ta fika pokutim ku kalor ta dexa sal na vista.' },
+        { k: 'Kristal branku na fundu', e: 'white crystals on the bottom', ex: 'Kristal branku na fundu ta brilhaba na sol.' },
+        { k: 'Sal djuntadu ku mon', e: 'salt gathered by hand', ex: 'Sal djuntadu ku mon e trabadju pezadu.' },
+        { k: 'Munti di sal branku na sol', e: 'mound of white salt in the sun', ex: 'Munti di sal branku na sol e txeu bunitu.' },
+    ]},
+  { id: 'kr_haymaking1', title: 'Scything & Haymaking', titleKriolu: 'Korti di Erva i Fenu', icon: '🌾', color: 'emerald',
+    desc: 'Scything and haymaking vocabulary', vocab: [
+        { k: 'Lámina kurvu ki ta korta erva', e: 'curved scythe blade that cuts the grass', ex: 'Lámina kurvu ki ta korta erva e bon afiadu.' },
+        { k: 'Erva altu kortadu di manhan', e: 'tall grass cut in the morning', ex: 'Erva altu kortadu di manhan ta fika na txon.' },
+        { k: 'Erva spadjadu na sol pa fika seku', e: 'grass spread in the sun to dry', ex: 'Erva spadjadu na sol pa fika seku ta perde kor.' },
+        { k: 'Erva viradu ku mon', e: 'grass turned by hand', ex: 'Erva viradu ku mon ta fika seku tudu.' },
+        { k: 'Erva seku djuntadu na munti', e: 'dry grass gathered into a pile', ex: 'Erva seku djuntadu na munti ta ser guardadu.' },
+        { k: 'Erva seku guardadu pa inverno', e: 'dry grass stored for the winter', ex: 'Erva seku guardadu pa inverno ta da kume pa animal.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19454,6 +19472,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_sailmaking1','kr_knifesharp1'] },
   { unit:'Unit 311 — Windmill & Brick Making', icon:'🌬', desc:'Traditional windmill milling vocabulary, and clay brick making vocabulary',
     lessons:['kr_windmill1','kr_brickmaking1'] },
+  { unit:'Unit 312 — Salt Harvest & Haymaking', icon:'🧂', desc:'Sea salt harvesting vocabulary, and scything and haymaking vocabulary',
+    lessons:['kr_saltpan1','kr_haymaking1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35392,6 +35412,24 @@ const PT_LESSONS = [
         { k: 'tijolos empilhados em fila', e: 'bricks stacked in a row', ex: 'Os tijolos empilhados em fila formavam a parede.' },
         { k: 'parede firme feita de tijolos', e: 'firm wall made of bricks', ex: 'A parede firme feita de tijolos durava muitos anos.' },
     ]},
+  { id: 'pt_saltpan1', title: 'Sea Salt Harvesting', titleKriolu: 'Colheita de Sal Marinho', icon: '🧂', color: 'gray',
+    desc: 'Vocabulário de colheita de sal marinho', vocab: [
+        { k: 'água do mar a entrar na lagoa rasa', e: 'seawater entering the shallow lagoon', ex: 'A água do mar a entrar na lagoa rasa aquecia ao sol.' },
+        { k: 'sol forte que aquece a água', e: 'strong sun that heats the water', ex: 'O sol forte que aquece a água trabalhava o dia inteiro.' },
+        { k: 'água a diminuir com o calor', e: 'water shrinking in the heat', ex: 'A água a diminuir com o calor deixava o sal à vista.' },
+        { k: 'cristais brancos no fundo', e: 'white crystals on the bottom', ex: 'Os cristais brancos no fundo brilhavam ao sol.' },
+        { k: 'sal juntado à mão', e: 'salt gathered by hand', ex: 'O sal juntado à mão era trabalho pesado.' },
+        { k: 'monte de sal branco ao sol', e: 'mound of white salt in the sun', ex: 'O monte de sal branco ao sol era muito bonito.' },
+    ]},
+  { id: 'pt_haymaking1', title: 'Scything & Haymaking', titleKriolu: 'Ceifa de Erva e Feno', icon: '🌾', color: 'emerald',
+    desc: 'Vocabulário de ceifa de erva e feno', vocab: [
+        { k: 'lâmina curva da gadanha que corta a erva', e: 'curved scythe blade that cuts the grass', ex: 'A lâmina curva da gadanha que corta a erva era bem afiada.' },
+        { k: 'erva alta cortada de manhã', e: 'tall grass cut in the morning', ex: 'A erva alta cortada de manhã ficava no chão.' },
+        { k: 'erva espalhada ao sol para secar', e: 'grass spread in the sun to dry', ex: 'A erva espalhada ao sol para secar perdia a cor.' },
+        { k: 'erva virada à mão', e: 'grass turned by hand', ex: 'A erva virada à mão secava por igual.' },
+        { k: 'erva seca juntada num monte', e: 'dry grass gathered into a pile', ex: 'A erva seca juntada num monte era guardada.' },
+        { k: 'erva seca guardada para o inverno', e: 'dry grass stored for the winter', ex: 'A erva seca guardada para o inverno alimentava os animais.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36027,6 +36065,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_sailmaking1','pt_knifesharp1'] },
   { unit:'Unidade 313 — Moinho de Vento e Tijolos', icon:'🌬', desc:'Vocabulário de moagem em moinho de vento, e vocabulário de fabrico de tijolos de argila',
     lessons:['pt_windmill1','pt_brickmaking1'] },
+  { unit:'Unidade 314 — Sal Marinho e Feno', icon:'🧂', desc:'Vocabulário de colheita de sal marinho, e vocabulário de ceifa de erva e feno',
+    lessons:['pt_saltpan1','pt_haymaking1'] },
 ];
 
 
