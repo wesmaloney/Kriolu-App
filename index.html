@@ -18019,6 +18019,24 @@ const KR_LESSONS = [
         { k: 'Pedra skolhidu un pa un', e: 'stones chosen one by one', ex: 'Pedra skolhidu un pa un ta ser trabadjadu ku kuidadu.' },
         { k: 'Muru firmi ki ta dura txeu anu', e: 'firm wall that lasts many years', ex: 'Muru firmi ki ta dura txeu anu ta proteje terasu.' },
     ]},
+  { id: 'kr_sailmaking1', title: 'Traditional Sailmaking', titleKriolu: 'Fasi Vela di Barku', icon: '⛵', color: 'cyan',
+    desc: 'Traditional sailmaking vocabulary', vocab: [
+        { k: 'Tela grosu pa vela di barku', e: 'thick canvas for the boat\'s sail', ex: 'Tela grosu pa vela di barku ta forti na ventu.' },
+        { k: 'Kostura forti entri panu di vela', e: 'strong seam between the sail panels', ex: 'Kostura forti entri panu di vela ta ser fetu ku kuidadu.' },
+        { k: 'Bainha dobradu i kosidu na ponta di vela', e: 'hem folded and sewn at the tip of the sail', ex: 'Bainha dobradu i kosidu na ponta di vela ta reforsa panu.' },
+        { k: 'Fiu grosu pasadu ku agulha grandi', e: 'thick thread pulled through with a large needle', ex: 'Fiu grosu pasadu ku agulha grandi ta fasi kostura firmi.' },
+        { k: 'Kantu reforsadu ku panu extra', e: 'corners reinforced with extra cloth', ex: 'Kantu reforsadu ku panu extra ta dura txeu anu.' },
+        { k: 'Vela abertu na ventu', e: 'sail opened to the wind', ex: 'Vela abertu na ventu ta leba barku lonji.' },
+    ]},
+  { id: 'kr_knifesharp1', title: 'Knife Sharpening', titleKriolu: 'Afiason di Faka', icon: '🔪', color: 'slate',
+    desc: 'Knife sharpening vocabulary', vocab: [
+        { k: 'Pedra di afiason molhadu na agu', e: 'sharpening stone soaked in water', ex: 'Pedra di afiason molhadu na agu ta fika prontu.' },
+        { k: 'Lámina inklinadu riba di pedra', e: 'blade tilted on the stone', ex: 'Lámina inklinadu riba di pedra ta fika firmi.' },
+        { k: 'Movimentu lentu i igual', e: 'slow and even movements', ex: 'Movimentu lentu i igual ta dexa fiu lisu.' },
+        { k: 'Fiu di lámina bon afiadu', e: 'well-sharpened blade edge', ex: 'Fiu di lámina bon afiadu ta korta tomati sen forsa.' },
+        { k: 'Barra di aso pa ajusta fiu di faka', e: 'steel rod to adjust the knife edge', ex: 'Barra di aso pa ajusta fiu di faka ta ser uzadu tudu dia.' },
+        { k: 'Prova di fiu ku korti di papel', e: 'edge test by cutting paper', ex: 'Prova di fiu ku korti di papel ta mostra faka afiadu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19414,6 +19432,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_boatbuilding1','kr_ropemaking1'] },
   { unit:'Unit 309 — Thatching & Dry Stone Walls', icon:'🛖', desc:'Straw thatching vocabulary, and dry stone walling vocabulary',
     lessons:['kr_thatching1','kr_drystone1'] },
+  { unit:'Unit 310 — Sailmaking & Knife Sharpening', icon:'⛵', desc:'Traditional sailmaking vocabulary, and knife sharpening vocabulary',
+    lessons:['kr_sailmaking1','kr_knifesharp1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35316,6 +35336,24 @@ const PT_LESSONS = [
         { k: 'pedras escolhidas uma a uma', e: 'stones chosen one by one', ex: 'As pedras escolhidas uma a uma eram trabalhadas com cuidado.' },
         { k: 'muro firme que dura muitos anos', e: 'firm wall that lasts many years', ex: 'O muro firme que dura muitos anos protegia o terraço.' },
     ]},
+  { id: 'pt_sailmaking1', title: 'Traditional Sailmaking', titleKriolu: 'Fabrico de Velas Tradicionais', icon: '⛵', color: 'cyan',
+    desc: 'Vocabulário de fabrico de velas tradicionais', vocab: [
+        { k: 'tela grossa para a vela do barco', e: 'thick canvas for the boat\'s sail', ex: 'A tela grossa para a vela do barco resistia ao vento.' },
+        { k: 'costura forte entre os panos da vela', e: 'strong seam between the sail panels', ex: 'A costura forte entre os panos da vela era feita com cuidado.' },
+        { k: 'bainha dobrada e cosida na ponta da vela', e: 'hem folded and sewn at the tip of the sail', ex: 'A bainha dobrada e cosida na ponta da vela reforçava o pano.' },
+        { k: 'fio grosso passado com agulha grande', e: 'thick thread pulled through with a large needle', ex: 'O fio grosso passado com agulha grande fazia uma costura firme.' },
+        { k: 'cantos reforçados com pano extra', e: 'corners reinforced with extra cloth', ex: 'Os cantos reforçados com pano extra duravam muitos anos.' },
+        { k: 'vela aberta ao vento', e: 'sail opened to the wind', ex: 'A vela aberta ao vento levava o barco para longe.' },
+    ]},
+  { id: 'pt_knifesharp1', title: 'Knife Sharpening', titleKriolu: 'Afiação de Facas', icon: '🔪', color: 'slate',
+    desc: 'Vocabulário de afiação de facas', vocab: [
+        { k: 'pedra de afiar molhada em água', e: 'sharpening stone soaked in water', ex: 'A pedra de afiar molhada em água ficava pronta.' },
+        { k: 'lâmina inclinada sobre a pedra', e: 'blade tilted on the stone', ex: 'A lâmina inclinada sobre a pedra ficava firme.' },
+        { k: 'movimentos lentos e iguais', e: 'slow and even movements', ex: 'Os movimentos lentos e iguais deixavam o fio liso.' },
+        { k: 'fio da lâmina bem afiado', e: 'well-sharpened blade edge', ex: 'O fio da lâmina bem afiado cortava o tomate sem força.' },
+        { k: 'barra de aço para ajustar o fio da faca', e: 'steel rod to adjust the knife edge', ex: 'A barra de aço para ajustar o fio da faca era usada todos os dias.' },
+        { k: 'prova do fio a cortar papel', e: 'edge test by cutting paper', ex: 'A prova do fio a cortar papel mostrava uma faca afiada.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -35947,6 +35985,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_boatbuilding1','pt_ropemaking1'] },
   { unit:'Unidade 311 — Colmo e Muros de Pedra Seca', icon:'🛖', desc:'Vocabulário de colmar telhados de palha, e vocabulário de construção de muros de pedra seca',
     lessons:['pt_thatching1','pt_drystone1'] },
+  { unit:'Unidade 312 — Velas e Afiação de Facas', icon:'⛵', desc:'Vocabulário de fabrico de velas tradicionais, e vocabulário de afiação de facas',
+    lessons:['pt_sailmaking1','pt_knifesharp1'] },
 ];
 
 
