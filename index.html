@@ -18865,6 +18865,24 @@ const KR_LESSONS = [
         { k: 'Sol i txuva pa orta', e: 'sun and rain for the garden', ex: 'Sol i txuva pa orta ta djuda planta.' },
         { k: 'Kuve fresku na orta', e: 'fresh kale in the garden', ex: 'Kuve fresku na orta ta ser tiradu ku mon.' },
     ]},
+  { id: 'kr_morningcoffee1', title: 'Morning Coffee at Home', titleKriolu: 'Kafé di Manhan na Kaza', icon: '☕', color: 'sky',
+    desc: 'Morning coffee at home vocabulary', vocab: [
+        { k: 'Xeru di kafé na kuzinha', e: 'smell of coffee in the kitchen', ex: 'Xeru di kafé na kuzinha ta txiga te na kuartu.' },
+        { k: 'Kafeteira na fogu', e: 'coffee pot on the fire', ex: 'Kafeteira na fogu ta kumesa fasi barulhu.' },
+        { k: 'Agu ki ta ferbe', e: 'water that boils', ex: 'Agu ki ta ferbe ta inxi kuzinha di xeru.' },
+        { k: 'Kafé moídu na kafeteira', e: 'ground coffee in the pot', ex: 'Kafé moídu na kafeteira ta ser medidu ku kolher.' },
+        { k: 'Kafé ku leiti', e: 'coffee with milk', ex: 'Kafé ku leiti e bebida di manhan.' },
+        { k: 'Pon di kaza ku kafé', e: 'home-baked bread with coffee', ex: 'Pon di kaza ku kafé e pekenu-almosu.' },
+    ]},
+  { id: 'kr_homework1', title: 'Homework at the Table', titleKriolu: 'Tarefa na Meza', icon: '📝', color: 'emerald',
+    desc: 'Homework at the table vocabulary', vocab: [
+        { k: 'Livru i kaderno na meza', e: 'book and notebook on the table', ex: 'Livru i kaderno na meza ta spera mininu.' },
+        { k: 'Lapis na mon di mininu', e: 'pencil in the child\'s hand', ex: 'Lapis na mon di mininu ta skrebe dibagar.' },
+        { k: 'Lé livru di skola', e: 'reading the school book', ex: 'Lé livru di skola ta ser fetu na kuartu.' },
+        { k: 'Skrebe na kaderno', e: 'writing in the notebook', ex: 'Skrebe na kaderno ta pidi letra klaru.' },
+        { k: 'Mai ta djuda ku tarefa', e: 'mother helping with homework', ex: 'Mai ta djuda ku tarefa ta splika kada konta.' },
+        { k: 'Pergunta pa profesor', e: 'question for the teacher', ex: 'Pergunta pa profesor ta fika pa otu dia.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20346,6 +20364,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_sundaymass1','kr_neighbourplate1'] },
   { unit:'Unit 352 — Cold Remedy & Planting Beans', icon:'🤧', desc:'Grandmother cold remedy vocabulary, and Planting beans in the garden vocabulary',
     lessons:['kr_grandmacold1','kr_beanplanting1'] },
+  { unit:'Unit 353 — Morning Coffee & Homework', icon:'☕', desc:'Morning coffee at home vocabulary, and Homework at the table vocabulary',
+    lessons:['kr_morningcoffee1','kr_homework1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37094,6 +37114,24 @@ const PT_LESSONS = [
         { k: 'sol e chuva para a horta', e: 'sun and rain for the garden', ex: 'O sol e a chuva para a horta ajudavam as plantas.' },
         { k: 'couve fresca na horta', e: 'fresh kale in the garden', ex: 'A couve fresca na horta era colhida à mão.' },
     ]},
+  { id: 'pt_morningcoffee1', title: 'Morning Coffee at Home', titleKriolu: 'Café da Manhã em Casa', icon: '☕', color: 'sky',
+    desc: 'Vocabulário de café da manhã em casa', vocab: [
+        { k: 'cheiro a café na cozinha', e: 'smell of coffee in the kitchen', ex: 'O cheiro a café na cozinha chegava ao quarto.' },
+        { k: 'cafeteira ao lume', e: 'coffee pot on the fire', ex: 'A cafeteira ao lume começava a fazer barulho.' },
+        { k: 'água que ferve', e: 'water that boils', ex: 'A água que ferve enchia a cozinha de cheiro.' },
+        { k: 'café moído na cafeteira', e: 'ground coffee in the pot', ex: 'O café moído na cafeteira era medido com colher.' },
+        { k: 'café com leite', e: 'coffee with milk', ex: 'O café com leite era a bebida da manhã.' },
+        { k: 'pão caseiro com café', e: 'home-baked bread with coffee', ex: 'O pão caseiro com café era o pequeno-almoço.' },
+    ]},
+  { id: 'pt_homework1', title: 'Homework at the Table', titleKriolu: 'Trabalho de Casa à Mesa', icon: '📝', color: 'emerald',
+    desc: 'Vocabulário de trabalho de casa à mesa', vocab: [
+        { k: 'livro e caderno na mesa', e: 'book and notebook on the table', ex: 'O livro e o caderno na mesa esperavam o menino.' },
+        { k: 'lápis na mão da criança', e: 'pencil in the child\'s hand', ex: 'O lápis na mão da criança escrevia devagar.' },
+        { k: 'ler o livro da escola', e: 'reading the school book', ex: 'Ler o livro da escola era feito no quarto.' },
+        { k: 'escrever no caderno', e: 'writing in the notebook', ex: 'Escrever no caderno pedia letra clara.' },
+        { k: 'mãe a ajudar com o trabalho de casa', e: 'mother helping with homework', ex: 'A mãe a ajudar com o trabalho de casa explicava cada conta.' },
+        { k: 'pergunta para o professor', e: 'question for the teacher', ex: 'A pergunta para o professor ficava para outro dia.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37811,6 +37849,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_sundaymass1','pt_neighbourplate1'] },
   { unit:'Unidade 354 — Remédio para a Gripe e Feijão na Horta', icon:'🤧', desc:'Vocabulário de remédio da avó para a gripe, e vocabulário de plantar feijão na horta',
     lessons:['pt_grandmacold1','pt_beanplanting1'] },
+  { unit:'Unidade 355 — Café da Manhã e Trabalho de Casa', icon:'☕', desc:'Vocabulário de café da manhã em casa, e vocabulário de trabalho de casa à mesa',
+    lessons:['pt_morningcoffee1','pt_homework1'] },
 ];
 
 
