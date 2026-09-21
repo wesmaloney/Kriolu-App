@@ -18505,6 +18505,24 @@ const KR_LESSONS = [
         { k: 'Bolu di mel pa sobremesa', e: 'honey cake for dessert', ex: 'Bolu di mel pa sobremesa ta fasi mininu kontenti.' },
         { k: 'Tra mesa i laba pratu', e: 'clearing the table and washing the dishes', ex: 'Tra mesa i laba pratu ta ser djuda di tudu.' },
     ]},
+  { id: 'kr_heatwave1', title: 'Midday Heat Wave', titleKriolu: 'Vaga di Kalor na Meiu Dia', icon: '☀', color: 'red',
+    desc: 'Midday heat wave vocabulary', vocab: [
+        { k: 'Vaga di kalor na meiu dia', e: 'heat wave at midday', ex: 'Vaga di kalor na meiu dia ta pidi sonbra.' },
+        { k: 'Txapéu na kabesa', e: 'hat on the head', ex: 'Txapéu na kabesa ta proteje di sol.' },
+        { k: 'Ropa levi i klaru', e: 'light and pale clothes', ex: 'Ropa levi i klaru ta ajuda na kalor.' },
+        { k: 'Bebe agu fresku ku sedi', e: 'drinking cool water when thirsty', ex: 'Bebe agu fresku ku sedi ta da forsa.' },
+        { k: 'Ventoinha ki ta vira riba di kabesa', e: 'fan turning above the head', ex: 'Ventoinha ki ta vira riba di kabesa ta fasi briza.' },
+        { k: 'Janela fexadu di dia', e: 'window closed during the day', ex: 'Janela fexadu di dia ta dexa kaza fresku.' },
+    ]},
+  { id: 'kr_watertank1', title: 'The Household Water Tank', titleKriolu: 'Dipózitu di Agu di Kaza', icon: '🚰', color: 'blue',
+    desc: 'Household water tank vocabulary', vocab: [
+        { k: 'Dipózitu di agu riba di teladu', e: 'water tank on the roof', ex: 'Dipózitu di agu riba di teladu ta guarda agu.' },
+        { k: 'Kamion ki ta trazi agu', e: 'truck bringing water', ex: 'Kamion ki ta trazi agu ta txiga di manhan.' },
+        { k: 'Kanu ki ta inxi dipózitu', e: 'pipe filling the tank', ex: 'Kanu ki ta inxi dipózitu ta dura txeu ora.' },
+        { k: 'Torneira abertu sen kuidadu', e: 'tap left open carelessly', ex: 'Torneira abertu sen kuidadu ta perde agu.' },
+        { k: 'Pupa agu tudu dia', e: 'saving water every day', ex: 'Pupa agu tudu dia ta djuda kaza.' },
+        { k: 'Leitura di kontador di agu', e: 'reading of the water meter', ex: 'Leitura di kontador di agu ta ben na fin di mes.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19946,6 +19964,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_hike1','kr_hike2'] },
   { unit:'Unit 332 — Power Cut & Sunday Lunch', icon:'🕯', desc:'Power cut evening vocabulary, and Sunday family lunch vocabulary',
     lessons:['kr_powercut1','kr_sundaylunch1'] },
+  { unit:'Unit 333 — Heat Wave & Water Tank', icon:'☀', desc:'Midday heat wave vocabulary, and Household water tank vocabulary',
+    lessons:['kr_heatwave1','kr_watertank1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36334,6 +36354,24 @@ const PT_LESSONS = [
         { k: 'bolo de mel para a sobremesa', e: 'honey cake for dessert', ex: 'O bolo de mel para a sobremesa deixava os meninos contentes.' },
         { k: 'tirar a mesa e lavar a loiça', e: 'clearing the table and washing the dishes', ex: 'Tirar a mesa e lavar a loiça era ajuda de todos.' },
     ]},
+  { id: 'pt_heatwave1', title: 'Midday Heat Wave', titleKriolu: 'Onda de Calor ao Meio-Dia', icon: '☀', color: 'red',
+    desc: 'Vocabulário da onda de calor ao meio-dia', vocab: [
+        { k: 'onda de calor ao meio-dia', e: 'heat wave at midday', ex: 'A onda de calor ao meio-dia pedia sombra.' },
+        { k: 'chapéu na cabeça', e: 'hat on the head', ex: 'O chapéu na cabeça protegia do sol.' },
+        { k: 'roupa leve e clara', e: 'light and pale clothes', ex: 'A roupa leve e clara ajudava no calor.' },
+        { k: 'beber água fresca com sede', e: 'drinking cool water when thirsty', ex: 'Beber água fresca com sede dava força.' },
+        { k: 'ventoinha a girar por cima da cabeça', e: 'fan turning above the head', ex: 'A ventoinha a girar por cima da cabeça fazia uma brisa.' },
+        { k: 'janela fechada de dia', e: 'window closed during the day', ex: 'A janela fechada de dia mantinha a casa fresca.' },
+    ]},
+  { id: 'pt_watertank1', title: 'The Household Water Tank', titleKriolu: 'O Depósito de Água da Casa', icon: '🚰', color: 'blue',
+    desc: 'Vocabulário do depósito de água da casa', vocab: [
+        { k: 'depósito de água no telhado', e: 'water tank on the roof', ex: 'O depósito de água no telhado guardava a água.' },
+        { k: 'camião a trazer água', e: 'truck bringing water', ex: 'O camião a trazer água chegava de manhã.' },
+        { k: 'cano a encher o depósito', e: 'pipe filling the tank', ex: 'O cano a encher o depósito demorava muitas horas.' },
+        { k: 'torneira aberta sem cuidado', e: 'tap left open carelessly', ex: 'A torneira aberta sem cuidado fazia perder água.' },
+        { k: 'poupar água todos os dias', e: 'saving water every day', ex: 'Poupar água todos os dias ajudava a casa.' },
+        { k: 'leitura do contador da água', e: 'reading of the water meter', ex: 'A leitura do contador da água vinha no fim do mês.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37011,6 +37049,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_hike1','pt_hike2'] },
   { unit:'Unidade 334 — Serão sem Luz e Almoço de Domingo', icon:'🕯', desc:'Vocabulário do serão sem luz, e vocabulário do almoço de domingo em família',
     lessons:['pt_powercut1','pt_sundaylunch1'] },
+  { unit:'Unidade 335 — Onda de Calor e Depósito de Água', icon:'☀', desc:'Vocabulário da onda de calor ao meio-dia, e vocabulário do depósito de água da casa',
+    lessons:['pt_heatwave1','pt_watertank1'] },
 ];
 
 
