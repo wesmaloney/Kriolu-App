@@ -18811,6 +18811,24 @@ const KR_LESSONS = [
         { k: 'Roda di mota', e: 'wheel of the motorbike', ex: 'Roda di mota ta toka na txon.' },
         { k: 'Bomba di gazolina pa mota', e: 'petrol pump for the motorbike', ex: 'Bomba di gazolina pa mota ta fika na fin di rua.' },
     ]},
+  { id: 'kr_streetfootball1', title: 'Street Football', titleKriolu: 'Futebol na Rua', icon: '⚽', color: 'sky',
+    desc: 'Street football vocabulary', vocab: [
+        { k: 'Bola na rua', e: 'ball in the street', ex: 'Bola na rua ta rola te na fin di ladera.' },
+        { k: 'Jogu di futebol na rua', e: 'street football game', ex: 'Jogu di futebol na rua ta kumesa dipos di skola.' },
+        { k: 'Kuri tras di bola', e: 'running after the ball', ex: 'Kuri tras di bola ta fasi mininu kansadu.' },
+        { k: 'Grita di alegria', e: 'shouting with joy', ex: 'Grita di alegria ta ser obi na tudu bairru.' },
+        { k: 'Ekipa ki ta ganha', e: 'team that wins', ex: 'Ekipa ki ta ganha ta bai buska premiu.' },
+        { k: 'Apitu di arbitru', e: 'referee\'s whistle', ex: 'Apitu di arbitru ta para jogu.' },
+    ]},
+  { id: 'kr_fruitpicking1', title: 'Picking Fruit from the Tree', titleKriolu: 'Tira Fruta na Arvi', icon: '🥭', color: 'emerald',
+    desc: 'Picking fruit from the tree vocabulary', vocab: [
+        { k: 'Manga na arvi', e: 'mango on the tree', ex: 'Manga na arvi ta sta kasi pronta.' },
+        { k: 'Sobi na arvi', e: 'climbing the tree', ex: 'Sobi na arvi ta pidi kuidadu.' },
+        { k: 'Fruta verdi na arvi', e: 'green fruit on the tree', ex: 'Fruta verdi na arvi ka ta ser kumidu inda.' },
+        { k: 'Manga kaidu na txon', e: 'mango fallen on the ground', ex: 'Manga kaidu na txon ta ser tiradu pa mininu.' },
+        { k: 'Balde di fruta', e: 'bucket of fruit', ex: 'Balde di fruta ta bai pa merkadu.' },
+        { k: 'Laranja i goiaba', e: 'orange and guava', ex: 'Laranja i goiaba ta ser dosi.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20286,6 +20304,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_clothesline1','kr_porchevening1'] },
   { unit:'Unit 349 — Cold Drinks & Washing the Motorbike', icon:'🧃', desc:'Cold drinks on a hot day vocabulary, and Washing the motorbike vocabulary',
     lessons:['kr_colddrinks1','kr_washmoto1'] },
+  { unit:'Unit 350 — Street Football & Fruit Picking', icon:'⚽', desc:'Street football vocabulary, and Picking fruit from the tree vocabulary',
+    lessons:['kr_streetfootball1','kr_fruitpicking1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36980,6 +37000,24 @@ const PT_LESSONS = [
         { k: 'roda da mota', e: 'wheel of the motorbike', ex: 'A roda da mota tocava no chão.' },
         { k: 'bomba de gasolina para a mota', e: 'petrol pump for the motorbike', ex: 'A bomba de gasolina para a mota ficava no fim da rua.' },
     ]},
+  { id: 'pt_streetfootball1', title: 'Street Football', titleKriolu: 'Futebol na Rua', icon: '⚽', color: 'sky',
+    desc: 'Vocabulário de futebol na rua', vocab: [
+        { k: 'bola na rua', e: 'ball in the street', ex: 'A bola na rua rolava até ao fim da ladeira.' },
+        { k: 'jogo de futebol na rua', e: 'street football game', ex: 'O jogo de futebol na rua começava depois da escola.' },
+        { k: 'correr atrás da bola', e: 'running after the ball', ex: 'Correr atrás da bola cansava os miúdos.' },
+        { k: 'gritar de alegria', e: 'shouting with joy', ex: 'Gritar de alegria ouvia-se em todo o bairro.' },
+        { k: 'equipa que ganha', e: 'team that wins', ex: 'A equipa que ganha ia buscar o prémio.' },
+        { k: 'apito do árbitro', e: 'referee\'s whistle', ex: 'O apito do árbitro parava o jogo.' },
+    ]},
+  { id: 'pt_fruitpicking1', title: 'Picking Fruit from the Tree', titleKriolu: 'Apanhar Fruta da Árvore', icon: '🥭', color: 'emerald',
+    desc: 'Vocabulário de apanhar fruta da árvore', vocab: [
+        { k: 'manga na árvore', e: 'mango on the tree', ex: 'A manga na árvore estava quase pronta.' },
+        { k: 'subir à árvore', e: 'climbing the tree', ex: 'Subir à árvore pedia cuidado.' },
+        { k: 'fruta verde na árvore', e: 'green fruit on the tree', ex: 'A fruta verde na árvore ainda não se comia.' },
+        { k: 'manga caída no chão', e: 'mango fallen on the ground', ex: 'A manga caída no chão era apanhada pelas crianças.' },
+        { k: 'balde de fruta', e: 'bucket of fruit', ex: 'O balde de fruta ia para o mercado.' },
+        { k: 'laranja e goiaba', e: 'orange and guava', ex: 'A laranja e a goiaba eram doces.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37691,6 +37729,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_clothesline1','pt_porchevening1'] },
   { unit:'Unidade 351 — Bebidas Frescas e Lavar a Mota', icon:'🧃', desc:'Vocabulário de bebidas frescas num dia de calor, e vocabulário de lavar a mota',
     lessons:['pt_colddrinks1','pt_washmoto1'] },
+  { unit:'Unidade 352 — Futebol na Rua e Fruta da Árvore', icon:'⚽', desc:'Vocabulário de futebol na rua, e vocabulário de apanhar fruta da árvore',
+    lessons:['pt_streetfootball1','pt_fruitpicking1'] },
 ];
 
 
