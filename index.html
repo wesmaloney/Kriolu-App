@@ -18883,6 +18883,24 @@ const KR_LESSONS = [
         { k: 'Mai ta djuda ku tarefa', e: 'mother helping with homework', ex: 'Mai ta djuda ku tarefa ta splika kada konta.' },
         { k: 'Pergunta pa profesor', e: 'question for the teacher', ex: 'Pergunta pa profesor ta fika pa otu dia.' },
     ]},
+  { id: 'kr_housepainting1', title: 'Painting the House White', titleKriolu: 'Pinta Kaza di Branku', icon: '🖌', color: 'sky',
+    desc: 'Painting the house white vocabulary', vocab: [
+        { k: 'Tinta branku na paredi', e: 'white paint on the wall', ex: 'Tinta branku na paredi ta fasi kaza mas klaru.' },
+        { k: 'Pinsel largu na mon', e: 'wide brush in the hand', ex: 'Pinsel largu na mon ta kobri paredi dipresa.' },
+        { k: 'Skada di mon pa pinta paredi', e: 'ladder for painting the wall', ex: 'Skada di mon pa pinta paredi ta fika djuntu di irmon.' },
+        { k: 'Porta i janela di kor verdi', e: 'green door and window', ex: 'Porta i janela di kor verdi ta sta na paredi branku.' },
+        { k: 'Paredi branku i limpu', e: 'white and clean wall', ex: 'Paredi branku i limpu ta brilha na sol.' },
+        { k: 'Sol ki ta seka tinta', e: 'sun that dries the paint', ex: 'Sol ki ta seka tinta ta djuda trabadju.' },
+    ]},
+  { id: 'kr_tapfix1', title: 'Fixing a Dripping Tap', titleKriolu: 'Konsertu di Torneira', icon: '🔧', color: 'emerald',
+    desc: 'Fixing a dripping tap vocabulary', vocab: [
+        { k: 'Gota di agu na torneira', e: 'drop of water from the tap', ex: 'Gota di agu na torneira ta kai tudu noti.' },
+        { k: 'Kaxa di ferramenta abertu', e: 'open toolbox', ex: 'Kaxa di ferramenta abertu ta sta na txon.' },
+        { k: 'Alikati na mon di pai', e: 'pliers in father\'s hand', ex: 'Alikati na mon di pai ta aperta kanu.' },
+        { k: 'Parafuzu na mon', e: 'screw in the hand', ex: 'Parafuzu na mon ta ser apertadu.' },
+        { k: 'Kanu di agu na paredi', e: 'water pipe in the wall', ex: 'Kanu di agu na paredi ta pertu di torneira.' },
+        { k: 'Konsertu di torneira fetu', e: 'tap repair done', ex: 'Konsertu di torneira fetu ta kaba ku barulhu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20366,6 +20384,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_grandmacold1','kr_beanplanting1'] },
   { unit:'Unit 353 — Morning Coffee & Homework', icon:'☕', desc:'Morning coffee at home vocabulary, and Homework at the table vocabulary',
     lessons:['kr_morningcoffee1','kr_homework1'] },
+  { unit:'Unit 354 — House Painting & Tap Repair', icon:'🖌', desc:'Painting the house white vocabulary, and Fixing a dripping tap vocabulary',
+    lessons:['kr_housepainting1','kr_tapfix1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37132,6 +37152,24 @@ const PT_LESSONS = [
         { k: 'mãe a ajudar com o trabalho de casa', e: 'mother helping with homework', ex: 'A mãe a ajudar com o trabalho de casa explicava cada conta.' },
         { k: 'pergunta para o professor', e: 'question for the teacher', ex: 'A pergunta para o professor ficava para outro dia.' },
     ]},
+  { id: 'pt_housepainting1', title: 'Painting the House White', titleKriolu: 'Pintar a Casa de Branco', icon: '🖌', color: 'sky',
+    desc: 'Vocabulário de pintar a casa de branco', vocab: [
+        { k: 'tinta branca na parede', e: 'white paint on the wall', ex: 'A tinta branca na parede deixava a casa mais clara.' },
+        { k: 'pincel largo na mão', e: 'wide brush in the hand', ex: 'O pincel largo na mão cobria a parede depressa.' },
+        { k: 'escada de mão para pintar a parede', e: 'ladder for painting the wall', ex: 'A escada de mão para pintar a parede ficava ao lado do irmão.' },
+        { k: 'porta e janela de cor verde', e: 'green door and window', ex: 'A porta e a janela de cor verde estavam na parede branca.' },
+        { k: 'parede branca e limpa', e: 'white and clean wall', ex: 'A parede branca e limpa brilhava ao sol.' },
+        { k: 'sol que seca a tinta', e: 'sun that dries the paint', ex: 'O sol que seca a tinta trabalhava a favor.' },
+    ]},
+  { id: 'pt_tapfix1', title: 'Fixing a Dripping Tap', titleKriolu: 'Arranjar uma Torneira a Pingar', icon: '🔧', color: 'emerald',
+    desc: 'Vocabulário de arranjar uma torneira a pingar', vocab: [
+        { k: 'gota de água na torneira', e: 'drop of water from the tap', ex: 'A gota de água na torneira caía toda a noite.' },
+        { k: 'caixa de ferramentas aberta', e: 'open toolbox', ex: 'A caixa de ferramentas aberta estava no chão.' },
+        { k: 'alicate na mão do pai', e: 'pliers in father\'s hand', ex: 'O alicate na mão do pai apertava o cano.' },
+        { k: 'parafuso na mão', e: 'screw in the hand', ex: 'O parafuso na mão foi apertado.' },
+        { k: 'cano de água na parede', e: 'water pipe in the wall', ex: 'O cano de água na parede ficava perto da torneira.' },
+        { k: 'conserto da torneira feito', e: 'tap repair done', ex: 'O conserto da torneira feito acabou com o barulho.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37851,6 +37889,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_grandmacold1','pt_beanplanting1'] },
   { unit:'Unidade 355 — Café da Manhã e Trabalho de Casa', icon:'☕', desc:'Vocabulário de café da manhã em casa, e vocabulário de trabalho de casa à mesa',
     lessons:['pt_morningcoffee1','pt_homework1'] },
+  { unit:'Unidade 356 — Pintar a Casa e Arranjar a Torneira', icon:'🖌', desc:'Vocabulário de pintar a casa de branco, e vocabulário de arranjar uma torneira a pingar',
+    lessons:['pt_housepainting1','pt_tapfix1'] },
 ];
 
 
