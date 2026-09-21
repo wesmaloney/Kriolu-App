@@ -18703,6 +18703,24 @@ const KR_LESSONS = [
         { k: 'Fotu antigu na álbun', e: 'old photos in the album', ex: 'Fotu antigu na álbun ta lenbra tenpu antigu.' },
         { k: 'Avó ki ta konta stória', e: 'grandmother telling stories', ex: 'Avó ki ta konta stória ta fasi mininu skuta.' },
     ]},
+  { id: 'kr_friedcachupa1', title: 'Fried Leftover Cachupa', titleKriolu: 'Katxupa Gizadu', icon: '🍳', color: 'yellow',
+    desc: 'Fried leftover cachupa vocabulary', vocab: [
+        { k: 'Katxupa di dia antis', e: 'cachupa from the day before', ex: 'Katxupa di dia antis ta fika pa manhan.' },
+        { k: 'Frigideira kenti ku óleu', e: 'hot frying pan with oil', ex: 'Frigideira kenti ku óleu ta pidi kuidadu.' },
+        { k: 'Sebola i linguisa pikadu', e: 'chopped onion and sausage', ex: 'Sebola i linguisa pikadu ta fritu primeru.' },
+        { k: 'Katxupa fritu pa fika doradu', e: 'cachupa fried until golden', ex: 'Katxupa fritu pa fika doradu ta ten krosta.' },
+        { k: 'Ovu fritu riba', e: 'fried egg on top', ex: 'Ovu fritu riba di katxupa ta ser komun.' },
+        { k: 'Pekenu-almosu di dumingu', e: 'Sunday breakfast', ex: 'Pekenu-almosu di dumingu ta ten katxupa gizadu.' },
+    ]},
+  { id: 'kr_schoolsupplies1', title: 'Buying School Supplies', titleKriolu: 'Kunpra Kuza pa Skola', icon: '📚', color: 'blue',
+    desc: 'Buying school supplies vocabulary', vocab: [
+        { k: 'Lista di kuza pa skola', e: 'list of things for school', ex: 'Lista di kuza pa skola ta bai pa loja.' },
+        { k: 'Kaderno i lápis nobu', e: 'new notebook and pencil', ex: 'Kaderno i lápis nobu ta pa primeru dia.' },
+        { k: 'Régua i tesoura', e: 'ruler and scissors', ex: 'Régua i tesoura ta na kixa di lápis.' },
+        { k: 'Kola i papel di dizenhu', e: 'glue and drawing paper', ex: 'Kola i papel di dizenhu ta pa trabadju di arti.' },
+        { k: 'Mochila skolar nobu txeiu di livru', e: 'new backpack full of books', ex: 'Mochila skolar nobu txeiu di livru e pezadu.' },
+        { k: 'Presu final na loja', e: 'final price in the shop', ex: 'Presu final na loja ta ser skritu na etiketa.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20166,6 +20184,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_lobster1','kr_cannedtuna1'] },
   { unit:'Unit 343 — Fish Stew & Grandmother Visit', icon:'🍲', desc:'Cooking fish stew vocabulary, and Visiting grandmother vocabulary',
     lessons:['kr_fishstew1','kr_visitgran1'] },
+  { unit:'Unit 344 — Fried Cachupa & School Supplies', icon:'🍳', desc:'Fried leftover cachupa vocabulary, and Buying school supplies vocabulary',
+    lessons:['kr_friedcachupa1','kr_schoolsupplies1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36752,6 +36772,24 @@ const PT_LESSONS = [
         { k: 'fotografias antigas no álbum', e: 'old photos in the album', ex: 'As fotografias antigas no álbum faziam lembrar o tempo antigo.' },
         { k: 'avó a contar histórias', e: 'grandmother telling stories', ex: 'A avó a contar histórias fazia as crianças ouvir.' },
     ]},
+  { id: 'pt_friedcachupa1', title: 'Fried Leftover Cachupa', titleKriolu: 'Cachupa Guisada do Dia Seguinte', icon: '🍳', color: 'yellow',
+    desc: 'Vocabulário da cachupa guisada do dia seguinte', vocab: [
+        { k: 'cachupa do dia anterior', e: 'cachupa from the day before', ex: 'A cachupa do dia anterior ficava para a manhã.' },
+        { k: 'frigideira quente com óleo', e: 'hot frying pan with oil', ex: 'A frigideira quente com óleo pedia cuidado.' },
+        { k: 'cebola e linguiça picadas', e: 'chopped onion and sausage', ex: 'A cebola e a linguiça picadas eram fritas primeiro.' },
+        { k: 'cachupa frita até ficar dourada', e: 'cachupa fried until golden', ex: 'A cachupa frita até ficar dourada tinha crosta.' },
+        { k: 'ovo estrelado por cima', e: 'fried egg on top', ex: 'O ovo estrelado por cima da cachupa era comum.' },
+        { k: 'pequeno-almoço de domingo', e: 'Sunday breakfast', ex: 'O pequeno-almoço de domingo tinha cachupa frita.' },
+    ]},
+  { id: 'pt_schoolsupplies1', title: 'Buying School Supplies', titleKriolu: 'Comprar Material Escolar', icon: '📚', color: 'blue',
+    desc: 'Vocabulário de comprar material escolar', vocab: [
+        { k: 'lista de coisas para a escola', e: 'list of things for school', ex: 'A lista de coisas para a escola ia para a loja.' },
+        { k: 'caderno e lápis novos', e: 'new notebook and pencil', ex: 'O caderno e o lápis novos eram para o primeiro dia.' },
+        { k: 'régua e tesoura', e: 'ruler and scissors', ex: 'A régua e a tesoura ficavam no estojo.' },
+        { k: 'cola e papel de desenho', e: 'glue and drawing paper', ex: 'A cola e o papel de desenho eram para o trabalho de arte.' },
+        { k: 'mochila nova cheia de livros', e: 'new backpack full of books', ex: 'A mochila nova cheia de livros era pesada.' },
+        { k: 'preço final na loja', e: 'final price in the shop', ex: 'O preço final na loja estava escrito na etiqueta.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37451,6 +37489,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_lobster1','pt_cannedtuna1'] },
   { unit:'Unidade 345 — Caldo de Peixe e Visita à Avó', icon:'🍲', desc:'Vocabulário de cozinhar caldo de peixe, e vocabulário da visita à avó',
     lessons:['pt_fishstew1','pt_visitgran1'] },
+  { unit:'Unidade 346 — Cachupa Guisada e Material Escolar', icon:'🍳', desc:'Vocabulário da cachupa guisada do dia seguinte, e vocabulário de comprar material escolar',
+    lessons:['pt_friedcachupa1','pt_schoolsupplies1'] },
 ];
 
 
