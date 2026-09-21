@@ -19009,6 +19009,24 @@ const KR_LESSONS = [
         { k: 'Kauda di gatu', e: 'cat\'s tail', ex: 'Kauda di gatu ta bai i ta ben dibagar.' },
         { k: 'Gatu ta odja di lonji', e: 'cat looking into the distance', ex: 'Gatu ta odja di lonji ta spera noti.' },
     ]},
+  { id: 'kr_sandalbuy1', title: 'Buying Sandals at the Market', titleKriolu: 'Kunpra Sandália na Merkadu', icon: '👡', color: 'sky',
+    desc: 'Buying sandals at the market vocabulary', vocab: [
+        { k: 'Sandália na banka di merkadu', e: 'sandal on the market stall', ex: 'Sandália na banka di merkadu e bunitu.' },
+        { k: 'Prova sandália', e: 'trying on the sandal', ex: 'Prova sandália ta pidi un banku pa senta.' },
+        { k: 'Tamanhu di sandália', e: 'size of the sandal', ex: 'Tamanhu di sandália ta sta skritu baxu.' },
+        { k: 'Pe na sandália nobu', e: 'foot in the new sandal', ex: 'Pe na sandália nobu ta fika justu.' },
+        { k: 'Presu di sandália', e: 'price of the sandal', ex: 'Presu di sandália ta ser papiadu ku vendedor.' },
+        { k: 'Sapatu i sandália na banka', e: 'shoes and sandals on the stall', ex: 'Sapatu i sandália na banka ta sta na fila.' },
+    ]},
+  { id: 'kr_scaleveg1', title: 'Weighing Vegetables', titleKriolu: 'Peza Legumi na Balansa', icon: '⚖', color: 'emerald',
+    desc: 'Weighing vegetables vocabulary', vocab: [
+        { k: 'Balansa na banka di merkadu', e: 'scale on the market stall', ex: 'Balansa na banka di merkadu e grandi.' },
+        { k: 'Mandioka na balansa', e: 'cassava on the scale', ex: 'Mandioka na balansa ta peza txeu.' },
+        { k: 'Saku di batata-dosi', e: 'sack of sweet potato', ex: 'Saku di batata-dosi e pezadu.' },
+        { k: 'Tomati na balansa', e: 'tomato on the scale', ex: 'Tomati na balansa ta ser pezadu na banda di alhu.' },
+        { k: 'Mon di vendedor na balansa', e: 'seller\'s hand on the scale', ex: 'Mon di vendedor na balansa ta sta pertu di pratu.' },
+        { k: 'Dinheru pa vendedor', e: 'money for the seller', ex: 'Dinheru pa vendedor ta ser kontadu dôs ves.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20506,6 +20524,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_mornanight1','kr_streetparty1'] },
   { unit:'Unit 360 — Family Dog & Wall Cat', icon:'🐶', desc:'The family dog vocabulary, and The cat on the wall vocabulary',
     lessons:['kr_familydog1','kr_wallcat1'] },
+  { unit:'Unit 361 — Market Sandals & Weighing Vegetables', icon:'👡', desc:'Buying sandals at the market vocabulary, and Weighing vegetables vocabulary',
+    lessons:['kr_sandalbuy1','kr_scaleveg1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37398,6 +37418,24 @@ const PT_LESSONS = [
         { k: 'cauda do gato', e: 'cat\'s tail', ex: 'A cauda do gato ia e vinha devagar.' },
         { k: 'gato a olhar ao longe', e: 'cat looking into the distance', ex: 'O gato a olhar ao longe esperava a noite.' },
     ]},
+  { id: 'pt_sandalbuy1', title: 'Buying Sandals at the Market', titleKriolu: 'Comprar Sandálias no Mercado', icon: '👡', color: 'sky',
+    desc: 'Vocabulário de comprar sandálias no mercado', vocab: [
+        { k: 'sandália na banca do mercado', e: 'sandal on the market stall', ex: 'A sandália na banca do mercado era bonita.' },
+        { k: 'provar a sandália', e: 'trying on the sandal', ex: 'Provar a sandália pedia um banco para sentar.' },
+        { k: 'tamanho da sandália', e: 'size of the sandal', ex: 'O tamanho da sandália estava escrito por baixo.' },
+        { k: 'pé na sandália nova', e: 'foot in the new sandal', ex: 'O pé na sandália nova ficava justo.' },
+        { k: 'preço da sandália', e: 'price of the sandal', ex: 'O preço da sandália foi conversado com o vendedor.' },
+        { k: 'sapatos e sandálias na banca', e: 'shoes and sandals on the stall', ex: 'Os sapatos e sandálias na banca estavam em fila.' },
+    ]},
+  { id: 'pt_scaleveg1', title: 'Weighing Vegetables', titleKriolu: 'Pesar Legumes na Balança', icon: '⚖', color: 'emerald',
+    desc: 'Vocabulário de pesar legumes na balança', vocab: [
+        { k: 'balança na banca do mercado', e: 'scale on the market stall', ex: 'A balança na banca do mercado era grande.' },
+        { k: 'mandioca na balança', e: 'cassava on the scale', ex: 'A mandioca na balança pesava muito.' },
+        { k: 'saco de batata-doce', e: 'sack of sweet potato', ex: 'O saco de batata-doce era pesado.' },
+        { k: 'tomate na balança', e: 'tomato on the scale', ex: 'O tomate na balança foi pesado ao lado do alho.' },
+        { k: 'mão do vendedor na balança', e: 'seller\'s hand on the scale', ex: 'A mão do vendedor na balança ficava perto do prato.' },
+        { k: 'dinheiro para o vendedor', e: 'money for the seller', ex: 'O dinheiro para o vendedor foi contado duas vezes.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38131,6 +38169,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_mornanight1','pt_streetparty1'] },
   { unit:'Unidade 362 — O Cão da Família e o Gato no Muro', icon:'🐶', desc:'Vocabulário do cão da família, e vocabulário do gato no muro',
     lessons:['pt_familydog1','pt_wallcat1'] },
+  { unit:'Unidade 363 — Sandálias e Pesar Legumes', icon:'👡', desc:'Vocabulário de comprar sandálias no mercado, e vocabulário de pesar legumes na balança',
+    lessons:['pt_sandalbuy1','pt_scaleveg1'] },
 ];
 
 
