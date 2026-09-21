@@ -18991,6 +18991,24 @@ const KR_LESSONS = [
         { k: 'Grogu i bolu na mesa', e: 'grogue and cake on the table', ex: 'Grogu i bolu na mesa e pa tudu.' },
         { k: 'Konvidadu ta kanta djuntu', e: 'guests singing together', ex: 'Konvidadu ta kanta djuntu ta kaba festa.' },
     ]},
+  { id: 'kr_familydog1', title: 'The Family Dog', titleKriolu: 'Katxoru di Família', icon: '🐶', color: 'sky',
+    desc: 'The family dog vocabulary', vocab: [
+        { k: 'Katxorinhu na kintal', e: 'puppy in the yard', ex: 'Katxorinhu na kintal ta kuri tras di galinha.' },
+        { k: 'Tijela di rason pa katxoru', e: 'bowl of dog food', ex: 'Tijela di rason pa katxoru ta fika na porta.' },
+        { k: 'Osu pa katxoru', e: 'bone for the dog', ex: 'Osu pa katxoru ta ser guardadu di sopa.' },
+        { k: 'Mininu ta brinka ku katxorinhu', e: 'children playing with the puppy', ex: 'Mininu ta brinka ku katxorinhu ta ri largu.' },
+        { k: 'Katxoru ki ta kuri ku bola', e: 'dog that runs with the ball', ex: 'Katxoru ki ta kuri ku bola ka ta larga.' },
+        { k: 'Katxorinhu ta durmi na porta', e: 'puppy sleeping at the door', ex: 'Katxorinhu ta durmi na porta ta guarda kaza.' },
+    ]},
+  { id: 'kr_wallcat1', title: 'The Cat on the Wall', titleKriolu: 'Gatu na Muru', icon: '🐱', color: 'emerald',
+    desc: 'The cat on the wall vocabulary', vocab: [
+        { k: 'Gatu pretu na muru', e: 'black cat on the wall', ex: 'Gatu pretu na muru ta odja rua.' },
+        { k: 'Gatu ta durmi na sol', e: 'cat sleeping in the sun', ex: 'Gatu ta durmi na sol ka ta labanta.' },
+        { k: 'Rason pa gatu na tijela', e: 'cat food in the bowl', ex: 'Rason pa gatu na tijela ta kaba dipresa.' },
+        { k: 'Leiti pa gatu', e: 'milk for the cat', ex: 'Leiti pa gatu ta ser dadu di manhan.' },
+        { k: 'Kauda di gatu', e: 'cat\'s tail', ex: 'Kauda di gatu ta bai i ta ben dibagar.' },
+        { k: 'Gatu ta odja di lonji', e: 'cat looking into the distance', ex: 'Gatu ta odja di lonji ta spera noti.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20486,6 +20504,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_stormradio1','kr_boatdeparture1'] },
   { unit:'Unit 359 — Morna Evening & Street Party', icon:'🎸', desc:'A morna evening vocabulary, and Street party in the square vocabulary',
     lessons:['kr_mornanight1','kr_streetparty1'] },
+  { unit:'Unit 360 — Family Dog & Wall Cat', icon:'🐶', desc:'The family dog vocabulary, and The cat on the wall vocabulary',
+    lessons:['kr_familydog1','kr_wallcat1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37360,6 +37380,24 @@ const PT_LESSONS = [
         { k: 'grogue e bolo na mesa', e: 'grogue and cake on the table', ex: 'O grogue e o bolo na mesa eram para todos.' },
         { k: 'convidados a cantar juntos', e: 'guests singing together', ex: 'Os convidados a cantar juntos acabavam a festa.' },
     ]},
+  { id: 'pt_familydog1', title: 'The Family Dog', titleKriolu: 'O Cão da Família', icon: '🐶', color: 'sky',
+    desc: 'Vocabulário do cão da família', vocab: [
+        { k: 'cachorrinho no quintal', e: 'puppy in the yard', ex: 'O cachorrinho no quintal corria atrás das galinhas.' },
+        { k: 'tigela de ração para o cão', e: 'bowl of dog food', ex: 'A tigela de ração para o cão ficava à porta.' },
+        { k: 'osso para o cão', e: 'bone for the dog', ex: 'O osso para o cão foi guardado da sopa.' },
+        { k: 'meninos a brincar com o cachorrinho', e: 'children playing with the puppy', ex: 'Os meninos a brincar com o cachorrinho riam alto.' },
+        { k: 'cão que corre com a bola', e: 'dog that runs with the ball', ex: 'O cão que corre com a bola não a largava.' },
+        { k: 'cachorrinho a dormir à porta', e: 'puppy sleeping at the door', ex: 'O cachorrinho a dormir à porta guardava a casa.' },
+    ]},
+  { id: 'pt_wallcat1', title: 'The Cat on the Wall', titleKriolu: 'O Gato no Muro', icon: '🐱', color: 'emerald',
+    desc: 'Vocabulário do gato no muro', vocab: [
+        { k: 'gato preto no muro', e: 'black cat on the wall', ex: 'O gato preto no muro olhava a rua.' },
+        { k: 'gato a dormir ao sol', e: 'cat sleeping in the sun', ex: 'O gato a dormir ao sol nem se levantava.' },
+        { k: 'ração para o gato na tigela', e: 'cat food in the bowl', ex: 'A ração para o gato na tigela acabava depressa.' },
+        { k: 'leite para o gato', e: 'milk for the cat', ex: 'O leite para o gato era dado de manhã.' },
+        { k: 'cauda do gato', e: 'cat\'s tail', ex: 'A cauda do gato ia e vinha devagar.' },
+        { k: 'gato a olhar ao longe', e: 'cat looking into the distance', ex: 'O gato a olhar ao longe esperava a noite.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38091,6 +38129,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_stormradio1','pt_boatdeparture1'] },
   { unit:'Unidade 361 — Serão de Morna e Festa na Praça', icon:'🎸', desc:'Vocabulário de serão de morna, e vocabulário de festa na praça',
     lessons:['pt_mornanight1','pt_streetparty1'] },
+  { unit:'Unidade 362 — O Cão da Família e o Gato no Muro', icon:'🐶', desc:'Vocabulário do cão da família, e vocabulário do gato no muro',
+    lessons:['pt_familydog1','pt_wallcat1'] },
 ];
 
 
