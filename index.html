@@ -19603,6 +19603,24 @@ const KR_LESSONS = [
         { k: 'Dosi na prateleira di kuzinha', e: 'preserve on the kitchen shelf', ex: 'Dosi na prateleira di kuzinha ta dura anu tudu.' },
         { k: 'Frasku di dosi pa vizinhu', e: 'jar of preserve for the neighbour', ex: 'Frasku di dosi pa vizinhu e prezenti di sempri.' },
     ]},
+  { id: 'kr_schoolgate1', title: 'Waiting at the School Gate', titleKriolu: 'Spera na Portom di Skola', icon: '🏫', color: 'sky',
+    desc: 'Waiting at the school gate vocabulary', vocab: [
+        { k: 'Mai ta spera na portom di skola', e: 'mother waiting at the school gate', ex: 'Mai ta spera na portom di skola ta txiga sempri sedu.' },
+        { k: 'Apitu di fin di aula', e: 'whistle at the end of the class', ex: 'Apitu di fin di aula ta abri portom.' },
+        { k: 'Mininu ta kuri pa mai', e: 'boy running to his mother', ex: 'Mininu ta kuri pa mai ta larga mutxila.' },
+        { k: 'Abrasu na portom di skola', e: 'hug at the school gate', ex: 'Abrasu na portom di skola ta dura un momentu.' },
+        { k: 'Sonbra na portom di skola', e: 'shade by the school gate', ex: 'Sonbra na portom di skola ta ser buskadu pa tudu.' },
+        { k: 'Mutxila pezadu na brasu', e: 'heavy backpack on the arm', ex: 'Mutxila pezadu na brasu ta pasa pa mai.' },
+    ]},
+  { id: 'kr_walkhome1', title: 'Walking Home Together', titleKriolu: 'Anda pa Kaza Djuntu', icon: '🚸', color: 'emerald',
+    desc: 'Walking home together vocabulary', vocab: [
+        { k: 'Mon na mon na rua', e: 'hand in hand in the street', ex: 'Mon na mon na rua ta fasi kaminhu kurtu.' },
+        { k: 'Pasu lentu na rua', e: 'slow step in the street', ex: 'Pasu lentu na rua ta dexa tenpu pa papia.' },
+        { k: 'Fidju ta konta dia di skola', e: 'son telling about the school day', ex: 'Fidju ta konta dia di skola ta papia sen para.' },
+        { k: 'Sol forti riba di rua', e: 'strong sun over the street', ex: 'Sol forti riba di rua ta pidi anda na sonbra.' },
+        { k: 'Fomi dipos di skola', e: 'hunger after school', ex: 'Fomi dipos di skola ta txiga na porta di kaza.' },
+        { k: 'Pon di kaza ta spera na kaza', e: 'home-baked bread waiting at home', ex: 'Pon di kaza ta spera na kaza ta kaba kaminhada.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21166,6 +21184,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_escudopay1','kr_bananabuy1'] },
   { unit:'Unit 393 — Papaya Preserve & Filling Jars', icon:'🍊', desc:'Making papaya preserve vocabulary, and Filling the jars vocabulary',
     lessons:['kr_papayapreserve1','kr_jarfilling1'] },
+  { unit:'Unit 394 — School Gate & Walking Home', icon:'🏫', desc:'Waiting at the school gate vocabulary, and Walking home together vocabulary',
+    lessons:['kr_schoolgate1','kr_walkhome1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38652,6 +38672,24 @@ const PT_LESSONS = [
         { k: 'doce na prateleira da cozinha', e: 'preserve on the kitchen shelf', ex: 'O doce na prateleira da cozinha durava o ano todo.' },
         { k: 'frasco de doce para o vizinho', e: 'jar of preserve for the neighbour', ex: 'O frasco de doce para o vizinho era o presente de sempre.' },
     ]},
+  { id: 'pt_schoolgate1', title: 'Waiting at the School Gate', titleKriolu: 'Esperar no Portão da Escola', icon: '🏫', color: 'sky',
+    desc: 'Vocabulário de esperar no portão da escola', vocab: [
+        { k: 'mãe à espera no portão da escola', e: 'mother waiting at the school gate', ex: 'A mãe à espera no portão da escola chegava sempre cedo.' },
+        { k: 'apito do fim da aula', e: 'whistle at the end of the class', ex: 'O apito do fim da aula abria o portão.' },
+        { k: 'menino a correr para a mãe', e: 'boy running to his mother', ex: 'O menino a correr para a mãe largava a mochila.' },
+        { k: 'abraço no portão da escola', e: 'hug at the school gate', ex: 'O abraço no portão da escola durava um instante.' },
+        { k: 'sombra junto ao portão da escola', e: 'shade by the school gate', ex: 'A sombra junto ao portão da escola era disputada.' },
+        { k: 'mochila pesada no braço', e: 'heavy backpack on the arm', ex: 'A mochila pesada no braço passou para a mãe.' },
+    ]},
+  { id: 'pt_walkhome1', title: 'Walking Home Together', titleKriolu: 'Caminhar para Casa Juntos', icon: '🚸', color: 'emerald',
+    desc: 'Vocabulário de caminhar para casa juntos', vocab: [
+        { k: 'mão na mão na rua', e: 'hand in hand in the street', ex: 'A mão na mão na rua tornava o caminho curto.' },
+        { k: 'passo lento na rua', e: 'slow step in the street', ex: 'O passo lento na rua deixava tempo para conversar.' },
+        { k: 'filho a contar o dia de escola', e: 'son telling about the school day', ex: 'O filho a contar o dia de escola falava sem parar.' },
+        { k: 'sol forte sobre a rua', e: 'strong sun over the street', ex: 'O sol forte sobre a rua obrigava a andar pela sombra.' },
+        { k: 'fome depois da escola', e: 'hunger after school', ex: 'A fome depois da escola vinha logo à porta de casa.' },
+        { k: 'pão caseiro à espera em casa', e: 'home-baked bread waiting at home', ex: 'O pão caseiro à espera em casa acabava a caminhada.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -39451,6 +39489,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_escudopay1','pt_bananabuy1'] },
   { unit:'Unidade 395 — Doce de Mamão e Encher os Frascos', icon:'🍊', desc:'Vocabulário de fazer doce de mamão, e vocabulário de encher os frascos de doce',
     lessons:['pt_papayapreserve1','pt_jarfilling1'] },
+  { unit:'Unidade 396 — Portão da Escola e Caminho para Casa', icon:'🏫', desc:'Vocabulário de esperar no portão da escola, e vocabulário de caminhar para casa juntos',
+    lessons:['pt_schoolgate1','pt_walkhome1'] },
 ];
 
 
