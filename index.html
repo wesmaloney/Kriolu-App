@@ -19657,6 +19657,24 @@ const KR_LESSONS = [
         { k: 'Kose botãu ku pasénsia', e: 'sewing the button on patiently', ex: 'Kose botãu ku pasénsia ta dura pouku.' },
         { k: 'Kasaku ku botãu firmi', e: 'coat with a firm button', ex: 'Kasaku ku botãu firmi ta sta pa friu.' },
     ]},
+  { id: 'kr_cafeterrace1', title: 'Coffee on the Café Terrace', titleKriolu: 'Kafé na Terasu', icon: '☕', color: 'sky',
+    desc: 'Coffee on the cafe terrace vocabulary', vocab: [
+        { k: 'Mesa na terasu di kafé', e: 'table on the café terrace', ex: 'Mesa na terasu di kafé ta sta na sonbra.' },
+        { k: 'Garson ta traze kafé', e: 'waiter bringing the coffee', ex: 'Garson ta traze kafé ta pasa entri mesa.' },
+        { k: 'Kafé i agu na mesa', e: 'coffee and water on the table', ex: 'Kafé i agu na mesa ta txiga djuntu.' },
+        { k: 'Pastel kenti na pratu', e: 'hot pastel on the plate', ex: 'Pastel kenti na pratu ta ser kortadu na meiu.' },
+        { k: 'Amigu ta konversa na terasu', e: 'friends chatting on the terrace', ex: 'Amigu ta konversa na terasu ta fika txeu ora.' },
+        { k: 'Sonbra na terasu di kafé', e: 'shade on the café terrace', ex: 'Sonbra na terasu di kafé ta muda ku sol.' },
+    ]},
+  { id: 'kr_paywaiter1', title: 'Paying the Waiter', titleKriolu: 'Paga Garson', icon: '🧾', color: 'emerald',
+    desc: 'Paying the waiter vocabulary', vocab: [
+        { k: 'Pidi konta ku garson', e: 'asking the waiter for the bill', ex: 'Pidi konta ku garson ta ser fetu ku mon.' },
+        { k: 'Konta na mesa di kafé', e: 'bill on the café table', ex: 'Konta na mesa di kafé ta fika dobradu.' },
+        { k: 'Paga ku nota di sen eskudu', e: 'paying with a hundred-escudo note', ex: 'Paga ku nota di sen eskudu ta dexa pouku troku.' },
+        { k: 'Troku di garson', e: 'change from the waiter', ex: 'Troku di garson ta ben na moeda.' },
+        { k: 'Gorjeta na mesa', e: 'tip on the table', ex: 'Gorjeta na mesa ta ser dexadu baxu di kopu.' },
+        { k: 'Obrigadu pa garson', e: 'thanks to the waiter', ex: 'Obrigadu pa garson ta fexa tardi.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21226,6 +21244,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_tintoycar1','kr_paperboat1'] },
   { unit:'Unit 396 — Old Sewing Machine & Button', icon:'🧵', desc:'The old sewing machine vocabulary, and Sewing on a button vocabulary',
     lessons:['kr_oldsewing1','kr_sewbutton1'] },
+  { unit:'Unit 397 — Café Terrace & Paying the Waiter', icon:'☕', desc:'Coffee on the cafe terrace vocabulary, and Paying the waiter vocabulary',
+    lessons:['kr_cafeterrace1','kr_paywaiter1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38766,6 +38786,24 @@ const PT_LESSONS = [
         { k: 'coser o botão com paciência', e: 'sewing the button on patiently', ex: 'Coser o botão com paciência durava pouco.' },
         { k: 'casaco com botão firme', e: 'coat with a firm button', ex: 'O casaco com botão firme estava pronto para o inverno.' },
     ]},
+  { id: 'pt_cafeterrace1', title: 'Coffee on the Café Terrace', titleKriolu: 'Café na Esplanada', icon: '☕', color: 'sky',
+    desc: 'Vocabulário de café na esplanada', vocab: [
+        { k: 'mesa na esplanada do café', e: 'table on the café terrace', ex: 'A mesa na esplanada do café estava à sombra.' },
+        { k: 'empregado a trazer o café', e: 'waiter bringing the coffee', ex: 'O empregado a trazer o café passava entre as mesas.' },
+        { k: 'café e água na mesa', e: 'coffee and water on the table', ex: 'O café e a água na mesa chegaram juntos.' },
+        { k: 'pastel quente no prato', e: 'hot pastel on the plate', ex: 'O pastel quente no prato foi partido ao meio.' },
+        { k: 'amigos a conversar na esplanada', e: 'friends chatting on the terrace', ex: 'Os amigos a conversar na esplanada ficavam horas.' },
+        { k: 'sombra na esplanada do café', e: 'shade on the café terrace', ex: 'A sombra na esplanada do café mudava com o sol.' },
+    ]},
+  { id: 'pt_paywaiter1', title: 'Paying the Waiter', titleKriolu: 'Pagar ao Empregado', icon: '🧾', color: 'emerald',
+    desc: 'Vocabulário de pagar ao empregado', vocab: [
+        { k: 'pedir a conta ao empregado', e: 'asking the waiter for the bill', ex: 'Pedir a conta ao empregado era feito com a mão.' },
+        { k: 'conta na mesa do café', e: 'bill on the café table', ex: 'A conta na mesa do café ficou dobrada.' },
+        { k: 'pagar com nota de cem escudos', e: 'paying with a hundred-escudo note', ex: 'Pagar com nota de cem escudos deixava pouco troco.' },
+        { k: 'troco do empregado', e: 'change from the waiter', ex: 'O troco do empregado veio em moedas.' },
+        { k: 'gorjeta na mesa', e: 'tip on the table', ex: 'A gorjeta na mesa foi deixada por baixo do copo.' },
+        { k: 'obrigado ao empregado', e: 'thanks to the waiter', ex: 'O obrigado ao empregado fechava a tarde.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -39571,6 +39609,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_tintoycar1','pt_paperboat1'] },
   { unit:'Unidade 398 — Máquina de Costura e Botão', icon:'🧵', desc:'Vocabulário da máquina de costura da avó, e vocabulário de coser um botão',
     lessons:['pt_oldsewing1','pt_sewbutton1'] },
+  { unit:'Unidade 399 — Café na Esplanada e Pagar ao Empregado', icon:'☕', desc:'Vocabulário de café na esplanada, e vocabulário de pagar ao empregado',
+    lessons:['pt_cafeterrace1','pt_paywaiter1'] },
 ];
 
 
