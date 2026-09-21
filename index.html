@@ -18235,6 +18235,24 @@ const KR_LESSONS = [
         { k: 'Troku kontadu ku kuidadu', e: 'change counted with care', ex: 'Troku kontadu ku kuidadu ta da konfiansa.' },
         { k: 'Dinheru ganhadu na fin di dia', e: 'money earned at the end of the day', ex: 'Dinheru ganhadu na fin di dia ta ajuda kaza.' },
     ]},
+  { id: 'kr_barbershop1', title: 'Barbershop Haircut', titleKriolu: 'Korti di Kabellu na Barberu', icon: '💈', color: 'slate',
+    desc: 'Barbershop haircut vocabulary', vocab: [
+        { k: 'Klienti ki ta spera si ves', e: 'customer waiting for their turn', ex: 'Klienti ki ta spera si ves ta senta na sala di spera.' },
+        { k: 'Kabellu labadu ku xanpu', e: 'hair washed with shampoo', ex: 'Kabellu labadu ku xanpu ta fika limpu.' },
+        { k: 'Tesoura ki ta korta kabellu kurtu', e: 'scissors cutting the hair short', ex: 'Tesoura ki ta korta kabellu kurtu ta fasi barulhu.' },
+        { k: 'Penti pa penteia kabellu', e: 'comb for combing the hair', ex: 'Penti pa penteia kabellu ta ser uzadu ku tesoura.' },
+        { k: 'Spuma di baba na kara', e: 'shaving foam on the face', ex: 'Spuma di baba na kara ta amoli barba.' },
+        { k: 'Barba kortadu ku lámina afiadu', e: 'beard cut with a sharp blade', ex: 'Barba kortadu ku lámina afiadu ta fika lisu.' },
+    ]},
+  { id: 'kr_tailorfit1', title: 'Tailor Fitting', titleKriolu: 'Prova di Ropa na Alfaiati', icon: '🧵', color: 'indigo',
+    desc: 'Tailor fitting vocabulary', vocab: [
+        { k: 'Fita métrika pa medi korpu', e: 'tape measure for measuring the body', ex: 'Fita métrika pa medi korpu ta da medida sertu.' },
+        { k: 'Tecidu kortadu ku tesoura di kuzedura', e: 'fabric cut with sewing scissors', ex: 'Tecidu kortadu ku tesoura di kuzedura ta pidi mon firmi.' },
+        { k: 'Linha di kose i agulha', e: 'sewing thread and needle', ex: 'Linha di kose i agulha ta fasi kostura.' },
+        { k: 'Prova ropa na klienti', e: 'trying the clothes on the customer', ex: 'Prova ropa na klienti ta mostra kuze ki falta.' },
+        { k: 'Bainha ajustadu na tamanhu', e: 'hem adjusted to the size', ex: 'Bainha ajustadu na tamanhu ta fika dretu.' },
+        { k: 'Ropa prontu pa klienti leba', e: 'clothes ready for the customer to take', ex: 'Ropa prontu pa klienti leba ta da alegria.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19654,6 +19672,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_cvtowns1','kr_cvlandmarks1'] },
   { unit:'Unit 321 — Fish Vendor & Rabidante', icon:'🐡', desc:'Fish market vendor vocabulary, and Rabidante street trader vocabulary',
     lessons:['kr_fishvendor1','kr_rabidanti1'] },
+  { unit:'Unit 322 — Barbershop & Tailor', icon:'💈', desc:'Barbershop haircut vocabulary, and Tailor fitting vocabulary',
+    lessons:['kr_barbershop1','kr_tailorfit1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35772,6 +35792,24 @@ const PT_LESSONS = [
         { k: 'troco contado com cuidado', e: 'change counted with care', ex: 'O troco contado com cuidado dava confiança.' },
         { k: 'dinheiro ganho no fim do dia', e: 'money earned at the end of the day', ex: 'O dinheiro ganho no fim do dia ajudava a casa.' },
     ]},
+  { id: 'pt_barbershop1', title: 'Barbershop Haircut', titleKriolu: 'Corte de Cabelo na Barbearia', icon: '💈', color: 'slate',
+    desc: 'Vocabulário do corte de cabelo na barbearia', vocab: [
+        { k: 'cliente à espera da sua vez', e: 'customer waiting for their turn', ex: 'O cliente à espera da sua vez sentava-se na sala de espera.' },
+        { k: 'cabelo lavado com champô', e: 'hair washed with shampoo', ex: 'O cabelo lavado com champô ficava limpo.' },
+        { k: 'tesoura a cortar o cabelo curto', e: 'scissors cutting the hair short', ex: 'A tesoura a cortar o cabelo curto fazia barulho.' },
+        { k: 'pente para pentear o cabelo', e: 'comb for combing the hair', ex: 'O pente para pentear o cabelo era usado com a tesoura.' },
+        { k: 'espuma de barbear na cara', e: 'shaving foam on the face', ex: 'A espuma de barbear na cara amolecia a barba.' },
+        { k: 'barba cortada com lâmina afiada', e: 'beard cut with a sharp blade', ex: 'A barba cortada com lâmina afiada ficava lisa.' },
+    ]},
+  { id: 'pt_tailorfit1', title: 'Tailor Fitting', titleKriolu: 'Prova de Roupa no Alfaiate', icon: '🧵', color: 'indigo',
+    desc: 'Vocabulário da prova de roupa no alfaiate', vocab: [
+        { k: 'fita métrica para medir o corpo', e: 'tape measure for measuring the body', ex: 'A fita métrica para medir o corpo dava a medida certa.' },
+        { k: 'tecido cortado com tesoura de costura', e: 'fabric cut with sewing scissors', ex: 'O tecido cortado com tesoura de costura pedia mão firme.' },
+        { k: 'linha de coser e agulha', e: 'sewing thread and needle', ex: 'A linha de coser e a agulha faziam a costura.' },
+        { k: 'prova da roupa no cliente', e: 'trying the clothes on the customer', ex: 'A prova da roupa no cliente mostrava o que faltava.' },
+        { k: 'bainha ajustada ao tamanho', e: 'hem adjusted to the size', ex: 'A bainha ajustada ao tamanho ficava direita.' },
+        { k: 'roupa pronta para o cliente levar', e: 'clothes ready for the customer to take', ex: 'A roupa pronta para o cliente levar dava alegria.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36427,6 +36465,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_cvtowns1','pt_cvlandmarks1'] },
   { unit:'Unidade 323 — Peixeira e Rabidante', icon:'🐡', desc:'Vocabulário da peixeira no mercado, e vocabulário do rabidante na rua',
     lessons:['pt_fishvendor1','pt_rabidanti1'] },
+  { unit:'Unidade 324 — Barbearia e Alfaiate', icon:'💈', desc:'Vocabulário do corte de cabelo na barbearia, e vocabulário da prova de roupa no alfaiate',
+    lessons:['pt_barbershop1','pt_tailorfit1'] },
 ];
 
 
