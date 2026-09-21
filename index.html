@@ -18397,6 +18397,24 @@ const KR_LESSONS = [
         { k: 'Bomba pa inxi pneu', e: 'pump to inflate the tyre', ex: 'Bomba pa inxi pneu ta da ar.' },
         { k: 'Ofisina undi pneu ta ser konsertadu', e: 'workshop where the tyre is repaired', ex: 'Ofisina undi pneu ta ser konsertadu ta fika na bairu.' },
     ]},
+  { id: 'kr_hike1', title: 'Mountain Hike: Gear and Trail', titleKriolu: 'Kaminhada na Munti: Ekipamentu i Trilhu', icon: '🥾', color: 'green',
+    desc: 'Mountain hike gear and trail vocabulary', vocab: [
+        { k: 'Botina di kaminhada i mochila', e: 'hiking boots and backpack', ex: 'Botina di kaminhada i mochila ta ser pa trilhu.' },
+        { k: 'Trilhu streitu entri munti', e: 'narrow trail between the mountains', ex: 'Trilhu streitu entri munti ta pidi kuidadu.' },
+        { k: 'Vali fundu ku terasu', e: 'deep valley with terraces', ex: 'Vali fundu ku terasu ta verdi.' },
+        { k: 'Mapa abertu na mon', e: 'map open in the hand', ex: 'Mapa abertu na mon ta mostra kaminhu.' },
+        { k: 'Protetor solar i agu', e: 'sunscreen and water', ex: 'Protetor solar i agu ta djuda na sol kenti.' },
+        { k: 'Kaminhu pa baxu ku pedra solta', e: 'hard descent with loose stones', ex: 'Kaminhu pa baxu ku pedra solta e difísil.' },
+    ]},
+  { id: 'kr_hike2', title: 'Mountain Hike: Views and Rest', titleKriolu: 'Kaminhada na Munti: Vista i Diskansa', icon: '🏞', color: 'brown',
+    desc: 'Mountain hike views and rest vocabulary', vocab: [
+        { k: 'Vista deslumbranti di topu di munti', e: 'stunning view from the mountain top', ex: 'Vista deslumbranti di topu di munti ta fasi bal la pena subida.' },
+        { k: 'Konta stória di ilha na kaminhu', e: 'telling stories of the island on the way', ex: 'Konta stória di ilha na kaminhu ta fasi kaminhada más kurtu.' },
+        { k: 'Fotu ku munti pa tras', e: 'photo with the mountain behind', ex: 'Fotu ku munti pa tras ta fika na lenbransa.' },
+        { k: 'Diskansa na sonbra di arburi', e: 'rest in the shade of the tree', ex: 'Diskansa na sonbra di arburi ta da forsa nobu.' },
+        { k: 'Kaza pikinoti na fundu di vali', e: 'small house at the bottom of the valley', ex: 'Kaza pikinoti na fundu di vali ta odjadu di topu.' },
+        { k: 'Xiga kansadu ma kontenti', e: 'tired but happy arrival', ex: 'Xiga kansadu ma kontenti ta da bon sonu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19834,6 +19852,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_laundry1','kr_cornershop1'] },
   { unit:'Unit 330 — Meat Stall & Flat Tyre', icon:'🥩', desc:'Buying meat at the market vocabulary, and Fixing a flat tyre vocabulary',
     lessons:['kr_meatstall1','kr_flattyre1'] },
+  { unit:'Unit 331 — Mountain Hike', icon:'🥾', desc:'Mountain hike gear and trail vocabulary, and Mountain hike views and rest vocabulary',
+    lessons:['kr_hike1','kr_hike2'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36114,6 +36134,24 @@ const PT_LESSONS = [
         { k: 'bomba para encher o pneu', e: 'pump to inflate the tyre', ex: 'A bomba para encher o pneu dava ar.' },
         { k: 'oficina onde o pneu é reparado', e: 'workshop where the tyre is repaired', ex: 'A oficina onde o pneu é reparado ficava no bairro.' },
     ]},
+  { id: 'pt_hike1', title: 'Mountain Hike: Gear and Trail', titleKriolu: 'Caminhada na Montanha: Equipamento e Trilho', icon: '🥾', color: 'green',
+    desc: 'Vocabulário da caminhada na montanha: equipamento e trilho', vocab: [
+        { k: 'botas de caminhada e mochila', e: 'hiking boots and backpack', ex: 'As botas de caminhada e a mochila eram para o trilho.' },
+        { k: 'trilho estreito entre as montanhas', e: 'narrow trail between the mountains', ex: 'O trilho estreito entre as montanhas pedia cuidado.' },
+        { k: 'vale fundo com terraços', e: 'deep valley with terraces', ex: 'O vale fundo com terraços estava verde.' },
+        { k: 'mapa aberto na mão', e: 'map open in the hand', ex: 'O mapa aberto na mão mostrava o caminho.' },
+        { k: 'protetor solar e água', e: 'sunscreen and water', ex: 'O protetor solar e a água ajudavam ao sol quente.' },
+        { k: 'descida difícil com pedras soltas', e: 'hard descent with loose stones', ex: 'A descida difícil com pedras soltas era complicada.' },
+    ]},
+  { id: 'pt_hike2', title: 'Mountain Hike: Views and Rest', titleKriolu: 'Caminhada na Montanha: Vistas e Descanso', icon: '🏞', color: 'brown',
+    desc: 'Vocabulário da caminhada na montanha: vistas e descanso', vocab: [
+        { k: 'vista deslumbrante do topo da montanha', e: 'stunning view from the mountain top', ex: 'A vista deslumbrante do topo da montanha valia a subida.' },
+        { k: 'contar histórias da ilha no caminho', e: 'telling stories of the island on the way', ex: 'Contar histórias da ilha no caminho encurtava a caminhada.' },
+        { k: 'fotografia com a montanha atrás', e: 'photo with the mountain behind', ex: 'A fotografia com a montanha atrás ficava na memória.' },
+        { k: 'descanso à sombra da árvore', e: 'rest in the shade of the tree', ex: 'O descanso à sombra da árvore dava força nova.' },
+        { k: 'casa pequena no fundo do vale', e: 'small house at the bottom of the valley', ex: 'A casa pequena no fundo do vale via-se do topo.' },
+        { k: 'chegada cansada mas contente', e: 'tired but happy arrival', ex: 'A chegada cansada mas contente dava bom sono.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36787,6 +36825,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_laundry1','pt_cornershop1'] },
   { unit:'Unidade 332 — Carne no Mercado e Pneu Furado', icon:'🥩', desc:'Vocabulário de comprar carne no mercado, e vocabulário de reparar um pneu furado',
     lessons:['pt_meatstall1','pt_flattyre1'] },
+  { unit:'Unidade 333 — Caminhada na Montanha', icon:'🥾', desc:'Vocabulário da caminhada na montanha: equipamento e trilho, e vocabulário da caminhada na montanha: vistas e descanso',
+    lessons:['pt_hike1','pt_hike2'] },
 ];
 
 
