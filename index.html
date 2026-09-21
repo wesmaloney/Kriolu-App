@@ -18559,6 +18559,24 @@ const KR_LESSONS = [
         { k: 'Skrebe resposta na papel', e: 'writing the answer on the paper', ex: 'Skrebe resposta na papel ta pidi kaneta.' },
         { k: 'Rezultadu di prova ku nota bon', e: 'test result with a good grade', ex: 'Rezultadu di prova ku nota bon ta fasi mai kontenti.' },
     ]},
+  { id: 'kr_dentist1', title: 'Visiting the Dentist', titleKriolu: 'Vizita na Dentista', icon: '🦷', color: 'teal',
+    desc: 'Visiting the dentist vocabulary', vocab: [
+        { k: 'Doi denti na noti', e: 'toothache at night', ex: 'Doi denti na noti ta dexa algen ka durmi.' },
+        { k: 'Marka konsulta ku dentista', e: 'booking an appointment with the dentist', ex: 'Marka konsulta ku dentista ta pidi ora sertu.' },
+        { k: 'Boka abertu na kadera di dentista', e: 'mouth open in the dentist\'s chair', ex: 'Boka abertu na kadera di dentista ta pidi kalma.' },
+        { k: 'Anestezia antis di trabadju', e: 'anaesthetic before the work', ex: 'Anestezia antis di trabadju ta tira dolor.' },
+        { k: 'Skova di denti i pasta di denti', e: 'toothbrush and toothpaste', ex: 'Skova di denti i pasta di denti ta ser uzadu tudu dia.' },
+        { k: 'Denti limpu dipos di konsulta', e: 'clean teeth after the appointment', ex: 'Denti limpu dipos di konsulta ta fasi algen kontenti.' },
+    ]},
+  { id: 'kr_firewood1', title: 'Cooking on a Wood Fire', titleKriolu: 'Kuzinha na Fogu di Lenha', icon: '🔥', color: 'red',
+    desc: 'Cooking on a wood fire vocabulary', vocab: [
+        { k: 'Buska lenha na munti', e: 'fetching firewood on the mountain', ex: 'Buska lenha na munti ta leba txeu tenpu.' },
+        { k: 'Lenha seku pa fogu', e: 'dry firewood for the fire', ex: 'Lenha seku pa fogu ta fasi fogu forti.' },
+        { k: 'Fósfuru i lenha na fogon', e: 'match and firewood in the stove', ex: 'Fósfuru i lenha na fogon ta kumesa fogu.' },
+        { k: 'Kaldeiron grandi na fogon', e: 'large pot on the stove', ex: 'Kaldeiron grandi na fogon ta ferve agu.' },
+        { k: 'Fumu ki ta subi pa teladu', e: 'smoke rising through the roof', ex: 'Fumu ki ta subi pa teladu ta xera na kaza tudu.' },
+        { k: 'Sinza friu di manhan', e: 'cold ash in the morning', ex: 'Sinza friu di manhan ta ser tiradu di fogon.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20006,6 +20024,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_marketstall1','kr_firstjob1'] },
   { unit:'Unit 335 — Sewing Repair & Exam Day', icon:'🧵', desc:'Sewing machine repair vocabulary, and Exam day at school vocabulary',
     lessons:['kr_sewrepair1','kr_examday1'] },
+  { unit:'Unit 336 — Dentist & Wood Fire Cooking', icon:'🦷', desc:'Visiting the dentist vocabulary, and Cooking on a wood fire vocabulary',
+    lessons:['kr_dentist1','kr_firewood1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36448,6 +36468,24 @@ const PT_LESSONS = [
         { k: 'escrever a resposta no papel', e: 'writing the answer on the paper', ex: 'Escrever a resposta no papel pedia caneta.' },
         { k: 'resultado da prova com nota boa', e: 'test result with a good grade', ex: 'O resultado da prova com nota boa deixava a mãe contente.' },
     ]},
+  { id: 'pt_dentist1', title: 'Visiting the Dentist', titleKriolu: 'Ida ao Dentista', icon: '🦷', color: 'teal',
+    desc: 'Vocabulário da ida ao dentista', vocab: [
+        { k: 'dor de dente à noite', e: 'toothache at night', ex: 'A dor de dente à noite não deixava ninguém dormir.' },
+        { k: 'marcar consulta com o dentista', e: 'booking an appointment with the dentist', ex: 'Marcar consulta com o dentista pedia a hora certa.' },
+        { k: 'boca aberta na cadeira do dentista', e: 'mouth open in the dentist\'s chair', ex: 'A boca aberta na cadeira do dentista pedia calma.' },
+        { k: 'anestesia antes do trabalho', e: 'anaesthetic before the work', ex: 'A anestesia antes do trabalho tirava a dor.' },
+        { k: 'escova de dentes e pasta de dentes', e: 'toothbrush and toothpaste', ex: 'A escova de dentes e a pasta de dentes eram usadas todos os dias.' },
+        { k: 'dentes limpos depois da consulta', e: 'clean teeth after the appointment', ex: 'Os dentes limpos depois da consulta deixavam a pessoa contente.' },
+    ]},
+  { id: 'pt_firewood1', title: 'Cooking on a Wood Fire', titleKriolu: 'Cozinhar no Lume de Lenha', icon: '🔥', color: 'red',
+    desc: 'Vocabulário de cozinhar no lume de lenha', vocab: [
+        { k: 'buscar lenha na montanha', e: 'fetching firewood on the mountain', ex: 'Buscar lenha na montanha levava muito tempo.' },
+        { k: 'lenha seca para o lume', e: 'dry firewood for the fire', ex: 'A lenha seca para o lume fazia um fogo forte.' },
+        { k: 'fósforo e lenha no fogão', e: 'match and firewood in the stove', ex: 'O fósforo e a lenha no fogão começavam o lume.' },
+        { k: 'panela grande no fogão', e: 'large pot on the stove', ex: 'A panela grande no fogão fervia a água.' },
+        { k: 'fumo a subir pelo teto', e: 'smoke rising through the roof', ex: 'O fumo a subir pelo teto cheirava por toda a casa.' },
+        { k: 'cinza fria de manhã', e: 'cold ash in the morning', ex: 'A cinza fria de manhã era tirada do fogão.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37131,6 +37169,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_marketstall1','pt_firstjob1'] },
   { unit:'Unidade 337 — Máquina de Costura e Dia da Prova', icon:'🧵', desc:'Vocabulário de reparar uma máquina de costura, e vocabulário do dia da prova na escola',
     lessons:['pt_sewrepair1','pt_examday1'] },
+  { unit:'Unidade 338 — Dentista e Cozinhar a Lenha', icon:'🦷', desc:'Vocabulário da ida ao dentista, e vocabulário de cozinhar no lume de lenha',
+    lessons:['pt_dentist1','pt_firewood1'] },
 ];
 
 
