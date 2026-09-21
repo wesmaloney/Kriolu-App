@@ -18307,6 +18307,24 @@ const KR_LESSONS = [
         { k: 'Sonbra di arburi na meiu dia', e: 'tree shade at noon', ex: 'Sonbra di arburi na meiu dia ta fika fresku.' },
         { k: 'Kabra ki ta volta pa kaza na fin di dia', e: 'goats returning home at the end of the day', ex: 'Kabra ki ta volta pa kaza na fin di dia ta kansadu.' },
     ]},
+  { id: 'kr_lighthouse1', title: 'Lighthouse Night Watch', titleKriolu: 'Guarda di Farol di Noti', icon: '🔦', color: 'violet',
+    desc: 'Lighthouse night watch vocabulary', vocab: [
+        { k: 'Torre branku na beira-mar', e: 'white tower by the sea', ex: 'Torre branku na beira-mar ta odjadu di lonji.' },
+        { k: 'Luzu ki ta vira di noti', e: 'light that turns at night', ex: 'Luzu ki ta vira di noti ta mostra kaminhu.' },
+        { k: 'Skada streitu pa topu', e: 'narrow stairs up to the top', ex: 'Skada streitu pa topu ta ser altu.' },
+        { k: 'Neblina riba di mar', e: 'fog over the sea', ex: 'Neblina riba di mar ta pidi luzu forti.' },
+        { k: 'Barku ki ta pasa lonji di pedra', e: 'boat passing far from the rocks', ex: 'Barku ki ta pasa lonji di pedra ta fika siguru.' },
+        { k: 'Home ki ta odja mar noti interu', e: 'man who watches the sea all night', ex: 'Home ki ta odja mar noti interu ta sabe kada barku.' },
+    ]},
+  { id: 'kr_nurseround1', title: 'Nurse Ward Round', titleKriolu: 'Ronda di Enfermeru', icon: '🏥', color: 'red',
+    desc: 'Nurse ward round vocabulary', vocab: [
+        { k: 'Enfermeru di turnu ki txiga na ora sertu', e: 'nurse on duty arriving on time', ex: 'Enfermeru di turnu ki txiga na ora sertu ta kumesa trabadju.' },
+        { k: 'Termómetru pa medi tenperatura', e: 'thermometer to measure the temperature', ex: 'Termómetru pa medi tenperatura ta mostra númeru.' },
+        { k: 'Presón medidu na brasu', e: 'blood pressure measured on the arm', ex: 'Presón medidu na brasu ta ser skrebidu na papel.' },
+        { k: 'Medikamentu dadu na ora sertu', e: 'medicine given at the right time', ex: 'Medikamentu dadu na ora sertu ta djuda pasienti.' },
+        { k: 'Pasienti ki ta diskansa na kama di ospital', e: 'patient resting in the hospital bed', ex: 'Pasienti ki ta diskansa ben ta dexa família kontenti.' },
+        { k: 'Família ki ta spera na sala di spera', e: 'family waiting in the waiting room', ex: 'Família ki ta spera na sala di spera ta pergunta pa pasienti.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19734,6 +19752,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_ferry1','kr_classroomday1'] },
   { unit:'Unit 325 — Fetching Water & Goatherding', icon:'🪣', desc:'Fetching water on foot vocabulary, and Goatherding on the mountain vocabulary',
     lessons:['kr_watercarry1','kr_goatherd1'] },
+  { unit:'Unit 326 — Lighthouse & Nurse Round', icon:'🔦', desc:'Lighthouse night watch vocabulary, and Nurse ward round vocabulary',
+    lessons:['kr_lighthouse1','kr_nurseround1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35924,6 +35944,24 @@ const PT_LESSONS = [
         { k: 'sombra da árvore ao meio-dia', e: 'tree shade at noon', ex: 'A sombra da árvore ao meio-dia era fresca.' },
         { k: 'cabras a voltar para casa ao fim do dia', e: 'goats returning home at the end of the day', ex: 'As cabras a voltar para casa ao fim do dia vinham cansadas.' },
     ]},
+  { id: 'pt_lighthouse1', title: 'Lighthouse Night Watch', titleKriolu: 'Vigília Noturna no Farol', icon: '🔦', color: 'violet',
+    desc: 'Vocabulário da vigília noturna no farol', vocab: [
+        { k: 'torre branca à beira-mar', e: 'white tower by the sea', ex: 'A torre branca à beira-mar via-se ao longe.' },
+        { k: 'luz que gira à noite', e: 'light that turns at night', ex: 'A luz que gira à noite mostrava o caminho.' },
+        { k: 'escada estreita até ao topo', e: 'narrow stairs up to the top', ex: 'A escada estreita até ao topo era alta.' },
+        { k: 'nevoeiro sobre o mar', e: 'fog over the sea', ex: 'O nevoeiro sobre o mar pedia uma luz forte.' },
+        { k: 'barco a passar longe das pedras', e: 'boat passing far from the rocks', ex: 'O barco a passar longe das pedras ficava seguro.' },
+        { k: 'homem que olha o mar a noite toda', e: 'man who watches the sea all night', ex: 'O homem que olha o mar a noite toda conhecia cada barco.' },
+    ]},
+  { id: 'pt_nurseround1', title: 'Nurse Ward Round', titleKriolu: 'Ronda do Enfermeiro', icon: '🏥', color: 'red',
+    desc: 'Vocabulário da ronda do enfermeiro', vocab: [
+        { k: 'enfermeiro de turno a chegar à hora certa', e: 'nurse on duty arriving on time', ex: 'O enfermeiro de turno a chegar à hora certa começava o trabalho.' },
+        { k: 'termómetro para medir a temperatura', e: 'thermometer to measure the temperature', ex: 'O termómetro para medir a temperatura mostrava o número.' },
+        { k: 'tensão medida no braço', e: 'blood pressure measured on the arm', ex: 'A tensão medida no braço era escrita no papel.' },
+        { k: 'medicamento dado à hora certa', e: 'medicine given at the right time', ex: 'O medicamento dado à hora certa ajudava o paciente.' },
+        { k: 'paciente a descansar na cama do hospital', e: 'patient resting in the hospital bed', ex: 'O paciente a descansar na cama do hospital deixava a família contente.' },
+        { k: 'família à espera na sala de espera', e: 'family waiting in the waiting room', ex: 'A família à espera na sala de espera perguntava pelo paciente.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36587,6 +36625,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_ferry1','pt_classroomday1'] },
   { unit:'Unidade 327 — Buscar Água e Guardar Cabras', icon:'🪣', desc:'Vocabulário de ir buscar água a pé, e vocabulário de guardar cabras na montanha',
     lessons:['pt_watercarry1','pt_goatherd1'] },
+  { unit:'Unidade 328 — Farol e Ronda do Enfermeiro', icon:'🔦', desc:'Vocabulário da vigília noturna no farol, e vocabulário da ronda do enfermeiro',
+    lessons:['pt_lighthouse1','pt_nurseround1'] },
 ];
 
 
