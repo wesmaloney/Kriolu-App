@@ -19423,6 +19423,24 @@ const KR_LESSONS = [
         { k: 'Konversa ku vizinhu riba di notísia', e: 'chat with the neighbour about the news', ex: 'Konversa ku vizinhu riba di notísia ta dura manhan tudu.' },
         { k: 'Jornal dobradu na kadera', e: 'newspaper folded on the chair', ex: 'Jornal dobradu na kadera ta spera tardi.' },
     ]},
+  { id: 'kr_linefishing1', title: 'Line Fishing from the Rocks', titleKriolu: 'Peska di Linha na Rotxa', icon: '🎣', color: 'sky',
+    desc: 'Line fishing from the rocks vocabulary', vocab: [
+        { k: 'Rotxa riba di mar', e: 'rock above the sea', ex: 'Rotxa riba di mar e lugar di avô.' },
+        { k: 'Linha i anzol na mon', e: 'line and hook in the hand', ex: 'Linha i anzol na mon ta spera primeru pexi.' },
+        { k: 'Balde ku pexi pikinoti', e: 'bucket with small fish', ex: 'Balde ku pexi pikinoti ta inxi dibagar.' },
+        { k: 'Onda ta bati na rotxa', e: 'wave hitting the rock', ex: 'Onda ta bati na rotxa ta txiga te na linha.' },
+        { k: 'Spera ku pasénsia na rotxa', e: 'waiting patiently on the rock', ex: 'Spera ku pasénsia na rotxa ta da pexi.' },
+        { k: 'Pexi na anzol', e: 'fish on the hook', ex: 'Pexi na anzol ta bai ku forsa.' },
+    ]},
+  { id: 'kr_dawnbirds1', title: 'Birds at Dawn', titleKriolu: 'Pasaru di Manhan', icon: '🐦', color: 'emerald',
+    desc: 'Birds at dawn vocabulary', vocab: [
+        { k: 'Pasaru na arburi', e: 'bird in the tree', ex: 'Pasaru na arburi ta kanta sedu.' },
+        { k: 'Ninhu riba di arburi', e: 'nest at the top of the tree', ex: 'Ninhu riba di arburi ta sta altu dimaiz.' },
+        { k: 'Pena na txon', e: 'feather on the ground', ex: 'Pena na txon ta ser tiradu pa un mininu.' },
+        { k: 'Pasaru ta kanta sedu', e: 'bird singing early', ex: 'Pasaru ta kanta sedu ta da bon dia.' },
+        { k: 'Milhu pa pasaru', e: 'corn for the birds', ex: 'Milhu pa pasaru ta ser dadu na kintal.' },
+        { k: 'Pasaru ta voa riba di telhadu', e: 'bird flying over the roof', ex: 'Pasaru ta voa riba di telhadu ta bai pa séu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20966,6 +20984,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_icecreamseller1','kr_babysteps1'] },
   { unit:'Unit 383 — Radio Match & Newspaper', icon:'📻', desc:'The match on the radio vocabulary, and Reading the newspaper vocabulary',
     lessons:['kr_radiomatch1','kr_newspaper1'] },
+  { unit:'Unit 384 — Line Fishing & Dawn Birds', icon:'🎣', desc:'Line fishing from the rocks vocabulary, and Birds at dawn vocabulary',
+    lessons:['kr_linefishing1','kr_dawnbirds1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38272,6 +38292,24 @@ const PT_LESSONS = [
         { k: 'conversa com o vizinho sobre a notícia', e: 'chat with the neighbour about the news', ex: 'A conversa com o vizinho sobre a notícia durava toda a manhã.' },
         { k: 'jornal dobrado na cadeira', e: 'newspaper folded on the chair', ex: 'O jornal dobrado na cadeira esperava a tarde.' },
     ]},
+  { id: 'pt_linefishing1', title: 'Line Fishing from the Rocks', titleKriolu: 'Pesca à Linha na Rocha', icon: '🎣', color: 'sky',
+    desc: 'Vocabulário de pesca à linha na rocha', vocab: [
+        { k: 'rocha sobre o mar', e: 'rock above the sea', ex: 'A rocha sobre o mar era o lugar do avô.' },
+        { k: 'linha e anzol na mão', e: 'line and hook in the hand', ex: 'A linha e o anzol na mão esperavam o primeiro peixe.' },
+        { k: 'balde com peixe pequeno', e: 'bucket with small fish', ex: 'O balde com peixe pequeno ia enchendo devagar.' },
+        { k: 'onda a bater na rocha', e: 'wave hitting the rock', ex: 'A onda a bater na rocha chegava à linha.' },
+        { k: 'esperar com paciência na rocha', e: 'waiting patiently on the rock', ex: 'Esperar com paciência na rocha dava peixe.' },
+        { k: 'peixe no anzol', e: 'fish on the hook', ex: 'O peixe no anzol ia com força.' },
+    ]},
+  { id: 'pt_dawnbirds1', title: 'Birds at Dawn', titleKriolu: 'Pássaros ao Amanhecer', icon: '🐦', color: 'emerald',
+    desc: 'Vocabulário de pássaros ao amanhecer', vocab: [
+        { k: 'pássaro na árvore', e: 'bird in the tree', ex: 'O pássaro na árvore cantava cedo.' },
+        { k: 'ninho no alto da árvore', e: 'nest at the top of the tree', ex: 'O ninho no alto da árvore estava alto demais.' },
+        { k: 'pena no chão', e: 'feather on the ground', ex: 'A pena no chão foi apanhada por uma criança.' },
+        { k: 'pássaro a cantar cedo', e: 'bird singing early', ex: 'O pássaro a cantar cedo dava as boas-vindas ao dia.' },
+        { k: 'milho para os pássaros', e: 'corn for the birds', ex: 'O milho para os pássaros era espalhado no quintal.' },
+        { k: 'pássaro a voar sobre o telhado', e: 'bird flying over the roof', ex: 'O pássaro a voar sobre o telhado desapareceu no céu.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -39051,6 +39089,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_icecreamseller1','pt_babysteps1'] },
   { unit:'Unidade 385 — Jogo no Rádio e Ler o Jornal', icon:'📻', desc:'Vocabulário do jogo no rádio, e vocabulário de ler o jornal',
     lessons:['pt_radiomatch1','pt_newspaper1'] },
+  { unit:'Unidade 386 — Pesca à Linha e Pássaros ao Amanhecer', icon:'🎣', desc:'Vocabulário de pesca à linha na rocha, e vocabulário de pássaros ao amanhecer',
+    lessons:['pt_linefishing1','pt_dawnbirds1'] },
 ];
 
 
