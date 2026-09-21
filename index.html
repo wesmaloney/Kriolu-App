@@ -18631,6 +18631,24 @@ const KR_LESSONS = [
         { k: 'Pasu lentu i firmi', e: 'slow and steady step', ex: 'Pasu lentu i firmi ta djuda burru.' },
         { k: 'Deskarrega burru na fin di dia', e: 'unloading the donkey at the end of the day', ex: 'Deskarrega burru na fin di dia ta dexa el diskansa.' },
     ]},
+  { id: 'kr_coffeepick1', title: 'Picking and Roasting Coffee', titleKriolu: 'Panha i Torra Kafé', icon: '☕', color: 'brown',
+    desc: 'Picking and roasting coffee vocabulary', vocab: [
+        { k: 'Kafezal na munti', e: 'coffee plantation on the mountain', ex: 'Kafezal na munti ta verdi.' },
+        { k: 'Grãu di kafé vermelhu', e: 'red coffee bean', ex: 'Grãu di kafé vermelhu ta prontu pa panha.' },
+        { k: 'Sesta di palha txeiu di kafé', e: 'straw basket full of coffee', ex: 'Sesta di palha txeiu di kafé ta pezadu.' },
+        { k: 'Kafé na sol pa fika seku', e: 'coffee put in the sun to dry', ex: 'Kafé na sol pa fika seku ta ser viradu.' },
+        { k: 'Grãu torradu na fogu', e: 'bean roasted over the fire', ex: 'Grãu torradu na fogu ta da xeru forti.' },
+        { k: 'Kafé moídu sirbidu kenti', e: 'ground coffee served hot', ex: 'Kafé moídu sirbidu kenti ta ser midjor di manhan.' },
+    ]},
+  { id: 'kr_marketrain1', title: 'A Rain Shower at the Market', titleKriolu: 'Txuva di Repenti na Merkadu', icon: '☔', color: 'sky',
+    desc: 'Rain shower at the market vocabulary', vocab: [
+        { k: 'Txuva di repenti na merkadu', e: 'sudden rain at the market', ex: 'Txuva di repenti na merkadu ta fasi tudu kuri.' },
+        { k: 'Panu pa kobri banka', e: 'cloth to cover the stall', ex: 'Panu pa kobri banka ta proteje fruta.' },
+        { k: 'Klienti ki ta kuri pa baxu di teladu', e: 'customers running under the roof', ex: 'Klienti ki ta kuri pa baxu di teladu ta fika seku.' },
+        { k: 'Txon molhadu ki ta skorega', e: 'wet floor that is slippery', ex: 'Txon molhadu ki ta skorega ta pidi kuidadu.' },
+        { k: 'Sol ki ta volta dipos di txuva', e: 'sun coming back after the rain', ex: 'Sol ki ta volta dipos di txuva ta da alegria.' },
+        { k: 'Fruta labadu pa txuva', e: 'fruit washed by the rain', ex: 'Fruta labadu pa txuva ta brilha.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20086,6 +20104,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_busstop1','kr_chickens1'] },
   { unit:'Unit 339 — Dawn Bread & Donkey Load', icon:'🥖', desc:'Buying bread at dawn vocabulary, and Loading the donkey vocabulary',
     lessons:['kr_breaderrand1','kr_donkeyload1'] },
+  { unit:'Unit 340 — Coffee & Market Rain', icon:'☕', desc:'Picking and roasting coffee vocabulary, and Rain shower at the market vocabulary',
+    lessons:['kr_coffeepick1','kr_marketrain1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36600,6 +36620,24 @@ const PT_LESSONS = [
         { k: 'passo lento e firme', e: 'slow and steady step', ex: 'O passo lento e firme ajudava o burro.' },
         { k: 'descarregar o burro ao fim do dia', e: 'unloading the donkey at the end of the day', ex: 'Descarregar o burro ao fim do dia deixava-o descansar.' },
     ]},
+  { id: 'pt_coffeepick1', title: 'Picking and Roasting Coffee', titleKriolu: 'Apanhar e Torrar Café', icon: '☕', color: 'brown',
+    desc: 'Vocabulário de apanhar e torrar café', vocab: [
+        { k: 'cafezal na montanha', e: 'coffee plantation on the mountain', ex: 'O cafezal na montanha estava verde.' },
+        { k: 'grão de café vermelho', e: 'red coffee bean', ex: 'O grão de café vermelho estava pronto a apanhar.' },
+        { k: 'cesto de palha cheio de café', e: 'straw basket full of coffee', ex: 'O cesto de palha cheio de café era pesado.' },
+        { k: 'café posto ao sol para secar', e: 'coffee put in the sun to dry', ex: 'O café posto ao sol para secar era virado.' },
+        { k: 'grão torrado ao lume', e: 'bean roasted over the fire', ex: 'O grão torrado ao lume dava um cheiro forte.' },
+        { k: 'café moído servido quente', e: 'ground coffee served hot', ex: 'O café moído servido quente era melhor de manhã.' },
+    ]},
+  { id: 'pt_marketrain1', title: 'A Rain Shower at the Market', titleKriolu: 'Uma Chuvada no Mercado', icon: '☔', color: 'sky',
+    desc: 'Vocabulário de uma chuvada no mercado', vocab: [
+        { k: 'chuva de repente no mercado', e: 'sudden rain at the market', ex: 'A chuva de repente no mercado fazia todos correr.' },
+        { k: 'pano para cobrir a banca', e: 'cloth to cover the stall', ex: 'O pano para cobrir a banca protegia a fruta.' },
+        { k: 'clientes a correr para debaixo do telhado', e: 'customers running under the roof', ex: 'Os clientes a correr para debaixo do telhado ficavam secos.' },
+        { k: 'chão molhado que escorrega', e: 'wet floor that is slippery', ex: 'O chão molhado que escorrega pedia cuidado.' },
+        { k: 'sol a voltar depois da chuva', e: 'sun coming back after the rain', ex: 'O sol a voltar depois da chuva dava alegria.' },
+        { k: 'fruta lavada pela chuva', e: 'fruit washed by the rain', ex: 'A fruta lavada pela chuva brilhava.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37291,6 +37329,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_busstop1','pt_chickens1'] },
   { unit:'Unidade 341 — Pão de Madrugada e Carga do Burro', icon:'🥖', desc:'Vocabulário de comprar pão de madrugada, e vocabulário de carregar o burro',
     lessons:['pt_breaderrand1','pt_donkeyload1'] },
+  { unit:'Unidade 342 — Café e Chuvada no Mercado', icon:'☕', desc:'Vocabulário de apanhar e torrar café, e vocabulário de uma chuvada no mercado',
+    lessons:['pt_coffeepick1','pt_marketrain1'] },
 ];
 
 
