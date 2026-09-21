@@ -19459,6 +19459,24 @@ const KR_LESSONS = [
         { k: 'Sumo dosi na boka di mininu', e: 'sweet juice in the boy\'s mouth', ex: 'Sumo dosi na boka di mininu ta kai na keixu.' },
         { k: 'Kaska di kana na txon', e: 'cane husks on the ground', ex: 'Kaska di kana na txon ta ser tiradu di noti.' },
     ]},
+  { id: 'kr_melonday1', title: 'Melon on a Hot Day', titleKriolu: 'Meloa na Dia di Kalor', icon: '🍈', color: 'sky',
+    desc: 'Melon on a hot day vocabulary', vocab: [
+        { k: 'Meloa grandi na mesa', e: 'big melon on the table', ex: 'Meloa grandi na mesa e sentru di almosu.' },
+        { k: 'Faka ta korta meloa', e: 'knife cutting the melon', ex: 'Faka ta korta meloa ta fasi barulhu seku.' },
+        { k: 'Fatia di meloa friu', e: 'slice of cold melon', ex: 'Fatia di meloa friu ta pasa di mon na mon.' },
+        { k: 'Simenti di meloa na tijela', e: 'melon seeds in the bowl', ex: 'Simenti di meloa na tijela ta ser guardadu pa orta.' },
+        { k: 'Sumo di meloa na kopu', e: 'melon juice in the glass', ex: 'Sumo di meloa na kopu ta ser bebidu dipresa.' },
+        { k: 'Meloa friu ku jelu', e: 'fresh melon with ice', ex: 'Meloa friu ku jelu ta tra kalor.' },
+    ]},
+  { id: 'kr_noonshade1', title: 'Shade at Noon', titleKriolu: 'Sonbra na Meiu Dia', icon: '🌞', color: 'emerald',
+    desc: 'Shade at noon vocabulary', vocab: [
+        { k: 'Sol forti di meiu dia', e: 'strong sun at noon', ex: 'Sol forti di meiu dia ta pidi pa para.' },
+        { k: 'Diskansa na sonbra', e: 'resting in the shade', ex: 'Diskansa na sonbra e ábitu di tardi.' },
+        { k: 'Sedi na kalor', e: 'thirst in the heat', ex: 'Sedi na kalor ta aperta dipos di trabadju.' },
+        { k: 'Agu friu na sonbra', e: 'cold water in the shade', ex: 'Agu friu na sonbra ta sta na garafa.' },
+        { k: 'Kuidadu ku sol forti', e: 'care with the strong sun', ex: 'Kuidadu ku sol forti ta ser fla pa mininu.' },
+        { k: 'Mininu ta brinka na sonbra', e: 'children playing in the shade', ex: 'Mininu ta brinka na sonbra ta ri sen para.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21006,6 +21024,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_linefishing1','kr_dawnbirds1'] },
   { unit:'Unit 385 — Lost Tooth & Chewing Sugar Cane', icon:'🦷', desc:'A lost milk tooth vocabulary, and Chewing sugar cane vocabulary',
     lessons:['kr_losttooth1','kr_chewcane1'] },
+  { unit:'Unit 386 — Melon Day & Noon Shade', icon:'🍈', desc:'Melon on a hot day vocabulary, and Shade at noon vocabulary',
+    lessons:['kr_melonday1','kr_noonshade1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38348,6 +38368,24 @@ const PT_LESSONS = [
         { k: 'sumo doce na boca do menino', e: 'sweet juice in the boy\'s mouth', ex: 'O sumo doce na boca do menino escorria pelo queixo.' },
         { k: 'cascas de cana no chão', e: 'cane husks on the ground', ex: 'As cascas de cana no chão eram retiradas à noite.' },
     ]},
+  { id: 'pt_melonday1', title: 'Melon on a Hot Day', titleKriolu: 'Melão num Dia de Calor', icon: '🍈', color: 'sky',
+    desc: 'Vocabulário de melão num dia de calor', vocab: [
+        { k: 'melão grande na mesa', e: 'big melon on the table', ex: 'O melão grande na mesa era o centro do almoço.' },
+        { k: 'faca a cortar o melão', e: 'knife cutting the melon', ex: 'A faca a cortar o melão fazia um som seco.' },
+        { k: 'fatia de melão frio', e: 'slice of cold melon', ex: 'A fatia de melão frio passava-se de mão em mão.' },
+        { k: 'sementes de melão na tigela', e: 'melon seeds in the bowl', ex: 'As sementes de melão na tigela eram guardadas para a horta.' },
+        { k: 'sumo de melão no copo', e: 'melon juice in the glass', ex: 'O sumo de melão no copo era bebido logo.' },
+        { k: 'melão fresco com gelo', e: 'fresh melon with ice', ex: 'O melão fresco com gelo tirava o calor.' },
+    ]},
+  { id: 'pt_noonshade1', title: 'Shade at Noon', titleKriolu: 'Sombra ao Meio-dia', icon: '🌞', color: 'emerald',
+    desc: 'Vocabulário de sombra ao meio-dia', vocab: [
+        { k: 'sol forte ao meio-dia', e: 'strong sun at noon', ex: 'O sol forte ao meio-dia pedia para parar.' },
+        { k: 'descansar na sombra', e: 'resting in the shade', ex: 'Descansar na sombra era o costume das tardes.' },
+        { k: 'sede no calor', e: 'thirst in the heat', ex: 'A sede no calor apertava depois do trabalho.' },
+        { k: 'água fria na sombra', e: 'cold water in the shade', ex: 'A água fria na sombra estava numa garrafa.' },
+        { k: 'cuidado com o sol forte', e: 'care with the strong sun', ex: 'O cuidado com o sol forte era dito às crianças.' },
+        { k: 'meninos a brincar na sombra', e: 'children playing in the shade', ex: 'Os meninos a brincar na sombra riam sem parar.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -39131,6 +39169,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_linefishing1','pt_dawnbirds1'] },
   { unit:'Unidade 387 — Dente Caído e Mastigar Cana', icon:'🦷', desc:'Vocabulário de um dente de leite caído, e vocabulário de mastigar cana-de-açúcar',
     lessons:['pt_losttooth1','pt_chewcane1'] },
+  { unit:'Unidade 388 — Melão e Sombra ao Meio-dia', icon:'🍈', desc:'Vocabulário de melão num dia de calor, e vocabulário de sombra ao meio-dia',
+    lessons:['pt_melonday1','pt_noonshade1'] },
 ];
 
 
