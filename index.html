@@ -18919,6 +18919,24 @@ const KR_LESSONS = [
         { k: 'Obi mal na telefoni', e: 'hearing badly on the phone', ex: 'Obi mal na telefoni ta pidi pa fla di novu.' },
         { k: 'Abrasu pa tudu família', e: 'hug for the whole family', ex: 'Abrasu pa tudu família ta fexa txamada.' },
     ]},
+  { id: 'kr_yardsweep1', title: 'Sweeping the Yard', titleKriolu: 'Barre Kintal', icon: '🧹', color: 'sky',
+    desc: 'Sweeping the yard vocabulary', vocab: [
+        { k: 'Folha na kintal', e: 'leaves in the yard', ex: 'Folha na kintal ta kobri txon.' },
+        { k: 'Vasoura na mon di avó', e: 'broom in grandmother\'s hand', ex: 'Vasoura na mon di avó ta fasi un son suavi.' },
+        { k: 'Saku di lixu txeiu', e: 'full bin bag', ex: 'Saku di lixu txeiu ta ser kargadu pa rua.' },
+        { k: 'Karinhu di mon ku lixu', e: 'wheelbarrow with rubbish', ex: 'Karinhu di mon ku lixu ta pasa na portom.' },
+        { k: 'Kintal limpu di manhan', e: 'clean yard in the morning', ex: 'Kintal limpu di manhan ta xera terra molhadu.' },
+        { k: 'Djunta lixu na kintal', e: 'gathering the rubbish in the yard', ex: 'Djunta lixu na kintal e trabadju di tudu.' },
+    ]},
+  { id: 'kr_afternoonnap1', title: 'Afternoon Nap', titleKriolu: 'Kabesada di Tardi', icon: '😴', color: 'emerald',
+    desc: 'Afternoon nap vocabulary', vocab: [
+        { k: 'Kabesada dipos di almosu', e: 'nap after lunch', ex: 'Kabesada dipos di almosu e ora di diskansa.' },
+        { k: 'Banku na sonbra di arburi', e: 'bench in the shade of the tree', ex: 'Banku na sonbra di arburi ta sta sempri txeiu.' },
+        { k: 'Kalor di tardi na kaza', e: 'afternoon heat in the house', ex: 'Kalor di tardi na kaza ta pidi janela fexadu.' },
+        { k: 'Silensiu na kaza', e: 'silence in the house', ex: 'Silensiu na kaza so ventu ta obi.' },
+        { k: 'Avô ta durmi na kadera', e: 'grandfather sleeping in the chair', ex: 'Avô ta durmi na kadera ta ronka baxinhu.' },
+        { k: 'Sonu levi di tardi', e: 'light sleep in the afternoon', ex: 'Sonu levi di tardi ta kaba ku kalker barulhu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20406,6 +20424,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_housepainting1','kr_tapfix1'] },
   { unit:'Unit 355 — Rice Lunch & Call from Abroad', icon:'🍚', desc:'Cooking rice for lunch vocabulary, and A call from abroad vocabulary',
     lessons:['kr_ricelunch1','kr_callabroad1'] },
+  { unit:'Unit 356 — Yard Sweeping & Afternoon Nap', icon:'🧹', desc:'Sweeping the yard vocabulary, and Afternoon nap vocabulary',
+    lessons:['kr_yardsweep1','kr_afternoonnap1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37208,6 +37228,24 @@ const PT_LESSONS = [
         { k: 'ouvir mal ao telefone', e: 'hearing badly on the phone', ex: 'Ouvir mal ao telefone obrigava a pedir para repetir.' },
         { k: 'abraço para toda a família', e: 'hug for the whole family', ex: 'O abraço para toda a família fechava a chamada.' },
     ]},
+  { id: 'pt_yardsweep1', title: 'Sweeping the Yard', titleKriolu: 'Varrer o Quintal', icon: '🧹', color: 'sky',
+    desc: 'Vocabulário de varrer o quintal', vocab: [
+        { k: 'folhas no quintal', e: 'leaves in the yard', ex: 'As folhas no quintal cobriam o chão.' },
+        { k: 'vassoura na mão da avó', e: 'broom in grandmother\'s hand', ex: 'A vassoura na mão da avó fazia um som suave.' },
+        { k: 'saco de lixo cheio', e: 'full bin bag', ex: 'O saco de lixo cheio foi levado para a rua.' },
+        { k: 'carrinho de mão com lixo', e: 'wheelbarrow with rubbish', ex: 'O carrinho de mão com lixo passava pelo portão.' },
+        { k: 'quintal limpo de manhã', e: 'clean yard in the morning', ex: 'O quintal limpo de manhã cheirava a terra molhada.' },
+        { k: 'juntar o lixo no quintal', e: 'gathering the rubbish in the yard', ex: 'Juntar o lixo no quintal era trabalho de todos.' },
+    ]},
+  { id: 'pt_afternoonnap1', title: 'Afternoon Nap', titleKriolu: 'A Sesta da Tarde', icon: '😴', color: 'emerald',
+    desc: 'Vocabulário de sesta da tarde', vocab: [
+        { k: 'sesta depois do almoço', e: 'nap after lunch', ex: 'A sesta depois do almoço era a hora de descansar.' },
+        { k: 'banco à sombra da árvore', e: 'bench in the shade of the tree', ex: 'O banco à sombra da árvore estava sempre cheio.' },
+        { k: 'calor da tarde em casa', e: 'afternoon heat in the house', ex: 'O calor da tarde em casa pedia janelas fechadas.' },
+        { k: 'silêncio na casa', e: 'silence in the house', ex: 'No silêncio da casa só se ouvia o vento.' },
+        { k: 'avô a dormir na cadeira', e: 'grandfather sleeping in the chair', ex: 'O avô a dormir na cadeira roncava baixinho.' },
+        { k: 'sono leve de tarde', e: 'light sleep in the afternoon', ex: 'O sono leve de tarde acabava com qualquer ruído.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37931,6 +37969,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_housepainting1','pt_tapfix1'] },
   { unit:'Unidade 357 — Arroz ao Almoço e Chamada do Estrangeiro', icon:'🍚', desc:'Vocabulário de cozinhar arroz para o almoço, e vocabulário de uma chamada do estrangeiro',
     lessons:['pt_ricelunch1','pt_callabroad1'] },
+  { unit:'Unidade 358 — Varrer o Quintal e Sesta', icon:'🧹', desc:'Vocabulário de varrer o quintal, e vocabulário de sesta da tarde',
+    lessons:['pt_yardsweep1','pt_afternoonnap1'] },
 ];
 
 
