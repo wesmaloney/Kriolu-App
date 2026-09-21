@@ -18973,6 +18973,24 @@ const KR_LESSONS = [
         { k: 'Barku ta sai di kais', e: 'boat leaving the quay', ex: 'Barku ta sai di kais ta leba tres omi.' },
         { k: 'Boia na mar', e: 'buoy in the sea', ex: 'Boia na mar ta marka lugar di rede.' },
     ]},
+  { id: 'kr_mornanight1', title: 'A Morna Evening', titleKriolu: 'Noti di Morna', icon: '🎸', color: 'sky',
+    desc: 'A morna evening vocabulary', vocab: [
+        { k: 'Viola na mon di kantor', e: 'guitar in the singer\'s hands', ex: 'Viola na mon di kantor ta abri noti di morna.' },
+        { k: 'Kavakinhu ta toka djuntu ku viola', e: 'cavaquinho playing with the guitar', ex: 'Kavakinhu ta toka djuntu ku viola ta inxi sala.' },
+        { k: 'Kantor ki ta kanta morna', e: 'singer who sings morna', ex: 'Kantor ki ta kanta morna ta kanta ku sodadi.' },
+        { k: 'Sodadi na letra di morna', e: 'longing in the lyrics of the morna', ex: 'Sodadi na letra di morna ta leba tudu algen na korason.' },
+        { k: 'Konvidadu ta skuta ku silensiu', e: 'guests listening in silence', ex: 'Konvidadu ta skuta ku silensiu ka ta papia.' },
+        { k: 'Ritmu mansu di morna', e: 'gentle rhythm of the morna', ex: 'Ritmu mansu di morna ta bai ku noti.' },
+    ]},
+  { id: 'kr_streetparty1', title: 'Street Party in the Square', titleKriolu: 'Festa na Prasa', icon: '🎉', color: 'emerald',
+    desc: 'Street party in the square vocabulary', vocab: [
+        { k: 'Bandeira na rua di festa', e: 'flags in the party street', ex: 'Bandeira na rua di festa ta bati ku ventu.' },
+        { k: 'Palku na prasa sentral', e: 'stage in the central square', ex: 'Palku na prasa sentral ta fika grandi.' },
+        { k: 'Mikrofoni na mon di kantor', e: 'microphone in the singer\'s hand', ex: 'Mikrofoni na mon di kantor ta sta pertu di boka.' },
+        { k: 'Par ki ta dansa na prasa', e: 'couples dancing in the square', ex: 'Par ki ta dansa na prasa ka ta para.' },
+        { k: 'Grogu i bolu na mesa', e: 'grogue and cake on the table', ex: 'Grogu i bolu na mesa e pa tudu.' },
+        { k: 'Konvidadu ta kanta djuntu', e: 'guests singing together', ex: 'Konvidadu ta kanta djuntu ta kaba festa.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20466,6 +20484,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_seashells1','kr_turtlenight1'] },
   { unit:'Unit 358 — Storm Radio & Boat Departure', icon:'📻', desc:'Storm warning on the radio vocabulary, and Fishing boat leaving the quay vocabulary',
     lessons:['kr_stormradio1','kr_boatdeparture1'] },
+  { unit:'Unit 359 — Morna Evening & Street Party', icon:'🎸', desc:'A morna evening vocabulary, and Street party in the square vocabulary',
+    lessons:['kr_mornanight1','kr_streetparty1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37322,6 +37342,24 @@ const PT_LESSONS = [
         { k: 'barco a sair do cais', e: 'boat leaving the quay', ex: 'O barco a sair do cais levava três homens.' },
         { k: 'boia no mar', e: 'buoy in the sea', ex: 'A boia no mar marcava o lugar da rede.' },
     ]},
+  { id: 'pt_mornanight1', title: 'A Morna Evening', titleKriolu: 'Serão de Morna', icon: '🎸', color: 'sky',
+    desc: 'Vocabulário de serão de morna', vocab: [
+        { k: 'viola na mão do cantor', e: 'guitar in the singer\'s hands', ex: 'A viola na mão do cantor abria a noite de morna.' },
+        { k: 'cavaquinho a tocar com a viola', e: 'cavaquinho playing with the guitar', ex: 'O cavaquinho a tocar com a viola enchia a sala.' },
+        { k: 'cantor que canta morna', e: 'singer who sings morna', ex: 'O cantor que canta morna cantava com saudade.' },
+        { k: 'saudade na letra da morna', e: 'longing in the lyrics of the morna', ex: 'A saudade na letra da morna comovia toda a gente.' },
+        { k: 'convidados a ouvir em silêncio', e: 'guests listening in silence', ex: 'Os convidados a ouvir em silêncio nem respiravam.' },
+        { k: 'ritmo suave da morna', e: 'gentle rhythm of the morna', ex: 'O ritmo suave da morna embalava a noite.' },
+    ]},
+  { id: 'pt_streetparty1', title: 'Street Party in the Square', titleKriolu: 'Festa na Praça', icon: '🎉', color: 'emerald',
+    desc: 'Vocabulário de festa na praça', vocab: [
+        { k: 'bandeiras na rua de festa', e: 'flags in the party street', ex: 'As bandeiras na rua de festa balançavam ao vento.' },
+        { k: 'palco na praça central', e: 'stage in the central square', ex: 'O palco na praça central era grande.' },
+        { k: 'microfone na mão do cantor', e: 'microphone in the singer\'s hand', ex: 'O microfone na mão do cantor ficava perto da boca.' },
+        { k: 'casais a dançar na praça', e: 'couples dancing in the square', ex: 'Os casais a dançar na praça não paravam.' },
+        { k: 'grogue e bolo na mesa', e: 'grogue and cake on the table', ex: 'O grogue e o bolo na mesa eram para todos.' },
+        { k: 'convidados a cantar juntos', e: 'guests singing together', ex: 'Os convidados a cantar juntos acabavam a festa.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38051,6 +38089,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_seashells1','pt_turtlenight1'] },
   { unit:'Unidade 360 — Aviso de Tempestade e Barco a Sair', icon:'📻', desc:'Vocabulário de aviso de tempestade no rádio, e vocabulário de barco de pesca a sair do cais',
     lessons:['pt_stormradio1','pt_boatdeparture1'] },
+  { unit:'Unidade 361 — Serão de Morna e Festa na Praça', icon:'🎸', desc:'Vocabulário de serão de morna, e vocabulário de festa na praça',
+    lessons:['pt_mornanight1','pt_streetparty1'] },
 ];
 
 
