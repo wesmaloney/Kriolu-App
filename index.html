@@ -19243,6 +19243,24 @@ const KR_LESSONS = [
         { k: 'Pedra na kaminhu', e: 'stone on the path', ex: 'Pedra na kaminhu ta fasi algen kai.' },
         { k: 'Volta pa kaza ku balde txeiu', e: 'going home with the full bucket', ex: 'Volta pa kaza ku balde txeiu ta pidi pasu dibagar.' },
     ]},
+  { id: 'kr_gardenweeding1', title: 'Weeding the Garden', titleKriolu: 'Tra Erva na Orta', icon: '🌱', color: 'sky',
+    desc: 'Weeding the garden vocabulary', vocab: [
+        { k: 'Erva na orta', e: 'weeds in the garden', ex: 'Erva na orta ta ben dipos di txuva.' },
+        { k: 'Enxada pa tra erva', e: 'hoe for removing weeds', ex: 'Enxada pa tra erva ta sta bon.' },
+        { k: 'Erva altu na kanteru', e: 'tall weeds in the bed', ex: 'Erva altu na kanteru ta kobri kuve.' },
+        { k: 'Sol forti riba di orta', e: 'strong sun over the garden', ex: 'Sol forti riba di orta ta pidi trabadju sedu.' },
+        { k: 'Kansadu dipos di trabadju na orta', e: 'tired after work in the garden', ex: 'Kansadu dipos di trabadju na orta ta durmi sedu.' },
+        { k: 'Erva na un monti', e: 'weeds in a pile', ex: 'Erva na un monti ta bai pa animal.' },
+    ]},
+  { id: 'kr_grocerycarry1', title: 'Carrying Groceries Home', titleKriolu: 'Leba Kunpra pa Kaza', icon: '🛒', color: 'emerald',
+    desc: 'Carrying groceries home vocabulary', vocab: [
+        { k: 'Saku di farinha di milhu', e: 'sack of corn flour', ex: 'Saku di farinha di milhu e pezadu.' },
+        { k: 'Óleu i sabon na saku', e: 'oil and soap in the bag', ex: 'Óleu i sabon na saku ta bem di supermerkadu.' },
+        { k: 'Ovu na saku', e: 'eggs in the bag', ex: 'Ovu na saku ta bai riba.' },
+        { k: 'Saku pezadu na mon', e: 'heavy bag in the hand', ex: 'Saku pezadu na mon ta kansa brasu.' },
+        { k: 'Lista di kunpra na papel', e: 'shopping list on paper', ex: 'Lista di kunpra na papel ta sta na bolsu.' },
+        { k: 'Supermerkadu pertu di kaza', e: 'supermarket near home', ex: 'Supermerkadu pertu di kaza ta fexa na oitu ora.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20766,6 +20784,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_christmashome1','kr_flagday1'] },
   { unit:'Unit 373 — Beach Picnic & Walk to the Spring', icon:'🧺', desc:'Beach picnic vocabulary, and Walk to the spring vocabulary',
     lessons:['kr_beachpicnic1','kr_springwalk1'] },
+  { unit:'Unit 374 — Garden Weeding & Groceries Home', icon:'🌱', desc:'Weeding the garden vocabulary, and Carrying groceries home vocabulary',
+    lessons:['kr_gardenweeding1','kr_grocerycarry1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37892,6 +37912,24 @@ const PT_LESSONS = [
         { k: 'pedra no caminho', e: 'stone on the path', ex: 'A pedra no caminho fazia tropeçar.' },
         { k: 'voltar para casa com o balde cheio', e: 'going home with the full bucket', ex: 'Voltar para casa com o balde cheio pedia passo lento.' },
     ]},
+  { id: 'pt_gardenweeding1', title: 'Weeding the Garden', titleKriolu: 'Tirar a Erva da Horta', icon: '🌱', color: 'sky',
+    desc: 'Vocabulário de tirar a erva da horta', vocab: [
+        { k: 'erva na horta', e: 'weeds in the garden', ex: 'A erva na horta crescia depois da chuva.' },
+        { k: 'enxada para tirar a erva', e: 'hoe for removing weeds', ex: 'A enxada para tirar a erva estava afiada.' },
+        { k: 'erva alta no canteiro', e: 'tall weeds in the bed', ex: 'A erva alta no canteiro cobria as couves.' },
+        { k: 'sol forte sobre a horta', e: 'strong sun over the garden', ex: 'O sol forte sobre a horta apressava o trabalho.' },
+        { k: 'cansado depois do trabalho na horta', e: 'tired after work in the garden', ex: 'Quem ficava cansado depois do trabalho na horta dormia cedo.' },
+        { k: 'erva num monte', e: 'weeds in a pile', ex: 'A erva num monte era levada para os animais.' },
+    ]},
+  { id: 'pt_grocerycarry1', title: 'Carrying Groceries Home', titleKriolu: 'Levar as Compras para Casa', icon: '🛒', color: 'emerald',
+    desc: 'Vocabulário de levar as compras para casa', vocab: [
+        { k: 'saco de farinha de milho', e: 'sack of corn flour', ex: 'O saco de farinha de milho pesava muito.' },
+        { k: 'óleo e sabão no saco', e: 'oil and soap in the bag', ex: 'O óleo e o sabão no saco vinham do supermercado.' },
+        { k: 'ovos no saco', e: 'eggs in the bag', ex: 'Os ovos no saco iam no topo.' },
+        { k: 'saco pesado na mão', e: 'heavy bag in the hand', ex: 'O saco pesado na mão cansava o braço.' },
+        { k: 'lista de compras no papel', e: 'shopping list on paper', ex: 'A lista de compras no papel estava no bolso.' },
+        { k: 'supermercado perto de casa', e: 'supermarket near home', ex: 'O supermercado perto de casa fechava às oito.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38651,6 +38689,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_christmashome1','pt_flagday1'] },
   { unit:'Unidade 375 — Piquenique e Caminhada até à Nascente', icon:'🧺', desc:'Vocabulário de piquenique na praia, e vocabulário de caminhada até à nascente',
     lessons:['pt_beachpicnic1','pt_springwalk1'] },
+  { unit:'Unidade 376 — Tirar a Erva e Levar as Compras', icon:'🌱', desc:'Vocabulário de tirar a erva da horta, e vocabulário de levar as compras para casa',
+    lessons:['pt_gardenweeding1','pt_grocerycarry1'] },
 ];
 
 
