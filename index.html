@@ -19027,6 +19027,24 @@ const KR_LESSONS = [
         { k: 'Mon di vendedor na balansa', e: 'seller\'s hand on the scale', ex: 'Mon di vendedor na balansa ta sta pertu di pratu.' },
         { k: 'Dinheru pa vendedor', e: 'money for the seller', ex: 'Dinheru pa vendedor ta ser kontadu dôs ves.' },
     ]},
+  { id: 'kr_ironclothes1', title: 'Ironing Clothes', titleKriolu: 'Pasa Ferru na Ropa', icon: '👔', color: 'sky',
+    desc: 'Ironing clothes vocabulary', vocab: [
+        { k: 'Ferru kenti na mon', e: 'hot iron in the hand', ex: 'Ferru kenti na mon ta pasa na ropa.' },
+        { k: 'Kalsa na tabua', e: 'trousers on the ironing board', ex: 'Kalsa na tabua ta sta molhadu.' },
+        { k: 'Pasa ferru na kalsa', e: 'ironing the trousers', ex: 'Pasa ferru na kalsa ta dura pouku.' },
+        { k: 'Kabidi di ropa ku fatu', e: 'clothes hanger with a suit', ex: 'Kabidi di ropa ku fatu ta fika na porta.' },
+        { k: 'Ropa pasadu na gaveta', e: 'ironed clothes in the drawer', ex: 'Ropa pasadu na gaveta ta ten xeru limpu.' },
+        { k: 'Kuidadu ku ferru kenti', e: 'care with the hot iron', ex: 'Kuidadu ku ferru kenti ta ser splikadu pa mininu.' },
+    ]},
+  { id: 'kr_cleanfish1', title: 'Cleaning Fish at the Beach', titleKriolu: 'Prepara Pexi na Praia', icon: '🐟', color: 'emerald',
+    desc: 'Cleaning fish at the beach vocabulary', vocab: [
+        { k: 'Pexi fresku na balde', e: 'fresh fish in the bucket', ex: 'Pexi fresku na balde inda ta sta vivu.' },
+        { k: 'Faka i tabua pa pexi', e: 'knife and board for the fish', ex: 'Faka i tabua pa pexi ta sta limpu.' },
+        { k: 'Pexi na tabua di korta', e: 'fish on the cutting board', ex: 'Pexi na tabua di korta ta ser abertu na meiu.' },
+        { k: 'Sal grosu na pexi', e: 'coarse salt on the fish', ex: 'Sal grosu na pexi ta guarda pexi te noti.' },
+        { k: 'Gaivota ta spera restu di pexi', e: 'seagull waiting for the scraps', ex: 'Gaivota ta spera restu di pexi ta fika na volta di banka.' },
+        { k: 'Agu di mar pa laba pexi', e: 'seawater for washing the fish', ex: 'Agu di mar pa laba pexi ta bem na balde.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20526,6 +20544,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_familydog1','kr_wallcat1'] },
   { unit:'Unit 361 — Market Sandals & Weighing Vegetables', icon:'👡', desc:'Buying sandals at the market vocabulary, and Weighing vegetables vocabulary',
     lessons:['kr_sandalbuy1','kr_scaleveg1'] },
+  { unit:'Unit 362 — Ironing & Cleaning Fish', icon:'👔', desc:'Ironing clothes vocabulary, and Cleaning fish at the beach vocabulary',
+    lessons:['kr_ironclothes1','kr_cleanfish1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37436,6 +37456,24 @@ const PT_LESSONS = [
         { k: 'mão do vendedor na balança', e: 'seller\'s hand on the scale', ex: 'A mão do vendedor na balança ficava perto do prato.' },
         { k: 'dinheiro para o vendedor', e: 'money for the seller', ex: 'O dinheiro para o vendedor foi contado duas vezes.' },
     ]},
+  { id: 'pt_ironclothes1', title: 'Ironing Clothes', titleKriolu: 'Passar a Roupa a Ferro', icon: '👔', color: 'sky',
+    desc: 'Vocabulário de passar a roupa a ferro', vocab: [
+        { k: 'ferro quente na mão', e: 'hot iron in the hand', ex: 'O ferro quente na mão alisava a roupa.' },
+        { k: 'calças na tábua de passar', e: 'trousers on the ironing board', ex: 'As calças na tábua de passar estavam húmidas.' },
+        { k: 'passar a ferro as calças', e: 'ironing the trousers', ex: 'Passar a ferro as calças demorava pouco.' },
+        { k: 'cabide de roupa com fato', e: 'clothes hanger with a suit', ex: 'O cabide de roupa com fato ficava à porta.' },
+        { k: 'roupa passada na gaveta', e: 'ironed clothes in the drawer', ex: 'A roupa passada na gaveta cheirava a limpo.' },
+        { k: 'cuidado com o ferro quente', e: 'care with the hot iron', ex: 'O cuidado com o ferro quente era explicado às crianças.' },
+    ]},
+  { id: 'pt_cleanfish1', title: 'Cleaning Fish at the Beach', titleKriolu: 'Limpar o Peixe na Praia', icon: '🐟', color: 'emerald',
+    desc: 'Vocabulário de limpar o peixe na praia', vocab: [
+        { k: 'peixe fresco no balde', e: 'fresh fish in the bucket', ex: 'O peixe fresco no balde ainda estava vivo.' },
+        { k: 'faca e tábua para o peixe', e: 'knife and board for the fish', ex: 'A faca e a tábua para o peixe estavam limpas.' },
+        { k: 'peixe na tábua de cortar', e: 'fish on the cutting board', ex: 'O peixe na tábua de cortar foi aberto ao meio.' },
+        { k: 'sal grosso no peixe', e: 'coarse salt on the fish', ex: 'O sal grosso no peixe conservava-o até à noite.' },
+        { k: 'gaivota à espera dos restos', e: 'seagull waiting for the scraps', ex: 'A gaivota à espera dos restos ficava à volta da banca.' },
+        { k: 'água do mar para lavar o peixe', e: 'seawater for washing the fish', ex: 'A água do mar para lavar o peixe vinha em baldes.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38171,6 +38209,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_familydog1','pt_wallcat1'] },
   { unit:'Unidade 363 — Sandálias e Pesar Legumes', icon:'👡', desc:'Vocabulário de comprar sandálias no mercado, e vocabulário de pesar legumes na balança',
     lessons:['pt_sandalbuy1','pt_scaleveg1'] },
+  { unit:'Unidade 364 — Passar a Ferro e Limpar o Peixe', icon:'👔', desc:'Vocabulário de passar a roupa a ferro, e vocabulário de limpar o peixe na praia',
+    lessons:['pt_ironclothes1','pt_cleanfish1'] },
 ];
 
 
