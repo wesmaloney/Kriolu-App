@@ -19063,6 +19063,24 @@ const KR_LESSONS = [
         { k: 'Penteia kabellu dipos di banhu', e: 'combing the hair after the bath', ex: 'Penteia kabellu dipos di banhu e ku mai.' },
         { k: 'Mininu ta ri na banhu', e: 'boy laughing in the bath', ex: 'Mininu ta ri na banhu ta fasi tudu molhadu.' },
     ]},
+  { id: 'kr_settable1', title: 'Setting the Table', titleKriolu: 'Prepara Mesa', icon: '🍴', color: 'sky',
+    desc: 'Setting the table vocabulary', vocab: [
+        { k: 'Garfu i faka na mesa', e: 'fork and knife on the table', ex: 'Garfu i faka na mesa ta sta na su lugar.' },
+        { k: 'Kolher na banda di pratu', e: 'spoon beside the plate', ex: 'Kolher na banda di pratu e pa sopa.' },
+        { k: 'Kopu i garafa di agu na mesa', e: 'glass and bottle of water on the table', ex: 'Kopu i garafa di agu na mesa e pa tudu.' },
+        { k: 'Guardanapu na banda di pratu', e: 'napkin beside the plate', ex: 'Guardanapu na banda di pratu ta sta dobradu.' },
+        { k: 'Pon na meiu di mesa', e: 'bread in the middle of the table', ex: 'Pon na meiu di mesa ta ten xeru di forno.' },
+        { k: 'Kadera pa tudu família', e: 'chair for the whole family', ex: 'Kadera pa tudu família ta ten lugar.' },
+    ]},
+  { id: 'kr_soupprep1', title: 'Preparing Vegetables for Soup', titleKriolu: 'Prepara Legumi pa Sopa', icon: '🥣', color: 'emerald',
+    desc: 'Preparing vegetables for soup vocabulary', vocab: [
+        { k: 'Kaska batata-dosi', e: 'peeling the sweet potato', ex: 'Kaska batata-dosi e tarefa di mininu.' },
+        { k: 'Korta kenoura na tabua di korta', e: 'cutting the carrot on the board', ex: 'Korta kenoura na tabua di korta ta pidi faka bon.' },
+        { k: 'Pika sebola fininhu', e: 'chopping the onion finely', ex: 'Pika sebola fininhu ta fasi algen txora.' },
+        { k: 'Kuve i kenoura na panela', e: 'kale and carrot in the pot', ex: 'Kuve i kenoura na panela ta kuzinha djuntu.' },
+        { k: 'Sopa kenti na kaldeiron', e: 'hot soup in the large pot', ex: 'Sopa kenti na kaldeiron ta da pa tudu.' },
+        { k: 'Sopa kenti pa família', e: 'hot soup for the family', ex: 'Sopa kenti pa família ta ser sirbidu di noti.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20566,6 +20584,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_ironclothes1','kr_cleanfish1'] },
   { unit:'Unit 363 — Making the Bed & Children Bath', icon:'🛏', desc:'Making the bed vocabulary, and Evening bath for the children vocabulary',
     lessons:['kr_makebed1','kr_childbath1'] },
+  { unit:'Unit 364 — Setting the Table & Soup Prep', icon:'🍴', desc:'Setting the table vocabulary, and Preparing vegetables for soup vocabulary',
+    lessons:['kr_settable1','kr_soupprep1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37512,6 +37532,24 @@ const PT_LESSONS = [
         { k: 'pentear o cabelo depois do banho', e: 'combing the hair after the bath', ex: 'Pentear o cabelo depois do banho era com a mãe.' },
         { k: 'menino a rir no banho', e: 'boy laughing in the bath', ex: 'O menino a rir no banho molhava tudo.' },
     ]},
+  { id: 'pt_settable1', title: 'Setting the Table', titleKriolu: 'Pôr a Mesa', icon: '🍴', color: 'sky',
+    desc: 'Vocabulário de pôr a mesa', vocab: [
+        { k: 'garfo e faca na mesa', e: 'fork and knife on the table', ex: 'O garfo e a faca na mesa estavam no seu lugar.' },
+        { k: 'colher ao lado do prato', e: 'spoon beside the plate', ex: 'A colher ao lado do prato era para a sopa.' },
+        { k: 'copo e garrafa de água na mesa', e: 'glass and bottle of water on the table', ex: 'O copo e a garrafa de água na mesa eram para todos.' },
+        { k: 'guardanapo ao lado do prato', e: 'napkin beside the plate', ex: 'O guardanapo ao lado do prato estava dobrado.' },
+        { k: 'pão no meio da mesa', e: 'bread in the middle of the table', ex: 'O pão no meio da mesa cheirava a forno.' },
+        { k: 'cadeira para toda a família', e: 'chair for the whole family', ex: 'A cadeira para toda a família tinha lugar marcado.' },
+    ]},
+  { id: 'pt_soupprep1', title: 'Preparing Vegetables for Soup', titleKriolu: 'Preparar Legumes para a Sopa', icon: '🥣', color: 'emerald',
+    desc: 'Vocabulário de preparar legumes para a sopa', vocab: [
+        { k: 'descascar a batata-doce', e: 'peeling the sweet potato', ex: 'Descascar a batata-doce era tarefa dos miúdos.' },
+        { k: 'cortar a cenoura na tábua', e: 'cutting the carrot on the board', ex: 'Cortar a cenoura na tábua pedia uma faca boa.' },
+        { k: 'picar a cebola fininha', e: 'chopping the onion finely', ex: 'Picar a cebola fininha fazia chorar.' },
+        { k: 'couve e cenoura na panela', e: 'kale and carrot in the pot', ex: 'A couve e a cenoura na panela cozinhavam juntas.' },
+        { k: 'sopa quente no caldeirão', e: 'hot soup in the large pot', ex: 'A sopa quente no caldeirão dava para todos.' },
+        { k: 'sopa quente para a família', e: 'hot soup for the family', ex: 'A sopa quente para a família era servida à noite.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38251,6 +38289,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_ironclothes1','pt_cleanfish1'] },
   { unit:'Unidade 365 — Fazer a Cama e Banho das Crianças', icon:'🛏', desc:'Vocabulário de fazer a cama, e vocabulário do banho das crianças ao fim do dia',
     lessons:['pt_makebed1','pt_childbath1'] },
+  { unit:'Unidade 366 — Pôr a Mesa e Preparar a Sopa', icon:'🍴', desc:'Vocabulário de pôr a mesa, e vocabulário de preparar legumes para a sopa',
+    lessons:['pt_settable1','pt_soupprep1'] },
 ];
 
 
