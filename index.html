@@ -19351,6 +19351,24 @@ const KR_LESSONS = [
         { k: 'Txiga sedu na trabadju', e: 'arriving early at work', ex: 'Txiga sedu na trabadju e bon sinal.' },
         { k: 'Ora di kumesa trabadju', e: 'time to start work', ex: 'Ora di kumesa trabadju e sedu.' },
     ]},
+  { id: 'kr_housebuilding1', title: 'Building a House', titleKriolu: 'Obra di Kaza', icon: '🏗', color: 'sky',
+    desc: 'Building a house vocabulary', vocab: [
+        { k: 'Pedreru na obra di kaza', e: 'mason at the house building site', ex: 'Pedreru na obra di kaza ta kumesa ku sol.' },
+        { k: 'Paredi di blóku na obra', e: 'block wall on the building site', ex: 'Paredi di blóku na obra ta fika mas altu tudu dia.' },
+        { k: 'Karinhu di mon ku areia', e: 'wheelbarrow with sand', ex: 'Karinhu di mon ku areia ta pasa na kintal.' },
+        { k: 'Pá i martelu na txon', e: 'shovel and hammer on the ground', ex: 'Pá i martelu na txon ta spera otu dia.' },
+        { k: 'Nível di bolha na paredi', e: 'spirit level on the wall', ex: 'Nível di bolha na paredi ta mostra se ta diretu.' },
+        { k: 'Telhadu di kaza nobu', e: 'roof of the new house', ex: 'Telhadu di kaza nobu ta ben na fin.' },
+    ]},
+  { id: 'kr_neighbourhelp1', title: 'Neighbours Lending a Hand', titleKriolu: 'Djunta-mon di Vizinhu', icon: '🤝', color: 'emerald',
+    desc: 'Neighbours lending a hand vocabulary', vocab: [
+        { k: 'Vizinhu ta djuda na obra', e: 'neighbour helping on the building site', ex: 'Vizinhu ta djuda na obra ta leba ferramenta di el.' },
+        { k: 'Djunta-mon na kaza di vizinhu', e: 'working together at the neighbour\'s house', ex: 'Djunta-mon na kaza di vizinhu ta djunta rua.' },
+        { k: 'Almosu pa tudu ki ta djuda', e: 'lunch for all who help', ex: 'Almosu pa tudu ki ta djuda ta ser fetu pa mudjer.' },
+        { k: 'Sol forti riba di obra', e: 'strong sun over the building site', ex: 'Sol forti riba di obra ta pidi sonbra.' },
+        { k: 'Kaba obra na tenpu', e: 'finishing the building work on time', ex: 'Kaba obra na tenpu ta sta na mon di tudu.' },
+        { k: 'Gradise pa ajuda di vizinhu', e: 'thanking the neighbour for his help', ex: 'Gradise pa ajuda di vizinhu ta ser fetu ku un kumida.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20886,6 +20904,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_lostkey1','kr_askway1'] },
   { unit:'Unit 379 — Packing a Suitcase & Up Early for Work', icon:'🧳', desc:'Packing a suitcase vocabulary, and Up early for work vocabulary',
     lessons:['kr_packsuitcase1','kr_earlywork1'] },
+  { unit:'Unit 380 — Building a House & Neighbours Helping', icon:'🏗', desc:'Building a house vocabulary, and Neighbours lending a hand vocabulary',
+    lessons:['kr_housebuilding1','kr_neighbourhelp1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38120,6 +38140,24 @@ const PT_LESSONS = [
         { k: 'chegar cedo ao trabalho', e: 'arriving early at work', ex: 'Chegar cedo ao trabalho era bom sinal.' },
         { k: 'hora de começar o trabalho', e: 'time to start work', ex: 'A hora de começar o trabalho era cedo.' },
     ]},
+  { id: 'pt_housebuilding1', title: 'Building a House', titleKriolu: 'Obra de Casa', icon: '🏗', color: 'sky',
+    desc: 'Vocabulário de obra de casa', vocab: [
+        { k: 'pedreiro na obra da casa', e: 'mason at the house building site', ex: 'O pedreiro na obra da casa começava ao nascer do sol.' },
+        { k: 'parede de blocos na obra', e: 'block wall on the building site', ex: 'A parede de blocos na obra ficava mais alta todos os dias.' },
+        { k: 'carrinho de mão com areia', e: 'wheelbarrow with sand', ex: 'O carrinho de mão com areia atravessava o quintal.' },
+        { k: 'pá e martelo no chão', e: 'shovel and hammer on the ground', ex: 'A pá e o martelo no chão esperavam o dia seguinte.' },
+        { k: 'nível de bolha na parede', e: 'spirit level on the wall', ex: 'O nível de bolha na parede mostrava se estava direita.' },
+        { k: 'telhado da casa nova', e: 'roof of the new house', ex: 'O telhado da casa nova vinha no fim.' },
+    ]},
+  { id: 'pt_neighbourhelp1', title: 'Neighbours Lending a Hand', titleKriolu: 'Vizinhos a Ajudar', icon: '🤝', color: 'emerald',
+    desc: 'Vocabulário de vizinhos a ajudar', vocab: [
+        { k: 'vizinho a ajudar na obra', e: 'neighbour helping on the building site', ex: 'O vizinho a ajudar na obra trazia as suas ferramentas.' },
+        { k: 'trabalho em conjunto na casa do vizinho', e: 'working together at the neighbour\'s house', ex: 'O trabalho em conjunto na casa do vizinho juntava a rua.' },
+        { k: 'almoço para todos os que ajudam', e: 'lunch for all who help', ex: 'O almoço para todos os que ajudam era feito pelas mulheres.' },
+        { k: 'sol forte sobre a obra', e: 'strong sun over the building site', ex: 'O sol forte sobre a obra pedia sombra.' },
+        { k: 'acabar a obra a tempo', e: 'finishing the building work on time', ex: 'Acabar a obra a tempo estava nas mãos de todos.' },
+        { k: 'agradecer a ajuda do vizinho', e: 'thanking the neighbour for his help', ex: 'Agradecer a ajuda do vizinho era feito com uma refeição.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38891,6 +38929,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_lostkey1','pt_askway1'] },
   { unit:'Unidade 381 — Fazer a Mala e Levantar Cedo para o Trabalho', icon:'🧳', desc:'Vocabulário de fazer a mala para a viagem, e vocabulário de levantar cedo para o trabalho',
     lessons:['pt_packsuitcase1','pt_earlywork1'] },
+  { unit:'Unidade 382 — Obra de Casa e Vizinhos a Ajudar', icon:'🏗', desc:'Vocabulário de obra de casa, e vocabulário de vizinhos a ajudar',
+    lessons:['pt_housebuilding1','pt_neighbourhelp1'] },
 ];
 
 
