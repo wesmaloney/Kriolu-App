@@ -18487,6 +18487,24 @@ const KR_LESSONS = [
         { k: 'Kaza pikinoti na fundu di vali', e: 'small house at the bottom of the valley', ex: 'Kaza pikinoti na fundu di vali ta odjadu di topu.' },
         { k: 'Xiga kansadu ma kontenti', e: 'tired but happy arrival', ex: 'Xiga kansadu ma kontenti ta da bon sonu.' },
     ]},
+  { id: 'kr_powercut1', title: 'Power Cut Evening', titleKriolu: 'Noti sen Lus', icon: '🕯', color: 'amber',
+    desc: 'Power cut evening vocabulary', vocab: [
+        { k: 'Falta di lus na noti', e: 'power cut at night', ex: 'Falta di lus na noti ta dexa kaza skuru.' },
+        { k: 'Lanterna ku luzu forti', e: 'torch with a strong light', ex: 'Lanterna ku luzu forti ta mostra kaminhu.' },
+        { k: 'Vela na garrafa', e: 'candle in a bottle', ex: 'Vela na garrafa ta da luzu pokutim.' },
+        { k: 'Kumida guardadu na frigorífiku fexadu', e: 'food kept in the closed fridge', ex: 'Kumida guardadu na frigorífiku fexadu ta dura txeu ora.' },
+        { k: 'Telefoni ku karregador portátil', e: 'phone with a portable charger', ex: 'Telefoni ku karregador portátil ta fika ligadu.' },
+        { k: 'Vizinhu ki ta papia na rua', e: 'neighbours chatting in the street', ex: 'Vizinhu ki ta papia na rua ta spera lus volta.' },
+    ]},
+  { id: 'kr_sundaylunch1', title: 'Sunday Family Lunch', titleKriolu: 'Almosu di Dumingu ku Família', icon: '🍛', color: 'orange',
+    desc: 'Sunday family lunch vocabulary', vocab: [
+        { k: 'Bota mesa pa família tudu', e: 'setting the table for the whole family', ex: 'Bota mesa pa família tudu ta fasi dumingu spesial.' },
+        { k: 'Avó ki ta sirvi katxupa', e: 'grandmother serving the cachupa', ex: 'Avó ki ta sirvi katxupa ta da pratu txeiu.' },
+        { k: 'Mininu sentadu na mesa', e: 'children seated at the table', ex: 'Mininu sentadu na mesa ta spera kumida.' },
+        { k: 'Sumo di fruta pa tudu', e: 'fruit juice for everyone', ex: 'Sumo di fruta pa tudu ta ser fresku.' },
+        { k: 'Bolu di mel pa sobremesa', e: 'honey cake for dessert', ex: 'Bolu di mel pa sobremesa ta fasi mininu kontenti.' },
+        { k: 'Tra mesa i laba pratu', e: 'clearing the table and washing the dishes', ex: 'Tra mesa i laba pratu ta ser djuda di tudu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19926,6 +19944,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_meatstall1','kr_flattyre1'] },
   { unit:'Unit 331 — Mountain Hike', icon:'🥾', desc:'Mountain hike gear and trail vocabulary, and Mountain hike views and rest vocabulary',
     lessons:['kr_hike1','kr_hike2'] },
+  { unit:'Unit 332 — Power Cut & Sunday Lunch', icon:'🕯', desc:'Power cut evening vocabulary, and Sunday family lunch vocabulary',
+    lessons:['kr_powercut1','kr_sundaylunch1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36296,6 +36316,24 @@ const PT_LESSONS = [
         { k: 'casa pequena no fundo do vale', e: 'small house at the bottom of the valley', ex: 'A casa pequena no fundo do vale via-se do topo.' },
         { k: 'chegada cansada mas contente', e: 'tired but happy arrival', ex: 'A chegada cansada mas contente dava bom sono.' },
     ]},
+  { id: 'pt_powercut1', title: 'Power Cut Evening', titleKriolu: 'Serão sem Luz', icon: '🕯', color: 'amber',
+    desc: 'Vocabulário do serão sem luz', vocab: [
+        { k: 'falta de luz à noite', e: 'power cut at night', ex: 'A falta de luz à noite deixava a casa escura.' },
+        { k: 'lanterna com luz forte', e: 'torch with a strong light', ex: 'A lanterna com luz forte mostrava o caminho.' },
+        { k: 'vela numa garrafa', e: 'candle in a bottle', ex: 'A vela numa garrafa dava pouca luz.' },
+        { k: 'comida guardada no frigorífico fechado', e: 'food kept in the closed fridge', ex: 'A comida guardada no frigorífico fechado durava muitas horas.' },
+        { k: 'telemóvel com carregador portátil', e: 'phone with a portable charger', ex: 'O telemóvel com carregador portátil ficava ligado.' },
+        { k: 'vizinhos à conversa na rua', e: 'neighbours chatting in the street', ex: 'Os vizinhos à conversa na rua esperavam a luz voltar.' },
+    ]},
+  { id: 'pt_sundaylunch1', title: 'Sunday Family Lunch', titleKriolu: 'Almoço de Domingo em Família', icon: '🍛', color: 'orange',
+    desc: 'Vocabulário do almoço de domingo em família', vocab: [
+        { k: 'pôr a mesa para a família toda', e: 'setting the table for the whole family', ex: 'Pôr a mesa para a família toda tornava o domingo especial.' },
+        { k: 'avó a servir a cachupa', e: 'grandmother serving the cachupa', ex: 'A avó a servir a cachupa enchia o prato.' },
+        { k: 'crianças sentadas à mesa', e: 'children seated at the table', ex: 'As crianças sentadas à mesa esperavam a comida.' },
+        { k: 'sumo de fruta para todos', e: 'fruit juice for everyone', ex: 'O sumo de fruta para todos era fresco.' },
+        { k: 'bolo de mel para a sobremesa', e: 'honey cake for dessert', ex: 'O bolo de mel para a sobremesa deixava os meninos contentes.' },
+        { k: 'tirar a mesa e lavar a loiça', e: 'clearing the table and washing the dishes', ex: 'Tirar a mesa e lavar a loiça era ajuda de todos.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36971,6 +37009,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_meatstall1','pt_flattyre1'] },
   { unit:'Unidade 333 — Caminhada na Montanha', icon:'🥾', desc:'Vocabulário da caminhada na montanha: equipamento e trilho, e vocabulário da caminhada na montanha: vistas e descanso',
     lessons:['pt_hike1','pt_hike2'] },
+  { unit:'Unidade 334 — Serão sem Luz e Almoço de Domingo', icon:'🕯', desc:'Vocabulário do serão sem luz, e vocabulário do almoço de domingo em família',
+    lessons:['pt_powercut1','pt_sundaylunch1'] },
 ];
 
 
