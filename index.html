@@ -19495,6 +19495,24 @@ const KR_LESSONS = [
         { k: 'Boka kenti di piri-piri', e: 'mouth burning with piri-piri', ex: 'Boka kenti di piri-piri ta pidi agu.' },
         { k: 'Txora ku piri-piri', e: 'crying from the piri-piri', ex: 'Txora ku piri-piri ta fasi mesa tudu ri.' },
     ]},
+  { id: 'kr_dishwashing1', title: 'Washing the Dishes', titleKriolu: 'Laba Pratu dipos di Kume', icon: '🍽', color: 'sky',
+    desc: 'Washing the dishes vocabulary', vocab: [
+        { k: 'Pratu sujadu na lavatóriu', e: 'dirty plate in the sink', ex: 'Pratu sujadu na lavatóriu ta spera bez.' },
+        { k: 'Agu kenti i sabon na lavatóriu', e: 'hot water and soap in the sink', ex: 'Agu kenti i sabon na lavatóriu ta tra gordura.' },
+        { k: 'Sponja di kuzinha na mon', e: 'kitchen sponge in the hand', ex: 'Sponja di kuzinha na mon ta pasa na kada pratu.' },
+        { k: 'Fidja ta laba pratu', e: 'daughter washing the dishes', ex: 'Fidja ta laba pratu ta kanta baxu.' },
+        { k: 'Kopu i kolher limpu', e: 'clean glasses and spoons', ex: 'Kopu i kolher limpu ta brilha na lavatóriu.' },
+        { k: 'Pano di kuzinha pa seka pratu', e: 'kitchen cloth for drying the plates', ex: 'Pano di kuzinha pa seka pratu ta sta molhadu.' },
+    ]},
+  { id: 'kr_kitchennight1', title: 'Kitchen at Night', titleKriolu: 'Kuzinha di Noti', icon: '🧽', color: 'emerald',
+    desc: 'Kitchen at night vocabulary', vocab: [
+        { k: 'Restu di kumida na lixu', e: 'food scraps in the rubbish', ex: 'Restu di kumida na lixu ta ser pouku.' },
+        { k: 'Panela limpu na prateleira', e: 'clean pot on the shelf', ex: 'Panela limpu na prateleira ta fika na mon.' },
+        { k: 'Mesa limpu dipos di kume', e: 'clean table after eating', ex: 'Mesa limpu dipos di kume ta sta bon pa manhan.' },
+        { k: 'Torneira fexadu', e: 'tap turned off', ex: 'Torneira fexadu ta kaba servisu.' },
+        { k: 'Kuzinha limpu di noti', e: 'clean kitchen at night', ex: 'Kuzinha limpu di noti ta ten xeru di sabon.' },
+        { k: 'Mai ta kaba trabadju di dia', e: 'mother finishing the day\'s work', ex: 'Mai ta kaba trabadju di dia ta senta dipos.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21046,6 +21064,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_melonday1','kr_noonshade1'] },
   { unit:'Unit 387 — Soaking Beans & Piri-piri', icon:'🥘', desc:'Soaking beans overnight vocabulary, and Making piri-piri vocabulary',
     lessons:['kr_soakbeans1','kr_piripiri1'] },
+  { unit:'Unit 388 — Dishwashing & Kitchen at Night', icon:'🍽', desc:'Washing the dishes vocabulary, and Kitchen at night vocabulary',
+    lessons:['kr_dishwashing1','kr_kitchennight1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38424,6 +38444,24 @@ const PT_LESSONS = [
         { k: 'boca quente de piri-piri', e: 'mouth burning with piri-piri', ex: 'A boca quente de piri-piri pedia água.' },
         { k: 'chorar com o piri-piri', e: 'crying from the piri-piri', ex: 'Chorar com o piri-piri fazia rir a mesa toda.' },
     ]},
+  { id: 'pt_dishwashing1', title: 'Washing the Dishes', titleKriolu: 'Lavar a Loiça depois de Comer', icon: '🍽', color: 'sky',
+    desc: 'Vocabulário de lavar a loiça', vocab: [
+        { k: 'prato sujo no lava-loiça', e: 'dirty plate in the sink', ex: 'O prato sujo no lava-loiça esperava a vez.' },
+        { k: 'água quente e sabão no lava-loiça', e: 'hot water and soap in the sink', ex: 'A água quente e o sabão no lava-loiça tiravam a gordura.' },
+        { k: 'esponja da cozinha na mão', e: 'kitchen sponge in the hand', ex: 'A esponja da cozinha na mão passava por cada prato.' },
+        { k: 'filha a lavar a loiça', e: 'daughter washing the dishes', ex: 'A filha a lavar a loiça cantava baixinho.' },
+        { k: 'copos e colheres limpos', e: 'clean glasses and spoons', ex: 'Os copos e as colheres limpos brilhavam no escorredor.' },
+        { k: 'pano da cozinha para secar os pratos', e: 'kitchen cloth for drying the plates', ex: 'O pano da cozinha para secar os pratos estava húmido.' },
+    ]},
+  { id: 'pt_kitchennight1', title: 'Kitchen at Night', titleKriolu: 'A Cozinha à Noite', icon: '🧽', color: 'emerald',
+    desc: 'Vocabulário da cozinha à noite', vocab: [
+        { k: 'restos de comida no lixo', e: 'food scraps in the rubbish', ex: 'Os restos de comida no lixo eram poucos.' },
+        { k: 'panela limpa na prateleira', e: 'clean pot on the shelf', ex: 'A panela limpa na prateleira ficava à mão.' },
+        { k: 'mesa limpa depois de comer', e: 'clean table after eating', ex: 'A mesa limpa depois de comer estava pronta para a manhã.' },
+        { k: 'torneira fechada', e: 'tap turned off', ex: 'A torneira fechada acabava o serviço.' },
+        { k: 'cozinha limpa à noite', e: 'clean kitchen at night', ex: 'A cozinha limpa à noite cheirava a sabão.' },
+        { k: 'mãe a acabar o trabalho do dia', e: 'mother finishing the day\'s work', ex: 'A mãe a acabar o trabalho do dia sentava-se depois.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -39211,6 +39249,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_melonday1','pt_noonshade1'] },
   { unit:'Unidade 389 — Feijão de Molho e Piri-piri', icon:'🥘', desc:'Vocabulário de feijão de molho de noite, e vocabulário de fazer piri-piri',
     lessons:['pt_soakbeans1','pt_piripiri1'] },
+  { unit:'Unidade 390 — Lavar a Loiça e Cozinha à Noite', icon:'🍽', desc:'Vocabulário de lavar a loiça, e vocabulário da cozinha à noite',
+    lessons:['pt_dishwashing1','pt_kitchennight1'] },
 ];
 
 
