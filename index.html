@@ -19171,6 +19171,24 @@ const KR_LESSONS = [
         { k: 'Balkon di loja limpu', e: 'clean shop counter', ex: 'Balkon di loja limpu ta brilha ku sol.' },
         { k: 'Primeru klienti di dia', e: 'first customer of the day', ex: 'Primeru klienti di dia ta da sorti.' },
     ]},
+  { id: 'kr_nightrain1', title: 'Night Rain and Thunder', titleKriolu: 'Txuva i Trovoada di Noti', icon: '⛈', color: 'sky',
+    desc: 'Night rain and thunder vocabulary', vocab: [
+        { k: 'Txuva na telhadu di noti', e: 'rain on the roof at night', ex: 'Txuva na telhadu di noti ta fasi barulhu tudu noti.' },
+        { k: 'Barulhu di txuva na kuartu', e: 'sound of rain in the bedroom', ex: 'Barulhu di txuva na kuartu ta ser obi na tudu kaza.' },
+        { k: 'Trovoada di noti', e: 'thunderstorm at night', ex: 'Trovoada di noti ta labanta mininu.' },
+        { k: 'Relanpagu na janela', e: 'lightning at the window', ex: 'Relanpagu na janela ta da luz na kuartu pa un momentu.' },
+        { k: 'Kobertor di lan pa noti friu', e: 'wool blanket for the cold night', ex: 'Kobertor di lan pa noti friu ta sta na kama.' },
+        { k: 'Sonu levi ku txuva', e: 'light sleep with the rain', ex: 'Sonu levi ku txuva ta kaba ku trovoada.' },
+    ]},
+  { id: 'kr_seasunrise1', title: 'Sunrise over the Sea', titleKriolu: 'Sol ta Sai riba di Mar', icon: '🌅', color: 'emerald',
+    desc: 'Sunrise over the sea vocabulary', vocab: [
+        { k: 'Sol ta sai na orizonti', e: 'sun rising on the horizon', ex: 'Sol ta sai na orizonti ta da kor na mar.' },
+        { k: 'Séu laranja i roza', e: 'orange and pink sky', ex: 'Séu laranja i roza ta dura pouku tenpu.' },
+        { k: 'Barku di piska na orizonti', e: 'fishing boat on the horizon', ex: 'Barku di piska na orizonti ta bai pa kosta.' },
+        { k: 'Galu ta kanta antis di sol', e: 'rooster crowing before the sun', ex: 'Galu ta kanta antis di sol ta labanta rua.' },
+        { k: 'Mar azul-klaru di manhan', e: 'light blue sea in the morning', ex: 'Mar azul-klaru di manhan ta sta mansu.' },
+        { k: 'Ventu friu di manhan', e: 'cold wind in the morning', ex: 'Ventu friu di manhan ta bem di mar.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20686,6 +20704,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_shellbeans1','kr_orangejuice1'] },
   { unit:'Unit 369 — Locking Up & Opening the Shop', icon:'🔐', desc:'Locking up for the night vocabulary, and Opening the shop vocabulary',
     lessons:['kr_lockup1','kr_shopopening1'] },
+  { unit:'Unit 370 — Night Rain & Sea Sunrise', icon:'⛈', desc:'Night rain and thunder vocabulary, and Sunrise over the sea vocabulary',
+    lessons:['kr_nightrain1','kr_seasunrise1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37740,6 +37760,24 @@ const PT_LESSONS = [
         { k: 'balcão da loja limpo', e: 'clean shop counter', ex: 'O balcão da loja limpo reluzia com o sol.' },
         { k: 'primeiro cliente do dia', e: 'first customer of the day', ex: 'O primeiro cliente do dia dava sorte.' },
     ]},
+  { id: 'pt_nightrain1', title: 'Night Rain and Thunder', titleKriolu: 'Chuva e Trovoada de Noite', icon: '⛈', color: 'sky',
+    desc: 'Vocabulário de chuva e trovoada de noite', vocab: [
+        { k: 'chuva no telhado de noite', e: 'rain on the roof at night', ex: 'A chuva no telhado de noite fazia barulho a noite toda.' },
+        { k: 'barulho da chuva no quarto', e: 'sound of rain in the bedroom', ex: 'O barulho da chuva no quarto ouvia-se por toda a casa.' },
+        { k: 'trovoada de noite', e: 'thunderstorm at night', ex: 'A trovoada de noite acordou as crianças.' },
+        { k: 'relâmpago na janela', e: 'lightning at the window', ex: 'O relâmpago na janela iluminava o quarto por um instante.' },
+        { k: 'cobertor de lã para a noite fria', e: 'wool blanket for the cold night', ex: 'O cobertor de lã para a noite fria estava na cama.' },
+        { k: 'sono leve com a chuva', e: 'light sleep with the rain', ex: 'O sono leve com a chuva quebrava-se a cada trovão.' },
+    ]},
+  { id: 'pt_seasunrise1', title: 'Sunrise over the Sea', titleKriolu: 'Nascer do Sol sobre o Mar', icon: '🌅', color: 'emerald',
+    desc: 'Vocabulário do nascer do sol sobre o mar', vocab: [
+        { k: 'sol a nascer no horizonte', e: 'sun rising on the horizon', ex: 'O sol a nascer no horizonte dava cor ao mar.' },
+        { k: 'céu laranja e rosa', e: 'orange and pink sky', ex: 'O céu laranja e rosa durava pouco tempo.' },
+        { k: 'barco de pesca no horizonte', e: 'fishing boat on the horizon', ex: 'O barco de pesca no horizonte ia a caminho da costa.' },
+        { k: 'galo a cantar antes do sol', e: 'rooster crowing before the sun', ex: 'O galo a cantar antes do sol acordava a rua.' },
+        { k: 'mar azul-claro de manhã', e: 'light blue sea in the morning', ex: 'O mar azul-claro de manhã estava manso.' },
+        { k: 'vento frio de manhã', e: 'cold wind in the morning', ex: 'O vento frio de manhã vinha do mar.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38491,6 +38529,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_shellbeans1','pt_orangejuice1'] },
   { unit:'Unidade 371 — Fechar a Casa e Abrir a Loja', icon:'🔐', desc:'Vocabulário de fechar a casa à noite, e vocabulário de abrir a loja de manhã',
     lessons:['pt_lockup1','pt_shopopening1'] },
+  { unit:'Unidade 372 — Chuva de Noite e Nascer do Sol', icon:'⛈', desc:'Vocabulário de chuva e trovoada de noite, e vocabulário do nascer do sol sobre o mar',
+    lessons:['pt_nightrain1','pt_seasunrise1'] },
 ];
 
 
