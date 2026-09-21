@@ -18271,6 +18271,24 @@ const KR_LESSONS = [
         { k: 'Guardanapu di papel i pratu pekenu', e: 'paper napkin and small plate', ex: 'Guardanapu di papel i pratu pekenu ta bai ku pastel.' },
         { k: 'Troku dadu ku alegria', e: 'change given with joy', ex: 'Troku dadu ku alegria ta ganha klienti.' },
     ]},
+  { id: 'kr_ferry1', title: 'Ferry Crossing', titleKriolu: 'Viaji di Ferry', icon: '⛴', color: 'blue',
+    desc: 'Ferry crossing vocabulary', vocab: [
+        { k: 'Bilhete kunpradu na bilheteira', e: 'ticket bought at the ticket office', ex: 'Bilhete kunpradu na bilheteira ta ser mostradu na entrada.' },
+        { k: 'Ferry ki ta sai di kais', e: 'ferry leaving the quay', ex: 'Ferry ki ta sai di kais ta bai pa Santu Antãu.' },
+        { k: 'Pasajeru ki ta subi na barku', e: 'passengers boarding the ship', ex: 'Pasajeru ki ta subi na barku ta leba saku.' },
+        { k: 'Mar ku ventu forti', e: 'sea with strong wind', ex: 'Mar ku ventu forti ta mexe barku txeu.' },
+        { k: 'Gaivota riba di barku', e: 'seagulls on top of the boat', ex: 'Gaivota riba di barku ta odja pexi.' },
+        { k: 'Ilha di lonji más pertu', e: 'island in the distance getting closer', ex: 'Ilha di lonji más pertu ta fasi pasajeru kontenti.' },
+    ]},
+  { id: 'kr_classroomday1', title: 'A School Day in Class', titleKriolu: 'Dia di Aula na Skola', icon: '🏫', color: 'green',
+    desc: 'School day in class vocabulary', vocab: [
+        { k: 'Profesora ki ta le un livru', e: 'teacher reading a book', ex: 'Profesora ki ta le un livru ta konta un stória.' },
+        { k: 'Studanti sentadu na sala di ola', e: 'students seated in the classroom', ex: 'Studanti sentadu na sala di ola ta skuta.' },
+        { k: 'Kaderno abertu riba di mesa', e: 'notebook open on the table', ex: 'Kaderno abertu riba di mesa ta spera lápis.' },
+        { k: 'Pergunta i resposta', e: 'question and answer', ex: 'Pergunta i resposta ta ajuda studanti.' },
+        { k: 'Intervalu na kintal di skola', e: 'break in the school yard', ex: 'Mininu ta binka na intervalu.' },
+        { k: 'Nota bon na fin di trimestri', e: 'good grade at the end of the term', ex: 'Nota bon na fin di trimestri ta da orgulhu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19694,6 +19712,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_barbershop1','kr_tailorfit1'] },
   { unit:'Unit 323 — Minibus Driver & Street Cook', icon:'🚐', desc:'Minibus driver day vocabulary, and Street food cook vocabulary',
     lessons:['kr_hiacedriver1','kr_streetcook1'] },
+  { unit:'Unit 324 — Ferry & School Day', icon:'⛴', desc:'Ferry crossing vocabulary, and School day in class vocabulary',
+    lessons:['kr_ferry1','kr_classroomday1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35848,6 +35868,24 @@ const PT_LESSONS = [
         { k: 'guardanapo de papel e prato pequeno', e: 'paper napkin and small plate', ex: 'O guardanapo de papel e o prato pequeno iam com o pastel.' },
         { k: 'troco dado com alegria', e: 'change given with joy', ex: 'O troco dado com alegria ganhava clientes.' },
     ]},
+  { id: 'pt_ferry1', title: 'Ferry Crossing', titleKriolu: 'Viagem de Ferry', icon: '⛴', color: 'blue',
+    desc: 'Vocabulário da viagem de ferry', vocab: [
+        { k: 'bilhete comprado na bilheteira', e: 'ticket bought at the ticket office', ex: 'O bilhete comprado na bilheteira era mostrado à entrada.' },
+        { k: 'ferry a sair do cais', e: 'ferry leaving the quay', ex: 'O ferry a sair do cais ia para Santo Antão.' },
+        { k: 'passageiros a subir a bordo', e: 'passengers boarding the ship', ex: 'Os passageiros a subir a bordo levavam sacos.' },
+        { k: 'mar com vento forte', e: 'sea with strong wind', ex: 'O mar com vento forte mexia muito o barco.' },
+        { k: 'gaivotas em cima do barco', e: 'seagulls on top of the boat', ex: 'As gaivotas em cima do barco olhavam para o peixe.' },
+        { k: 'ilha ao longe cada vez mais perto', e: 'island in the distance getting closer', ex: 'A ilha ao longe cada vez mais perto deixava os passageiros contentes.' },
+    ]},
+  { id: 'pt_classroomday1', title: 'A School Day in Class', titleKriolu: 'Um Dia de Aulas na Escola', icon: '🏫', color: 'green',
+    desc: 'Vocabulário de um dia de aulas na escola', vocab: [
+        { k: 'professora a ler um livro', e: 'teacher reading a book', ex: 'A professora a ler um livro contava uma história.' },
+        { k: 'alunos sentados na sala de aula', e: 'students seated in the classroom', ex: 'Os alunos sentados na sala de aula ouviam.' },
+        { k: 'caderno aberto em cima da mesa', e: 'notebook open on the table', ex: 'O caderno aberto em cima da mesa esperava o lápis.' },
+        { k: 'pergunta e resposta', e: 'question and answer', ex: 'A pergunta e a resposta ajudavam os alunos.' },
+        { k: 'intervalo no pátio da escola', e: 'break in the school yard', ex: 'No intervalo os meninos brincavam.' },
+        { k: 'nota boa no fim do período', e: 'good grade at the end of the term', ex: 'A nota boa no fim do período dava orgulho.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36507,6 +36545,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_barbershop1','pt_tailorfit1'] },
   { unit:'Unidade 325 — Motorista de Hiace e Cozinheira de Rua', icon:'🚐', desc:'Vocabulário do dia do motorista de hiace, e vocabulário da cozinheira de rua',
     lessons:['pt_hiacedriver1','pt_streetcook1'] },
+  { unit:'Unidade 326 — Ferry e Dia de Aulas', icon:'⛴', desc:'Vocabulário da viagem de ferry, e vocabulário de um dia de aulas na escola',
+    lessons:['pt_ferry1','pt_classroomday1'] },
 ];
 
 
