@@ -19315,6 +19315,24 @@ const KR_LESSONS = [
         { k: 'Mininu ki kai di bisikleta', e: 'boy who falls off the bicycle', ex: 'Mininu ki kai di bisikleta ta labanta ta ri.' },
         { k: 'Prende anda di bisikleta', e: 'learning to ride a bicycle', ex: 'Prende anda di bisikleta ta leba un simana.' },
     ]},
+  { id: 'kr_lostkey1', title: 'The Lost Key', titleKriolu: 'Txavi Pirdidu', icon: '🔑', color: 'sky',
+    desc: 'The lost key vocabulary', vocab: [
+        { k: 'Perde txavi di kaza', e: 'losing the house key', ex: 'Perde txavi di kaza ta perde manhan tudu.' },
+        { k: 'Buska txavi na bolsu', e: 'looking for the key in the pocket', ex: 'Buska txavi na bolsu ka ta djuda.' },
+        { k: 'Txavi a más na gaveta', e: 'spare key in the drawer', ex: 'Txavi a más na gaveta ta djuda dia tudu.' },
+        { k: 'Odja ben baxu di kadera', e: 'looking closely under the chair', ex: 'Odja ben baxu di kadera ta djuda.' },
+        { k: 'Pergunta undi ki txavi sta', e: 'asking where the key is', ex: 'Pergunta undi ki txavi sta ta fasi tudu família buska.' },
+        { k: 'Txavi na bolsu di kalsa', e: 'key in the trouser pocket', ex: 'Txavi na bolsu di kalsa ta sta li tudu tenpu.' },
+    ]},
+  { id: 'kr_askway1', title: 'Asking the Way in Town', titleKriolu: 'Pergunta Kaminhu na Sidadi', icon: '🧭', color: 'emerald',
+    desc: 'Asking the way in town vocabulary', vocab: [
+        { k: 'Undi ki e prasa sentral', e: 'where the central square is', ex: 'Undi ki e prasa sentral e pergunta di stranjeru.' },
+        { k: 'Sigi diretu te na igreja', e: 'going straight on to the church', ex: 'Sigi diretu te na igreja ta leba sinku minutu.' },
+        { k: 'Vira na rua prinsipal', e: 'turning onto the main street', ex: 'Vira na rua prinsipal e otu pasu.' },
+        { k: 'Pertu di merkadu', e: 'near the market', ex: 'Pertu di merkadu e pontu di enkontru.' },
+        { k: 'Mapa na mon', e: 'map in the hand', ex: 'Mapa na mon di stranjeru ta sta dobradu.' },
+        { k: 'Obrigadu pa ajuda', e: 'thank you for the help', ex: 'Obrigadu pa ajuda ta fexa konversa.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20846,6 +20864,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_waterbill1','kr_lightmeter1'] },
   { unit:'Unit 377 — Guitar Lesson & Learning to Cycle', icon:'🎸', desc:'First guitar lesson vocabulary, and Learning to ride a bicycle vocabulary',
     lessons:['kr_guitarlesson1','kr_learnbike1'] },
+  { unit:'Unit 378 — Lost Key & Asking the Way', icon:'🔑', desc:'The lost key vocabulary, and Asking the way in town vocabulary',
+    lessons:['kr_lostkey1','kr_askway1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38044,6 +38064,24 @@ const PT_LESSONS = [
         { k: 'menino que cai da bicicleta', e: 'boy who falls off the bicycle', ex: 'O menino que cai da bicicleta levanta-se a rir.' },
         { k: 'aprender a andar de bicicleta', e: 'learning to ride a bicycle', ex: 'Aprender a andar de bicicleta levou uma semana.' },
     ]},
+  { id: 'pt_lostkey1', title: 'The Lost Key', titleKriolu: 'A Chave Perdida', icon: '🔑', color: 'sky',
+    desc: 'Vocabulário da chave perdida', vocab: [
+        { k: 'perder a chave de casa', e: 'losing the house key', ex: 'Perder a chave de casa fez perder a manhã toda.' },
+        { k: 'procurar a chave no bolso', e: 'looking for the key in the pocket', ex: 'Procurar a chave no bolso não ajudou.' },
+        { k: 'chave sobressalente na gaveta', e: 'spare key in the drawer', ex: 'A chave sobressalente na gaveta ajudou o dia todo.' },
+        { k: 'olhar bem debaixo da cadeira', e: 'looking closely under the chair', ex: 'Olhar bem debaixo da cadeira acabou por ajudar.' },
+        { k: 'perguntar onde está a chave', e: 'asking where the key is', ex: 'Perguntar onde está a chave fez toda a família procurar.' },
+        { k: 'chave no bolso das calças', e: 'key in the trouser pocket', ex: 'A chave no bolso das calças estava ali o tempo todo.' },
+    ]},
+  { id: 'pt_askway1', title: 'Asking the Way in Town', titleKriolu: 'Perguntar o Caminho na Cidade', icon: '🧭', color: 'emerald',
+    desc: 'Vocabulário de perguntar o caminho na cidade', vocab: [
+        { k: 'onde fica a praça central', e: 'where the central square is', ex: 'Onde fica a praça central era a pergunta do turista.' },
+        { k: 'seguir em frente até à igreja', e: 'going straight on to the church', ex: 'Seguir em frente até à igreja levava cinco minutos.' },
+        { k: 'virar na rua principal', e: 'turning onto the main street', ex: 'Virar na rua principal era o outro passo.' },
+        { k: 'perto do mercado', e: 'near the market', ex: 'Perto do mercado era ponto de encontro.' },
+        { k: 'mapa na mão', e: 'map in the hand', ex: 'O mapa na mão do turista estava dobrado.' },
+        { k: 'obrigado pela ajuda', e: 'thank you for the help', ex: 'O obrigado pela ajuda fechou a conversa.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38811,6 +38849,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_waterbill1','pt_lightmeter1'] },
   { unit:'Unidade 379 — Aula de Viola e Aprender a Andar de Bicicleta', icon:'🎸', desc:'Vocabulário da primeira aula de viola, e vocabulário de aprender a andar de bicicleta',
     lessons:['pt_guitarlesson1','pt_learnbike1'] },
+  { unit:'Unidade 380 — A Chave Perdida e Perguntar o Caminho', icon:'🔑', desc:'Vocabulário da chave perdida, e vocabulário de perguntar o caminho na cidade',
+    lessons:['pt_lostkey1','pt_askway1'] },
 ];
 
 
