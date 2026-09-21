@@ -19279,6 +19279,24 @@ const KR_LESSONS = [
         { k: 'Mandioka ku mel di kana', e: 'cassava with cane syrup', ex: 'Mandioka ku mel di kana e un dosi di kaza.' },
         { k: 'Pon di kaza ku xa', e: 'home-baked bread with tea', ex: 'Pon di kaza ku xa ta kenta manhan friu.' },
     ]},
+  { id: 'kr_waterbill1', title: 'Paying the Water Bill', titleKriolu: 'Paga Fatura di Agu', icon: '🚰', color: 'sky',
+    desc: 'Paying the water bill vocabulary', vocab: [
+        { k: 'Fatura di agu na mon', e: 'water bill in the hand', ex: 'Fatura di agu na mon ta txiga na fin di mes.' },
+        { k: 'Kontador di agu na kaza', e: 'water meter at home', ex: 'Kontador di agu na kaza ta fika djuntu di portom.' },
+        { k: 'Paga fatura na fin di mes', e: 'paying the bill at the end of the month', ex: 'Paga fatura na fin di mes ta ka dexa multa txiga.' },
+        { k: 'Fila na balkon', e: 'queue at the counter', ex: 'Fila na balkon ta bai dibagar.' },
+        { k: 'Resibu di fatura paga', e: 'receipt for the paid bill', ex: 'Resibu di fatura paga ta ser guardadu na gaveta.' },
+        { k: 'Multa di atraso na fatura', e: 'late fine on the bill', ex: 'Multa di atraso na fatura ta fasi pai preokupadu.' },
+    ]},
+  { id: 'kr_lightmeter1', title: 'The Electricity Meter', titleKriolu: 'Kontador di Luz', icon: '💡', color: 'emerald',
+    desc: 'The electricity meter vocabulary', vocab: [
+        { k: 'Kontador di luz na paredi', e: 'electricity meter on the wall', ex: 'Kontador di luz na paredi ta ten un númeru riba.' },
+        { k: 'Númeru di kontador na papel', e: 'meter number on the paper', ex: 'Númeru di kontador na papel ta ser dadu pa enpregadu.' },
+        { k: 'Odja númeru na kontador', e: 'reading the number on the meter', ex: 'Odja númeru na kontador ta ser fetu tudu mes.' },
+        { k: 'Fatura di luz pendenti', e: 'pending electricity bill', ex: 'Fatura di luz pendenti ta sta na mesa.' },
+        { k: 'Luz na kaza tudu', e: 'light in the whole house', ex: 'Luz na kaza tudu ta volta di noti.' },
+        { k: 'Paga fatura di luz antis di prazu', e: 'paying the electricity bill before the deadline', ex: 'Paga fatura di luz antis di prazu ta da pas.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20806,6 +20824,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_gardenweeding1','kr_grocerycarry1'] },
   { unit:'Unit 375 — Roast Corn & Cassava Breakfast', icon:'🌽', desc:'Roasting corn on the street vocabulary, and Cassava for breakfast vocabulary',
     lessons:['kr_roastcorn1','kr_cassavabreakfast1'] },
+  { unit:'Unit 376 — Water Bill & Electricity Meter', icon:'🚰', desc:'Paying the water bill vocabulary, and The electricity meter vocabulary',
+    lessons:['kr_waterbill1','kr_lightmeter1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37968,6 +37988,24 @@ const PT_LESSONS = [
         { k: 'mandioca com mel de cana', e: 'cassava with cane syrup', ex: 'A mandioca com mel de cana era um doce caseiro.' },
         { k: 'pão caseiro com chá', e: 'home-baked bread with tea', ex: 'O pão caseiro com chá aquecia as manhãs frias.' },
     ]},
+  { id: 'pt_waterbill1', title: 'Paying the Water Bill', titleKriolu: 'Pagar a Fatura da Água', icon: '🚰', color: 'sky',
+    desc: 'Vocabulário de pagar a fatura da água', vocab: [
+        { k: 'fatura da água na mão', e: 'water bill in the hand', ex: 'A fatura da água na mão chegava no fim do mês.' },
+        { k: 'contador da água em casa', e: 'water meter at home', ex: 'O contador da água em casa ficava junto ao portão.' },
+        { k: 'pagar a fatura no fim do mês', e: 'paying the bill at the end of the month', ex: 'Pagar a fatura no fim do mês impedia multas.' },
+        { k: 'fila no balcão', e: 'queue at the counter', ex: 'A fila no balcão ia devagar.' },
+        { k: 'recibo da fatura paga', e: 'receipt for the paid bill', ex: 'O recibo da fatura paga era guardado numa gaveta.' },
+        { k: 'multa de atraso na fatura', e: 'late fine on the bill', ex: 'A multa de atraso na fatura deixou o pai preocupado.' },
+    ]},
+  { id: 'pt_lightmeter1', title: 'The Electricity Meter', titleKriolu: 'O Contador da Luz', icon: '💡', color: 'emerald',
+    desc: 'Vocabulário do contador da luz', vocab: [
+        { k: 'contador da luz na parede', e: 'electricity meter on the wall', ex: 'O contador da luz na parede tinha um número por cima.' },
+        { k: 'número do contador no papel', e: 'meter number on the paper', ex: 'O número do contador no papel foi dado ao empregado.' },
+        { k: 'ler o número no contador', e: 'reading the number on the meter', ex: 'Ler o número no contador era feito todos os meses.' },
+        { k: 'fatura da luz pendente', e: 'pending electricity bill', ex: 'A fatura da luz pendente estava na mesa.' },
+        { k: 'luz em toda a casa', e: 'light in the whole house', ex: 'A luz em toda a casa voltou à noite.' },
+        { k: 'pagar a fatura da luz antes do prazo', e: 'paying the electricity bill before the deadline', ex: 'Pagar a fatura da luz antes do prazo dava paz.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38731,6 +38769,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_gardenweeding1','pt_grocerycarry1'] },
   { unit:'Unidade 377 — Milho Assado e Mandioca ao Pequeno-almoço', icon:'🌽', desc:'Vocabulário de milho assado na rua, e vocabulário de mandioca ao pequeno-almoço',
     lessons:['pt_roastcorn1','pt_cassavabreakfast1'] },
+  { unit:'Unidade 378 — Fatura da Água e Contador da Luz', icon:'🚰', desc:'Vocabulário de pagar a fatura da água, e vocabulário do contador da luz',
+    lessons:['pt_waterbill1','pt_lightmeter1'] },
 ];
 
 
