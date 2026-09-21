@@ -18739,6 +18739,24 @@ const KR_LESSONS = [
         { k: 'Konta dinheru ku kuidadu', e: 'counting the money carefully', ex: 'Konta dinheru ku kuidadu ta pidi kalma.' },
         { k: 'Saldu di konta na fin di mes', e: 'account balance at the end of the month', ex: 'Saldu di konta na fin di mes ta ser pokutim.' },
     ]},
+  { id: 'kr_guestwelcome1', title: 'Welcoming a Guest at Home', titleKriolu: 'Risebe Vizita na Kaza', icon: '🚪', color: 'sky',
+    desc: 'Welcoming a guest at home vocabulary', vocab: [
+        { k: 'Vizita ki ta bati na porta', e: 'visitor knocking at the door', ex: 'Vizita ki ta bati na porta ta ser risebidu ku alegria.' },
+        { k: 'Bem-vindu na kaza', e: 'welcome to the house', ex: 'Bem-vindu na kaza ta ser fla na porta.' },
+        { k: 'Konvida konvidadu pa senta', e: 'inviting the guest to sit down', ex: 'Konvida konvidadu pa senta ta mostra morabeza.' },
+        { k: 'Kafé kenti na kopu', e: 'hot coffee in a cup', ex: 'Kafé kenti na kopu ta ser sirbidu pa vizita.' },
+        { k: 'Agu fresku pa vizita', e: 'cool water for the visitor', ex: 'Agu fresku pa vizita ta ser dadu primeru.' },
+        { k: 'Konversa na sala', e: 'chat in the living room', ex: 'Konversa na sala ta dura txeu ora.' },
+    ]},
+  { id: 'kr_honeycake1', title: 'Baking Honey Cake', titleKriolu: 'Fasi Bolu di Mel', icon: '🍯', color: 'emerald',
+    desc: 'Baking honey cake vocabulary', vocab: [
+        { k: 'Mel di kana kentadu na fogu', e: 'cane syrup heated on the fire', ex: 'Mel di kana kentadu na fogu ta fika moli.' },
+        { k: 'Farinha di trigu i fermentu na pó', e: 'wheat flour and baking powder', ex: 'Farinha di trigu i fermentu na pó ta ser mexidu.' },
+        { k: 'Kanela i kravu moídu', e: 'ground cinnamon and clove', ex: 'Kanela i kravu moídu ta da xeru forti.' },
+        { k: 'Ovu batidu na masa', e: 'eggs beaten into the batter', ex: 'Ovu batidu na masa ta fasi bolu fofu.' },
+        { k: 'Masa na fôrma pa forno', e: 'batter in the tin for the oven', ex: 'Masa na fôrma pa forno ta bai na forno kenti.' },
+        { k: 'Fatia di bolu di mel na Natal', e: 'slice of honey cake at Christmas', ex: 'Fatia di bolu di mel na Natal e típiku.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20206,6 +20224,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_friedcachupa1','kr_schoolsupplies1'] },
   { unit:'Unit 345 — Phone Credit & Bank Morning', icon:'📱', desc:'Buying phone credit vocabulary, and Morning at the bank vocabulary',
     lessons:['kr_phonecredit1','kr_bankqueue1'] },
+  { unit:'Unit 346 — Guest Welcome & Honey Cake', icon:'🚪', desc:'Welcoming a guest at home vocabulary, and Baking honey cake vocabulary',
+    lessons:['kr_guestwelcome1','kr_honeycake1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36828,6 +36848,24 @@ const PT_LESSONS = [
         { k: 'contar o dinheiro com cuidado', e: 'counting the money carefully', ex: 'Contar o dinheiro com cuidado pedia calma.' },
         { k: 'saldo da conta no fim do mês', e: 'account balance at the end of the month', ex: 'O saldo da conta no fim do mês era pouco.' },
     ]},
+  { id: 'pt_guestwelcome1', title: 'Welcoming a Guest at Home', titleKriolu: 'Receber uma Visita em Casa', icon: '🚪', color: 'sky',
+    desc: 'Vocabulário de receber uma visita em casa', vocab: [
+        { k: 'visita a bater à porta', e: 'visitor knocking at the door', ex: 'A visita a bater à porta era recebida com alegria.' },
+        { k: 'bem-vindo a casa', e: 'welcome to the house', ex: 'O bem-vindo a casa dizia-se logo à porta.' },
+        { k: 'convidar o hóspede a sentar-se', e: 'inviting the guest to sit down', ex: 'Convidar o hóspede a sentar-se mostrava hospitalidade.' },
+        { k: 'café quente numa chávena', e: 'hot coffee in a cup', ex: 'O café quente numa chávena era servido à visita.' },
+        { k: 'água fresca para o visitante', e: 'cool water for the visitor', ex: 'A água fresca para o visitante era dada primeiro.' },
+        { k: 'conversa na sala', e: 'chat in the living room', ex: 'A conversa na sala durava muitas horas.' },
+    ]},
+  { id: 'pt_honeycake1', title: 'Baking Honey Cake', titleKriolu: 'Fazer Bolo de Mel', icon: '🍯', color: 'emerald',
+    desc: 'Vocabulário de fazer bolo de mel', vocab: [
+        { k: 'mel de cana aquecido ao lume', e: 'cane syrup heated on the fire', ex: 'O mel de cana aquecido ao lume ficava mole.' },
+        { k: 'farinha de trigo e fermento em pó', e: 'wheat flour and baking powder', ex: 'A farinha de trigo e o fermento em pó eram mexidos.' },
+        { k: 'canela e cravinho moídos', e: 'ground cinnamon and clove', ex: 'A canela e o cravinho moídos davam um cheiro forte.' },
+        { k: 'ovos batidos na massa', e: 'eggs beaten into the batter', ex: 'Os ovos batidos na massa deixavam o bolo fofo.' },
+        { k: 'massa na forma para o forno', e: 'batter in the tin for the oven', ex: 'A massa na forma para o forno ia ao forno quente.' },
+        { k: 'fatia de bolo de mel no Natal', e: 'slice of honey cake at Christmas', ex: 'A fatia de bolo de mel no Natal era típica.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37531,6 +37569,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_friedcachupa1','pt_schoolsupplies1'] },
   { unit:'Unidade 347 — Crédito de Telemóvel e Manhã no Banco', icon:'📱', desc:'Vocabulário de comprar crédito de telemóvel, e vocabulário de uma manhã no banco',
     lessons:['pt_phonecredit1','pt_bankqueue1'] },
+  { unit:'Unidade 348 — Receber Visita e Bolo de Mel', icon:'🚪', desc:'Vocabulário de receber uma visita em casa, e vocabulário de fazer bolo de mel',
+    lessons:['pt_guestwelcome1','pt_honeycake1'] },
 ];
 
 
