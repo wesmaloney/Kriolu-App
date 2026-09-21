@@ -18325,6 +18325,24 @@ const KR_LESSONS = [
         { k: 'Pasienti ki ta diskansa na kama di ospital', e: 'patient resting in the hospital bed', ex: 'Pasienti ki ta diskansa ben ta dexa família kontenti.' },
         { k: 'Família ki ta spera na sala di spera', e: 'family waiting in the waiting room', ex: 'Família ki ta spera na sala di spera ta pergunta pa pasienti.' },
     ]},
+  { id: 'kr_taxiride1', title: 'Taxi Ride', titleKriolu: 'Viaji di Táksi', icon: '🚕', color: 'emerald',
+    desc: 'Taxi ride vocabulary', vocab: [
+        { k: 'Klienti ki ta pidi un táksi', e: 'customer asking for a taxi', ex: 'Klienti ki ta pidi un táksi ta spera na rua.' },
+        { k: 'Mala na bagajen di karru', e: 'suitcase in the trunk of the car', ex: 'Mala na bagajen di karru ta ser guardadu ku kuidadu.' },
+        { k: 'Pasajeru ki ta fla undi ki e bai', e: 'passenger saying where he is going', ex: 'Pasajeru ki ta fla undi ki e bai ta ajuda motorista.' },
+        { k: 'Táksi ki ta para na kruzamentu', e: 'taxi stopping at the junction', ex: 'Táksi ki ta para na kruzamentu ta spera sinal.' },
+        { k: 'Presa pa txiga na aeroportu', e: 'hurry to reach the airport', ex: 'Presa pa txiga na aeroportu ta pidi kuidadu.' },
+        { k: 'Presu di viaji i troku', e: 'fare and change', ex: 'Presu di viaji i troku ta ser pagu na fin di viaji.' },
+    ]},
+  { id: 'kr_firstrain1', title: 'First Rain of the Season', titleKriolu: 'Primeru Txuva di Anu', icon: '🌧', color: 'sky',
+    desc: 'First rain of the season vocabulary', vocab: [
+        { k: 'Nuven skuru na séu', e: 'dark clouds in the sky', ex: 'Nuven skuru na séu ta mostra ki txuva ta ben.' },
+        { k: 'Trovoada di lonji', e: 'thunderstorm in the distance', ex: 'Trovoada di lonji ta dexa mininu ku medu.' },
+        { k: 'Primeru gota na tera seku', e: 'first drop on the dry soil', ex: 'Primeru gota na tera seku ta kai divagar.' },
+        { k: 'Xeru di tera molhadu', e: 'smell of wet earth', ex: 'Xeru di tera molhadu ta ben dipos di txuva.' },
+        { k: 'Ribera txeiu di agu', e: 'stream full of water', ex: 'Ribera txeiu di agu ta ka dexa algen pasa.' },
+        { k: 'Kampu verdi dipos di txuva', e: 'green field after the rain', ex: 'Kampu verdi dipos di txuva ta da alegria.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19754,6 +19772,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_watercarry1','kr_goatherd1'] },
   { unit:'Unit 326 — Lighthouse & Nurse Round', icon:'🔦', desc:'Lighthouse night watch vocabulary, and Nurse ward round vocabulary',
     lessons:['kr_lighthouse1','kr_nurseround1'] },
+  { unit:'Unit 327 — Taxi & First Rain', icon:'🚕', desc:'Taxi ride vocabulary, and First rain of the season vocabulary',
+    lessons:['kr_taxiride1','kr_firstrain1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -35962,6 +35982,24 @@ const PT_LESSONS = [
         { k: 'paciente a descansar na cama do hospital', e: 'patient resting in the hospital bed', ex: 'O paciente a descansar na cama do hospital deixava a família contente.' },
         { k: 'família à espera na sala de espera', e: 'family waiting in the waiting room', ex: 'A família à espera na sala de espera perguntava pelo paciente.' },
     ]},
+  { id: 'pt_taxiride1', title: 'Taxi Ride', titleKriolu: 'Viagem de Táxi', icon: '🚕', color: 'emerald',
+    desc: 'Vocabulário da viagem de táxi', vocab: [
+        { k: 'cliente a pedir um táxi', e: 'customer asking for a taxi', ex: 'O cliente a pedir um táxi esperava na rua.' },
+        { k: 'mala na bagageira do carro', e: 'suitcase in the trunk of the car', ex: 'A mala na bagageira do carro era guardada com cuidado.' },
+        { k: 'passageiro a dizer para onde vai', e: 'passenger saying where he is going', ex: 'O passageiro a dizer para onde vai ajudava o motorista.' },
+        { k: 'táxi a parar no cruzamento', e: 'taxi stopping at the junction', ex: 'O táxi a parar no cruzamento esperava o sinal.' },
+        { k: 'pressa para chegar ao aeroporto', e: 'hurry to reach the airport', ex: 'A pressa para chegar ao aeroporto pedia cuidado.' },
+        { k: 'preço da viagem e troco', e: 'fare and change', ex: 'O preço da viagem e o troco eram pagos no fim.' },
+    ]},
+  { id: 'pt_firstrain1', title: 'First Rain of the Season', titleKriolu: 'A Primeira Chuva do Ano', icon: '🌧', color: 'sky',
+    desc: 'Vocabulário da primeira chuva do ano', vocab: [
+        { k: 'nuvens escuras no céu', e: 'dark clouds in the sky', ex: 'As nuvens escuras no céu mostravam que a chuva vinha.' },
+        { k: 'trovoada ao longe', e: 'thunderstorm in the distance', ex: 'A trovoada ao longe deixava as crianças com medo.' },
+        { k: 'primeira gota na terra seca', e: 'first drop on the dry soil', ex: 'A primeira gota na terra seca caía devagar.' },
+        { k: 'cheiro de terra molhada', e: 'smell of wet earth', ex: 'O cheiro de terra molhada vinha depois da chuva.' },
+        { k: 'ribeira cheia de água', e: 'stream full of water', ex: 'A ribeira cheia de água não deixava ninguém passar.' },
+        { k: 'campo verde depois da chuva', e: 'green field after the rain', ex: 'O campo verde depois da chuva dava alegria.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36627,6 +36665,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_watercarry1','pt_goatherd1'] },
   { unit:'Unidade 328 — Farol e Ronda do Enfermeiro', icon:'🔦', desc:'Vocabulário da vigília noturna no farol, e vocabulário da ronda do enfermeiro',
     lessons:['pt_lighthouse1','pt_nurseround1'] },
+  { unit:'Unidade 329 — Táxi e Primeira Chuva', icon:'🚕', desc:'Vocabulário da viagem de táxi, e vocabulário da primeira chuva do ano',
+    lessons:['pt_taxiride1','pt_firstrain1'] },
 ];
 
 
