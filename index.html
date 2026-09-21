@@ -18775,6 +18775,24 @@ const KR_LESSONS = [
         { k: 'Ovu fresku di galinha', e: 'fresh egg from the hen', ex: 'Ovu fresku di galinha ta ser tiradu sedu.' },
         { k: 'Restu di kumida pa animal', e: 'food scraps for the animals', ex: 'Restu di kumida pa animal ta ser guardadu.' },
     ]},
+  { id: 'kr_clothesline1', title: 'Drying Laundry in the Sun', titleKriolu: 'Seka Ropa na Sol', icon: '🧺', color: 'sky',
+    desc: 'Drying laundry in the sun vocabulary', vocab: [
+        { k: 'Ropa molhadu na korda', e: 'wet clothes on the line', ex: 'Ropa molhadu na korda ta gota na sol.' },
+        { k: 'Lensol na sol', e: 'sheet in the sun', ex: 'Lensol na sol ta seka dipresa.' },
+        { k: 'Ventu ki ta seka ropa', e: 'wind that dries the clothes', ex: 'Ventu ki ta seka ropa ta bem di monti.' },
+        { k: 'Ropa seku na fin di tardi', e: 'dry clothes at the end of the afternoon', ex: 'Ropa seku na fin di tardi ta ten xeru limpu.' },
+        { k: 'Dobra ropa seku', e: 'folding the dry clothes', ex: 'Dobra ropa seku e trabadju di avó.' },
+        { k: 'Txuva na ropa di korda', e: 'rain on the clothes on the line', ex: 'Txuva na ropa di korda ta molha ropa seku.' },
+    ]},
+  { id: 'kr_porchevening1', title: 'Evening on the Terrace', titleKriolu: 'Tardi na Terasu', icon: '🌙', color: 'emerald',
+    desc: 'Evening on the terrace vocabulary', vocab: [
+        { k: 'Vizinhu ki ta papia na tardi', e: 'neighbours chatting in the late afternoon', ex: 'Vizinhu ki ta papia na tardi ta senta na terasu.' },
+        { k: 'Lua txeiu na séu', e: 'full moon in the sky', ex: 'Lua txeiu na séu ta da luz na rua.' },
+        { k: 'Strela na séu di noti', e: 'stars in the night sky', ex: 'Strela na séu di noti ta ser txeu.' },
+        { k: 'Notísia di bairru', e: 'news from the neighbourhood', ex: 'Notísia di bairru ta pasa di boka na boka.' },
+        { k: 'Ventu sabi na fin di dia', e: 'pleasant wind at the end of the day', ex: 'Ventu sabi na fin di dia ta fasi terasu fresku.' },
+        { k: 'Bon noti pa vizinhu', e: 'good night to the neighbours', ex: 'Bon noti pa vizinhu ta fexa konversa.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20246,6 +20264,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_guestwelcome1','kr_honeycake1'] },
   { unit:'Unit 347 — Story Night & Feeding Animals', icon:'📖', desc:'Grandmother story night vocabulary, and Feeding the farmyard animals vocabulary',
     lessons:['kr_nightstory1','kr_feedanimals1'] },
+  { unit:'Unit 348 — Laundry & Terrace Evening', icon:'🧺', desc:'Drying laundry in the sun vocabulary, and Evening on the terrace vocabulary',
+    lessons:['kr_clothesline1','kr_porchevening1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36904,6 +36924,24 @@ const PT_LESSONS = [
         { k: 'ovo fresco da galinha', e: 'fresh egg from the hen', ex: 'O ovo fresco da galinha era apanhado cedo.' },
         { k: 'restos de comida para os animais', e: 'food scraps for the animals', ex: 'Os restos de comida para os animais eram guardados.' },
     ]},
+  { id: 'pt_clothesline1', title: 'Drying Laundry in the Sun', titleKriolu: 'Secar a Roupa ao Sol', icon: '🧺', color: 'sky',
+    desc: 'Vocabulário de secar a roupa ao sol', vocab: [
+        { k: 'roupa molhada na corda', e: 'wet clothes on the line', ex: 'A roupa molhada na corda pingava ao sol.' },
+        { k: 'lençol ao sol', e: 'sheet in the sun', ex: 'O lençol ao sol secava depressa.' },
+        { k: 'vento que seca a roupa', e: 'wind that dries the clothes', ex: 'O vento que seca a roupa vinha do monte.' },
+        { k: 'roupa seca ao fim da tarde', e: 'dry clothes at the end of the afternoon', ex: 'A roupa seca ao fim da tarde cheirava a limpo.' },
+        { k: 'dobrar a roupa seca', e: 'folding the dry clothes', ex: 'Dobrar a roupa seca era trabalho da avó.' },
+        { k: 'chuva na roupa da corda', e: 'rain on the clothes on the line', ex: 'A chuva na roupa da corda voltava a molhar a roupa seca.' },
+    ]},
+  { id: 'pt_porchevening1', title: 'Evening on the Terrace', titleKriolu: 'Serão no Terraço', icon: '🌙', color: 'emerald',
+    desc: 'Vocabulário de serão no terraço', vocab: [
+        { k: 'vizinhos a conversar ao fim da tarde', e: 'neighbours chatting in the late afternoon', ex: 'Os vizinhos a conversar ao fim da tarde sentavam-se no terraço.' },
+        { k: 'lua cheia no céu', e: 'full moon in the sky', ex: 'A lua cheia no céu iluminava a rua.' },
+        { k: 'estrelas no céu da noite', e: 'stars in the night sky', ex: 'As estrelas no céu da noite eram muitas.' },
+        { k: 'notícias do bairro', e: 'news from the neighbourhood', ex: 'As notícias do bairro passavam de boca em boca.' },
+        { k: 'vento agradável ao fim do dia', e: 'pleasant wind at the end of the day', ex: 'O vento agradável ao fim do dia refrescava o terraço.' },
+        { k: 'boa noite aos vizinhos', e: 'good night to the neighbours', ex: 'A boa noite aos vizinhos fechava a conversa.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37611,6 +37649,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_guestwelcome1','pt_honeycake1'] },
   { unit:'Unidade 349 — Noite de Histórias e Animais', icon:'📖', desc:'Vocabulário de noite de histórias com a avó, e vocabulário de dar de comer aos animais',
     lessons:['pt_nightstory1','pt_feedanimals1'] },
+  { unit:'Unidade 350 — Roupa ao Sol e Serão', icon:'🧺', desc:'Vocabulário de secar a roupa ao sol, e vocabulário de serão no terraço',
+    lessons:['pt_clothesline1','pt_porchevening1'] },
 ];
 
 
