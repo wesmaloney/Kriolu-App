@@ -19333,6 +19333,24 @@ const KR_LESSONS = [
         { k: 'Mapa na mon', e: 'map in the hand', ex: 'Mapa na mon di stranjeru ta sta dobradu.' },
         { k: 'Obrigadu pa ajuda', e: 'thank you for the help', ex: 'Obrigadu pa ajuda ta fexa konversa.' },
     ]},
+  { id: 'kr_packsuitcase1', title: 'Packing a Suitcase', titleKriolu: 'Aruma Mala pa Viaji', icon: '🧳', color: 'sky',
+    desc: 'Packing a suitcase vocabulary', vocab: [
+        { k: 'Mala abertu na kama', e: 'open suitcase on the bed', ex: 'Mala abertu na kama ta spera ropa.' },
+        { k: 'Ropa dobradu na mala', e: 'folded clothes in the suitcase', ex: 'Ropa dobradu na mala ta pidi pouku spasu.' },
+        { k: 'Sapatu pa viaji', e: 'shoes for the trip', ex: 'Sapatu pa viaji ta bai na saku.' },
+        { k: 'Tualha i skova na mala', e: 'towel and toothbrush in the suitcase', ex: 'Tualha i skova na mala ta bai na fin.' },
+        { k: 'Pasaporti i bilheti na mon', e: 'passport and ticket in hand', ex: 'Pasaporti i bilheti na mon ta ser odjadu dôs ves.' },
+        { k: 'Mala pezadu dimaiz', e: 'suitcase too heavy', ex: 'Mala pezadu dimaiz ta pidi abri otu bes.' },
+    ]},
+  { id: 'kr_earlywork1', title: 'Up Early for Work', titleKriolu: 'Labanta Sedu pa Trabadju', icon: '⏰', color: 'emerald',
+    desc: 'Up early for work vocabulary', vocab: [
+        { k: 'Relójiu ta toka sedu', e: 'clock ringing early', ex: 'Relójiu ta toka sedu ta labanta pai.' },
+        { k: 'Kafé kenti antis di trabadju', e: 'hot coffee before work', ex: 'Kafé kenti antis di trabadju ta da forsa.' },
+        { k: 'Pekenu-almosu sedu', e: 'early breakfast', ex: 'Pekenu-almosu sedu ta ser fetu ku silensiu.' },
+        { k: 'Spera autokarru sedu', e: 'waiting early for the bus', ex: 'Spera autokarru sedu ta pidi un kasaku.' },
+        { k: 'Txiga sedu na trabadju', e: 'arriving early at work', ex: 'Txiga sedu na trabadju e bon sinal.' },
+        { k: 'Ora di kumesa trabadju', e: 'time to start work', ex: 'Ora di kumesa trabadju e sedu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20866,6 +20884,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_guitarlesson1','kr_learnbike1'] },
   { unit:'Unit 378 — Lost Key & Asking the Way', icon:'🔑', desc:'The lost key vocabulary, and Asking the way in town vocabulary',
     lessons:['kr_lostkey1','kr_askway1'] },
+  { unit:'Unit 379 — Packing a Suitcase & Up Early for Work', icon:'🧳', desc:'Packing a suitcase vocabulary, and Up early for work vocabulary',
+    lessons:['kr_packsuitcase1','kr_earlywork1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38082,6 +38102,24 @@ const PT_LESSONS = [
         { k: 'mapa na mão', e: 'map in the hand', ex: 'O mapa na mão do turista estava dobrado.' },
         { k: 'obrigado pela ajuda', e: 'thank you for the help', ex: 'O obrigado pela ajuda fechou a conversa.' },
     ]},
+  { id: 'pt_packsuitcase1', title: 'Packing a Suitcase', titleKriolu: 'Fazer a Mala para a Viagem', icon: '🧳', color: 'sky',
+    desc: 'Vocabulário de fazer a mala para a viagem', vocab: [
+        { k: 'mala aberta em cima da cama', e: 'open suitcase on the bed', ex: 'A mala aberta em cima da cama esperava a roupa.' },
+        { k: 'roupa dobrada na mala', e: 'folded clothes in the suitcase', ex: 'A roupa dobrada na mala pedia pouco espaço.' },
+        { k: 'sapatos para a viagem', e: 'shoes for the trip', ex: 'Os sapatos para a viagem iam num saco.' },
+        { k: 'toalha e escova de dentes na mala', e: 'towel and toothbrush in the suitcase', ex: 'A toalha e a escova de dentes na mala iam no fim.' },
+        { k: 'passaporte e bilhete na mão', e: 'passport and ticket in hand', ex: 'O passaporte e o bilhete na mão eram conferidos duas vezes.' },
+        { k: 'mala pesada demais', e: 'suitcase too heavy', ex: 'A mala pesada demais precisou de ser aberta outra vez.' },
+    ]},
+  { id: 'pt_earlywork1', title: 'Up Early for Work', titleKriolu: 'Levantar Cedo para o Trabalho', icon: '⏰', color: 'emerald',
+    desc: 'Vocabulário de levantar cedo para o trabalho', vocab: [
+        { k: 'relógio a tocar cedo', e: 'clock ringing early', ex: 'O relógio a tocar cedo acordava o pai.' },
+        { k: 'café quente antes do trabalho', e: 'hot coffee before work', ex: 'O café quente antes do trabalho dava ânimo.' },
+        { k: 'pequeno-almoço cedo', e: 'early breakfast', ex: 'O pequeno-almoço cedo era feito em silêncio.' },
+        { k: 'esperar o autocarro cedo', e: 'waiting early for the bus', ex: 'Esperar o autocarro cedo pedia um casaco.' },
+        { k: 'chegar cedo ao trabalho', e: 'arriving early at work', ex: 'Chegar cedo ao trabalho era bom sinal.' },
+        { k: 'hora de começar o trabalho', e: 'time to start work', ex: 'A hora de começar o trabalho era cedo.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38851,6 +38889,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_guitarlesson1','pt_learnbike1'] },
   { unit:'Unidade 380 — A Chave Perdida e Perguntar o Caminho', icon:'🔑', desc:'Vocabulário da chave perdida, e vocabulário de perguntar o caminho na cidade',
     lessons:['pt_lostkey1','pt_askway1'] },
+  { unit:'Unidade 381 — Fazer a Mala e Levantar Cedo para o Trabalho', icon:'🧳', desc:'Vocabulário de fazer a mala para a viagem, e vocabulário de levantar cedo para o trabalho',
+    lessons:['pt_packsuitcase1','pt_earlywork1'] },
 ];
 
 
