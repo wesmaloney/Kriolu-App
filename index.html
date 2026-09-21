@@ -19099,6 +19099,24 @@ const KR_LESSONS = [
         { k: 'Diskansa i bebe agu', e: 'resting and drinking water', ex: 'Diskansa i bebe agu ta ser pidi pa dotor.' },
         { k: 'Medikamentu pa mininu', e: 'medicine for the child', ex: 'Medikamentu pa mininu ta ser dadu ku kolher.' },
     ]},
+  { id: 'kr_skiprope1', title: 'Skipping Rope', titleKriolu: 'Salta Korda', icon: '🤸', color: 'sky',
+    desc: 'Skipping rope vocabulary', vocab: [
+        { k: 'Korda di saltu na mon di mininu', e: 'jump rope in the child\'s hand', ex: 'Korda di saltu na mon di mininu e kunpridu.' },
+        { k: 'Mininu ta salta korda', e: 'children skipping rope', ex: 'Mininu ta salta korda ta kanta djuntu.' },
+        { k: 'Konta salta ku amigu', e: 'counting the jumps with a friend', ex: 'Konta salta ku amigu e jogu.' },
+        { k: 'Turnu di kada mininu', e: 'each child\'s turn', ex: 'Turnu di kada mininu ta dura des salta.' },
+        { k: 'Korda ta bati na txon', e: 'rope hitting the ground', ex: 'Korda ta bati na txon ta fasi barulhu.' },
+        { k: 'Mininu ki ta kai na korda', e: 'child who trips on the rope', ex: 'Mininu ki ta kai na korda ta perde bez.' },
+    ]},
+  { id: 'kr_schoolbreak1', title: 'Break Time at School', titleKriolu: 'Intervalu na Skola', icon: '🏫', color: 'emerald',
+    desc: 'Break time at school vocabulary', vocab: [
+        { k: 'Apitu di intervalu na skola', e: 'break whistle at school', ex: 'Apitu di intervalu na skola ta toka na des ora.' },
+        { k: 'Mininu ta kuri na kintal di skola', e: 'children running in the school yard', ex: 'Mininu ta kuri na kintal di skola ka ta para.' },
+        { k: 'Pon di kejo pa intervalu', e: 'bread with cheese for break', ex: 'Pon di kejo pa intervalu ta bem di kaza.' },
+        { k: 'Amigu ta brinka djuntu', e: 'friends playing together', ex: 'Amigu ta brinka djuntu ta fasi jogu nobu.' },
+        { k: 'Profesor ta odja di lonji', e: 'teacher looking from afar', ex: 'Profesor ta odja di lonji ta guarda kintal.' },
+        { k: 'Fila pa entra na sala', e: 'line to enter the classroom', ex: 'Fila pa entra na sala ta ser ku silensiu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20606,6 +20624,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_settable1','kr_soupprep1'] },
   { unit:'Unit 365 — Health Centre Wait & Medicine at Home', icon:'🏥', desc:'Waiting room at the health centre vocabulary, and Medicine at home vocabulary',
     lessons:['kr_healthwait1','kr_medicinehome1'] },
+  { unit:'Unit 366 — Skipping Rope & School Break', icon:'🤸', desc:'Skipping rope vocabulary, and Break time at school vocabulary',
+    lessons:['kr_skiprope1','kr_schoolbreak1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37588,6 +37608,24 @@ const PT_LESSONS = [
         { k: 'descansar e beber água', e: 'resting and drinking water', ex: 'Descansar e beber água era o que o médico pedia.' },
         { k: 'medicamento para a criança', e: 'medicine for the child', ex: 'O medicamento para a criança era dado com colher.' },
     ]},
+  { id: 'pt_skiprope1', title: 'Skipping Rope', titleKriolu: 'Saltar à Corda', icon: '🤸', color: 'sky',
+    desc: 'Vocabulário de saltar à corda', vocab: [
+        { k: 'corda de saltar na mão da criança', e: 'jump rope in the child\'s hand', ex: 'A corda de saltar na mão da criança era comprida.' },
+        { k: 'crianças a saltar à corda', e: 'children skipping rope', ex: 'As crianças a saltar à corda cantavam juntas.' },
+        { k: 'contar os saltos com o amigo', e: 'counting the jumps with a friend', ex: 'Contar os saltos com o amigo era o jogo todo.' },
+        { k: 'vez de cada criança', e: 'each child\'s turn', ex: 'A vez de cada criança durava dez saltos.' },
+        { k: 'corda a bater no chão', e: 'rope hitting the ground', ex: 'A corda a bater no chão fazia barulho.' },
+        { k: 'criança que cai na corda', e: 'child who trips on the rope', ex: 'A criança que cai na corda perdia a vez.' },
+    ]},
+  { id: 'pt_schoolbreak1', title: 'Break Time at School', titleKriolu: 'Intervalo na Escola', icon: '🏫', color: 'emerald',
+    desc: 'Vocabulário de intervalo na escola', vocab: [
+        { k: 'apito de intervalo na escola', e: 'break whistle at school', ex: 'O apito de intervalo na escola soava às dez.' },
+        { k: 'meninos a correr no pátio da escola', e: 'children running in the school yard', ex: 'Os meninos a correr no pátio da escola nunca paravam.' },
+        { k: 'pão com queijo para o intervalo', e: 'bread with cheese for break', ex: 'O pão com queijo para o intervalo vinha de casa.' },
+        { k: 'amigos a brincar juntos', e: 'friends playing together', ex: 'Os amigos a brincar juntos faziam jogos novos.' },
+        { k: 'professor a olhar ao longe', e: 'teacher looking from afar', ex: 'O professor a olhar ao longe vigiava o pátio.' },
+        { k: 'fila para entrar na sala', e: 'line to enter the classroom', ex: 'A fila para entrar na sala era em silêncio.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38331,6 +38369,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_settable1','pt_soupprep1'] },
   { unit:'Unidade 367 — Centro de Saúde e Medicamentos em Casa', icon:'🏥', desc:'Vocabulário de sala de espera no centro de saúde, e vocabulário de medicamentos em casa',
     lessons:['pt_healthwait1','pt_medicinehome1'] },
+  { unit:'Unidade 368 — Saltar à Corda e Intervalo na Escola', icon:'🤸', desc:'Vocabulário de saltar à corda, e vocabulário de intervalo na escola',
+    lessons:['pt_skiprope1','pt_schoolbreak1'] },
 ];
 
 
