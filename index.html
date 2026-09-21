@@ -19117,6 +19117,24 @@ const KR_LESSONS = [
         { k: 'Profesor ta odja di lonji', e: 'teacher looking from afar', ex: 'Profesor ta odja di lonji ta guarda kintal.' },
         { k: 'Fila pa entra na sala', e: 'line to enter the classroom', ex: 'Fila pa entra na sala ta ser ku silensiu.' },
     ]},
+  { id: 'kr_learnswim1', title: 'Learning to Swim', titleKriolu: 'Prende Nada', icon: '🏊', color: 'sky',
+    desc: 'Learning to swim vocabulary', vocab: [
+        { k: 'Fatu di banhu i tualha', e: 'swimsuit and towel', ex: 'Fatu di banhu i tualha ta sta na mutxila.' },
+        { k: 'Salva-vida ta odja mininu', e: 'lifeguard watching the boy', ex: 'Salva-vida ta odja mininu ka ta dexa di odja.' },
+        { k: 'Brasu i perna na agu', e: 'arms and legs in the water', ex: 'Brasu i perna na agu ta pidi ritmu.' },
+        { k: 'Respira fundu antis di nada', e: 'breathing deeply before swimming', ex: 'Respira fundu antis di nada ta kalma medu.' },
+        { k: 'Mininu ku bóia na brasu', e: 'boy with the float on his arm', ex: 'Mininu ku bóia na brasu ta entra dibagar.' },
+        { k: 'Agu friu di manhan', e: 'cold water in the morning', ex: 'Agu friu di manhan ta ser friu dimaiz.' },
+    ]},
+  { id: 'kr_beachcleanup1', title: 'Beach Clean-up Day', titleKriolu: 'Dia di Limpa Praia', icon: '♻', color: 'emerald',
+    desc: 'Beach clean-up day vocabulary', vocab: [
+        { k: 'Voluntáriu ku saku di lixu', e: 'volunteer with a bin bag', ex: 'Voluntáriu ku saku di lixu ta pasa na praia.' },
+        { k: 'Lata vaziu na areia', e: 'empty tin on the sand', ex: 'Lata vaziu na areia ta bai na saku.' },
+        { k: 'Luva na mon di voluntáriu', e: 'glove on the volunteer\'s hand', ex: 'Luva na mon di voluntáriu ta guarda mon.' },
+        { k: 'Djunta lixu na praia', e: 'gathering the rubbish on the beach', ex: 'Djunta lixu na praia ta ser fetu na dumingu.' },
+        { k: 'Praia limpu dipos di trabadju', e: 'clean beach after the work', ex: 'Praia limpu dipos di trabadju ta sta bunitu.' },
+        { k: 'Djunta-mon pa limpa praia', e: 'working together to clean the beach', ex: 'Djunta-mon pa limpa praia ta djunta tudu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20626,6 +20644,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_healthwait1','kr_medicinehome1'] },
   { unit:'Unit 366 — Skipping Rope & School Break', icon:'🤸', desc:'Skipping rope vocabulary, and Break time at school vocabulary',
     lessons:['kr_skiprope1','kr_schoolbreak1'] },
+  { unit:'Unit 367 — Learning to Swim & Beach Clean-up', icon:'🏊', desc:'Learning to swim vocabulary, and Beach clean-up day vocabulary',
+    lessons:['kr_learnswim1','kr_beachcleanup1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37626,6 +37646,24 @@ const PT_LESSONS = [
         { k: 'professor a olhar ao longe', e: 'teacher looking from afar', ex: 'O professor a olhar ao longe vigiava o pátio.' },
         { k: 'fila para entrar na sala', e: 'line to enter the classroom', ex: 'A fila para entrar na sala era em silêncio.' },
     ]},
+  { id: 'pt_learnswim1', title: 'Learning to Swim', titleKriolu: 'Aprender a Nadar', icon: '🏊', color: 'sky',
+    desc: 'Vocabulário de aprender a nadar', vocab: [
+        { k: 'fato de banho e toalha', e: 'swimsuit and towel', ex: 'O fato de banho e a toalha estavam na mochila.' },
+        { k: 'nadador-salvador a vigiar o menino', e: 'lifeguard watching the boy', ex: 'O nadador-salvador a vigiar o menino não desviava o olhar.' },
+        { k: 'braços e pernas na água', e: 'arms and legs in the water', ex: 'Os braços e as pernas na água pediam ritmo.' },
+        { k: 'respirar fundo antes de nadar', e: 'breathing deeply before swimming', ex: 'Respirar fundo antes de nadar acalmava o medo.' },
+        { k: 'menino com a boia no braço', e: 'boy with the float on his arm', ex: 'O menino com a boia no braço entrou devagar.' },
+        { k: 'água fria de manhã', e: 'cold water in the morning', ex: 'A água fria de manhã era fria demais para o menino.' },
+    ]},
+  { id: 'pt_beachcleanup1', title: 'Beach Clean-up Day', titleKriolu: 'Dia de Limpeza da Praia', icon: '♻', color: 'emerald',
+    desc: 'Vocabulário do dia de limpeza da praia', vocab: [
+        { k: 'voluntário com saco de lixo', e: 'volunteer with a bin bag', ex: 'O voluntário com saco de lixo percorria a praia.' },
+        { k: 'lata vazia na areia', e: 'empty tin on the sand', ex: 'A lata vazia na areia foi para o saco.' },
+        { k: 'luva na mão do voluntário', e: 'glove on the volunteer\'s hand', ex: 'A luva na mão do voluntário protegia as mãos.' },
+        { k: 'juntar o lixo na praia', e: 'gathering the rubbish on the beach', ex: 'Juntar o lixo na praia era feito ao domingo.' },
+        { k: 'praia limpa depois do trabalho', e: 'clean beach after the work', ex: 'A praia limpa depois do trabalho estava bonita.' },
+        { k: 'trabalho em conjunto para limpar a praia', e: 'working together to clean the beach', ex: 'O trabalho em conjunto para limpar a praia juntou todos.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38371,6 +38409,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_healthwait1','pt_medicinehome1'] },
   { unit:'Unidade 368 — Saltar à Corda e Intervalo na Escola', icon:'🤸', desc:'Vocabulário de saltar à corda, e vocabulário de intervalo na escola',
     lessons:['pt_skiprope1','pt_schoolbreak1'] },
+  { unit:'Unidade 369 — Aprender a Nadar e Limpeza da Praia', icon:'🏊', desc:'Vocabulário de aprender a nadar, e vocabulário do dia de limpeza da praia',
+    lessons:['pt_learnswim1','pt_beachcleanup1'] },
 ];
 
 
