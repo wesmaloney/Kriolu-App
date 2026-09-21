@@ -19207,6 +19207,24 @@ const KR_LESSONS = [
         { k: 'Ri largu ku stória di bedju', e: 'laughing loudly at the elder\'s story', ex: 'Ri largu ku stória di bedju e ábitu.' },
         { k: 'Odja ben pa bedju di terra', e: 'looking closely at the village elder', ex: 'Odja ben pa bedju di terra ta mostra respetu.' },
     ]},
+  { id: 'kr_christmashome1', title: 'Christmas at Home', titleKriolu: 'Natal na Kaza', icon: '🎄', color: 'sky',
+    desc: 'Christmas at home vocabulary', vocab: [
+        { k: 'Arvi di natal na sala', e: 'Christmas tree in the living room', ex: 'Arvi di natal na sala ta ser dekoradu na dizenbru.' },
+        { k: 'Strela riba di arvi', e: 'star on top of the tree', ex: 'Strela riba di arvi ta ser fetu na kaza.' },
+        { k: 'Prezenti pa mininu', e: 'present for the boy', ex: 'Prezenti pa mininu ta sta baxu di arvi.' },
+        { k: 'Fita na prezenti', e: 'ribbon on the present', ex: 'Fita na prezenti e vermelhu.' },
+        { k: 'Família djuntu na Natal', e: 'family together at Christmas', ex: 'Família djuntu na Natal ta inxi kaza.' },
+        { k: 'Bolu na mesa di Natal', e: 'cake on the Christmas table', ex: 'Bolu na mesa di Natal ta ser kortadu dipos di kume.' },
+    ]},
+  { id: 'kr_flagday1', title: 'Flag Day in the Square', titleKriolu: 'Dia di Bandeira na Prasa', icon: '🎆', color: 'emerald',
+    desc: 'Flag day in the square vocabulary', vocab: [
+        { k: 'Bandeira di Kabu Verdi', e: 'flag of Cape Verde', ex: 'Bandeira di Kabu Verdi ta ser sobidu di manhan.' },
+        { k: 'Sinku di Julhu na prasa', e: 'fifth of July in the square', ex: 'Sinku di Julhu na prasa ta djunta sidadi tudu.' },
+        { k: 'Bandeira na prasa sentral', e: 'flag in the central square', ex: 'Bandeira na prasa sentral ta sta ku ventu.' },
+        { k: 'Mininu ku bandeira na mon', e: 'boy with the flag in his hand', ex: 'Mininu ku bandeira na mon ta bai kontenti.' },
+        { k: 'Fogu di artifísiu na noti', e: 'fireworks at night', ex: 'Fogu di artifísiu na noti ta kaba festa.' },
+        { k: 'Povu ta kanta na prasa', e: 'people singing in the square', ex: 'Povu ta kanta na prasa ta inxi noti.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20726,6 +20744,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_nightrain1','kr_seasunrise1'] },
   { unit:'Unit 371 — Old Photographs & Village Elder', icon:'🖼', desc:'Old family photographs vocabulary, and The village elder vocabulary',
     lessons:['kr_oldphotos1','kr_villageelder1'] },
+  { unit:'Unit 372 — Christmas at Home & Flag Day', icon:'🎄', desc:'Christmas at home vocabulary, and Flag day in the square vocabulary',
+    lessons:['kr_christmashome1','kr_flagday1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37816,6 +37836,24 @@ const PT_LESSONS = [
         { k: 'rir alto com a história do velho', e: 'laughing loudly at the elder\'s story', ex: 'Rir alto com a história do velho era o hábito.' },
         { k: 'olhar com atenção para o velho da terra', e: 'looking closely at the village elder', ex: 'Olhar com atenção para o velho da terra mostrava respeito.' },
     ]},
+  { id: 'pt_christmashome1', title: 'Christmas at Home', titleKriolu: 'Natal em Casa', icon: '🎄', color: 'sky',
+    desc: 'Vocabulário de Natal em casa', vocab: [
+        { k: 'árvore de Natal na sala', e: 'Christmas tree in the living room', ex: 'A árvore de Natal na sala era decorada em dezembro.' },
+        { k: 'estrela no alto da árvore', e: 'star on top of the tree', ex: 'A estrela no alto da árvore era feita em casa.' },
+        { k: 'prenda para o menino', e: 'present for the boy', ex: 'A prenda para o menino estava debaixo da árvore.' },
+        { k: 'fita na prenda', e: 'ribbon on the present', ex: 'A fita na prenda era vermelha.' },
+        { k: 'família junta no Natal', e: 'family together at Christmas', ex: 'A família junta no Natal enchia a casa.' },
+        { k: 'bolo na mesa de Natal', e: 'cake on the Christmas table', ex: 'O bolo na mesa de Natal era cortado depois de comer.' },
+    ]},
+  { id: 'pt_flagday1', title: 'Flag Day in the Square', titleKriolu: 'Dia da Bandeira na Praça', icon: '🎆', color: 'emerald',
+    desc: 'Vocabulário do dia da bandeira na praça', vocab: [
+        { k: 'bandeira de Cabo Verde', e: 'flag of Cape Verde', ex: 'A bandeira de Cabo Verde era hasteada de manhã.' },
+        { k: 'cinco de julho na praça', e: 'fifth of July in the square', ex: 'O cinco de julho na praça juntava a cidade toda.' },
+        { k: 'bandeira na praça central', e: 'flag in the central square', ex: 'A bandeira na praça central estava ao vento.' },
+        { k: 'menino com a bandeira na mão', e: 'boy with the flag in his hand', ex: 'O menino com a bandeira na mão desfilava orgulhoso.' },
+        { k: 'fogo de artifício à noite', e: 'fireworks at night', ex: 'O fogo de artifício à noite fechava a festa.' },
+        { k: 'povo a cantar na praça', e: 'people singing in the square', ex: 'O povo a cantar na praça enchia a noite.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38571,6 +38609,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_nightrain1','pt_seasunrise1'] },
   { unit:'Unidade 373 — Fotografias Antigas e Velho da Terra', icon:'🖼', desc:'Vocabulário de fotografias antigas da família, e vocabulário do velho da terra',
     lessons:['pt_oldphotos1','pt_villageelder1'] },
+  { unit:'Unidade 374 — Natal em Casa e Dia da Bandeira', icon:'🎄', desc:'Vocabulário de Natal em casa, e vocabulário do dia da bandeira na praça',
+    lessons:['pt_christmashome1','pt_flagday1'] },
 ];
 
 
