@@ -19621,6 +19621,24 @@ const KR_LESSONS = [
         { k: 'Fomi dipos di skola', e: 'hunger after school', ex: 'Fomi dipos di skola ta txiga na porta di kaza.' },
         { k: 'Pon di kaza ta spera na kaza', e: 'home-baked bread waiting at home', ex: 'Pon di kaza ta spera na kaza ta kaba kaminhada.' },
     ]},
+  { id: 'kr_tintoycar1', title: 'A Toy Car from a Tin', titleKriolu: 'Karu di Lata', icon: '🚗', color: 'sky',
+    desc: 'A toy car from a tin vocabulary', vocab: [
+        { k: 'Lata vaziu pa brinkedu', e: 'empty tin for a toy', ex: 'Lata vaziu pa brinkedu ta sta na lixu.' },
+        { k: 'Roda di tampa di garafa', e: 'wheels made of bottle caps', ex: 'Roda di tampa di garafa ta ser kuatru.' },
+        { k: 'Arami na karu di lata', e: 'wire on the tin car', ex: 'Arami na karu di lata ta sta na frenti di karu.' },
+        { k: 'Mininu ta fasi brinkedu di lata', e: 'boy making a tin toy', ex: 'Mininu ta fasi brinkedu di lata ta sta na sonbra.' },
+        { k: 'Karu di lata na txon', e: 'tin car on the ground', ex: 'Karu di lata na txon ta bai baxu.' },
+        { k: 'Mininu ta brinka ku karu di lata', e: 'children playing with the tin car', ex: 'Mininu ta brinka ku karu di lata ta fasi korida.' },
+    ]},
+  { id: 'kr_paperboat1', title: 'The Paper Boat', titleKriolu: 'Barku di Papel', icon: '⛵', color: 'emerald',
+    desc: 'The paper boat vocabulary', vocab: [
+        { k: 'Barku di papel na agu', e: 'paper boat on the water', ex: 'Barku di papel na agu ta bai dibagar.' },
+        { k: 'Papel dobradu pa fasi barku', e: 'paper folded to make a boat', ex: 'Papel dobradu pa fasi barku ta bem di kaderno.' },
+        { k: 'Tijela di agu na kintal', e: 'bowl of water in the yard', ex: 'Tijela di agu na kintal e mar di mininu.' },
+        { k: 'Ventu ta leba barku', e: 'wind carrying the boat', ex: 'Ventu ta leba barku ta fasi tudu ri.' },
+        { k: 'Mininu ta odja barku na agu', e: 'boy watching the boat on the water', ex: 'Mininu ta odja barku na agu ka ta piska odju.' },
+        { k: 'Barku ta kai na agu', e: 'boat falling into the water', ex: 'Barku ta kai na agu ta vira di ladu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21186,6 +21204,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_papayapreserve1','kr_jarfilling1'] },
   { unit:'Unit 394 — School Gate & Walking Home', icon:'🏫', desc:'Waiting at the school gate vocabulary, and Walking home together vocabulary',
     lessons:['kr_schoolgate1','kr_walkhome1'] },
+  { unit:'Unit 395 — Tin Toy Car & Paper Boat', icon:'🚗', desc:'A toy car from a tin vocabulary, and The paper boat vocabulary',
+    lessons:['kr_tintoycar1','kr_paperboat1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38690,6 +38710,24 @@ const PT_LESSONS = [
         { k: 'fome depois da escola', e: 'hunger after school', ex: 'A fome depois da escola vinha logo à porta de casa.' },
         { k: 'pão caseiro à espera em casa', e: 'home-baked bread waiting at home', ex: 'O pão caseiro à espera em casa acabava a caminhada.' },
     ]},
+  { id: 'pt_tintoycar1', title: 'A Toy Car from a Tin', titleKriolu: 'Carrinho de Lata', icon: '🚗', color: 'sky',
+    desc: 'Vocabulário de carrinho de lata', vocab: [
+        { k: 'lata vazia para brinquedo', e: 'empty tin for a toy', ex: 'A lata vazia para brinquedo estava no lixo.' },
+        { k: 'rodas de tampas de garrafa', e: 'wheels made of bottle caps', ex: 'As rodas de tampas de garrafa eram quatro.' },
+        { k: 'arame no carrinho de lata', e: 'wire on the tin car', ex: 'O arame no carrinho de lata ficava à frente do carro.' },
+        { k: 'menino a fazer um brinquedo de lata', e: 'boy making a tin toy', ex: 'O menino a fazer um brinquedo de lata estava à sombra.' },
+        { k: 'carrinho de lata no chão', e: 'tin car on the ground', ex: 'O carrinho de lata no chão descia sozinho.' },
+        { k: 'meninos a brincar com o carrinho de lata', e: 'children playing with the tin car', ex: 'Os meninos a brincar com o carrinho de lata faziam corridas.' },
+    ]},
+  { id: 'pt_paperboat1', title: 'The Paper Boat', titleKriolu: 'O Barco de Papel', icon: '⛵', color: 'emerald',
+    desc: 'Vocabulário do barco de papel', vocab: [
+        { k: 'barco de papel na água', e: 'paper boat on the water', ex: 'O barco de papel na água ia devagar.' },
+        { k: 'papel dobrado para fazer um barco', e: 'paper folded to make a boat', ex: 'O papel dobrado para fazer um barco vinha do caderno.' },
+        { k: 'tigela de água no quintal', e: 'bowl of water in the yard', ex: 'A tigela de água no quintal era o mar dos meninos.' },
+        { k: 'vento a levar o barco', e: 'wind carrying the boat', ex: 'O vento a levar o barco fazia todos rir.' },
+        { k: 'menino a olhar o barco na água', e: 'boy watching the boat on the water', ex: 'O menino a olhar o barco na água nem piscava.' },
+        { k: 'barco a cair na água', e: 'boat falling into the water', ex: 'O barco a cair na água virou-se de lado.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -39491,6 +39529,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_papayapreserve1','pt_jarfilling1'] },
   { unit:'Unidade 396 — Portão da Escola e Caminho para Casa', icon:'🏫', desc:'Vocabulário de esperar no portão da escola, e vocabulário de caminhar para casa juntos',
     lessons:['pt_schoolgate1','pt_walkhome1'] },
+  { unit:'Unidade 397 — Carrinho de Lata e Barco de Papel', icon:'🚗', desc:'Vocabulário de carrinho de lata, e vocabulário do barco de papel',
+    lessons:['pt_tintoycar1','pt_paperboat1'] },
 ];
 
 
