@@ -18847,6 +18847,24 @@ const KR_LESSONS = [
         { k: 'Djunta kumida na mesa', e: 'sharing the food at the table', ex: 'Djunta kumida na mesa ta djunta família.' },
         { k: 'Pratu ki ta volta ku bolu', e: 'plate that comes back with a cake', ex: 'Pratu ki ta volta ku bolu ta fexa sirkulu.' },
     ]},
+  { id: 'kr_grandmacold1', title: 'Grandmother Cold Remedy', titleKriolu: 'Remédiu di Avó pa Gripi', icon: '🤧', color: 'sky',
+    desc: 'Grandmother cold remedy vocabulary', vocab: [
+        { k: 'Gripi forti', e: 'bad flu', ex: 'Gripi forti ta fasi avô fika na kama.' },
+        { k: 'Xa di erva kenti', e: 'hot herbal tea', ex: 'Xa di erva kenti ta kenta garganta.' },
+        { k: 'Mel di abelha na xa', e: 'bee honey in the tea', ex: 'Mel di abelha na xa ta fasi bebida dosi.' },
+        { k: 'Diskansa na kama', e: 'resting in bed', ex: 'Diskansa na kama ta djuda korpu.' },
+        { k: 'Komprimidu di farmásia', e: 'pill from the pharmacy', ex: 'Komprimidu di farmásia ta ser tomadu dipos di kume.' },
+        { k: 'Testa kenti di gripi', e: 'hot forehead with the flu', ex: 'Testa kenti di gripi ta fasi mai txama dotor.' },
+    ]},
+  { id: 'kr_beanplanting1', title: 'Planting Beans in the Garden', titleKriolu: 'Planta Fejon na Orta', icon: '🌱', color: 'emerald',
+    desc: 'Planting beans in the garden vocabulary', vocab: [
+        { k: 'Enxada na mon', e: 'hoe in the hand', ex: 'Enxada na mon ta abri txon.' },
+        { k: 'Fejon na txon', e: 'beans in the ground', ex: 'Fejon na txon ta ser plantadu na fila.' },
+        { k: 'Rega fejon ku agu', e: 'watering the beans', ex: 'Rega fejon ku agu e tarefa di fin di dia.' },
+        { k: 'Kanteru di kuve', e: 'bed of kale', ex: 'Kanteru di kuve ta fika djuntu di muru.' },
+        { k: 'Sol i txuva pa orta', e: 'sun and rain for the garden', ex: 'Sol i txuva pa orta ta djuda planta.' },
+        { k: 'Kuve fresku na orta', e: 'fresh kale in the garden', ex: 'Kuve fresku na orta ta ser tiradu ku mon.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20326,6 +20344,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_streetfootball1','kr_fruitpicking1'] },
   { unit:'Unit 351 — Sunday Mass & Neighbour Plate', icon:'⛪', desc:'Sunday mass vocabulary, and A plate for the neighbour vocabulary',
     lessons:['kr_sundaymass1','kr_neighbourplate1'] },
+  { unit:'Unit 352 — Cold Remedy & Planting Beans', icon:'🤧', desc:'Grandmother cold remedy vocabulary, and Planting beans in the garden vocabulary',
+    lessons:['kr_grandmacold1','kr_beanplanting1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37056,6 +37076,24 @@ const PT_LESSONS = [
         { k: 'partilhar a comida à mesa', e: 'sharing the food at the table', ex: 'Partilhar a comida à mesa unia a família.' },
         { k: 'prato que volta com um bolo', e: 'plate that comes back with a cake', ex: 'O prato que volta com um bolo fechava o ciclo.' },
     ]},
+  { id: 'pt_grandmacold1', title: 'Grandmother Cold Remedy', titleKriolu: 'Remédio da Avó para a Gripe', icon: '🤧', color: 'sky',
+    desc: 'Vocabulário de remédio da avó para a gripe', vocab: [
+        { k: 'gripe forte', e: 'bad flu', ex: 'A gripe forte deixou o avô de cama.' },
+        { k: 'chá quente de ervas', e: 'hot herbal tea', ex: 'O chá quente de ervas aquecia a garganta.' },
+        { k: 'mel de abelha no chá', e: 'bee honey in the tea', ex: 'O mel de abelha no chá adoçava a bebida.' },
+        { k: 'descansar na cama', e: 'resting in bed', ex: 'Descansar na cama ajudava o corpo.' },
+        { k: 'comprimido da farmácia', e: 'pill from the pharmacy', ex: 'O comprimido da farmácia era tomado depois de comer.' },
+        { k: 'testa quente com a gripe', e: 'hot forehead with the flu', ex: 'A testa quente com a gripe obrigou a mãe a chamar o médico.' },
+    ]},
+  { id: 'pt_beanplanting1', title: 'Planting Beans in the Garden', titleKriolu: 'Plantar Feijão na Horta', icon: '🌱', color: 'emerald',
+    desc: 'Vocabulário de plantar feijão na horta', vocab: [
+        { k: 'enxada na mão', e: 'hoe in the hand', ex: 'A enxada na mão abria a terra.' },
+        { k: 'feijão na terra', e: 'beans in the ground', ex: 'O feijão na terra era plantado em fila.' },
+        { k: 'regar o feijão com água', e: 'watering the beans', ex: 'Regar o feijão com água era tarefa de fim de dia.' },
+        { k: 'canteiro de couve', e: 'bed of kale', ex: 'O canteiro de couve ficava junto ao muro.' },
+        { k: 'sol e chuva para a horta', e: 'sun and rain for the garden', ex: 'O sol e a chuva para a horta ajudavam as plantas.' },
+        { k: 'couve fresca na horta', e: 'fresh kale in the garden', ex: 'A couve fresca na horta era colhida à mão.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37771,6 +37809,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_streetfootball1','pt_fruitpicking1'] },
   { unit:'Unidade 353 — Missa de Domingo e Prato para o Vizinho', icon:'⛪', desc:'Vocabulário de missa de domingo, e vocabulário de um prato para o vizinho',
     lessons:['pt_sundaymass1','pt_neighbourplate1'] },
+  { unit:'Unidade 354 — Remédio para a Gripe e Feijão na Horta', icon:'🤧', desc:'Vocabulário de remédio da avó para a gripe, e vocabulário de plantar feijão na horta',
+    lessons:['pt_grandmacold1','pt_beanplanting1'] },
 ];
 
 
