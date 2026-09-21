@@ -18757,6 +18757,24 @@ const KR_LESSONS = [
         { k: 'Masa na fôrma pa forno', e: 'batter in the tin for the oven', ex: 'Masa na fôrma pa forno ta bai na forno kenti.' },
         { k: 'Fatia di bolu di mel na Natal', e: 'slice of honey cake at Christmas', ex: 'Fatia di bolu di mel na Natal e típiku.' },
     ]},
+  { id: 'kr_nightstory1', title: 'Grandmother Story Night', titleKriolu: 'Noti di Stória ku Avó', icon: '📖', color: 'sky',
+    desc: 'Grandmother story night vocabulary', vocab: [
+        { k: 'Mininu na volta di avó', e: 'children around grandmother', ex: 'Mininu na volta di avó ta spera stória.' },
+        { k: 'Stória kontadu di noti', e: 'story told at night', ex: 'Stória kontadu di noti ta fasi tudu algen ri.' },
+        { k: 'Nhu Lobu na stória di avó', e: 'clever wolf in grandmother\'s tales', ex: 'Nhu Lobu na stória di avó ta ingana tudu algen.' },
+        { k: 'Lanterna na kuartu di mininu', e: 'lantern in the children\'s bedroom', ex: 'Lanterna na kuartu di mininu ta da pouku luz.' },
+        { k: 'Kobertor te na keixu', e: 'blanket up to the chin', ex: 'Kobertor te na keixu ta kenta mininu.' },
+        { k: 'Sonhu bon dipos di stória', e: 'good dream after the story', ex: 'Sonhu bon dipos di stória ta txiga dipresa.' },
+    ]},
+  { id: 'kr_feedanimals1', title: 'Feeding the Farmyard Animals', titleKriolu: 'Da di Kume pa Animal di Kaza', icon: '🐷', color: 'emerald',
+    desc: 'Feeding the farmyard animals vocabulary', vocab: [
+        { k: 'Da di kume pa porku', e: 'feeding the pig', ex: 'Da di kume pa porku e tarefa di manhan.' },
+        { k: 'Milhu pa galinha', e: 'corn for the hens', ex: 'Milhu pa galinha ta ser dadu na txon.' },
+        { k: 'Balde di agu pa kabra', e: 'bucket of water for the goat', ex: 'Balde di agu pa kabra ta fika na sombra.' },
+        { k: 'Patu na agu', e: 'ducks in the water', ex: 'Patu na agu ta nada djuntu.' },
+        { k: 'Ovu fresku di galinha', e: 'fresh egg from the hen', ex: 'Ovu fresku di galinha ta ser tiradu sedu.' },
+        { k: 'Restu di kumida pa animal', e: 'food scraps for the animals', ex: 'Restu di kumida pa animal ta ser guardadu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20226,6 +20244,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_phonecredit1','kr_bankqueue1'] },
   { unit:'Unit 346 — Guest Welcome & Honey Cake', icon:'🚪', desc:'Welcoming a guest at home vocabulary, and Baking honey cake vocabulary',
     lessons:['kr_guestwelcome1','kr_honeycake1'] },
+  { unit:'Unit 347 — Story Night & Feeding Animals', icon:'📖', desc:'Grandmother story night vocabulary, and Feeding the farmyard animals vocabulary',
+    lessons:['kr_nightstory1','kr_feedanimals1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36866,6 +36886,24 @@ const PT_LESSONS = [
         { k: 'massa na forma para o forno', e: 'batter in the tin for the oven', ex: 'A massa na forma para o forno ia ao forno quente.' },
         { k: 'fatia de bolo de mel no Natal', e: 'slice of honey cake at Christmas', ex: 'A fatia de bolo de mel no Natal era típica.' },
     ]},
+  { id: 'pt_nightstory1', title: 'Grandmother Story Night', titleKriolu: 'Noite de Histórias com a Avó', icon: '📖', color: 'sky',
+    desc: 'Vocabulário de noite de histórias com a avó', vocab: [
+        { k: 'crianças à volta da avó', e: 'children around grandmother', ex: 'As crianças à volta da avó esperavam a história.' },
+        { k: 'história contada à noite', e: 'story told at night', ex: 'A história contada à noite fazia todos sorrir.' },
+        { k: 'lobo esperto nos contos da avó', e: 'clever wolf in grandmother\'s tales', ex: 'O lobo esperto nos contos da avó enganava toda a gente.' },
+        { k: 'lanterna no quarto das crianças', e: 'lantern in the children\'s bedroom', ex: 'A lanterna no quarto das crianças dava pouca luz.' },
+        { k: 'cobertor até ao queixo', e: 'blanket up to the chin', ex: 'O cobertor até ao queixo aquecia o menino.' },
+        { k: 'sonho bom depois da história', e: 'good dream after the story', ex: 'O sonho bom depois da história chegava depressa.' },
+    ]},
+  { id: 'pt_feedanimals1', title: 'Feeding the Farmyard Animals', titleKriolu: 'Dar de Comer aos Animais', icon: '🐷', color: 'emerald',
+    desc: 'Vocabulário de dar de comer aos animais', vocab: [
+        { k: 'dar de comer ao porco', e: 'feeding the pig', ex: 'Dar de comer ao porco era tarefa da manhã.' },
+        { k: 'milho para as galinhas', e: 'corn for the hens', ex: 'O milho para as galinhas era espalhado no chão.' },
+        { k: 'balde de água para a cabra', e: 'bucket of water for the goat', ex: 'O balde de água para a cabra ficava à sombra.' },
+        { k: 'patos na água', e: 'ducks in the water', ex: 'Os patos na água nadavam juntos.' },
+        { k: 'ovo fresco da galinha', e: 'fresh egg from the hen', ex: 'O ovo fresco da galinha era apanhado cedo.' },
+        { k: 'restos de comida para os animais', e: 'food scraps for the animals', ex: 'Os restos de comida para os animais eram guardados.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37571,6 +37609,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_phonecredit1','pt_bankqueue1'] },
   { unit:'Unidade 348 — Receber Visita e Bolo de Mel', icon:'🚪', desc:'Vocabulário de receber uma visita em casa, e vocabulário de fazer bolo de mel',
     lessons:['pt_guestwelcome1','pt_honeycake1'] },
+  { unit:'Unidade 349 — Noite de Histórias e Animais', icon:'📖', desc:'Vocabulário de noite de histórias com a avó, e vocabulário de dar de comer aos animais',
+    lessons:['pt_nightstory1','pt_feedanimals1'] },
 ];
 
 
