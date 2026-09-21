@@ -18379,6 +18379,24 @@ const KR_LESSONS = [
         { k: 'Konta skritu na kaderno', e: 'account written in the notebook', ex: 'Konta skritu na kaderno ta ser pagu na fin di mes.' },
         { k: 'Loja ki ta fitxa na fin di dia', e: 'shop closing at the end of the day', ex: 'Loja ki ta fitxa na fin di dia ta abri sedu di mañan.' },
     ]},
+  { id: 'kr_meatstall1', title: 'Buying Meat at the Market', titleKriolu: 'Kunpra Karni na Merkadu', icon: '🥩', color: 'red',
+    desc: 'Buying meat at the market vocabulary', vocab: [
+        { k: 'Karni fresku na banka', e: 'fresh meat at the stall', ex: 'Karni fresku na banka ta bende dipresa.' },
+        { k: 'Faka grandi i tabua di korta', e: 'big knife and cutting board', ex: 'Faka grandi i tabua di korta ta ser uzadu tudu dia.' },
+        { k: 'Osu pa sopa', e: 'bone for the soup', ex: 'Osu pa sopa ta da sabor.' },
+        { k: 'Pedasu kortadu ku gostu di klienti', e: 'piece cut to the customer\'s taste', ex: 'Pedasu kortadu ku gostu di klienti ta ser pezadu.' },
+        { k: 'Balansa ki ta mostra pezu', e: 'scale showing the weight', ex: 'Balansa ki ta mostra pezu ta da presu sertu.' },
+        { k: 'Karni na saku di papel', e: 'meat in a paper bag', ex: 'Karni na saku di papel ta bai pa kaza.' },
+    ]},
+  { id: 'kr_flattyre1', title: 'Fixing a Flat Tyre', titleKriolu: 'Konserta Pneu Furadu', icon: '🔧', color: 'slate',
+    desc: 'Fixing a flat tyre vocabulary', vocab: [
+        { k: 'Pneu furadu na rua', e: 'flat tyre on the road', ex: 'Pneu furadu na rua ta para karru.' },
+        { k: 'Roda tiradu di karru', e: 'wheel taken off the car', ex: 'Roda tiradu di karru ta pidi txavi.' },
+        { k: 'Txavi pa solta parafuzu', e: 'wrench to loosen the screws', ex: 'Txavi pa solta parafuzu ta ser forti.' },
+        { k: 'Pneu sobresselente na lugar', e: 'spare tyre in place', ex: 'Pneu sobresselente na lugar ta fika firmi.' },
+        { k: 'Bomba pa inxi pneu', e: 'pump to inflate the tyre', ex: 'Bomba pa inxi pneu ta da ar.' },
+        { k: 'Ofisina undi pneu ta ser konsertadu', e: 'workshop where the tyre is repaired', ex: 'Ofisina undi pneu ta ser konsertadu ta fika na bairu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19814,6 +19832,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_fishdawn1','kr_firstschool1'] },
   { unit:'Unit 329 — Handwashing & Corner Shop', icon:'🧺', desc:'Washing clothes by hand vocabulary, and Corner shop vocabulary',
     lessons:['kr_laundry1','kr_cornershop1'] },
+  { unit:'Unit 330 — Meat Stall & Flat Tyre', icon:'🥩', desc:'Buying meat at the market vocabulary, and Fixing a flat tyre vocabulary',
+    lessons:['kr_meatstall1','kr_flattyre1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36076,6 +36096,24 @@ const PT_LESSONS = [
         { k: 'conta escrita no caderno', e: 'account written in the notebook', ex: 'A conta escrita no caderno era paga no fim do mês.' },
         { k: 'loja a fechar ao fim do dia', e: 'shop closing at the end of the day', ex: 'A loja a fechar ao fim do dia abria cedo de manhã.' },
     ]},
+  { id: 'pt_meatstall1', title: 'Buying Meat at the Market', titleKriolu: 'Comprar Carne no Mercado', icon: '🥩', color: 'red',
+    desc: 'Vocabulário de comprar carne no mercado', vocab: [
+        { k: 'carne fresca na banca', e: 'fresh meat at the stall', ex: 'A carne fresca na banca vendia-se depressa.' },
+        { k: 'faca grande e tábua de cortar', e: 'big knife and cutting board', ex: 'A faca grande e a tábua de cortar eram usadas todos os dias.' },
+        { k: 'osso para a sopa', e: 'bone for the soup', ex: 'O osso para a sopa dava sabor.' },
+        { k: 'pedaço cortado ao gosto do cliente', e: 'piece cut to the customer\'s taste', ex: 'O pedaço cortado ao gosto do cliente era pesado.' },
+        { k: 'balança a mostrar o peso', e: 'scale showing the weight', ex: 'A balança a mostrar o peso dava o preço certo.' },
+        { k: 'carne num saco de papel', e: 'meat in a paper bag', ex: 'A carne num saco de papel ia para casa.' },
+    ]},
+  { id: 'pt_flattyre1', title: 'Fixing a Flat Tyre', titleKriolu: 'Reparar um Pneu Furado', icon: '🔧', color: 'slate',
+    desc: 'Vocabulário de reparar um pneu furado', vocab: [
+        { k: 'pneu furado na estrada', e: 'flat tyre on the road', ex: 'O pneu furado na estrada parava o carro.' },
+        { k: 'roda tirada do carro', e: 'wheel taken off the car', ex: 'A roda tirada do carro pedia uma chave.' },
+        { k: 'chave para soltar os parafusos', e: 'wrench to loosen the screws', ex: 'A chave para soltar os parafusos era forte.' },
+        { k: 'pneu sobresselente no lugar', e: 'spare tyre in place', ex: 'O pneu sobresselente no lugar ficava firme.' },
+        { k: 'bomba para encher o pneu', e: 'pump to inflate the tyre', ex: 'A bomba para encher o pneu dava ar.' },
+        { k: 'oficina onde o pneu é reparado', e: 'workshop where the tyre is repaired', ex: 'A oficina onde o pneu é reparado ficava no bairro.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -36747,6 +36785,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_fishdawn1','pt_firstschool1'] },
   { unit:'Unidade 331 — Lavar Roupa e Loja do Bairro', icon:'🧺', desc:'Vocabulário de lavar roupa à mão, e vocabulário da loja do bairro',
     lessons:['pt_laundry1','pt_cornershop1'] },
+  { unit:'Unidade 332 — Carne no Mercado e Pneu Furado', icon:'🥩', desc:'Vocabulário de comprar carne no mercado, e vocabulário de reparar um pneu furado',
+    lessons:['pt_meatstall1','pt_flattyre1'] },
 ];
 
 
