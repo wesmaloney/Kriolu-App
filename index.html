@@ -19297,6 +19297,24 @@ const KR_LESSONS = [
         { k: 'Luz na kaza tudu', e: 'light in the whole house', ex: 'Luz na kaza tudu ta volta di noti.' },
         { k: 'Paga fatura di luz antis di prazu', e: 'paying the electricity bill before the deadline', ex: 'Paga fatura di luz antis di prazu ta da pas.' },
     ]},
+  { id: 'kr_guitarlesson1', title: 'First Guitar Lesson', titleKriolu: 'Primeru Aula di Viola', icon: '🎸', color: 'sky',
+    desc: 'First guitar lesson vocabulary', vocab: [
+        { k: 'Viola nobu pa mininu', e: 'new guitar for the boy', ex: 'Viola nobu pa mininu ta ten xeru di madera.' },
+        { k: 'Afina korda di viola', e: 'tuning the guitar strings', ex: 'Afina korda di viola ta leba txeu tenpu.' },
+        { k: 'Aula di viola na sala', e: 'guitar lesson in the living room', ex: 'Aula di viola na sala e na sabadu.' },
+        { k: 'Tiu ta toka viola', e: 'uncle playing the guitar', ex: 'Tiu ta toka viola ta splika kantiga pasu pa pasu.' },
+        { k: 'Tenta di novu ku pasénsia', e: 'trying again with patience', ex: 'Tenta di novu ku pasénsia ta da bon rezultadu.' },
+        { k: 'Nota bon na fin di aula', e: 'good grade at the end of the lesson', ex: 'Nota bon na fin di aula ta fasi mininu kontenti.' },
+    ]},
+  { id: 'kr_learnbike1', title: 'Learning to Ride a Bicycle', titleKriolu: 'Prende Anda di Bisikleta', icon: '🚲', color: 'emerald',
+    desc: 'Learning to ride a bicycle vocabulary', vocab: [
+        { k: 'Bisikleta di mininu', e: 'child\'s bicycle', ex: 'Bisikleta di mininu ta ten roda pikinoti.' },
+        { k: 'Kapasete na kabesa di mininu', e: 'helmet on the child\'s head', ex: 'Kapasete na kabesa di mininu ta sta bon na kabesa.' },
+        { k: 'Pai ta djuda mininu ku bisikleta', e: 'father helping the son with the bicycle', ex: 'Pai ta djuda mininu ku bisikleta ta kuri na banda.' },
+        { k: 'Pe na pedal', e: 'foot on the pedal', ex: 'Pe na pedal ta bai ku forsa.' },
+        { k: 'Mininu ki kai di bisikleta', e: 'boy who falls off the bicycle', ex: 'Mininu ki kai di bisikleta ta labanta ta ri.' },
+        { k: 'Prende anda di bisikleta', e: 'learning to ride a bicycle', ex: 'Prende anda di bisikleta ta leba un simana.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20826,6 +20844,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_roastcorn1','kr_cassavabreakfast1'] },
   { unit:'Unit 376 — Water Bill & Electricity Meter', icon:'🚰', desc:'Paying the water bill vocabulary, and The electricity meter vocabulary',
     lessons:['kr_waterbill1','kr_lightmeter1'] },
+  { unit:'Unit 377 — Guitar Lesson & Learning to Cycle', icon:'🎸', desc:'First guitar lesson vocabulary, and Learning to ride a bicycle vocabulary',
+    lessons:['kr_guitarlesson1','kr_learnbike1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38006,6 +38026,24 @@ const PT_LESSONS = [
         { k: 'luz em toda a casa', e: 'light in the whole house', ex: 'A luz em toda a casa voltou à noite.' },
         { k: 'pagar a fatura da luz antes do prazo', e: 'paying the electricity bill before the deadline', ex: 'Pagar a fatura da luz antes do prazo dava paz.' },
     ]},
+  { id: 'pt_guitarlesson1', title: 'First Guitar Lesson', titleKriolu: 'Primeira Aula de Viola', icon: '🎸', color: 'sky',
+    desc: 'Vocabulário da primeira aula de viola', vocab: [
+        { k: 'viola nova para o menino', e: 'new guitar for the boy', ex: 'A viola nova para o menino cheirava a madeira.' },
+        { k: 'afinar as cordas da viola', e: 'tuning the guitar strings', ex: 'Afinar as cordas da viola levava muito tempo.' },
+        { k: 'aula de viola na sala', e: 'guitar lesson in the living room', ex: 'A aula de viola na sala era ao sábado.' },
+        { k: 'tio a tocar viola', e: 'uncle playing the guitar', ex: 'O tio a tocar viola ensinava a cantiga passo a passo.' },
+        { k: 'tentar de novo com paciência', e: 'trying again with patience', ex: 'Tentar de novo com paciência trazia bons resultados.' },
+        { k: 'nota boa no fim da aula', e: 'good grade at the end of the lesson', ex: 'A nota boa no fim da aula alegrou o menino.' },
+    ]},
+  { id: 'pt_learnbike1', title: 'Learning to Ride a Bicycle', titleKriolu: 'Aprender a Andar de Bicicleta', icon: '🚲', color: 'emerald',
+    desc: 'Vocabulário de aprender a andar de bicicleta', vocab: [
+        { k: 'bicicleta de criança', e: 'child\'s bicycle', ex: 'A bicicleta de criança tinha rodinhas.' },
+        { k: 'capacete na cabeça da criança', e: 'helmet on the child\'s head', ex: 'O capacete na cabeça da criança ficava bem na cabeça.' },
+        { k: 'pai a ajudar o filho com a bicicleta', e: 'father helping the son with the bicycle', ex: 'O pai a ajudar o filho com a bicicleta corria ao lado.' },
+        { k: 'pé no pedal', e: 'foot on the pedal', ex: 'O pé no pedal empurrava com força.' },
+        { k: 'menino que cai da bicicleta', e: 'boy who falls off the bicycle', ex: 'O menino que cai da bicicleta levanta-se a rir.' },
+        { k: 'aprender a andar de bicicleta', e: 'learning to ride a bicycle', ex: 'Aprender a andar de bicicleta levou uma semana.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38771,6 +38809,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_roastcorn1','pt_cassavabreakfast1'] },
   { unit:'Unidade 378 — Fatura da Água e Contador da Luz', icon:'🚰', desc:'Vocabulário de pagar a fatura da água, e vocabulário do contador da luz',
     lessons:['pt_waterbill1','pt_lightmeter1'] },
+  { unit:'Unidade 379 — Aula de Viola e Aprender a Andar de Bicicleta', icon:'🎸', desc:'Vocabulário da primeira aula de viola, e vocabulário de aprender a andar de bicicleta',
+    lessons:['pt_guitarlesson1','pt_learnbike1'] },
 ];
 
 
