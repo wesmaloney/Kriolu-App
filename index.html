@@ -19567,6 +19567,24 @@ const KR_LESSONS = [
         { k: 'Brasa kenti baxu di panela', e: 'hot embers under the pot', ex: 'Brasa kenti baxu di panela ta dura txeu ora.' },
         { k: 'Kuidadu ku brasa', e: 'care with the embers', ex: 'Kuidadu ku brasa ta ser splikadu pa mininu.' },
     ]},
+  { id: 'kr_escudopay1', title: 'Paying with Escudos', titleKriolu: 'Paga ku Eskudu', icon: '💵', color: 'sky',
+    desc: 'Paying with escudos vocabulary', vocab: [
+        { k: 'Nota di sen eskudu', e: 'hundred-escudo note', ex: 'Nota di sen eskudu ta sta dobradu na bolsu.' },
+        { k: 'Moeda di sinku eskudu', e: 'five-escudo coin', ex: 'Moeda di sinku eskudu ta rola na txon.' },
+        { k: 'Karteira ku eskudu', e: 'wallet with escudos', ex: 'Karteira ku eskudu ta fika na bolsu di frenti.' },
+        { k: 'Kantu kusta un banana', e: 'how much does a banana cost', ex: 'Kantu kusta un banana e pergunta di mininu.' },
+        { k: 'Troku pa nota di mil eskudu', e: 'change for a thousand-escudo note', ex: 'Troku pa nota di mil eskudu ta dura.' },
+        { k: 'Paga ku eskudu na loja', e: 'paying with escudos in the shop', ex: 'Paga ku eskudu na loja e mas rápidu.' },
+    ]},
+  { id: 'kr_bananabuy1', title: 'Buying Bananas', titleKriolu: 'Kunpra Banana na Merkadu', icon: '🍌', color: 'emerald',
+    desc: 'Buying bananas vocabulary', vocab: [
+        { k: 'Banana na banka di merkadu', e: 'banana on the market stall', ex: 'Banana na banka di merkadu ta sta dosi.' },
+        { k: 'Presu di banana', e: 'price of the banana', ex: 'Presu di banana ta muda ku tenpu.' },
+        { k: 'Mon xeiu di banana', e: 'handful of bananas', ex: 'Mon xeiu di banana ta bai pa saku.' },
+        { k: 'Banana verdi na banka', e: 'green banana on the stall', ex: 'Banana verdi na banka ka ta ser kumidu inda.' },
+        { k: 'Saku di banana', e: 'sack of bananas', ex: 'Saku di banana ta bai na kabesa di mai.' },
+        { k: 'Vendedor ta peza banana', e: 'seller weighing the bananas', ex: 'Vendedor ta peza banana ta papia ku tudu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21126,6 +21144,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_duskwater1','kr_flowervase1'] },
   { unit:'Unit 391 — Gas Bottle & Charcoal Stove', icon:'🔥', desc:'The gas bottle runs out vocabulary, and Lighting the charcoal stove vocabulary',
     lessons:['kr_gasbottle1','kr_charcoalstove1'] },
+  { unit:'Unit 392 — Paying with Escudos & Buying Bananas', icon:'💵', desc:'Paying with escudos vocabulary, and Buying bananas vocabulary',
+    lessons:['kr_escudopay1','kr_bananabuy1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -38576,6 +38596,24 @@ const PT_LESSONS = [
         { k: 'brasa quente debaixo da panela', e: 'hot embers under the pot', ex: 'A brasa quente debaixo da panela durava horas.' },
         { k: 'cuidado com a brasa', e: 'care with the embers', ex: 'O cuidado com a brasa era explicado às crianças.' },
     ]},
+  { id: 'pt_escudopay1', title: 'Paying with Escudos', titleKriolu: 'Pagar com Escudos', icon: '💵', color: 'sky',
+    desc: 'Vocabulário de pagar com escudos', vocab: [
+        { k: 'nota de cem escudos', e: 'hundred-escudo note', ex: 'A nota de cem escudos estava dobrada no bolso.' },
+        { k: 'moeda de cinco escudos', e: 'five-escudo coin', ex: 'A moeda de cinco escudos rolou pelo chão.' },
+        { k: 'carteira com escudos', e: 'wallet with escudos', ex: 'A carteira com escudos ficava sempre no bolso da frente.' },
+        { k: 'quanto custa uma banana', e: 'how much does a banana cost', ex: 'Quanto custa uma banana era a pergunta do menino.' },
+        { k: 'troco para uma nota de mil escudos', e: 'change for a thousand-escudo note', ex: 'O troco para uma nota de mil escudos demorou.' },
+        { k: 'pagar com escudos na loja', e: 'paying with escudos in the shop', ex: 'Pagar com escudos na loja era o mais rápido.' },
+    ]},
+  { id: 'pt_bananabuy1', title: 'Buying Bananas', titleKriolu: 'Comprar Bananas no Mercado', icon: '🍌', color: 'emerald',
+    desc: 'Vocabulário de comprar bananas no mercado', vocab: [
+        { k: 'banana na banca do mercado', e: 'banana on the market stall', ex: 'A banana na banca do mercado estava doce.' },
+        { k: 'preço da banana', e: 'price of the banana', ex: 'O preço da banana mudava com o tempo.' },
+        { k: 'mão cheia de banana', e: 'handful of bananas', ex: 'A mão cheia de banana foi para o saco.' },
+        { k: 'banana verde na banca', e: 'green banana on the stall', ex: 'A banana verde na banca ainda não se comia.' },
+        { k: 'saco de bananas', e: 'sack of bananas', ex: 'O saco de bananas ia à cabeça da mãe.' },
+        { k: 'vendedor a pesar a banana', e: 'seller weighing the bananas', ex: 'O vendedor a pesar a banana falava com todos.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -39371,6 +39409,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_duskwater1','pt_flowervase1'] },
   { unit:'Unidade 393 — Botija de Gás e Fogareiro de Carvão', icon:'🔥', desc:'Vocabulário da botija de gás que acaba, e vocabulário de acender o fogareiro de carvão',
     lessons:['pt_gasbottle1','pt_charcoalstove1'] },
+  { unit:'Unidade 394 — Pagar com Escudos e Comprar Bananas', icon:'💵', desc:'Vocabulário de pagar com escudos, e vocabulário de comprar bananas no mercado',
+    lessons:['pt_escudopay1','pt_bananabuy1'] },
 ];
 
 
