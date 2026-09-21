@@ -19081,6 +19081,24 @@ const KR_LESSONS = [
         { k: 'Sopa kenti na kaldeiron', e: 'hot soup in the large pot', ex: 'Sopa kenti na kaldeiron ta da pa tudu.' },
         { k: 'Sopa kenti pa família', e: 'hot soup for the family', ex: 'Sopa kenti pa família ta ser sirbidu di noti.' },
     ]},
+  { id: 'kr_healthwait1', title: 'Waiting Room at the Health Centre', titleKriolu: 'Sala di Spera na Sentru di Saúdi', icon: '🏥', color: 'sky',
+    desc: 'Waiting room at the health centre vocabulary', vocab: [
+        { k: 'Sala di spera txeiu', e: 'full waiting room', ex: 'Sala di spera txeiu ta pidi spera na pe.' },
+        { k: 'Spera bu ves ku fidju', e: 'waiting your turn with the child', ex: 'Spera bu ves ku fidju ta pidi txeu pasénsia.' },
+        { k: 'Infermera ta txama nomi', e: 'nurse calling out the name', ex: 'Infermera ta txama nomi ta fla ku vos altu.' },
+        { k: 'Dotor ta odja barriga', e: 'doctor examining the stomach', ex: 'Dotor ta odja barriga ta fasi pergunta.' },
+        { k: 'Konsulta markadu pa manhan', e: 'appointment booked for the morning', ex: 'Konsulta markadu pa manhan e primeru.' },
+        { k: 'Reseita na mon', e: 'prescription in the hand', ex: 'Reseita na mon ta ser kargadu pa farmásia.' },
+    ]},
+  { id: 'kr_medicinehome1', title: 'Medicine at Home', titleKriolu: 'Medikamentu na Kaza', icon: '💊', color: 'emerald',
+    desc: 'Medicine at home vocabulary', vocab: [
+        { k: 'Farmásia di servisu na noti', e: 'duty pharmacy at night', ex: 'Farmásia di servisu na noti ta ten luz.' },
+        { k: 'Kaxa di medikamentu', e: 'box of medicines', ex: 'Kaxa di medikamentu ta fika lonji di mininu.' },
+        { k: 'Komprimidu i agu na mesa', e: 'pill and water on the table', ex: 'Komprimidu i agu na mesa ta spera avô.' },
+        { k: 'Toma komprimidu dipos di kume', e: 'taking the pill after eating', ex: 'Toma komprimidu dipos di kume ta djuda kontra dor.' },
+        { k: 'Diskansa i bebe agu', e: 'resting and drinking water', ex: 'Diskansa i bebe agu ta ser pidi pa dotor.' },
+        { k: 'Medikamentu pa mininu', e: 'medicine for the child', ex: 'Medikamentu pa mininu ta ser dadu ku kolher.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20586,6 +20604,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_makebed1','kr_childbath1'] },
   { unit:'Unit 364 — Setting the Table & Soup Prep', icon:'🍴', desc:'Setting the table vocabulary, and Preparing vegetables for soup vocabulary',
     lessons:['kr_settable1','kr_soupprep1'] },
+  { unit:'Unit 365 — Health Centre Wait & Medicine at Home', icon:'🏥', desc:'Waiting room at the health centre vocabulary, and Medicine at home vocabulary',
+    lessons:['kr_healthwait1','kr_medicinehome1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37550,6 +37570,24 @@ const PT_LESSONS = [
         { k: 'sopa quente no caldeirão', e: 'hot soup in the large pot', ex: 'A sopa quente no caldeirão dava para todos.' },
         { k: 'sopa quente para a família', e: 'hot soup for the family', ex: 'A sopa quente para a família era servida à noite.' },
     ]},
+  { id: 'pt_healthwait1', title: 'Waiting Room at the Health Centre', titleKriolu: 'Sala de Espera no Centro de Saúde', icon: '🏥', color: 'sky',
+    desc: 'Vocabulário de sala de espera no centro de saúde', vocab: [
+        { k: 'sala de espera cheia', e: 'full waiting room', ex: 'A sala de espera cheia obrigava a esperar em pé.' },
+        { k: 'esperar a vez com o filho', e: 'waiting your turn with the child', ex: 'Esperar a vez com o filho pedia muita paciência.' },
+        { k: 'enfermeira a chamar o nome', e: 'nurse calling out the name', ex: 'A enfermeira a chamar o nome falava em voz alta.' },
+        { k: 'médico a ver a barriga', e: 'doctor examining the stomach', ex: 'O médico a ver a barriga fazia perguntas.' },
+        { k: 'consulta marcada para de manhã', e: 'appointment booked for the morning', ex: 'A consulta marcada para de manhã era a primeira.' },
+        { k: 'receita na mão', e: 'prescription in the hand', ex: 'A receita na mão foi levada à farmácia.' },
+    ]},
+  { id: 'pt_medicinehome1', title: 'Medicine at Home', titleKriolu: 'Medicamentos em Casa', icon: '💊', color: 'emerald',
+    desc: 'Vocabulário de medicamentos em casa', vocab: [
+        { k: 'farmácia de serviço à noite', e: 'duty pharmacy at night', ex: 'A farmácia de serviço à noite tinha uma luz.' },
+        { k: 'caixa de medicamentos', e: 'box of medicines', ex: 'A caixa de medicamentos ficava fora do alcance das crianças.' },
+        { k: 'comprimido e água na mesa', e: 'pill and water on the table', ex: 'O comprimido e a água na mesa esperavam o avô.' },
+        { k: 'tomar o comprimido depois de comer', e: 'taking the pill after eating', ex: 'Tomar o comprimido depois de comer ajudava contra as dores.' },
+        { k: 'descansar e beber água', e: 'resting and drinking water', ex: 'Descansar e beber água era o que o médico pedia.' },
+        { k: 'medicamento para a criança', e: 'medicine for the child', ex: 'O medicamento para a criança era dado com colher.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38291,6 +38329,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_makebed1','pt_childbath1'] },
   { unit:'Unidade 366 — Pôr a Mesa e Preparar a Sopa', icon:'🍴', desc:'Vocabulário de pôr a mesa, e vocabulário de preparar legumes para a sopa',
     lessons:['pt_settable1','pt_soupprep1'] },
+  { unit:'Unidade 367 — Centro de Saúde e Medicamentos em Casa', icon:'🏥', desc:'Vocabulário de sala de espera no centro de saúde, e vocabulário de medicamentos em casa',
+    lessons:['pt_healthwait1','pt_medicinehome1'] },
 ];
 
 
