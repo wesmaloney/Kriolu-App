@@ -18541,6 +18541,24 @@ const KR_LESSONS = [
         { k: 'Formason sobri trabadju', e: 'training about the job', ex: 'Formason sobri trabadju ta dura un simana.' },
         { k: 'Pergunta kandu ten dúvida', e: 'asking when in doubt', ex: 'Pergunta kandu ten dúvida ta ajuda tudu.' },
     ]},
+  { id: 'kr_sewrepair1', title: 'Sewing Machine Repair', titleKriolu: 'Konsertu di Máquina di Kostura', icon: '🧵', color: 'pink',
+    desc: 'Sewing machine repair vocabulary', vocab: [
+        { k: 'Máquina di kostura ki para', e: 'stopped sewing machine', ex: 'Máquina di kostura ki para ta pidi konsertu.' },
+        { k: 'Agulha kebradu', e: 'broken needle', ex: 'Agulha kebradu ta troka pa nobu.' },
+        { k: 'Fiu inroladu na máquina', e: 'thread tangled in the machine', ex: 'Fiu inroladu na máquina ta pidi kalma.' },
+        { k: 'Óleu na máquina di kostura', e: 'oil in the sewing machine', ex: 'Óleu na máquina di kostura ta dexa el lisu.' },
+        { k: 'Pedal ki ta funsiona ben', e: 'pedal working well', ex: 'Pedal ki ta funsiona ben ta da velosidadi.' },
+        { k: 'Kostura dretu dipos di konsertu', e: 'straight seam after the repair', ex: 'Kostura dretu dipos di konsertu ta fasi alfaiati kontenti.' },
+    ]},
+  { id: 'kr_examday1', title: 'Exam Day at School', titleKriolu: 'Dia di Prova na Skola', icon: '📝', color: 'indigo',
+    desc: 'Exam day at school vocabulary', vocab: [
+        { k: 'Studa di noti antis di prova', e: 'studying at night before the test', ex: 'Studa di noti antis di prova ta djuda.' },
+        { k: 'Kaneta i lápis na kixa di lápis', e: 'pen and pencil in the pencil case', ex: 'Kaneta i lápis na kixa di lápis ta prontu pa prova.' },
+        { k: 'Txiga sedu na sala di ola', e: 'arriving early in the classroom', ex: 'Txiga sedu na sala di ola ta dexa kabesa fria.' },
+        { k: 'Lê pergunta ku kalma', e: 'reading the question calmly', ex: 'Lê pergunta ku kalma ta ajuda na resposta.' },
+        { k: 'Skrebe resposta na papel', e: 'writing the answer on the paper', ex: 'Skrebe resposta na papel ta pidi kaneta.' },
+        { k: 'Rezultadu di prova ku nota bon', e: 'test result with a good grade', ex: 'Rezultadu di prova ku nota bon ta fasi mai kontenti.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -19986,6 +20004,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_heatwave1','kr_watertank1'] },
   { unit:'Unit 334 — Market Stall & First Job Day', icon:'🍊', desc:'Setting up a market stall vocabulary, and First day at a new job vocabulary',
     lessons:['kr_marketstall1','kr_firstjob1'] },
+  { unit:'Unit 335 — Sewing Repair & Exam Day', icon:'🧵', desc:'Sewing machine repair vocabulary, and Exam day at school vocabulary',
+    lessons:['kr_sewrepair1','kr_examday1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -36410,6 +36430,24 @@ const PT_LESSONS = [
         { k: 'formação sobre o trabalho', e: 'training about the job', ex: 'A formação sobre o trabalho durava uma semana.' },
         { k: 'perguntar quando há dúvida', e: 'asking when in doubt', ex: 'Perguntar quando há dúvida ajudava todos.' },
     ]},
+  { id: 'pt_sewrepair1', title: 'Sewing Machine Repair', titleKriolu: 'Reparar uma Máquina de Costura', icon: '🧵', color: 'pink',
+    desc: 'Vocabulário de reparar uma máquina de costura', vocab: [
+        { k: 'máquina de costura parada', e: 'stopped sewing machine', ex: 'A máquina de costura parada pedia conserto.' },
+        { k: 'agulha partida', e: 'broken needle', ex: 'A agulha partida era trocada por uma nova.' },
+        { k: 'fio enrolado na máquina', e: 'thread tangled in the machine', ex: 'O fio enrolado na máquina pedia calma.' },
+        { k: 'óleo na máquina de costura', e: 'oil in the sewing machine', ex: 'O óleo na máquina de costura deixava-a suave.' },
+        { k: 'pedal a funcionar bem', e: 'pedal working well', ex: 'O pedal a funcionar bem dava velocidade.' },
+        { k: 'costura direita depois do conserto', e: 'straight seam after the repair', ex: 'A costura direita depois do conserto deixava o alfaiate contente.' },
+    ]},
+  { id: 'pt_examday1', title: 'Exam Day at School', titleKriolu: 'O Dia da Prova na Escola', icon: '📝', color: 'indigo',
+    desc: 'Vocabulário do dia da prova na escola', vocab: [
+        { k: 'estudar à noite antes da prova', e: 'studying at night before the test', ex: 'Estudar à noite antes da prova ajudava.' },
+        { k: 'caneta e lápis no estojo', e: 'pen and pencil in the pencil case', ex: 'A caneta e o lápis no estojo estavam prontos para a prova.' },
+        { k: 'chegar cedo à sala de aula', e: 'arriving early in the classroom', ex: 'Chegar cedo à sala de aula ajudava a manter a cabeça fria.' },
+        { k: 'ler a pergunta com calma', e: 'reading the question calmly', ex: 'Ler a pergunta com calma ajudava na resposta.' },
+        { k: 'escrever a resposta no papel', e: 'writing the answer on the paper', ex: 'Escrever a resposta no papel pedia caneta.' },
+        { k: 'resultado da prova com nota boa', e: 'test result with a good grade', ex: 'O resultado da prova com nota boa deixava a mãe contente.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -37091,6 +37129,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_heatwave1','pt_watertank1'] },
   { unit:'Unidade 336 — Banca no Mercado e Primeiro Dia de Trabalho', icon:'🍊', desc:'Vocabulário de montar a banca no mercado, e vocabulário do primeiro dia num novo trabalho',
     lessons:['pt_marketstall1','pt_firstjob1'] },
+  { unit:'Unidade 337 — Máquina de Costura e Dia da Prova', icon:'🧵', desc:'Vocabulário de reparar uma máquina de costura, e vocabulário do dia da prova na escola',
+    lessons:['pt_sewrepair1','pt_examday1'] },
 ];
 
 
