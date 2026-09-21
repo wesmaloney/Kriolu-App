@@ -18955,6 +18955,24 @@ const KR_LESSONS = [
         { k: 'Tartaruga ta volta pa mar', e: 'turtle returning to the sea', ex: 'Tartaruga ta volta pa mar ta dexa marka na areia.' },
         { k: 'Silensiu na praia di noti', e: 'silence on the beach at night', ex: 'Silensiu na praia di noti ta ser total.' },
     ]},
+  { id: 'kr_stormradio1', title: 'Storm Warning on the Radio', titleKriolu: 'Avizu di Tenpestadi na Rádiu', icon: '📻', color: 'sky',
+    desc: 'Storm warning on the radio vocabulary', vocab: [
+        { k: 'Rádiu na kuzinha', e: 'radio in the kitchen', ex: 'Rádiu na kuzinha ta toka tudu dia.' },
+        { k: 'Avizu di tenpestadi na rádiu', e: 'storm warning on the radio', ex: 'Avizu di tenpestadi na rádiu ta prokupa tudu algen.' },
+        { k: 'Previson di tenpu na rádiu', e: 'weather forecast on the radio', ex: 'Previson di tenpu na rádiu ta ser obi ku atenson.' },
+        { k: 'Ventu forti na mar', e: 'strong wind at sea', ex: 'Ventu forti na mar ta fasi onda grandi.' },
+        { k: 'Barku ka ta sai pa mar', e: 'boat that does not go out to sea', ex: 'Barku ka ta sai pa mar ta fika prezu na kais.' },
+        { k: 'Barku na kais', e: 'boat at the quay', ex: 'Barku na kais ta bati na muru ku ventu.' },
+    ]},
+  { id: 'kr_boatdeparture1', title: 'Fishing Boat Leaving the Quay', titleKriolu: 'Barku di Piska ta Sai di Kais', icon: '⛵', color: 'emerald',
+    desc: 'Fishing boat leaving the quay vocabulary', vocab: [
+        { k: 'Marinheru na barku di piska', e: 'sailor on the fishing boat', ex: 'Marinheru na barku di piska ta labanta sedu.' },
+        { k: 'Rede di piska na barku', e: 'fishing net on the boat', ex: 'Rede di piska na barku ta sta pertu di marinheru.' },
+        { k: 'Jelu pa pexi', e: 'ice for the fish', ex: 'Jelu pa pexi ta bem na kaxa.' },
+        { k: 'Motor di barku', e: 'boat engine', ex: 'Motor di barku ta fasi txeu barulhu.' },
+        { k: 'Barku ta sai di kais', e: 'boat leaving the quay', ex: 'Barku ta sai di kais ta leba tres omi.' },
+        { k: 'Boia na mar', e: 'buoy in the sea', ex: 'Boia na mar ta marka lugar di rede.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -20446,6 +20464,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_yardsweep1','kr_afternoonnap1'] },
   { unit:'Unit 357 — Seashells & Turtle Night', icon:'🐚', desc:'Shells on the beach vocabulary, and Turtle night on the beach vocabulary',
     lessons:['kr_seashells1','kr_turtlenight1'] },
+  { unit:'Unit 358 — Storm Radio & Boat Departure', icon:'📻', desc:'Storm warning on the radio vocabulary, and Fishing boat leaving the quay vocabulary',
+    lessons:['kr_stormradio1','kr_boatdeparture1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -37284,6 +37304,24 @@ const PT_LESSONS = [
         { k: 'tartaruga que volta para o mar', e: 'turtle returning to the sea', ex: 'A tartaruga que volta para o mar deixava marcas na areia.' },
         { k: 'silêncio na praia de noite', e: 'silence on the beach at night', ex: 'O silêncio na praia de noite era total.' },
     ]},
+  { id: 'pt_stormradio1', title: 'Storm Warning on the Radio', titleKriolu: 'Aviso de Tempestade no Rádio', icon: '📻', color: 'sky',
+    desc: 'Vocabulário de aviso de tempestade no rádio', vocab: [
+        { k: 'rádio na cozinha', e: 'radio in the kitchen', ex: 'O rádio na cozinha estava sempre a tocar.' },
+        { k: 'aviso de tempestade no rádio', e: 'storm warning on the radio', ex: 'O aviso de tempestade no rádio preocupou toda a gente.' },
+        { k: 'previsão do tempo no rádio', e: 'weather forecast on the radio', ex: 'A previsão do tempo no rádio era ouvida com atenção.' },
+        { k: 'vento forte no mar', e: 'strong wind at sea', ex: 'O vento forte no mar fazia ondas grandes.' },
+        { k: 'barco que não sai para o mar', e: 'boat that does not go out to sea', ex: 'O barco que não sai para o mar ficava preso ao cais.' },
+        { k: 'barco no cais', e: 'boat at the quay', ex: 'O barco no cais batia no muro com o vento.' },
+    ]},
+  { id: 'pt_boatdeparture1', title: 'Fishing Boat Leaving the Quay', titleKriolu: 'Barco de Pesca a Sair do Cais', icon: '⛵', color: 'emerald',
+    desc: 'Vocabulário de barco de pesca a sair do cais', vocab: [
+        { k: 'marinheiro no barco de pesca', e: 'sailor on the fishing boat', ex: 'O marinheiro no barco de pesca levantou-se de madrugada.' },
+        { k: 'rede de pesca no barco', e: 'fishing net on the boat', ex: 'A rede de pesca no barco estava perto do marinheiro.' },
+        { k: 'gelo para o peixe', e: 'ice for the fish', ex: 'O gelo para o peixe vinha em caixas.' },
+        { k: 'motor do barco', e: 'boat engine', ex: 'O motor do barco fazia muito barulho.' },
+        { k: 'barco a sair do cais', e: 'boat leaving the quay', ex: 'O barco a sair do cais levava três homens.' },
+        { k: 'boia no mar', e: 'buoy in the sea', ex: 'A boia no mar marcava o lugar da rede.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -38011,6 +38049,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_yardsweep1','pt_afternoonnap1'] },
   { unit:'Unidade 359 — Conchas e Noite das Tartarugas', icon:'🐚', desc:'Vocabulário de conchas na praia, e vocabulário de noite das tartarugas na praia',
     lessons:['pt_seashells1','pt_turtlenight1'] },
+  { unit:'Unidade 360 — Aviso de Tempestade e Barco a Sair', icon:'📻', desc:'Vocabulário de aviso de tempestade no rádio, e vocabulário de barco de pesca a sair do cais',
+    lessons:['pt_stormradio1','pt_boatdeparture1'] },
 ];
 
 
