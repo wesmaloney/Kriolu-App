@@ -20827,6 +20827,24 @@ const KR_LESSONS = [
         { k: 'Orgulhu di avô ora ki odja arvi grandi', e: 'grandfather\'s pride upon seeing the big tree', ex: 'Orgulhu di avô ora ki odja arvi grandi ta parse na si sorridu.' },
         { k: 'Stória di arvi kontadu pa netu kada anu', e: 'story of the tree told to the grandchildren every year', ex: 'Stória di arvi kontadu pa netu kada anu ka ta muda kumesu nunka.' },
     ]},
+  { id: 'kr_sickchild1', title: 'Child with a Fever Cared for by Mother', titleKriolu: 'Mininu ku Febri Kuidadu pa Mai', icon: '🤒', color: 'rose',
+    desc: 'Child with a fever cared for by mother vocabulary', vocab: [
+        { k: 'Mininu duenti ku febri altu', e: 'sick child with high fever', ex: 'Mininu duenti ku febri altu ka konsigi durmi dretu.' },
+        { k: 'Testa kenti sentidu ku mon di mai', e: 'hot forehead felt with the mother\'s hand', ex: 'Testa kenti sentidu ku mon di mai ta mostra tudu kuidadu di mai.' },
+        { k: 'Termómetru poi bas di braso', e: 'thermometer placed under the arm', ex: 'Termómetru poi bas di braso ta leba alguns minutu pa marka.' },
+        { k: 'Kama ku kobertor kenti pa mininu', e: 'bed with a warm blanket for the child', ex: 'Kama ku kobertor kenti pa mininu ta fika pertu di janela.' },
+        { k: 'Sopa kenti pa mininu duenti', e: 'hot soup for the sick child', ex: 'Sopa kenti pa mininu duenti ben fetu ku tudu kuidadu.' },
+        { k: 'Mai ta fika djuntu tudu noti', e: 'mother staying close all night', ex: 'Mai ta fika djuntu tudu noti ka ta fitxa odju nen un minutu.' },
+    ]},
+  { id: 'kr_doctorvisit1', title: 'Taking the Sick Child to the Doctor', titleKriolu: 'Leba Mininu Duenti pa Dotor', icon: '🩺', color: 'sky',
+    desc: 'Taking the sick child to the doctor vocabulary', vocab: [
+        { k: 'Konsulta marcadu pa dotor', e: 'appointment scheduled with the doctor', ex: 'Konsulta marcadu pa dotor e lógu na manhan.' },
+        { k: 'Sala di spera xeiu di jenti', e: 'waiting room full of people', ex: 'Sala di spera xeiu di jenti ta dexa mininu mas nervozu.' },
+        { k: 'Dotor ta odja garganta di mininu', e: 'doctor examining the child\'s throat', ex: 'Dotor ta odja garganta di mininu ta papia ku vós kalmu.' },
+        { k: 'Reseita di remédiu skrebedu na papel', e: 'medicine prescription written on the paper', ex: 'Reseita di remédiu skrebedu na papel ben guardadu na mala di mai.' },
+        { k: 'Toma remédiu tres bes na dia', e: 'medicine taken three times a day', ex: 'Toma remédiu tres bes na dia ta trazi melhora rápidu.' },
+        { k: 'Alegria di mininu fika bon otu bes', e: 'joy of the child getting well again', ex: 'Alegria di mininu fika bon otu bes ta inxi kaza di sorridu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -22526,6 +22544,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_newpuppy1','kr_puppyplay1'] },
   { unit:'Unit 461 — Planting a Tree & Watching It Grow', icon:'🌳', desc:'Grandfather and grandson planting a tree together vocabulary, and Watching the tree grow year after year vocabulary',
     lessons:['kr_treeplant1','kr_treegrow1'] },
+  { unit:'Unit 462 — Caring for a Sick Child & the Doctor Visit', icon:'🤒', desc:'Child with a fever cared for by mother vocabulary, and Taking the sick child to the doctor vocabulary',
+    lessons:['kr_sickchild1','kr_doctorvisit1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -41236,6 +41256,24 @@ const PT_LESSONS = [
         { k: 'orgulho do avô ao ver a árvore grande', e: 'grandfather\'s pride upon seeing the big tree', ex: 'O orgulho do avô ao ver a árvore grande via-se no seu sorriso.' },
         { k: 'história da árvore contada aos netos a cada ano', e: 'story of the tree told to the grandchildren every year', ex: 'A história da árvore contada aos netos a cada ano nunca mudava de início.' },
     ]},
+  { id: 'pt_sickchild1', title: 'Child with a Fever Cared for by Mother', titleKriolu: 'A Criança com Febre Cuidada pela Mãe', icon: '🤒', color: 'rose',
+    desc: 'Vocabulário da criança com febre cuidada pela mãe', vocab: [
+        { k: 'criança doente com febre alta', e: 'sick child with high fever', ex: 'A criança doente com febre alta não conseguia dormir direito.' },
+        { k: 'testa quente sentida com a mão da mãe', e: 'hot forehead felt with the mother\'s hand', ex: 'A testa quente sentida com a mão da mãe deixava-a preocupada.' },
+        { k: 'termómetro colocado debaixo do braço', e: 'thermometer placed under the arm', ex: 'O termómetro colocado debaixo do braço demorava alguns minutos a marcar.' },
+        { k: 'cama com um cobertor quente para a criança', e: 'bed with a warm blanket for the child', ex: 'A cama com um cobertor quente para a criança ficava perto da janela.' },
+        { k: 'sopa quente para a criança doente', e: 'hot soup for the sick child', ex: 'A sopa quente para a criança doente era feita com muito cuidado.' },
+        { k: 'mãe a ficar junto toda a noite', e: 'mother staying close all night', ex: 'A mãe a ficar junto toda a noite não fechava os olhos nem um minuto.' },
+    ]},
+  { id: 'pt_doctorvisit1', title: 'Taking the Sick Child to the Doctor', titleKriolu: 'A Levar a Criança Doente ao Médico', icon: '🩺', color: 'sky',
+    desc: 'Vocabulário de levar a criança doente ao médico', vocab: [
+        { k: 'consulta marcada com o médico', e: 'appointment scheduled with the doctor', ex: 'A consulta marcada com o médico era logo pela manhã.' },
+        { k: 'sala de espera cheia de gente', e: 'waiting room full of people', ex: 'A sala de espera cheia de gente deixava a criança ainda mais nervosa.' },
+        { k: 'médico a examinar a garganta da criança', e: 'doctor examining the child\'s throat', ex: 'O médico a examinar a garganta da criança falava com voz calma.' },
+        { k: 'receita do remédio escrita no papel', e: 'medicine prescription written on the paper', ex: 'A receita do remédio escrita no papel foi guardada na mala da mãe.' },
+        { k: 'remédio tomado três vezes por dia', e: 'medicine taken three times a day', ex: 'O remédio tomado três vezes por dia trazia melhoras rápidas.' },
+        { k: 'alegria da criança a ficar bem outra vez', e: 'joy of the child getting well again', ex: 'A alegria da criança a ficar bem outra vez enchia a casa de sorrisos.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -42171,6 +42209,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_newpuppy1','pt_puppyplay1'] },
   { unit:'Unidade 463 — A Plantar uma Árvore e a Vê-la Crescer', icon:'🌳', desc:'Vocabulário do avô e do neto a plantar uma árvore juntos, e vocabulário de ver a árvore crescer ano após ano',
     lessons:['pt_treeplant1','pt_treegrow1'] },
+  { unit:'Unidade 464 — A Cuidar da Criança com Febre e a Ida ao Médico', icon:'🤒', desc:'Vocabulário da criança com febre cuidada pela mãe, e vocabulário de levar a criança doente ao médico',
+    lessons:['pt_sickchild1','pt_doctorvisit1'] },
 ];
 
 
