@@ -19927,6 +19927,24 @@ const KR_LESSONS = [
         { k: 'Obrigadu di fazendeiru pa fereru', e: 'farmer\'s thanks to the blacksmith', ex: 'Obrigadu di fazendeiru pa fereru ta ben ku un mon dadu.' },
         { k: 'Enxada nobu pronto pa kanpu', e: 'new hoe ready for the field', ex: 'Enxada nobu pronto pa kanpu ta spera otu manhan.' },
     ]},
+  { id: 'kr_chairbuild1', title: 'The Carpenter Building a Wooden Chair', titleKriolu: 'Karpinteru ta Fasi Kadera di Madera', icon: '🪑', color: 'sky',
+    desc: 'The carpenter building a wooden chair vocabulary', vocab: [
+        { k: 'Karpinteru ta korta madera ku sera', e: 'carpenter cutting the wood with the saw', ex: 'Karpinteru ta korta madera ku sera ta medi kada pedasu.' },
+        { k: 'Pé di kadera poi na txon', e: 'chair legs placed on the floor', ex: 'Pé di kadera poi na txon ta spera pa ser junta.' },
+        { k: 'Pedasu di madera koladu ku kuidadu', e: 'wood pieces glued carefully', ex: 'Pedasu di madera koladu ku kuidadu meste seka un noti.' },
+        { k: 'Madera lixadu dipos di kortadu', e: 'wood sanded after being cut', ex: 'Madera lixadu dipos di kortadu ta fika sabi na mon.' },
+        { k: 'Vernis ta pasa riba di kadera', e: 'varnish being applied over the chair', ex: 'Vernis ta pasa riba di kadera ta da-l brilhu.' },
+        { k: 'Kadera ta seka na sol di tardi', e: 'chair drying in the afternoon sun', ex: 'Kadera ta seka na sol di tardi ta fika pronto te noti.' },
+    ]},
+  { id: 'kr_chairdeliver1', title: 'The Finished Chair Delivered to the House', titleKriolu: 'Kadera Pronto Entregadu na Kaza', icon: '🏡', color: 'emerald',
+    desc: 'The finished chair delivered to the house vocabulary', vocab: [
+        { k: 'Kadera pronto kargadu ku kuidadu', e: 'finished chair carried carefully', ex: 'Kadera pronto kargadu ku kuidadu ta bai diretu pa família.' },
+        { k: 'Família ta risebi kadera nobu', e: 'family receiving the new chair', ex: 'Família ta risebi kadera nobu ta agradesi karpinteru.' },
+        { k: 'Kadera poi na mesa di kuzinha', e: 'chair placed at the kitchen table', ex: 'Kadera poi na mesa di kuzinha ta fika na lugar sertu.' },
+        { k: 'Avó ta sinta pa primeru bes', e: 'grandmother sitting on it for the first time', ex: 'Avó ta sinta pa primeru bes ta sorri di kontenti.' },
+        { k: 'Karpinteru kontenti ku pagamentu', e: 'carpenter happy with the payment', ex: 'Karpinteru kontenti ku pagamentu ta agradesi família.' },
+        { k: 'Kadera nobu ki ta dura txeu anu', e: 'new chair that will last many years', ex: 'Kadera nobu ki ta dura txeu anu ta fika pertu di janela.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21526,6 +21544,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_bridedawn1','kr_weddingdance1'] },
   { unit:'Unit 411 — Blacksmith Forging & New Hoe', icon:'🔥', desc:'The blacksmith shaping the hot iron vocabulary, and The new hoe ready for the farmer vocabulary',
     lessons:['kr_blacksmithforge1','kr_newhoe1'] },
+  { unit:'Unit 412 — Building the Chair & Chair Delivered', icon:'🪑', desc:'The carpenter building a wooden chair vocabulary, and The finished chair delivered to the house vocabulary',
+    lessons:['kr_chairbuild1','kr_chairdeliver1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -39336,6 +39356,24 @@ const PT_LESSONS = [
         { k: 'agradecimento do fazendeiro ao ferreiro', e: 'farmer\'s thanks to the blacksmith', ex: 'O agradecimento do fazendeiro ao ferreiro veio com um aperto de mão.' },
         { k: 'enxada nova pronta para o campo', e: 'new hoe ready for the field', ex: 'A enxada nova pronta para o campo esperava a próxima manhã.' },
     ]},
+  { id: 'pt_chairbuild1', title: 'The Carpenter Building a Wooden Chair', titleKriolu: 'O Carpinteiro a Fazer uma Cadeira de Madeira', icon: '🪑', color: 'sky',
+    desc: 'Vocabulário do carpinteiro a fazer uma cadeira de madeira', vocab: [
+        { k: 'carpinteiro a cortar a madeira com a serra', e: 'carpenter cutting the wood with the saw', ex: 'O carpinteiro a cortar a madeira com a serra media cada peça.' },
+        { k: 'pernas da cadeira colocadas no chão', e: 'chair legs placed on the floor', ex: 'As pernas da cadeira colocadas no chão esperavam para ser unidas.' },
+        { k: 'peças de madeira coladas com cuidado', e: 'wood pieces glued carefully', ex: 'As peças de madeira coladas com cuidado tinham de secar uma noite.' },
+        { k: 'madeira lixada depois de cortada', e: 'wood sanded after being cut', ex: 'A madeira lixada depois de cortada ficava macia ao toque.' },
+        { k: 'verniz a ser passado sobre a cadeira', e: 'varnish being applied over the chair', ex: 'O verniz a ser passado sobre a cadeira dava-lhe brilho.' },
+        { k: 'cadeira a secar ao sol da tarde', e: 'chair drying in the afternoon sun', ex: 'A cadeira a secar ao sol da tarde ficava pronta até à noite.' },
+    ]},
+  { id: 'pt_chairdeliver1', title: 'The Finished Chair Delivered to the House', titleKriolu: 'A Cadeira Pronta Entregue em Casa', icon: '🏡', color: 'emerald',
+    desc: 'Vocabulário da cadeira pronta entregue em casa', vocab: [
+        { k: 'cadeira pronta carregada com cuidado', e: 'finished chair carried carefully', ex: 'A cadeira pronta carregada com cuidado ia direta para a família.' },
+        { k: 'família a receber a cadeira nova', e: 'family receiving the new chair', ex: 'A família a receber a cadeira nova agradecia ao carpinteiro.' },
+        { k: 'cadeira colocada à mesa da cozinha', e: 'chair placed at the kitchen table', ex: 'A cadeira colocada à mesa da cozinha ficava no lugar certo.' },
+        { k: 'avó a sentar-se pela primeira vez', e: 'grandmother sitting on it for the first time', ex: 'A avó a sentar-se pela primeira vez sorria de contente.' },
+        { k: 'carpinteiro contente com o pagamento', e: 'carpenter happy with the payment', ex: 'O carpinteiro contente com o pagamento agradecia à família.' },
+        { k: 'cadeira nova que vai durar muitos anos', e: 'new chair that will last many years', ex: 'A cadeira nova que vai durar muitos anos ficava perto da janela.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -40171,6 +40209,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_bridedawn1','pt_weddingdance1'] },
   { unit:'Unidade 413 — Ferreiro na Forja e Nova Enxada', icon:'🔥', desc:'Vocabulário do ferreiro a moldar o ferro quente, e vocabulário da nova enxada pronta para o fazendeiro',
     lessons:['pt_blacksmithforge1','pt_newhoe1'] },
+  { unit:'Unidade 414 — A Fazer a Cadeira e Entrega da Cadeira', icon:'🪑', desc:'Vocabulário do carpinteiro a fazer uma cadeira de madeira, e vocabulário da cadeira pronta entregue em casa',
+    lessons:['pt_chairbuild1','pt_chairdeliver1'] },
 ];
 
 
