@@ -20899,6 +20899,24 @@ const KR_LESSONS = [
         { k: 'Amigu tudu ben da parabéns', e: 'all the friends coming to give congratulations', ex: 'Amigu tudu ben da parabéns ta fasi fila na porta.' },
         { k: 'Momentu ki família ka ta odja skese nunka', e: 'moment the family will never forget', ex: 'Momentu ki família ka ta odja skese nunka ben kontadu duranti anu.' },
     ]},
+  { id: 'kr_beachcamp1', title: 'Setting Up Camp on the Beach at Sunset', titleKriolu: 'Fasi Kanpismu na Praia na Pôr di Sol', icon: '🏕️', color: 'orange',
+    desc: 'Setting up camp on the beach at sunset vocabulary', vocab: [
+        { k: 'Tenda fetu na areia antis di pôr di sol', e: 'tent set up on the sand before sunset', ex: 'Tenda fetu na areia antis di pôr di sol ta fika pertu di rotxa.' },
+        { k: 'Fogueira na praia asendedu dipos di skuridon', e: 'bonfire on the beach lit after dark', ex: 'Fogueira na praia asendedu dipos di skuridon ta iluminia tudu volta.' },
+        { k: 'Sardinha grelhadu na fogueira', e: 'grilled sardine on the bonfire', ex: 'Sardinha grelhadu na fogueira ten xeru ki ta txoma tudu jenti.' },
+        { k: 'Família sentadu na areia ta odja onda', e: 'family sitting on the sand watching the waves', ex: 'Família sentadu na areia ta odja onda kuazi ka ta papia.' },
+        { k: 'Ventu fresku ta ben di mar', e: 'cool wind coming from the sea', ex: 'Ventu fresku ta ben di mar ta fresca dipos di kalor di dia.' },
+        { k: 'Alegria di durmi pertu di mar', e: 'joy of sleeping close to the sea', ex: 'Alegria di durmi pertu di mar ta ben ku son di onda.' },
+    ]},
+  { id: 'kr_beachmorning1', title: 'Waking Up to the Sound of Waves in the Morning', titleKriolu: 'Manhan ku Son di Onda na Praia', icon: '🌅', color: 'sky',
+    desc: 'Waking up to the sound of waves in the morning vocabulary', vocab: [
+        { k: 'Son di onda ta txiga tudu manhan sedu', e: 'sound of the waves arriving every early morning', ex: 'Son di onda ta txiga tudu manhan sedu e midjor son di dia.' },
+        { k: 'Areia friu bas di pé dipos di noti', e: 'cold sand under the feet after the night', ex: 'Areia friu bas di pé dipos di noti ta fasi tudu kore pa sol.' },
+        { k: 'Primeru nada di dia na mar fresku', e: 'first swim of the day in the cool sea', ex: 'Primeru nada di dia na mar fresku ta dexa tudu kontenti.' },
+        { k: 'Sol ta subi riba di mar dibagar', e: 'sun rising slowly over the sea', ex: 'Sol ta subi riba di mar dibagar ta pinta séu di kor di laranja.' },
+        { k: 'Tenda tiradu dipos di kafé di manhan', e: 'tent taken down after breakfast', ex: 'Tenda tiradu dipos di kafé di manhan ben guardadu ku kuidadu na karru.' },
+        { k: 'Momentu di praia ki família ka ta odja skese nunka', e: 'beach moment the family will never forget', ex: 'Momentu di praia ki família ka ta odja skese nunka ben guardadu na txeu fotu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -22606,6 +22624,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_learnread1','kr_firststory1'] },
   { unit:'Unit 465 — Receiving the Diploma & Celebrating After', icon:'🎓', desc:'Walking across the stage to receive the diploma vocabulary, and Family celebrating after the graduation ceremony vocabulary',
     lessons:['kr_graduationstage1','kr_graduationcelebrate1'] },
+  { unit:'Unit 466 — Camping on the Beach & Waking to the Waves', icon:'🏕️', desc:'Setting up camp on the beach at sunset vocabulary, and Waking up to the sound of waves in the morning vocabulary',
+    lessons:['kr_beachcamp1','kr_beachmorning1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -41388,6 +41408,24 @@ const PT_LESSONS = [
         { k: 'todos os amigos a virem dar os parabéns', e: 'all the friends coming to give congratulations', ex: 'Todos os amigos a virem dar os parabéns fizeram fila à porta.' },
         { k: 'momento que a família nunca vai esquecer', e: 'moment the family will never forget', ex: 'O momento que a família nunca vai esquecer foi contado durante anos.' },
     ]},
+  { id: 'pt_beachcamp1', title: 'Setting Up Camp on the Beach at Sunset', titleKriolu: 'A Montar o Acampamento na Praia ao Pôr do Sol', icon: '🏕️', color: 'orange',
+    desc: 'Vocabulário de montar o acampamento na praia ao pôr do sol', vocab: [
+        { k: 'tenda montada na areia antes do pôr do sol', e: 'tent set up on the sand before sunset', ex: 'A tenda montada na areia antes do pôr do sol ficava perto das rochas.' },
+        { k: 'fogueira na praia acesa depois do escurecer', e: 'bonfire on the beach lit after dark', ex: 'A fogueira na praia acesa depois do escurecer iluminava toda a volta.' },
+        { k: 'sardinha grelhada na fogueira', e: 'grilled sardine on the bonfire', ex: 'A sardinha grelhada na fogueira tinha um cheiro que chamava toda a gente.' },
+        { k: 'família sentada na areia a ver as ondas', e: 'family sitting on the sand watching the waves', ex: 'A família sentada na areia a ver as ondas quase não falava, só olhava.' },
+        { k: 'vento fresco a vir do mar', e: 'cool wind coming from the sea', ex: 'O vento fresco a vir do mar refrescava depois do calor do dia.' },
+        { k: 'alegria de dormir perto do mar', e: 'joy of sleeping close to the sea', ex: 'A alegria de dormir perto do mar vinha com o som das ondas.' },
+    ]},
+  { id: 'pt_beachmorning1', title: 'Waking Up to the Sound of Waves in the Morning', titleKriolu: 'A Acordar com o Som das Ondas na Praia', icon: '🌅', color: 'sky',
+    desc: 'Vocabulário de acordar com o som das ondas na praia', vocab: [
+        { k: 'som das ondas a chegar todas as manhãs cedo', e: 'sound of the waves arriving every early morning', ex: 'O som das ondas a chegar todas as manhãs cedo era o melhor despertador.' },
+        { k: 'areia fria debaixo dos pés depois da noite', e: 'cold sand under the feet after the night', ex: 'A areia fria debaixo dos pés depois da noite fazia todos correr para o sol.' },
+        { k: 'primeiro banho do dia no mar fresco', e: 'first swim of the day in the cool sea', ex: 'O primeiro banho do dia no mar fresco acordava toda a gente de vez.' },
+        { k: 'sol a subir devagar sobre o mar', e: 'sun rising slowly over the sea', ex: 'O sol a subir devagar sobre o mar pintava o céu de cor-de-laranja.' },
+        { k: 'tenda desmontada depois do pequeno-almoço', e: 'tent taken down after breakfast', ex: 'A tenda desmontada depois do pequeno-almoço foi guardada com cuidado no carro.' },
+        { k: 'momento de praia que a família nunca vai esquecer', e: 'beach moment the family will never forget', ex: 'O momento de praia que a família nunca vai esquecer ficou guardado em muitas fotos.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -42331,6 +42369,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_learnread1','pt_firststory1'] },
   { unit:'Unidade 467 — A Receber o Diploma e a Celebrar Depois', icon:'🎓', desc:'Vocabulário de subir ao palco para receber o diploma, e vocabulário da família a celebrar depois da cerimónia de formatura',
     lessons:['pt_graduationstage1','pt_graduationcelebrate1'] },
+  { unit:'Unidade 468 — A Acampar na Praia e a Acordar com as Ondas', icon:'🏕️', desc:'Vocabulário de montar o acampamento na praia ao pôr do sol, e vocabulário de acordar com o som das ondas na praia',
+    lessons:['pt_beachcamp1','pt_beachmorning1'] },
 ];
 
 
