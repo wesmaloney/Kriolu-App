@@ -1,0 +1,10 @@
+# Netlify configuration for the Kriolu app
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Friendly redirect so the app can call /api/tts
+[[redirects]]
+  from = "/api/tts"
+  to = "/.netlify/functions/tts"
+  status = 200
