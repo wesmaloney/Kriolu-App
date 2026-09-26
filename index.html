@@ -20233,6 +20233,24 @@ const KR_LESSONS = [
         { k: 'Vitória di kaba tudu kuadradu', e: 'victory upon completing all the squares', ex: 'Vitória di kaba tudu kuadradu ta trazi grita di alegria.' },
         { k: 'Fila di mininu ta spera bes', e: 'line of children waiting for their turn', ex: 'Fila di mininu ta spera bes ta da un volta grandi.' },
     ]},
+  { id: 'kr_puppysit1', title: 'Teaching a Puppy to Sit', titleKriolu: 'Ensina Katxorinhu Sinta', icon: '🐶', color: 'sky',
+    desc: 'Teaching a puppy to sit vocabulary', vocab: [
+        { k: 'Mininu ta txoma katxorinhu pa pertu', e: 'boy calling the puppy closer', ex: 'Mininu ta txoma katxorinhu pa pertu ta bati palma dibagar.' },
+        { k: 'Palavra "sinta" fla txeu bes', e: 'the word \'sit\' said many times', ex: 'Palavra "sinta" fla txeu bes ta kumesa konfundi katxorinhu.' },
+        { k: 'Katxorinhu ki ka ta sabe kuma', e: 'puppy that doesn\'t know how yet', ex: 'Katxorinhu ki ka ta sabe kuma ta odja ku kabesa di ladu.' },
+        { k: 'Pedasu di kumida pa prémiu', e: 'piece of food for a reward', ex: 'Pedasu di kumida pa prémiu ta fika skondidu na mon.' },
+        { k: 'Pasénsia di mininu ku katxorinhu', e: 'boy\'s patience with the puppy', ex: 'Pasénsia di mininu ku katxorinhu ka ten fin.' },
+        { k: 'Primeru bes ki katxorinhu ta sinta sen ajuda', e: 'first time the puppy sits without help', ex: 'Primeru bes ki katxorinhu ta sinta sen ajuda ta fasi festa na kaza.' },
+    ]},
+  { id: 'kr_puppytrick1', title: 'The Puppy\'s First Successful Trick', titleKriolu: 'Primeru Truki di Katxorinhu', icon: '🏆', color: 'emerald',
+    desc: 'The puppy\'s first successful trick vocabulary', vocab: [
+        { k: 'Katxorinhu kontenti dja sabe sinta', e: 'happy puppy that already knows how to sit', ex: 'Katxorinhu kontenti dja sabe sinta ta kuri na volta di mininu.' },
+        { k: 'Mininu ta da katxorinhu pedasu di kumida', e: 'boy giving the puppy a piece of food', ex: 'Mininu ta da katxorinhu pedasu di kumida ta sorri kontenti.' },
+        { k: 'Truki mostradu pa tudu família', e: 'trick shown to the whole family', ex: 'Truki mostradu pa tudu família ta risebi txeu palma.' },
+        { k: 'Orgulhu di mininu ku katxorinhu', e: 'boy\'s pride with the puppy', ex: 'Orgulhu di mininu ku katxorinhu ta parse na sorrizu.' },
+        { k: 'Katxorinhu ta prende dipresa', e: 'puppy learning fast', ex: 'Katxorinhu ta prende dipresa ta surpreendi tudu jenti.' },
+        { k: 'Otu truki pa mininu ensina manhan', e: 'another trick for the boy to teach tomorrow', ex: 'Otu truki pa mininu ensina manhan dja sta skolhedu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -21866,6 +21884,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_pocketwatch1','kr_watchpassdown1'] },
   { unit:'Unit 428 — Drawing Hopscotch & Jumping on One Foot', icon:'🖍', desc:'Drawing the hopscotch squares with chalk vocabulary, and Jumping on one foot without falling vocabulary',
     lessons:['kr_hopscotchdraw1','kr_hopscotchjump1'] },
+  { unit:'Unit 429 — Teaching the Puppy & First Trick', icon:'🐶', desc:'Teaching a puppy to sit vocabulary, and The puppy\'s first successful trick vocabulary',
+    lessons:['kr_puppysit1','kr_puppytrick1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -39982,6 +40002,24 @@ const PT_LESSONS = [
         { k: 'vitória ao completar todos os quadrados', e: 'victory upon completing all the squares', ex: 'A vitória ao completar todos os quadrados trazia gritos de alegria.' },
         { k: 'fila de crianças à espera da vez', e: 'line of children waiting for their turn', ex: 'A fila de crianças à espera da vez ia dando a volta ao quarteirão.' },
     ]},
+  { id: 'pt_puppysit1', title: 'Teaching a Puppy to Sit', titleKriolu: 'A Ensinar o Cachorrinho a Sentar', icon: '🐶', color: 'sky',
+    desc: 'Vocabulário de ensinar o cachorrinho a sentar', vocab: [
+        { k: 'menino a chamar o cachorrinho para perto', e: 'boy calling the puppy closer', ex: 'O menino a chamar o cachorrinho para perto batia palmas devagar.' },
+        { k: 'palavra \'senta\' dita muitas vezes', e: 'the word \'sit\' said many times', ex: 'A palavra \'senta\' dita muitas vezes começava a confundir o cachorrinho.' },
+        { k: 'cachorrinho que ainda não sabe como', e: 'puppy that doesn\'t know how yet', ex: 'O cachorrinho que ainda não sabe como olhava com a cabeça de lado.' },
+        { k: 'pedaço de comida para prémio', e: 'piece of food for a reward', ex: 'O pedaço de comida para prémio ficava escondido na mão.' },
+        { k: 'paciência do menino com o cachorrinho', e: 'boy\'s patience with the puppy', ex: 'A paciência do menino com o cachorrinho não tinha fim.' },
+        { k: 'primeira vez que o cachorrinho senta sem ajuda', e: 'first time the puppy sits without help', ex: 'A primeira vez que o cachorrinho senta sem ajuda foi uma festa em casa.' },
+    ]},
+  { id: 'pt_puppytrick1', title: 'The Puppy\'s First Successful Trick', titleKriolu: 'O Primeiro Truque do Cachorrinho', icon: '🏆', color: 'emerald',
+    desc: 'Vocabulário do primeiro truque do cachorrinho', vocab: [
+        { k: 'cachorrinho contente que já sabe sentar', e: 'happy puppy that already knows how to sit', ex: 'O cachorrinho contente que já sabe sentar corria em volta do menino.' },
+        { k: 'menino a dar ao cachorrinho um pedaço de comida', e: 'boy giving the puppy a piece of food', ex: 'O menino a dar ao cachorrinho um pedaço de comida sorria feliz.' },
+        { k: 'truque mostrado a toda a família', e: 'trick shown to the whole family', ex: 'O truque mostrado a toda a família recebia muitos aplausos.' },
+        { k: 'orgulho do menino com o cachorrinho', e: 'boy\'s pride with the puppy', ex: 'O orgulho do menino com o cachorrinho aparecia no seu sorriso.' },
+        { k: 'cachorrinho a aprender depressa', e: 'puppy learning fast', ex: 'O cachorrinho a aprender depressa surpreendia toda a gente.' },
+        { k: 'outro truque para o menino ensinar amanhã', e: 'another trick for the boy to teach tomorrow', ex: 'Outro truque para o menino ensinar amanhã já estava escolhido.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -40851,6 +40889,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_pocketwatch1','pt_watchpassdown1'] },
   { unit:'Unidade 430 — A Desenhar a Macaca e a Saltar num Pé', icon:'🖍', desc:'Vocabulário de desenhar os quadrados da macaca com giz, e vocabulário de saltar num pé sem cair',
     lessons:['pt_hopscotchdraw1','pt_hopscotchjump1'] },
+  { unit:'Unidade 431 — A Ensinar o Cachorrinho e o Primeiro Truque', icon:'🐶', desc:'Vocabulário de ensinar o cachorrinho a sentar, e vocabulário do primeiro truque do cachorrinho',
+    lessons:['pt_puppysit1','pt_puppytrick1'] },
 ];
 
 
