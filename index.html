@@ -21727,6 +21727,24 @@ const KR_LESSONS = [
         { k: 'Mudjer ta gaba trabadju kandu ta risebe faka bak', e: 'women praising the work when they get the knife back', ex: 'Mudjer ta gaba trabadju kandu ta risebe faka bak fininhu ku brilhu.' },
         { k: 'Afiadór ta kontinua kaminhu pa otu bairu dipos di tudu', e: 'the sharpener continuing on to another neighborhood after finishing everyone', ex: 'Afiadór ta kontinua kaminhu pa otu bairu dipos di tudu faka afiadu.' },
     ]},
+  { id: 'kr_downedwire1', title: 'A Power Line Worker Fixing a Downed Wire After a Storm', titleKriolu: 'Trabadjadór di Luz Ta Konserta Fiu Kaidu dipos di Tempestadi', icon: '⚡', color: 'red',
+    desc: 'A power line worker fixing a downed wire after a storm vocabulary', vocab: [
+        { k: 'Fiu elétriku ta kai riba di rua dipos di vento forti', e: 'the electric wire falling into the street after strong wind', ex: 'Fiu elétriku ta kai riba di rua dipos di vento forti di noti.' },
+        { k: 'Vizinhu ta fika lonji di fiu ku txeu kuidadu', e: 'neighbors staying far from the wire very carefully', ex: 'Vizinhu ta fika lonji di fiu ku txeu kuidadu antis di ajuda txiga.' },
+        { k: 'Kamionete di enpresa di luz ta txiga ku lus piskadu', e: 'the power company\'s truck arriving with flashing lights', ex: 'Kamionete di enpresa di luz ta txiga ku lus piskadu na topu.' },
+        { k: 'Trabadjadór ta subi na poste ku sinturon di sigurensa', e: 'worker climbing the pole with a safety belt', ex: 'Trabadjadór ta subi na poste ku sinturon di sigurensa na sintura.' },
+        { k: 'Trabadjadór ta korta korenti antis di toka na fiu', e: 'worker cutting the current before touching the wire', ex: 'Trabadjadór ta korta korenti antis di toka na fiu kaidu.' },
+        { k: 'Fiu ta ser fixadu otu bes na poste altu', e: 'the wire being fixed back onto the tall pole', ex: 'Fiu ta ser fixadu otu bes na poste altu ku firmeza.' },
+    ]},
+  { id: 'kr_lightsrestore1', title: 'The Lights Coming Back On', titleKriolu: 'Lus Ta Volta Otu Bes', icon: '💡', color: 'yellow',
+    desc: 'The lights coming back on vocabulary', vocab: [
+        { k: 'Bairu interu ta fika sen lus dirantis di óra', e: 'the whole neighborhood staying without power for an hour', ex: 'Bairu interu ta fika sen lus dirantis di óra dipos di tempestadi.' },
+        { k: 'Família ta uza vela pa manti kaza klaru', e: 'family using candles to keep the house lit', ex: 'Família ta uza vela pa manti kaza klaru dirantis di korti.' },
+        { k: 'Trabadjadór ta da sinal ki serviçu ta kaba', e: 'worker giving the signal that the job is finished', ex: 'Trabadjadór ta da sinal ki serviçu ta kaba di riba di poste.' },
+        { k: 'Primeru lus ta pende na kaza más pertu di poste', e: 'the first light coming back on in the house closest to the pole', ex: 'Primeru lus ta pende na kaza más pertu di poste ku un grito di alegria.' },
+        { k: 'Rua interu ta kunsa fika klaru un kaza dipos di otu', e: 'the whole street starting to light up one house after another', ex: 'Rua interu ta kunsa fika klaru un kaza dipos di otu ku rapidez.' },
+        { k: 'Mininu ta grita di alegria kandu televizon ta liga otu bes', e: 'children shouting with joy when the television turns back on', ex: 'Mininu ta grita di alegria kandu televizon ta liga otu bes na sala.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -23526,6 +23544,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_uncleabroad1','kr_streetgreet1'] },
   { unit:'Unit 511 — A Traveling Knife Sharpener Passing Through the Neighborhood & Neighbors Bringing Out Their Dull Knives to Be Sharpened', icon:'🔪', desc:'A Traveling Knife Sharpener Passing Through the Neighborhood vocabulary, and Neighbors Bringing Out Their Dull Knives to Be Sharpened vocabulary',
     lessons:['kr_knifesharpener1','kr_knifesharpenline1'] },
+  { unit:'Unit 512 — A Power Line Worker Fixing a Downed Wire After a Storm & The Lights Coming Back On', icon:'⚡', desc:'A Power Line Worker Fixing a Downed Wire After a Storm vocabulary, and The Lights Coming Back On vocabulary',
+    lessons:['kr_downedwire1','kr_lightsrestore1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -43136,6 +43156,24 @@ const PT_LESSONS = [
         { k: 'mulheres a elogiar o trabalho ao receber a faca de volta', e: 'women praising the work when they get the knife back', ex: 'As mulheres a elogiar o trabalho ao receber a faca de volta, fininha e a brilhar.' },
         { k: 'amolador a seguir caminho para outro bairro depois de acabar', e: 'the sharpener continuing on to another neighborhood after finishing everyone', ex: 'O amolador a seguir caminho para outro bairro depois de acabar todas as facas.' },
     ]},
+  { id: 'pt_downedwire1', title: 'A Power Line Worker Fixing a Downed Wire After a Storm', titleKriolu: 'Um Eletricista a Consertar um Fio Caído Depois de uma Tempestade', icon: '⚡', color: 'red',
+    desc: 'Vocabulário de um eletricista a consertar um fio caído depois de uma tempestade', vocab: [
+        { k: 'fio elétrico a cair na rua depois de um vento forte', e: 'the electric wire falling into the street after strong wind', ex: 'O fio elétrico a cair na rua depois de um vento forte durante a noite.' },
+        { k: 'vizinhos a manter-se longe do fio com muito cuidado', e: 'neighbors staying far from the wire very carefully', ex: 'Os vizinhos a manter-se longe do fio com muito cuidado antes de a ajuda chegar.' },
+        { k: 'carrinha da empresa de eletricidade a chegar com as luzes a piscar', e: 'the power company\'s truck arriving with flashing lights', ex: 'A carrinha da empresa de eletricidade a chegar com as luzes a piscar no topo.' },
+        { k: 'eletricista a subir ao poste com o cinto de segurança', e: 'worker climbing the pole with a safety belt', ex: 'O eletricista a subir ao poste com o cinto de segurança na cintura.' },
+        { k: 'eletricista a cortar a corrente antes de tocar no fio', e: 'worker cutting the current before touching the wire', ex: 'O eletricista a cortar a corrente antes de tocar no fio caído.' },
+        { k: 'fio a ser fixado de novo no poste alto', e: 'the wire being fixed back onto the tall pole', ex: 'O fio a ser fixado de novo no poste alto, com firmeza.' },
+    ]},
+  { id: 'pt_lightsrestore1', title: 'The Lights Coming Back On', titleKriolu: 'As Luzes a Voltar', icon: '💡', color: 'yellow',
+    desc: 'Vocabulário das luzes a voltar depois do corte', vocab: [
+        { k: 'bairro inteiro a ficar sem luz durante uma hora', e: 'the whole neighborhood staying without power for an hour', ex: 'O bairro inteiro a ficar sem luz durante uma hora depois da tempestade.' },
+        { k: 'família a usar velas para manter a casa iluminada', e: 'family using candles to keep the house lit', ex: 'A família a usar velas para manter a casa iluminada durante o corte.' },
+        { k: 'eletricista a dar o sinal de que o trabalho está feito', e: 'worker giving the signal that the job is finished', ex: 'O eletricista a dar o sinal de que o trabalho está feito lá de cima do poste.' },
+        { k: 'primeira luz a acender na casa mais perto do poste', e: 'the first light coming back on in the house closest to the pole', ex: 'A primeira luz a acender na casa mais perto do poste, com um grito de alegria.' },
+        { k: 'rua inteira a começar a iluminar-se casa após casa', e: 'the whole street starting to light up one house after another', ex: 'A rua inteira a começar a iluminar-se casa após casa, rapidamente.' },
+        { k: 'crianças a gritar de alegria quando a televisão liga outra vez', e: 'children shouting with joy when the television turns back on', ex: 'As crianças a gritar de alegria quando a televisão liga outra vez na sala.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -44171,6 +44209,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_uncleabroad1','pt_streetgreet1'] },
   { unit:'Unidade 513 — Um Amolador Ambulante a Passar pelo Bairro e Vizinhos a Trazer as Facas Sem Fio para Amolar', icon:'🔪', desc:'Vocabulário de um amolador ambulante a passar pelo bairro, e vocabulário dos vizinhos a trazer as facas sem fio para amolar',
     lessons:['pt_knifesharpener1','pt_knifesharpenline1'] },
+  { unit:'Unidade 514 — Um Eletricista a Consertar um Fio Caído Depois de uma Tempestade e As Luzes a Voltar', icon:'⚡', desc:'Vocabulário de um eletricista a consertar um fio caído depois de uma tempestade, e vocabulário das luzes a voltar depois do corte',
+    lessons:['pt_downedwire1','pt_lightsrestore1'] },
 ];
 
 
