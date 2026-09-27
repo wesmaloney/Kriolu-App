@@ -21223,6 +21223,24 @@ const KR_LESSONS = [
         { k: 'Mininu ta poi ropa reserva ki mai ta poi na mochila', e: 'child putting on spare clothes that mom packed in the bag', ex: 'Mininu ta poi ropa reserva ki mai ta poi na mochila di manhan.' },
         { k: 'Dipos di un tenpu mininu ta fika seku i kontenti', e: 'after a while the child ends up dry and happy', ex: 'Dipos di un tenpu mininu ta fika seku i kontenti di sta na klasi.' },
     ]},
+  { id: 'kr_feedchickens1', title: 'Feeding the Chickens at Dawn', titleKriolu: 'Da Kumida pa Galinha di Manhan Sedu', icon: '🐓', color: 'yellow',
+    desc: 'Feeding the chickens at dawn vocabulary', vocab: [
+        { k: 'Mininu ta lanta antis di sol pa da kumida pa galinha', e: 'child waking before sunrise to feed the chickens', ex: 'Mininu ta lanta antis di sol pa da kumida pa galinha tudu dia.' },
+        { k: 'Galinha ta kuri pa kumida kandu ta obi lata bati', e: 'chickens running for the food when they hear the tin rattle', ex: 'Galinha ta kuri pa kumida kandu ta obi lata bati na txon.' },
+        { k: 'Galu ta kanta primeru antis di tudu galinha lanta', e: 'rooster crowing first before all the hens wake up', ex: 'Galu ta kanta primeru antis di tudu galinha lanta di sonu.' },
+        { k: 'Mininu ta spadja midju seku pa txon di kural', e: 'child scattering dried corn across the pen floor', ex: 'Mininu ta spadja midju seku pa txon di kural ku mon.' },
+        { k: 'Galinha más grandi ta kome primeru ki kes otu', e: 'the biggest hen eating before all the others', ex: 'Galinha más grandi ta kome primeru ki kes otu sen dividi.' },
+        { k: 'Mininu ta troka agu limpu na bandeja di galinha', e: 'child changing the clean water in the chickens\' tray', ex: 'Mininu ta troka agu limpu na bandeja di galinha kada manhan.' },
+    ]},
+  { id: 'kr_collecteggs1', title: 'Collecting Eggs from the Coop', titleKriolu: 'Panha Obu na Kural di Galinha', icon: '🥚', color: 'orange',
+    desc: 'Collecting eggs from the coop vocabulary', vocab: [
+        { k: 'Mininu ta entra dibagarinhu na kural pa ka susta galinha', e: 'child entering slowly into the pen so as not to startle the hens', ex: 'Mininu ta entra dibagarinhu na kural pa ka susta galinha sentadu.' },
+        { k: 'Mon ta buska obu inda kenti dibaxu di galinha', e: 'hand searching for eggs still warm under the hen', ex: 'Mon ta buska obu inda kenti dibaxu di galinha ku txeu kuidadu.' },
+        { k: 'Galinha ta kaklaja forti kandu ta perde si obu', e: 'hen clucking loudly when it loses its egg', ex: 'Galinha ta kaklaja forti kandu ta perde si obu di ninhu.' },
+        { k: 'Mininu ta poi kada obu ku kuidadu na sestu', e: 'child placing each egg carefully in the basket', ex: 'Mininu ta poi kada obu ku kuidadu na sestu pa ka kebra.' },
+        { k: 'Sestu ta fika pizadu dipos di panha tudu ninhu', e: 'basket getting heavy after collecting from every nest', ex: 'Sestu ta fika pizadu dipos di panha tudu ninhu di kural.' },
+        { k: 'Mai ta gaba mininu pa manhan di trabadju bén fetu', e: 'mother praising the child for a morning\'s work well done', ex: 'Mai ta gaba mininu pa manhan di trabadju bén fetu ku amor.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -22966,6 +22984,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_cisternseal1','kr_cisternfill1'] },
   { unit:'Unit 483 — Waiting for the School Bus in the Rain & Arriving Soaked and Drying Off at School', icon:'🚌', desc:'Waiting for the School Bus in the Rain vocabulary, and Arriving Soaked and Drying Off at School vocabulary',
     lessons:['kr_schoolbuswait1','kr_schoolbuswet1'] },
+  { unit:'Unit 484 — Feeding the Chickens at Dawn & Collecting Eggs from the Coop', icon:'🐓', desc:'Feeding the Chickens at Dawn vocabulary, and Collecting Eggs from the Coop vocabulary',
+    lessons:['kr_feedchickens1','kr_collecteggs1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -42072,6 +42092,24 @@ const PT_LESSONS = [
         { k: 'criança a vestir a roupa reserva que a mãe pôs na mochila', e: 'child putting on spare clothes that mom packed in the bag', ex: 'A criança a vestir a roupa reserva que a mãe pôs na mochila de manhã.' },
         { k: 'ao fim de um tempo a criança fica seca e contente', e: 'after a while the child ends up dry and happy', ex: 'Ao fim de um tempo a criança fica seca e contente por estar na aula.' },
     ]},
+  { id: 'pt_feedchickens1', title: 'Feeding the Chickens at Dawn', titleKriolu: 'Dar de Comer às Galinhas de Madrugada', icon: '🐓', color: 'yellow',
+    desc: 'Vocabulário de dar de comer às galinhas de madrugada', vocab: [
+        { k: 'criança a acordar antes do sol nascer para dar de comer às galinhas', e: 'child waking before sunrise to feed the chickens', ex: 'A criança a acordar antes do sol nascer para dar de comer às galinhas todos os dias.' },
+        { k: 'galinhas a correr para a comida ao ouvir a lata a bater', e: 'chickens running for the food when they hear the tin rattle', ex: 'As galinhas a correr para a comida ao ouvir a lata a bater no chão.' },
+        { k: 'galo a cantar primeiro antes de todas as galinhas acordarem', e: 'rooster crowing first before all the hens wake up', ex: 'O galo a cantar primeiro antes de todas as galinhas acordarem do sono.' },
+        { k: 'criança a espalhar milho seco pelo chão do curral', e: 'child scattering dried corn across the pen floor', ex: 'A criança a espalhar milho seco pelo chão do curral com a mão.' },
+        { k: 'galinha maior a comer antes de todas as outras', e: 'the biggest hen eating before all the others', ex: 'A galinha maior a comer antes de todas as outras sem dividir.' },
+        { k: 'criança a trocar a água limpa no tabuleiro das galinhas', e: 'child changing the clean water in the chickens\' tray', ex: 'A criança a trocar a água limpa no tabuleiro das galinhas todas as manhãs.' },
+    ]},
+  { id: 'pt_collecteggs1', title: 'Collecting Eggs from the Coop', titleKriolu: 'Apanhar os Ovos no Galinheiro', icon: '🥚', color: 'orange',
+    desc: 'Vocabulário de apanhar os ovos no galinheiro', vocab: [
+        { k: 'criança a entrar devagar no curral para não assustar as galinhas', e: 'child entering slowly into the pen so as not to startle the hens', ex: 'A criança a entrar devagar no curral para não assustar as galinhas sentadas.' },
+        { k: 'mão a procurar ovos ainda quentes debaixo da galinha', e: 'hand searching for eggs still warm under the hen', ex: 'A mão a procurar ovos ainda quentes debaixo da galinha com muito cuidado.' },
+        { k: 'galinha a cacarejar alto quando perde o seu ovo', e: 'hen clucking loudly when it loses its egg', ex: 'A galinha a cacarejar alto quando perde o seu ovo do ninho.' },
+        { k: 'criança a colocar cada ovo com cuidado no cesto', e: 'child placing each egg carefully in the basket', ex: 'A criança a colocar cada ovo com cuidado no cesto para não partir.' },
+        { k: 'cesto a ficar pesado depois de recolher de todos os ninhos', e: 'basket getting heavy after collecting from every nest', ex: 'O cesto a ficar pesado depois de recolher de todos os ninhos do curral.' },
+        { k: 'mãe a elogiar a criança por uma manhã de trabalho bem feito', e: 'mother praising the child for a morning\'s work well done', ex: 'A mãe a elogiar a criança por uma manhã de trabalho bem feito com carinho.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -43051,6 +43089,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_cisternseal1','pt_cisternfill1'] },
   { unit:'Unidade 485 — Esperar pelo Autocarro da Escola à Chuva e Chegar Encharcado e Secar na Escola', icon:'🚌', desc:'Vocabulário de esperar pelo autocarro da escola à chuva, e vocabulário de chegar encharcado e secar na escola',
     lessons:['pt_schoolbuswait1','pt_schoolbuswet1'] },
+  { unit:'Unidade 486 — Dar de Comer às Galinhas de Madrugada e Apanhar os Ovos no Galinheiro', icon:'🐓', desc:'Vocabulário de dar de comer às galinhas de madrugada, e vocabulário de apanhar os ovos no galinheiro',
+    lessons:['pt_feedchickens1','pt_collecteggs1'] },
 ];
 
 
