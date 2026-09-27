@@ -21547,6 +21547,24 @@ const KR_LESSONS = [
         { k: 'Diretora ta txiga pa odja sala nobu dekoradu', e: 'the principal arriving to see the newly decorated room', ex: 'Diretora ta txiga pa odja sala nobu dekoradu ku surpreza.' },
         { k: 'Tudu klasi ta fika orgudju di trabadju ki es fetu djuntu', e: 'the whole class feeling proud of the work they did together', ex: 'Tudu klasi ta fika orgudju di trabadju ki es fetu djuntu.' },
     ]},
+  { id: 'kr_vaccinefear1', title: 'A Child Scared of Getting a Vaccine at the Health Post', titleKriolu: 'Mininu ku Medu di Vasina na Postu di Saúdi', icon: '💉', color: 'red',
+    desc: 'A child scared of getting a vaccine at the health post vocabulary', vocab: [
+        { k: 'Mininu ta gara mon di mai forti na sala di spera', e: 'child gripping the mother\'s hand tightly in the waiting room', ex: 'Mininu ta gara mon di mai forti na sala di spera di postu.' },
+        { k: 'Mininu ta odja otu mininu txora dipos di vasina', e: 'child watching another child cry after getting the vaccine', ex: 'Mininu ta odja otu mininu txora dipos di vasina i ta fika más nervozu.' },
+        { k: 'Enfermeru ta txoma nómi di mininu ku vós suavi', e: 'nurse calling the child\'s name in a gentle voice', ex: 'Enfermeru ta txoma nómi di mininu ku vós suavi pa el ka susta.' },
+        { k: 'Mininu ta skonde brasu atrás di kórpu di mai', e: 'child hiding his arm behind the mother\'s body', ex: 'Mininu ta skonde brasu atrás di kórpu di mai sen kerê sai.' },
+        { k: 'Mai ta fla pa mininu ka ta doi txeu tenpu', e: 'mother telling the child it won\'t hurt for long', ex: 'Mai ta fla pa mininu ka ta doi txeu tenpu i ta pasa lóg.' },
+        { k: 'Enfermeru ta poi vasina rápidu antis di mininu nutá', e: 'nurse giving the vaccine quickly before the child notices', ex: 'Enfermeru ta poi vasina rápidu antis di mininu nutá di verdadi.' },
+    ]},
+  { id: 'kr_vaccinecandy1', title: 'Getting Candy for Being Brave Afterward', titleKriolu: 'Ganha Doci pa Korajen dipos', icon: '🍬', color: 'emerald',
+    desc: 'Getting candy for being brave afterward vocabulary', vocab: [
+        { k: 'Mininu ta txora poku dipos di sinti pikada', e: 'child crying a little after feeling the prick', ex: 'Mininu ta txora poku dipos di sinti pikada di vasina.' },
+        { k: 'Enfermeru ta gaba mininu pa korajen ki el mostra', e: 'nurse praising the child for the courage he showed', ex: 'Enfermeru ta gaba mininu pa korajen ki el mostra na kel momentu.' },
+        { k: 'Enfermeru ta tra un doci di gaveta pa mininu', e: 'nurse taking a candy from the drawer for the child', ex: 'Enfermeru ta tra un doci di gaveta pa mininu ku sorridu.' },
+        { k: 'Mininu ta skese di dor kandu ta odja doci na mon', e: 'child forgetting the pain upon seeing the candy in hand', ex: 'Mininu ta skese di dor kandu ta odja doci na mon di enfermeru.' },
+        { k: 'Mai ta gaba mininu pa tudu kaminhu di volta pa kaza', e: 'mother praising the child the whole way home', ex: 'Mai ta gaba mininu pa tudu kaminhu di volta pa kaza kel tardi.' },
+        { k: 'Mininu ta fla pa amigu ki vasina ka éra nada di más', e: 'child telling friends that the vaccine wasn\'t so bad', ex: 'Mininu ta fla pa amigu ki vasina ka éra nada di más ku doci dipos.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -23326,6 +23344,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_straydogadopt1','kr_straydogbath1'] },
   { unit:'Unit 501 — Making Paper Flowers for a School Project & Decorating the Classroom Together', icon:'🌸', desc:'Making Paper Flowers for a School Project vocabulary, and Decorating the Classroom Together vocabulary',
     lessons:['kr_paperflowermake1','kr_paperflowerclass1'] },
+  { unit:'Unit 502 — A Child Scared of Getting a Vaccine at the Health Post & Getting Candy for Being Brave Afterward', icon:'💉', desc:'A Child Scared of Getting a Vaccine at the Health Post vocabulary, and Getting Candy for Being Brave Afterward vocabulary',
+    lessons:['kr_vaccinefear1','kr_vaccinecandy1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -42756,6 +42776,24 @@ const PT_LESSONS = [
         { k: 'diretora a chegar para ver a sala recém-decorada', e: 'the principal arriving to see the newly decorated room', ex: 'A diretora a chegar para ver a sala recém-decorada, surpreendida.' },
         { k: 'toda a turma a ficar orgulhosa do trabalho feito em conjunto', e: 'the whole class feeling proud of the work they did together', ex: 'Toda a turma a ficar orgulhosa do trabalho feito em conjunto.' },
     ]},
+  { id: 'pt_vaccinefear1', title: 'A Child Scared of Getting a Vaccine at the Health Post', titleKriolu: 'Uma Criança com Medo de Tomar a Vacina no Posto de Saúde', icon: '💉', color: 'red',
+    desc: 'Vocabulário de uma criança com medo de tomar a vacina no posto de saúde', vocab: [
+        { k: 'criança a agarrar a mão da mãe com força na sala de espera', e: 'child gripping the mother\'s hand tightly in the waiting room', ex: 'A criança a agarrar a mão da mãe com força na sala de espera do posto.' },
+        { k: 'criança a ver outra criança a chorar depois da vacina', e: 'child watching another child cry after getting the vaccine', ex: 'A criança a ver outra criança a chorar depois da vacina e a ficar mais nervosa.' },
+        { k: 'enfermeiro a chamar o nome da criança com voz suave', e: 'nurse calling the child\'s name in a gentle voice', ex: 'O enfermeiro a chamar o nome da criança com voz suave para não a assustar.' },
+        { k: 'criança a esconder o braço atrás do corpo da mãe', e: 'child hiding his arm behind the mother\'s body', ex: 'A criança a esconder o braço atrás do corpo da mãe sem querer sair.' },
+        { k: 'mãe a dizer à criança que não vai doer muito tempo', e: 'mother telling the child it won\'t hurt for long', ex: 'A mãe a dizer à criança que não vai doer muito tempo e que passa depressa.' },
+        { k: 'enfermeiro a dar a vacina depressa antes que a criança repare', e: 'nurse giving the vaccine quickly before the child notices', ex: 'O enfermeiro a dar a vacina depressa antes que a criança repare de verdade.' },
+    ]},
+  { id: 'pt_vaccinecandy1', title: 'Getting Candy for Being Brave Afterward', titleKriolu: 'A Ganhar um Rebuçado por Ser Corajosa Depois', icon: '🍬', color: 'emerald',
+    desc: 'Vocabulário de ganhar um rebuçado por ser corajosa depois', vocab: [
+        { k: 'criança a chorar um pouco depois de sentir a picada', e: 'child crying a little after feeling the prick', ex: 'A criança a chorar um pouco depois de sentir a picada da vacina.' },
+        { k: 'enfermeiro a elogiar a criança pela coragem que mostrou', e: 'nurse praising the child for the courage he showed', ex: 'O enfermeiro a elogiar a criança pela coragem que mostrou naquele momento.' },
+        { k: 'enfermeiro a tirar um rebuçado da gaveta para a criança', e: 'nurse taking a candy from the drawer for the child', ex: 'O enfermeiro a tirar um rebuçado da gaveta para a criança com um sorriso.' },
+        { k: 'criança a esquecer a dor ao ver o rebuçado na mão', e: 'child forgetting the pain upon seeing the candy in hand', ex: 'A criança a esquecer a dor ao ver o rebuçado na mão do enfermeiro.' },
+        { k: 'mãe a elogiar a criança todo o caminho de volta para casa', e: 'mother praising the child the whole way home', ex: 'A mãe a elogiar a criança todo o caminho de volta para casa nessa tarde.' },
+        { k: 'criança a dizer aos amigos que a vacina não foi nada de mais', e: 'child telling friends that the vaccine wasn\'t so bad', ex: 'A criança a dizer aos amigos que a vacina não foi nada de mais, com um rebuçado depois.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -43771,6 +43809,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_straydogadopt1','pt_straydogbath1'] },
   { unit:'Unidade 503 — Fazer Flores de Papel para um Projeto da Escola e A Decorar a Sala de Aula Juntos', icon:'🌸', desc:'Vocabulário de fazer flores de papel para um projeto da escola, e vocabulário de decorar a sala de aula juntos',
     lessons:['pt_paperflowermake1','pt_paperflowerclass1'] },
+  { unit:'Unidade 504 — Uma Criança com Medo de Tomar a Vacina no Posto de Saúde e A Ganhar um Rebuçado por Ser Corajosa Depois', icon:'💉', desc:'Vocabulário de uma criança com medo de tomar a vacina no posto de saúde, e vocabulário de ganhar um rebuçado por ser corajosa depois',
+    lessons:['pt_vaccinefear1','pt_vaccinecandy1'] },
 ];
 
 
