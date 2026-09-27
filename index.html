@@ -21115,6 +21115,24 @@ const KR_LESSONS = [
         { k: 'Família tudu ta bati palma di riba di areia', e: 'whole family clapping from the sand', ex: 'Família tudu ta bati palma di riba di areia kandu mininu sai di agu.' },
         { k: 'Mininu ta pidi pa fasi di nobu la mésmu ora', e: 'child begging to do it again right away', ex: 'Mininu ta pidi pa fasi di nobu la mésmu ora sen kerê sai di agu.' },
     ]},
+  { id: 'kr_cornpounding1', title: 'Grinding Corn into Flour at the Pilon', titleKriolu: 'Pila Midju na Pilon', icon: '🌽', color: 'amber',
+    desc: 'Pounding corn into flour at the pilon vocabulary', vocab: [
+        { k: 'Mudjer ta leba saku di midju pa pila na pilon', e: 'woman carrying a sack of corn to pound at the mortar', ex: 'Mudjer ta leba saku di midju pa pila na pilon kada simana.' },
+        { k: 'Pilon ta bati midju na farinha fininhu poku a poku', e: 'mortar pounding the corn into fine flour little by little', ex: 'Pilon ta bati midju na farinha fininhu poku a poku sen para.' },
+        { k: 'Pó di midju ta subi na ar kandu ta pila', e: 'corn dust rising into the air while pounding', ex: 'Pó di midju ta subi na ar kandu ta pila i ta pousa na kabelu.' },
+        { k: 'Brasu ta kansa dipos di pila txeu tenpu', e: 'arms getting tired after pounding for a long time', ex: 'Brasu ta kansa dipos di pila txeu tenpu sen para di trabadja.' },
+        { k: 'Farinha ta kai dretu dentu di saku limpu', e: 'flour falling neatly into a clean sack', ex: 'Farinha ta kai dretu dentu di saku limpu pronta pa lévá pa kaza.' },
+        { k: 'Vizinhu ta troka farinha pa otu kusa na merkadu', e: 'neighbors trading flour for other goods at the market', ex: 'Vizinhu ta troka farinha pa otu kusa na merkadu kada simana.' },
+    ]},
+  { id: 'kr_cornbread1', title: 'Baking Cornbread from the Fresh Flour', titleKriolu: 'Kuzinha Pon di Midju ku Farinha Fresku', icon: '🍞', color: 'orange',
+    desc: 'Baking cornbread from the fresh flour vocabulary', vocab: [
+        { k: 'Mistura farinha di midju ku agu i sal pa fasi massa', e: 'mixing corn flour with water and salt to make dough', ex: 'Mistura farinha di midju ku agu i sal pa fasi massa dretu.' },
+        { k: 'Massa ta diskansa pertu di forno kenti', e: 'dough resting near the hot oven', ex: 'Massa ta diskansa pertu di forno kenti antis di entra dentu.' },
+        { k: 'Pon di midju ta entra dentu di forno di lenha', e: 'cornbread going into the wood-fired oven', ex: 'Pon di midju ta entra dentu di forno di lenha ku kuidadu.' },
+        { k: 'Txeru di pon kenti ta xiga tudu kaza', e: 'smell of hot bread reaching every house', ex: 'Txeru di pon kenti ta xiga tudu kaza na bairu.' },
+        { k: 'Krosta di pon ta fika doradu i duru pa fora', e: 'crust of the bread turning golden and firm outside', ex: 'Krosta di pon ta fika doradu i duru pa fora dipos di un óra na forno.' },
+        { k: 'Família ta kome pon di midju inda kenti', e: 'family eating the cornbread while still hot', ex: 'Família ta kome pon di midju inda kenti ku manteiga.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -22846,6 +22864,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_buskeraccordion1','kr_buskercoins1'] },
   { unit:'Unit 477 — Learning to Swim in the Sea', icon:'🏊', desc:'An older cousin teaching a child to swim in the sea vocabulary, and Swimming alone for the first time vocabulary',
     lessons:['kr_swimlesson1','kr_swimalone1'] },
+  { unit:'Unit 478 — Grinding Corn into Flour at the Pilon & Baking Cornbread from the Fresh Flour', icon:'🌽', desc:'Grinding Corn into Flour at the Pilon vocabulary, and Baking Cornbread from the Fresh Flour vocabulary',
+    lessons:['kr_cornpounding1','kr_cornbread1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -41844,6 +41864,24 @@ const PT_LESSONS = [
         { k: 'família toda a bater palmas desde a areia', e: 'whole family clapping from the sand', ex: 'A família toda a bater palmas desde a areia via a criança sair da água.' },
         { k: 'criança a pedir para fazer tudo outra vez já', e: 'child begging to do it again right away', ex: 'A criança a pedir para fazer tudo outra vez já nem queria sair da água.' },
     ]},
+  { id: 'pt_cornpounding1', title: 'Grinding Corn into Flour at the Pilon', titleKriolu: 'Pisar Milho no Pilão', icon: '🌽', color: 'amber',
+    desc: 'Vocabulário de pisar milho no pilão até virar farinha', vocab: [
+        { k: 'mulher a levar um saco de milho para pisar no pilão', e: 'woman carrying a sack of corn to pound at the mortar', ex: 'A mulher a levar um saco de milho para pisar no pilão fazia isso todas as semanas.' },
+        { k: 'pilão a bater o milho até virar farinha fina pouco a pouco', e: 'mortar pounding the corn into fine flour little by little', ex: 'O pilão a bater o milho até virar farinha fina pouco a pouco não parava.' },
+        { k: 'poeira de milho a subir no ar enquanto se pisa', e: 'corn dust rising into the air while pounding', ex: 'A poeira de milho a subir no ar enquanto se pisa pousava no cabelo.' },
+        { k: 'braços a cansar depois de pisar durante muito tempo', e: 'arms getting tired after pounding for a long time', ex: 'Os braços a cansar depois de pisar durante muito tempo custavam a levantar.' },
+        { k: 'farinha a cair certinha dentro de um saco limpo', e: 'flour falling neatly into a clean sack', ex: 'A farinha a cair certinha dentro de um saco limpo ficava pronta para levar para casa.' },
+        { k: 'vizinhos a trocar farinha por outras coisas no mercado', e: 'neighbors trading flour for other goods at the market', ex: 'Os vizinhos a trocar farinha por outras coisas no mercado faziam isso todas as semanas.' },
+    ]},
+  { id: 'pt_cornbread1', title: 'Baking Cornbread from the Fresh Flour', titleKriolu: 'Cozer Pão de Milho com a Farinha Fresca', icon: '🍞', color: 'orange',
+    desc: 'Vocabulário de cozer pão de milho com a farinha fresca', vocab: [
+        { k: 'misturar a farinha de milho com água e sal para fazer a massa', e: 'mixing corn flour with water and salt to make dough', ex: 'Misturar a farinha de milho com água e sal para fazer a massa levava o seu tempo.' },
+        { k: 'massa a descansar perto do forno quente', e: 'dough resting near the hot oven', ex: 'A massa a descansar perto do forno quente esperava a sua vez.' },
+        { k: 'pão de milho a entrar no forno a lenha', e: 'cornbread going into the wood-fired oven', ex: 'O pão de milho a entrar no forno a lenha era colocado com cuidado.' },
+        { k: 'cheiro do pão quente a chegar a toda a casa', e: 'smell of hot bread reaching every house', ex: 'O cheiro do pão quente a chegar a toda a casa despertava todos.' },
+        { k: 'crosta do pão a ficar dourada e dura por fora', e: 'crust of the bread turning golden and firm outside', ex: 'A crosta do pão a ficar dourada e dura por fora mostrava que estava pronto.' },
+        { k: 'família a comer o pão de milho ainda quente', e: 'family eating the cornbread while still hot', ex: 'A família a comer o pão de milho ainda quente passava a manteiga por cima.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -42811,6 +42849,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_buskeraccordion1','pt_buskercoins1'] },
   { unit:'Unidade 479 — Aprender a Nadar no Mar', icon:'🏊', desc:'Vocabulário de um primo mais velho a ensinar uma criança a nadar no mar, e vocabulário da primeira vez que a criança nada sozinha',
     lessons:['pt_swimlesson1','pt_swimalone1'] },
+  { unit:'Unidade 480 — Pisar Milho no Pilão e Cozer Pão de Milho com a Farinha Fresca', icon:'🌽', desc:'Vocabulário de pisar milho no pilão até virar farinha, e vocabulário de cozer pão de milho com a farinha fresca',
+    lessons:['pt_cornpounding1','pt_cornbread1'] },
 ];
 
 
