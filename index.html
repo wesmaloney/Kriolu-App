@@ -22069,6 +22069,24 @@ const KR_LESSONS = [
         { k: 'Mininu pegadu ta fika ku kara pretu di vergonha', e: 'the caught child ending up red-faced with embarrassment', ex: 'Mininu pegadu ta fika ku kara pretu di vergonha total.' },
         { k: 'Mininu ta kunsa otu rodada sen para di ri', e: 'the children starting another round without stopping their laughter', ex: 'Mininu ta kunsa otu rodada sen para di ri di kel susu.' },
     ]},
+  { id: 'kr_cowmilklearn1', title: 'A Child Helping Milk a Cow for the First Time', titleKriolu: 'Mininu Ta Djuda Titá Báka pa Primeru Bes', icon: '🐄', color: 'stone',
+    desc: 'A child helping milk a cow for the first time vocabulary', vocab: [
+        { k: 'Pai ta sinta na banku baxu pertu di báka', e: 'father sitting on a low stool next to the cow', ex: 'Pai ta sinta na banku baxu pertu di báka di manhan sedu.' },
+        { k: 'Mininu ta odja mon di pai move dretu i sertu', e: 'child watching the father\'s hands move steadily and surely', ex: 'Mininu ta odja mon di pai move dretu i sertu na tetu di báka.' },
+        { k: 'Pai ta poi mon di mininu na mesmu pozison', e: 'father placing the child\'s hands in the same position', ex: 'Pai ta poi mon di mininu na mesmu pozison ku txeu kuidadu.' },
+        { k: 'Primeru tentativa di mininu ka ta tra nada', e: 'the child\'s first attempt not getting any milk out', ex: 'Primeru tentativa di mininu ka ta tra nada di báka.' },
+        { k: 'Báka ta move rabu ku un poku di impasiénsia', e: 'the cow swishing its tail with a bit of impatience', ex: 'Báka ta move rabu ku un poku di impasiénsia di kel novidadi.' },
+        { k: 'Primeru jatu di leti ta kai na balde ku son', e: 'the first squirt of milk finally hitting the bucket with a sound', ex: 'Primeru jatu di leti ta kai na balde ku son i alegria di mininu.' },
+    ]},
+  { id: 'kr_cowmilkspill1', title: 'Spilling the Bucket', titleKriolu: 'Baza Balde di Leti', icon: '🥛', color: 'red',
+    desc: 'Spilling the bucket of milk vocabulary', vocab: [
+        { k: 'Mininu ta lanta ku txeu orgudju dipos di terminá', e: 'child standing up with great pride after finishing', ex: 'Mininu ta lanta ku txeu orgudju dipos di terminá si trabadju.' },
+        { k: 'Pé di mininu ta toka na balde xeiu di leti', e: 'the child\'s foot bumping into the bucket full of milk', ex: 'Pé di mininu ta toka na balde xeiu di leti sen el nutá.' },
+        { k: 'Balde ta vira i leti ta baza tudu na txon', e: 'the bucket tipping over and the milk spilling all over the ground', ex: 'Balde ta vira i leti ta baza tudu na txon di kurral.' },
+        { k: 'Pai ta suspira ma ka ta fika xatiadu', e: 'father sighing but not getting angry', ex: 'Pai ta suspira ma ka ta fika xatiadu ku mininu.' },
+        { k: 'Mininu ta pidi diskulpa ku kara pretu', e: 'child apologizing with a red face', ex: 'Mininu ta pidi diskulpa ku kara pretu di vergonha.' },
+        { k: 'Pai ta fla ki manhan ta ten más leti pa titá', e: 'father saying there will be more milk to draw tomorrow', ex: 'Pai ta fla ki manhan ta ten más leti pa titá otu bes.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -23906,6 +23924,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_icetruck1','kr_icechip1'] },
   { unit:'Unit 530 — A Game of Tag Through the Narrow Alleys & Getting Caught by Surprise', icon:'🏃', desc:'A Game of Tag Through the Narrow Alleys vocabulary, and Getting Caught by Surprise vocabulary',
     lessons:['kr_tagalley1','kr_tagcaught1'] },
+  { unit:'Unit 531 — A Child Helping Milk a Cow for the First Time & Spilling the Bucket', icon:'🐄', desc:'A Child Helping Milk a Cow for the First Time vocabulary, and Spilling the Bucket vocabulary',
+    lessons:['kr_cowmilklearn1','kr_cowmilkspill1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -43858,6 +43878,24 @@ const PT_LESSONS = [
         { k: 'criança apanhada a ficar vermelha de vergonha', e: 'the caught child ending up red-faced with embarrassment', ex: 'A criança apanhada a ficar vermelha de vergonha, de tanto envergonhada.' },
         { k: 'crianças a começar outra ronda sem parar de rir', e: 'the children starting another round without stopping their laughter', ex: 'As crianças a começar outra ronda sem parar de rir daquele susto.' },
     ]},
+  { id: 'pt_cowmilklearn1', title: 'A Child Helping Milk a Cow for the First Time', titleKriolu: 'Uma Criança a Ajudar a Ordenhar uma Vaca pela Primeira Vez', icon: '🐄', color: 'stone',
+    desc: 'Vocabulário de uma criança a ajudar a ordenhar uma vaca pela primeira vez', vocab: [
+        { k: 'pai a sentar-se num banco baixo perto da vaca', e: 'father sitting on a low stool next to the cow', ex: 'O pai a sentar-se num banco baixo perto da vaca logo de manhã.' },
+        { k: 'criança a ver as mãos do pai a mover-se firmes e certeiras', e: 'child watching the father\'s hands move steadily and surely', ex: 'A criança a ver as mãos do pai a mover-se firmes e certeiras no úbere da vaca.' },
+        { k: 'pai a colocar as mãos da criança na mesma posição', e: 'father placing the child\'s hands in the same position', ex: 'O pai a colocar as mãos da criança na mesma posição, com muito cuidado.' },
+        { k: 'primeira tentativa da criança a não tirar nada', e: 'the child\'s first attempt not getting any milk out', ex: 'A primeira tentativa da criança a não tirar nada da vaca.' },
+        { k: 'vaca a abanar o rabo com um pouco de impaciência', e: 'the cow swishing its tail with a bit of impatience', ex: 'A vaca a abanar o rabo com um pouco de impaciência com aquela novidade.' },
+        { k: 'primeiro jato de leite a cair no balde com um som', e: 'the first squirt of milk finally hitting the bucket with a sound', ex: 'O primeiro jato de leite a cair finalmente no balde, com som e alegria da criança.' },
+    ]},
+  { id: 'pt_cowmilkspill1', title: 'Spilling the Bucket', titleKriolu: 'A Entornar o Balde de Leite', icon: '🥛', color: 'red',
+    desc: 'Vocabulário de entornar o balde de leite', vocab: [
+        { k: 'criança a levantar-se com muito orgulho depois de terminar', e: 'child standing up with great pride after finishing', ex: 'A criança a levantar-se com muito orgulho depois de terminar o seu trabalho.' },
+        { k: 'pé da criança a tocar no balde cheio de leite', e: 'the child\'s foot bumping into the bucket full of milk', ex: 'O pé da criança a tocar no balde cheio de leite sem ela reparar.' },
+        { k: 'balde a tombar e o leite a entornar-se todo no chão', e: 'the bucket tipping over and the milk spilling all over the ground', ex: 'O balde a tombar e o leite a entornar-se todo no chão do curral.' },
+        { k: 'pai a suspirar mas sem ficar zangado', e: 'father sighing but not getting angry', ex: 'O pai a suspirar mas sem ficar zangado com a criança.' },
+        { k: 'criança a pedir desculpa com a cara vermelha', e: 'child apologizing with a red face', ex: 'A criança a pedir desculpa com a cara vermelha de vergonha.' },
+        { k: 'pai a dizer que amanhã há mais leite para ordenhar', e: 'father saying there will be more milk to draw tomorrow', ex: 'O pai a dizer que amanhã há mais leite para ordenhar outra vez.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -44931,6 +44969,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_icetruck1','pt_icechip1'] },
   { unit:'Unidade 532 — Um Jogo da Apanhada pelos Becos Estreitos e A Ser Apanhado de Surpresa', icon:'🏃', desc:'Vocabulário de um jogo da apanhada pelos becos estreitos, e vocabulário de ser apanhado de surpresa a jogar à apanhada',
     lessons:['pt_tagalley1','pt_tagcaught1'] },
+  { unit:'Unidade 533 — Uma Criança a Ajudar a Ordenhar uma Vaca pela Primeira Vez e A Entornar o Balde de Leite', icon:'🐄', desc:'Vocabulário de uma criança a ajudar a ordenhar uma vaca pela primeira vez, e vocabulário de entornar o balde de leite',
+    lessons:['pt_cowmilklearn1','pt_cowmilkspill1'] },
 ];
 
 
