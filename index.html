@@ -21295,6 +21295,24 @@ const KR_LESSONS = [
         { k: 'Funsionáriu ta pidi otu dokumentu ki es ka trazi', e: 'clerk asking for another document they didn\'t bring', ex: 'Funsionáriu ta pidi otu dokumentu ki es ka trazi kel dia.' },
         { k: 'Tudu jenti ta respira suavi kandu pasaporti ta pronto', e: 'everyone breathing easy when the passport is finally ready', ex: 'Tudu jenti ta respira suavi kandu pasaporti ta pronto na mon.' },
     ]},
+  { id: 'kr_remittancesend1', title: 'Sending Money Home Through the Post Office Counter', titleKriolu: 'Manda Dinheru pa Kaza na Balkon di Korreiu', icon: '💌', color: 'emerald',
+    desc: 'Sending money home through the post office counter vocabulary', vocab: [
+        { k: 'Pai na stranjeru ta konta notas riba di balkon', e: 'father abroad counting bills over the counter', ex: 'Pai na stranjeru ta konta notas riba di balkon di korreiu.' },
+        { k: 'Funsionáriu ta pergunta nómi di kenha ta risebe', e: 'clerk asking the name of who will receive it', ex: 'Funsionáriu ta pergunta nómi di kenha ta risebe dinheru la.' },
+        { k: 'Pai ta skrebe morada di kaza ku letra sertu', e: 'father writing the home address in careful handwriting', ex: 'Pai ta skrebe morada di kaza ku letra sertu na papel.' },
+        { k: 'Rizibu ta ser dadu ku un códigu di transferénsia', e: 'a receipt being given with a transfer code', ex: 'Rizibu ta ser dadu ku un códigu di transferénsia pa família.' },
+        { k: 'Pai ta txoma pa família pa fla kuma dinheru ben mandadu', e: 'father calling the family to say the money has been sent', ex: 'Pai ta txoma pa família pa fla kuma dinheru ben mandadu kel manhan.' },
+        { k: 'Sodadi ta pisa más pizadu ki di kustumi kel dia', e: 'homesickness weighing heavier than usual that day', ex: 'Sodadi ta pisa más pizadu ki di kustumi kel dia di manda dinheru.' },
+    ]},
+  { id: 'kr_remittancereceive1', title: 'The Family Receiving the Remittance Envelope', titleKriolu: 'Família Risebe Envelope di Dinheru', icon: '📬', color: 'yellow',
+    desc: 'The family receiving the remittance envelope vocabulary', vocab: [
+        { k: 'Mai ta risebe envelope na balkon di korreiu di vila', e: 'mother receiving the envelope at the village post office counter', ex: 'Mai ta risebe envelope na balkon di korreiu di vila kel tardi.' },
+        { k: 'Mai ta konta notas dôs bes pa sta sertu', e: 'mother counting the bills twice to be sure', ex: 'Mai ta konta notas dôs bes pa sta sertu di kuantu ben.' },
+        { k: 'Mininu ta pergunta si sobra un tantu pa brinkedu', e: 'child asking if there\'s a bit left over for a toy', ex: 'Mininu ta pergunta si sobra un tantu pa brinkedu na kel dinheru.' },
+        { k: 'Mai ta parti dinheru pa konta i pa kumida', e: 'mother splitting the money for bills and for food', ex: 'Mai ta parti dinheru pa konta i pa kumida di kel mes.' },
+        { k: 'Família ta skrebe karta di gradisimentu pa manda bak', e: 'family writing a thank-you letter to send back', ex: 'Família ta skrebe karta di gradisimentu pa manda bak pa pai.' },
+        { k: 'Kada envelope ta trazi un poku di sodadi ku alívio', e: 'each envelope bringing a bit of longing along with relief', ex: 'Kada envelope ta trazi un poku di sodadi ku alívio djuntu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -23046,6 +23064,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_photoalbum1','kr_photolabeling1'] },
   { unit:'Unit 487 — Taking a Passport Photo for the First Time & Waiting Nervously at the Passport Office', icon:'📸', desc:'Taking a Passport Photo for the First Time vocabulary, and Waiting Nervously at the Passport Office vocabulary',
     lessons:['kr_passportphoto1','kr_passportoffice1'] },
+  { unit:'Unit 488 — Sending Money Home Through the Post Office Counter & The Family Receiving the Remittance Envelope', icon:'💌', desc:'Sending Money Home Through the Post Office Counter vocabulary, and The Family Receiving the Remittance Envelope vocabulary',
+    lessons:['kr_remittancesend1','kr_remittancereceive1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -42224,6 +42244,24 @@ const PT_LESSONS = [
         { k: 'funcionário a pedir outro documento que eles não trouxeram', e: 'clerk asking for another document they didn\'t bring', ex: 'O funcionário a pedir outro documento que eles não tinham trazido.' },
         { k: 'toda a gente a respirar de alívio quando o passaporte fica pronto', e: 'everyone breathing easy when the passport is finally ready', ex: 'Toda a gente a respirar de alívio quando o passaporte fica finalmente pronto.' },
     ]},
+  { id: 'pt_remittancesend1', title: 'Sending Money Home Through the Post Office Counter', titleKriolu: 'Enviar Dinheiro para Casa no Balcão dos Correios', icon: '💌', color: 'emerald',
+    desc: 'Vocabulário de enviar dinheiro para casa no balcão dos correios', vocab: [
+        { k: 'pai no estrangeiro a contar notas em cima do balcão', e: 'father abroad counting bills over the counter', ex: 'O pai no estrangeiro a contar notas em cima do balcão dos correios.' },
+        { k: 'funcionário a perguntar o nome de quem vai receber', e: 'clerk asking the name of who will receive it', ex: 'O funcionário a perguntar o nome de quem vai receber o dinheiro lá.' },
+        { k: 'pai a escrever a morada de casa com letra cuidada', e: 'father writing the home address in careful handwriting', ex: 'O pai a escrever a morada de casa com letra cuidada no papel.' },
+        { k: 'recibo a ser entregue com um código de transferência', e: 'a receipt being given with a transfer code', ex: 'O recibo a ser entregue com um código de transferência para a família.' },
+        { k: 'pai a telefonar à família para dizer que o dinheiro foi enviado', e: 'father calling the family to say the money has been sent', ex: 'O pai a telefonar à família para dizer que o dinheiro tinha sido enviado nessa manhã.' },
+        { k: 'saudade a pesar mais do que o costume nesse dia', e: 'homesickness weighing heavier than usual that day', ex: 'A saudade a pesar mais do que o costume nesse dia de enviar dinheiro.' },
+    ]},
+  { id: 'pt_remittancereceive1', title: 'The Family Receiving the Remittance Envelope', titleKriolu: 'A Família a Receber o Envelope com o Dinheiro', icon: '📬', color: 'yellow',
+    desc: 'Vocabulário da família a receber o envelope com o dinheiro', vocab: [
+        { k: 'mãe a receber o envelope no balcão dos correios da aldeia', e: 'mother receiving the envelope at the village post office counter', ex: 'A mãe a receber o envelope no balcão dos correios da aldeia nessa tarde.' },
+        { k: 'mãe a contar as notas duas vezes para ter a certeza', e: 'mother counting the bills twice to be sure', ex: 'A mãe a contar as notas duas vezes para ter a certeza de quanto veio.' },
+        { k: 'criança a perguntar se sobra algum para um brinquedo', e: 'child asking if there\'s a bit left over for a toy', ex: 'A criança a perguntar se sobra algum dinheiro para um brinquedo.' },
+        { k: 'mãe a dividir o dinheiro entre contas e comida', e: 'mother splitting the money for bills and for food', ex: 'A mãe a dividir o dinheiro entre as contas e a comida desse mês.' },
+        { k: 'família a escrever uma carta de agradecimento para enviar de volta', e: 'family writing a thank-you letter to send back', ex: 'A família a escrever uma carta de agradecimento para enviar de volta ao pai.' },
+        { k: 'cada envelope a trazer um pouco de saudade junto com alívio', e: 'each envelope bringing a bit of longing along with relief', ex: 'Cada envelope a trazer um pouco de saudade junto com o alívio.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -43211,6 +43249,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_photoalbum1','pt_photolabeling1'] },
   { unit:'Unidade 489 — Tirar a Fotografia do Passaporte pela Primeira Vez e À Espera, Nervosa, nas Finanças do Passaporte', icon:'📸', desc:'Vocabulário de tirar a fotografia do passaporte pela primeira vez, e vocabulário de esperar nervosa nas repartições do passaporte',
     lessons:['pt_passportphoto1','pt_passportoffice1'] },
+  { unit:'Unidade 490 — Enviar Dinheiro para Casa no Balcão dos Correios e A Família a Receber o Envelope com o Dinheiro', icon:'💌', desc:'Vocabulário de enviar dinheiro para casa no balcão dos correios, e vocabulário da família a receber o envelope com o dinheiro',
+    lessons:['pt_remittancesend1','pt_remittancereceive1'] },
 ];
 
 
