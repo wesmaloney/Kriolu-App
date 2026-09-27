@@ -22411,6 +22411,24 @@ const KR_LESSONS = [
         { k: 'Paderu ta djunta tudu pon na si própi loja', e: 'baker gathering all the bread at his own shop', ex: 'Paderu ta djunta tudu pon na si própi loja antis di festa.' },
         { k: 'Festa ta kunsa ku sufisienti pon pa tudu jenti', e: 'the feast starting with plenty of bread for everyone', ex: 'Festa ta kunsa ku sufisienti pon pa tudu jenti gradisi vizinhu.' },
     ]},
+  { id: 'kr_braidfriend1', title: 'A Child\'s First Attempt at Braiding a Friend\'s Hair', titleKriolu: 'Primeru Tentativa di Transa Kabelu di Amiga', icon: '💇', color: 'amber',
+    desc: 'A child\'s first attempt at braiding a friend\'s hair vocabulary', vocab: [
+        { k: 'Amiga ta sinta na txon na frenti di mininu', e: 'friend sitting on the floor in front of the child', ex: 'Amiga ta sinta na txon na frenti di mininu ku pasiénsia.' },
+        { k: 'Mininu ta parti kabelu na tres padasu igual', e: 'child dividing the hair into three equal parts', ex: 'Mininu ta parti kabelu na tres padasu igual ku dedu.' },
+        { k: 'Dedu ta konfundi na primeru krusamentu', e: 'fingers getting confused at the first cross-over', ex: 'Dedu ta konfundi na primeru krusamentu di kabelu.' },
+        { k: 'Amiga ta fla ki ta sinti pele di kabésa puxadu', e: 'friend saying she can feel her scalp being pulled', ex: 'Amiga ta fla ki ta sinti pele di kabésa puxadu di más.' },
+        { k: 'Mininu ta pidi diskulpa i ta kunsa más suavi', e: 'child apologizing and starting more gently', ex: 'Mininu ta pidi diskulpa i ta kunsa más suavi ku transa.' },
+        { k: 'Poku a poku transa ta kunsa toma forma sertu', e: 'little by little the braid starting to take proper shape', ex: 'Poku a poku transa ta kunsa toma forma sertu na kabelu.' },
+    ]},
+  { id: 'kr_braiduneven1', title: 'Getting It Hopelessly Uneven', titleKriolu: 'Fika Tortu Sen Remédiu', icon: '😬', color: 'orange',
+    desc: 'The braid getting hopelessly uneven vocabulary', vocab: [
+        { k: 'Un ladu di transa ta fika más grossu ki otu', e: 'one side of the braid ending up thicker than the other', ex: 'Un ladu di transa ta fika más grossu ki otu sen mininu nutá.' },
+        { k: 'Amiga ta bai spedju pa odja kuma el sai', e: 'friend going to the mirror to see how it turned out', ex: 'Amiga ta bai spedju pa odja kuma el sai ku txeu spéransa.' },
+        { k: 'Dôs ta fika ku boka abertu di odja tal disastri', e: 'the two staring open-mouthed at such a disaster', ex: 'Dôs ta fika ku boka abertu di odja tal disastri di transa.' },
+        { k: 'Amiga ta ri sen para di odja si própi reflekson', e: 'friend laughing without stopping at her own reflection', ex: 'Amiga ta ri sen para di odja si própi reflekson na spedju.' },
+        { k: 'Mininu ta oferese pa disfaze i kunsa otu bes', e: 'child offering to undo it and start again', ex: 'Mininu ta oferese pa disfaze i kunsa otu bes ku más kuidadu.' },
+        { k: 'Dôs ta primeti prátika más antis di próximu tentativa', e: 'the two promising to practice more before the next attempt', ex: 'Dôs ta primeti prátika más antis di próximu tentativa di transa.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -24286,6 +24304,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_whittleboat1','kr_racegutter1'] },
   { unit:'Unit 549 — The Town Baker\'s Oven Breaking Down Before a Feast & Neighbors Lending Their Own Ovens', icon:'🔥', desc:'The Town Baker\'s Oven Breaking Down Before a Feast vocabulary, and Neighbors Lending Their Own Ovens vocabulary',
     lessons:['kr_bakeryoven1','kr_borrowoven1'] },
+  { unit:'Unit 550 — A Child\'s First Attempt at Braiding a Friend\'s Hair & Getting It Hopelessly Uneven', icon:'💇', desc:'A Child\'s First Attempt at Braiding a Friend\'s Hair vocabulary, and Getting It Hopelessly Uneven vocabulary',
+    lessons:['kr_braidfriend1','kr_braiduneven1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -44580,6 +44600,24 @@ const PT_LESSONS = [
         { k: 'padeiro a juntar todo o pão na sua própria loja', e: 'baker gathering all the bread at his own shop', ex: 'O padeiro a juntar todo o pão na sua própria loja antes da festa.' },
         { k: 'festa a começar com pão suficiente para toda a gente', e: 'the feast starting with plenty of bread for everyone', ex: 'A festa a começar com pão suficiente para toda a gente, agradecendo aos vizinhos.' },
     ]},
+  { id: 'pt_braidfriend1', title: 'A Child\'s First Attempt at Braiding a Friend\'s Hair', titleKriolu: 'A Primeira Tentativa de uma Criança a Entrançar o Cabelo de uma Amiga', icon: '💇', color: 'amber',
+    desc: 'Vocabulário da primeira tentativa de entrançar o cabelo de uma amiga', vocab: [
+        { k: 'amiga a sentar-se no chão à frente da criança', e: 'friend sitting on the floor in front of the child', ex: 'A amiga a sentar-se no chão à frente da criança, com paciência.' },
+        { k: 'criança a dividir o cabelo em três partes iguais', e: 'child dividing the hair into three equal parts', ex: 'A criança a dividir o cabelo em três partes iguais com os dedos.' },
+        { k: 'dedos a confundir-se no primeiro cruzamento', e: 'fingers getting confused at the first cross-over', ex: 'Os dedos a confundir-se no primeiro cruzamento do cabelo.' },
+        { k: 'amiga a dizer que sente o couro cabeludo a ser puxado', e: 'friend saying she can feel her scalp being pulled', ex: 'A amiga a dizer que sente o couro cabeludo a ser puxado demais.' },
+        { k: 'criança a pedir desculpa e a começar de novo, mais suave', e: 'child apologizing and starting more gently', ex: 'A criança a pedir desculpa e a começar de novo, com mais suavidade.' },
+        { k: 'pouco a pouco a trança a começar a tomar forma certa', e: 'little by little the braid starting to take proper shape', ex: 'Pouco a pouco a trança a começar a tomar forma certa no cabelo.' },
+    ]},
+  { id: 'pt_braiduneven1', title: 'Getting It Hopelessly Uneven', titleKriolu: 'A Ficar Toda Torta sem Remédio', icon: '😬', color: 'orange',
+    desc: 'Vocabulário da trança a ficar toda torta sem remédio', vocab: [
+        { k: 'um lado da trança a ficar mais grosso do que o outro', e: 'one side of the braid ending up thicker than the other', ex: 'Um lado da trança a ficar mais grosso do que o outro sem a criança reparar.' },
+        { k: 'amiga a ir ao espelho para ver como ficou', e: 'friend going to the mirror to see how it turned out', ex: 'A amiga a ir ao espelho para ver como ficou, cheia de esperança.' },
+        { k: 'as duas a ficar de boca aberta a ver tal desastre', e: 'the two staring open-mouthed at such a disaster', ex: 'As duas a ficar de boca aberta a ver tal desastre de trança.' },
+        { k: 'amiga a rir sem parar ao ver o seu próprio reflexo', e: 'friend laughing without stopping at her own reflection', ex: 'A amiga a rir sem parar ao ver o seu próprio reflexo no espelho.' },
+        { k: 'criança a oferecer-se para desfazer e começar de novo', e: 'child offering to undo it and start again', ex: 'A criança a oferecer-se para desfazer e começar de novo, com mais cuidado.' },
+        { k: 'as duas a prometer praticar mais antes da próxima tentativa', e: 'the two promising to practice more before the next attempt', ex: 'As duas a prometer praticar mais antes da próxima tentativa de trança.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -45691,6 +45729,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_whittleboat1','pt_racegutter1'] },
   { unit:'Unidade 551 — O Forno do Padeiro a Avariar Antes de uma Festa e Vizinhos a Emprestar os Seus Próprios Fornos', icon:'🔥', desc:'Vocabulário do forno do padeiro a avariar antes de uma festa, e vocabulário de vizinhos a emprestar os seus próprios fornos',
     lessons:['pt_bakeryoven1','pt_borrowoven1'] },
+  { unit:'Unidade 552 — A Primeira Tentativa de uma Criança a Entrançar o Cabelo de uma Amiga e A Ficar Toda Torta sem Remédio', icon:'💇', desc:'Vocabulário da primeira tentativa de entrançar o cabelo de uma amiga, e vocabulário da trança a ficar toda torta sem remédio',
+    lessons:['pt_braidfriend1','pt_braiduneven1'] },
 ];
 
 
