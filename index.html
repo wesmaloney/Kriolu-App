@@ -21205,6 +21205,24 @@ const KR_LESSONS = [
         { k: 'Sisterna ta txiga na metadi antis di txuba para', e: 'cistern reaching halfway before the rain stops', ex: 'Sisterna ta txiga na metadi antis di txuba para di kai.' },
         { k: 'Pai ta fitxa tampa pa agu ka izvapora', e: 'father closing the lid so the water doesn\'t evaporate', ex: 'Pai ta fitxa tampa pa agu ka izvapora na sol.' },
     ]},
+  { id: 'kr_schoolbuswait1', title: 'Waiting for the School Bus in the Rain', titleKriolu: 'Spera Autokarru di Skola na Txuba', icon: '🚌', color: 'slate',
+    desc: 'Waiting for the school bus in the rain vocabulary', vocab: [
+        { k: 'Mininu ta spera autokarru na baxu di txuba fininhu', e: 'child waiting for the bus under a light rain', ex: 'Mininu ta spera autokarru na baxu di txuba fininhu sen sombrinha.' },
+        { k: 'Sombrinha di kaza ta fika sken riba di kama', e: 'the umbrella from home staying forgotten on the bed', ex: 'Sombrinha di kaza ta fika sken riba di kama kel manhan.' },
+        { k: 'Mininu ta poi mochila pa riba di kabésa', e: 'child putting the backpack over their head', ex: 'Mininu ta poi mochila pa riba di kabésa pa ka molha kaderno.' },
+        { k: 'Autokarru ta tarda más ki normal pur kauza di txuba', e: 'bus taking longer than usual because of the rain', ex: 'Autokarru ta tarda más ki normal pur kauza di txuba na strada.' },
+        { k: 'Otu mininu ta junta na mesmu paradu ku medu di molha', e: 'other children gathering at the same stop afraid of getting wet', ex: 'Otu mininu ta junta na mesmu paradu ku medu di molha.' },
+        { k: 'Finalmenti autokarru ta txiga ku farol pisadu', e: 'bus finally arriving with its lights on', ex: 'Finalmenti autokarru ta txiga ku farol pisadu i tudu mininu ta kuri intra.' },
+    ]},
+  { id: 'kr_schoolbuswet1', title: 'Arriving Soaked and Drying Off at School', titleKriolu: 'Txiga Moiadu i Seka na Skola', icon: '🏫', color: 'amber',
+    desc: 'Arriving soaked and drying off at school vocabulary', vocab: [
+        { k: 'Mininu ta txiga skola ku ropa tudu moiadu', e: 'child arriving at school with clothes all soaked', ex: 'Mininu ta txiga skola ku ropa tudu moiadu di kabésa té pé.' },
+        { k: 'Purfesora ta da toaia pa mininu seka kabelu', e: 'teacher giving a towel for the child to dry their hair', ex: 'Purfesora ta da toaia pa mininu seka kabelu antis di sinta.' },
+        { k: 'Kaderno na mochila ta fika livri di molha', e: 'notebook in the backpack staying free of water', ex: 'Kaderno na mochila ta fika livri di molha pamodi mochila staba bén fitxadu.' },
+        { k: 'Kolega ta ri suavi di kabelu moiadu di mininu', e: 'classmates gently laughing at the child\'s wet hair', ex: 'Kolega ta ri suavi di kabelu moiadu di mininu sen maldadi.' },
+        { k: 'Mininu ta poi ropa reserva ki mai ta poi na mochila', e: 'child putting on spare clothes that mom packed in the bag', ex: 'Mininu ta poi ropa reserva ki mai ta poi na mochila di manhan.' },
+        { k: 'Dipos di un tenpu mininu ta fika seku i kontenti', e: 'after a while the child ends up dry and happy', ex: 'Dipos di un tenpu mininu ta fika seku i kontenti di sta na klasi.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -22946,6 +22964,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_umbrellapatch1','kr_umbrellarain1'] },
   { unit:'Unit 482 — Sealing a Cracked Water Cistern Before the Rains & Watching the Cistern Fill During the First Storm', icon:'🪣', desc:'Sealing a Cracked Water Cistern Before the Rains vocabulary, and Watching the Cistern Fill During the First Storm vocabulary',
     lessons:['kr_cisternseal1','kr_cisternfill1'] },
+  { unit:'Unit 483 — Waiting for the School Bus in the Rain & Arriving Soaked and Drying Off at School', icon:'🚌', desc:'Waiting for the School Bus in the Rain vocabulary, and Arriving Soaked and Drying Off at School vocabulary',
+    lessons:['kr_schoolbuswait1','kr_schoolbuswet1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -42034,6 +42054,24 @@ const PT_LESSONS = [
         { k: 'cisterna a chegar a meio antes de a chuva parar', e: 'cistern reaching halfway before the rain stops', ex: 'A cisterna a chegar a meio antes de a chuva parar de cair.' },
         { k: 'pai a fechar a tampa para a água não evaporar', e: 'father closing the lid so the water doesn\'t evaporate', ex: 'O pai a fechar a tampa para a água não evaporar ao sol.' },
     ]},
+  { id: 'pt_schoolbuswait1', title: 'Waiting for the School Bus in the Rain', titleKriolu: 'Esperar pelo Autocarro da Escola à Chuva', icon: '🚌', color: 'slate',
+    desc: 'Vocabulário de esperar pelo autocarro da escola à chuva', vocab: [
+        { k: 'criança à espera do autocarro debaixo de chuva miúda', e: 'child waiting for the bus under a light rain', ex: 'A criança à espera do autocarro debaixo de chuva miúda sem guarda-chuva.' },
+        { k: 'guarda-chuva de casa esquecido em cima da cama', e: 'the umbrella from home staying forgotten on the bed', ex: 'O guarda-chuva de casa esquecido em cima da cama naquela manhã.' },
+        { k: 'criança a pôr a mochila por cima da cabeça', e: 'child putting the backpack over their head', ex: 'A criança a pôr a mochila por cima da cabeça para não molhar o caderno.' },
+        { k: 'autocarro a demorar mais do que o normal por causa da chuva', e: 'bus taking longer than usual because of the rain', ex: 'O autocarro a demorar mais do que o normal por causa da chuva na estrada.' },
+        { k: 'outras crianças a juntar-se na mesma paragem com medo de se molhar', e: 'other children gathering at the same stop afraid of getting wet', ex: 'As outras crianças a juntar-se na mesma paragem com medo de se molhar.' },
+        { k: 'autocarro a chegar finalmente com as luzes acesas', e: 'bus finally arriving with its lights on', ex: 'O autocarro a chegar finalmente com as luzes acesas e todos a correr para entrar.' },
+    ]},
+  { id: 'pt_schoolbuswet1', title: 'Arriving Soaked and Drying Off at School', titleKriolu: 'Chegar Encharcado e Secar na Escola', icon: '🏫', color: 'amber',
+    desc: 'Vocabulário de chegar encharcado e secar na escola', vocab: [
+        { k: 'criança a chegar à escola com a roupa toda encharcada', e: 'child arriving at school with clothes all soaked', ex: 'A criança a chegar à escola com a roupa toda encharcada da cabeça aos pés.' },
+        { k: 'professora a dar uma toalha para a criança secar o cabelo', e: 'teacher giving a towel for the child to dry their hair', ex: 'A professora a dar uma toalha para a criança secar o cabelo antes de se sentar.' },
+        { k: 'caderno na mochila a ficar livre de água', e: 'notebook in the backpack staying free of water', ex: 'O caderno na mochila a ficar livre de água porque a mochila estava bem fechada.' },
+        { k: 'colegas a rir-se suavemente do cabelo molhado da criança', e: 'classmates gently laughing at the child\'s wet hair', ex: 'Os colegas a rir-se suavemente do cabelo molhado da criança sem maldade.' },
+        { k: 'criança a vestir a roupa reserva que a mãe pôs na mochila', e: 'child putting on spare clothes that mom packed in the bag', ex: 'A criança a vestir a roupa reserva que a mãe pôs na mochila de manhã.' },
+        { k: 'ao fim de um tempo a criança fica seca e contente', e: 'after a while the child ends up dry and happy', ex: 'Ao fim de um tempo a criança fica seca e contente por estar na aula.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -43011,6 +43049,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_umbrellapatch1','pt_umbrellarain1'] },
   { unit:'Unidade 484 — Vedar uma Cisterna Rachada Antes das Chuvas e Ver a Cisterna a Encher na Primeira Tempestade', icon:'🪣', desc:'Vocabulário de vedar uma cisterna rachada antes das chuvas, e vocabulário de ver a cisterna a encher na primeira tempestade',
     lessons:['pt_cisternseal1','pt_cisternfill1'] },
+  { unit:'Unidade 485 — Esperar pelo Autocarro da Escola à Chuva e Chegar Encharcado e Secar na Escola', icon:'🚌', desc:'Vocabulário de esperar pelo autocarro da escola à chuva, e vocabulário de chegar encharcado e secar na escola',
+    lessons:['pt_schoolbuswait1','pt_schoolbuswet1'] },
 ];
 
 
