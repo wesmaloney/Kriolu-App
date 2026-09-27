@@ -21151,6 +21151,24 @@ const KR_LESSONS = [
         { k: 'Kabra ta ser levadu bak pa kural fitxadu', e: 'goat being led back to the pen and locked in', ex: 'Kabra ta ser levadu bak pa kural fitxadu ku un korda nobu.' },
         { k: 'Mininu ta prende porta di kural ku forsa', e: 'child fastening the pen door tightly', ex: 'Mininu ta prende porta di kural ku forsa pa kabra ka skapa más.' },
     ]},
+  { id: 'kr_cookrice1', title: 'Cooking Rice Alone for the First Time', titleKriolu: 'Kuzinha Arroz Sozinhu pa Primeru Bes', icon: '🍚', color: 'amber',
+    desc: 'Cooking rice alone for the first time vocabulary', vocab: [
+        { k: 'Mininu ta poi agu na panela pa kuzinha arroz', e: 'child putting water in the pot to cook rice', ex: 'Mininu ta poi agu na panela pa kuzinha arroz sozinhu pa primeru bes.' },
+        { k: 'Mininu ta mede arroz ku kopu sen ajuda', e: 'child measuring the rice with a cup without help', ex: 'Mininu ta mede arroz ku kopu sen ajuda di ninguen.' },
+        { k: 'Panela ta kunsa ferve na fogon kenti', e: 'pot starting to boil on the hot stove', ex: 'Panela ta kunsa ferve na fogon kenti dipos di dés minutu.' },
+        { k: 'Mininu ta skese di baxa lumi na tenpu sertu', e: 'child forgetting to lower the heat at the right time', ex: 'Mininu ta skese di baxa lumi na tenpu sertu i ta kontinua fla ku otu kusa.' },
+        { k: 'Txeru di keimadu ta xiga kusinha di ripenti', e: 'smell of burning suddenly reaching the kitchen', ex: 'Txeru di keimadu ta xiga kusinha di ripenti i mininu ta kuri odja panela.' },
+        { k: 'Fundu di panela ta fika pretu di tantu keimadu', e: 'bottom of the pot turning black from burning', ex: 'Fundu di panela ta fika pretu di tantu keimadu i arroz ta fika sen kome.' },
+    ]},
+  { id: 'kr_burntpot1', title: 'Burning the Bottom of the Pot', titleKriolu: 'Fundu di Panela Keimadu', icon: '🔥', color: 'red',
+    desc: 'Burning the bottom of the pot vocabulary', vocab: [
+        { k: 'Mininu ta odja panela ku medu di kastigu', e: 'child looking at the pot afraid of being scolded', ex: 'Mininu ta odja panela ku medu di kastigu di mai.' },
+        { k: 'Mai ta txiga i ta sinti txeru di keimadu lóg', e: 'mother arriving and smelling the burning right away', ex: 'Mai ta txiga i ta sinti txeru di keimadu lóg na porta di kaza.' },
+        { k: 'Mininu ta splika kuma el skese di panela', e: 'child explaining how he forgot about the pot', ex: 'Mininu ta splika kuma el skese di panela pa un poku di tenpu.' },
+        { k: 'Mai ta ri i ta fla ka ta kontise ku tudu algen', e: 'mother laughing and saying it happens to everyone', ex: 'Mai ta ri i ta fla ka ta kontise ku tudu algen na primeru bes.' },
+        { k: 'Djuntu es ta laba panela ku txeu forsa', e: 'together they scrub the pot with a lot of effort', ex: 'Djuntu es ta laba panela ku txeu forsa pa tra tudu kel pretu.' },
+        { k: 'Mininu ta primeti kuzinha ku más atenson na próximu bes', e: 'child promising to cook more carefully next time', ex: 'Mininu ta primeti kuzinha ku más atenson na próximu bes ki mai sai.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -22886,6 +22904,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_cornpounding1','kr_cornbread1'] },
   { unit:'Unit 479 — A Goat Escaping Its Pen and Being Chased Around the Yard & The Goat Finally Cornered and Led Back to Its Pen', icon:'🐐', desc:'A Goat Escaping Its Pen and Being Chased Around the Yard vocabulary, and The Goat Finally Cornered and Led Back to Its Pen vocabulary',
     lessons:['kr_goatescape1','kr_goatcorner1'] },
+  { unit:'Unit 480 — Cooking Rice Alone for the First Time & Burning the Bottom of the Pot', icon:'🍚', desc:'Cooking Rice Alone for the First Time vocabulary, and Burning the Bottom of the Pot vocabulary',
+    lessons:['kr_cookrice1','kr_burntpot1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -41920,6 +41940,24 @@ const PT_LESSONS = [
         { k: 'cabra a ser levada de volta ao curral e trancada', e: 'goat being led back to the pen and locked in', ex: 'A cabra a ser levada de volta ao curral e trancada com uma corda nova.' },
         { k: 'criança a prender bem a porta do curral', e: 'child fastening the pen door tightly', ex: 'A criança a prender bem a porta do curral para a cabra não fugir mais.' },
     ]},
+  { id: 'pt_cookrice1', title: 'Cooking Rice Alone for the First Time', titleKriolu: 'Cozinhar Arroz Sozinho pela Primeira Vez', icon: '🍚', color: 'amber',
+    desc: 'Vocabulário de cozinhar arroz sozinho pela primeira vez', vocab: [
+        { k: 'criança a pôr água na panela para cozinhar o arroz', e: 'child putting water in the pot to cook rice', ex: 'A criança a pôr água na panela para cozinhar o arroz fazia-o pela primeira vez sozinha.' },
+        { k: 'criança a medir o arroz com um copo sem ajuda', e: 'child measuring the rice with a cup without help', ex: 'A criança a medir o arroz com um copo sem ajuda de ninguém sentia-se crescida.' },
+        { k: 'panela a começar a ferver no fogão quente', e: 'pot starting to boil on the hot stove', ex: 'A panela a começar a ferver no fogão quente ao fim de dez minutos.' },
+        { k: 'criança a esquecer-se de baixar o lume na hora certa', e: 'child forgetting to lower the heat at the right time', ex: 'A criança a esquecer-se de baixar o lume na hora certa distraiu-se com outra coisa.' },
+        { k: 'cheiro a queimado a chegar de repente à cozinha', e: 'smell of burning suddenly reaching the kitchen', ex: 'O cheiro a queimado a chegar de repente à cozinha fez a criança correr.' },
+        { k: 'fundo da panela a ficar preto de tanto queimar', e: 'bottom of the pot turning black from burning', ex: 'O fundo da panela a ficar preto de tanto queimar deixou o arroz por comer.' },
+    ]},
+  { id: 'pt_burntpot1', title: 'Burning the Bottom of the Pot', titleKriolu: 'O Fundo da Panela Queimado', icon: '🔥', color: 'red',
+    desc: 'Vocabulário do fundo da panela queimado', vocab: [
+        { k: 'criança a olhar para a panela com medo de ser repreendida', e: 'child looking at the pot afraid of being scolded', ex: 'A criança a olhar para a panela com medo de ser repreendida pela mãe.' },
+        { k: 'mãe a chegar e a sentir logo o cheiro a queimado', e: 'mother arriving and smelling the burning right away', ex: 'A mãe a chegar e a sentir logo o cheiro a queimado à porta de casa.' },
+        { k: 'criança a explicar como se esqueceu da panela', e: 'child explaining how he forgot about the pot', ex: 'A criança a explicar como se esqueceu da panela por um bocado.' },
+        { k: 'mãe a rir e a dizer que acontece a toda a gente', e: 'mother laughing and saying it happens to everyone', ex: 'A mãe a rir e a dizer que acontece a toda a gente na primeira vez.' },
+        { k: 'as duas a lavar a panela com muita força', e: 'together they scrub the pot with a lot of effort', ex: 'As duas a lavar a panela com muita força para tirar aquele preto todo.' },
+        { k: 'criança a prometer cozinhar com mais atenção da próxima vez', e: 'child promising to cook more carefully next time', ex: 'A criança a prometer cozinhar com mais atenção da próxima vez que a mãe saísse.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -42891,6 +42929,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_cornpounding1','pt_cornbread1'] },
   { unit:'Unidade 481 — Uma Cabra a Fugir do Curral e a Ser Perseguida no Quintal e A Cabra Finalmente Encurralada e Levada de Volta ao Curral', icon:'🐐', desc:'Vocabulário de uma cabra a fugir do curral e a ser perseguida no quintal, e vocabulário da cabra finalmente encurralada e levada de volta ao curral',
     lessons:['pt_goatescape1','pt_goatcorner1'] },
+  { unit:'Unidade 482 — Cozinhar Arroz Sozinho pela Primeira Vez e O Fundo da Panela Queimado', icon:'🍚', desc:'Vocabulário de cozinhar arroz sozinho pela primeira vez, e vocabulário do fundo da panela queimado',
+    lessons:['pt_cookrice1','pt_burntpot1'] },
 ];
 
 
