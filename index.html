@@ -24175,6 +24175,24 @@ const KR_LESSONS = [
         { k: 'El ta fla ki mel ta más dosi ki tudu ki el kunsi', e: 'he saying the honey is sweeter than anything he\'s known', ex: 'El ta fla ki mel ta más dosi ki tudu ki el kunsi antis.' },
         { k: 'Família ta poi mel na potu pa véndi na merkadu', e: 'family putting the honey into jars to sell at the market', ex: 'Família ta poi mel na potu pa véndi na merkadu di sábadu.' },
     ]},
+  { id: 'kr_carwashkids1', title: 'Children Washing a Neighbor\'s Car for Pocket Money', titleKriolu: 'Mininu Ta Laba Karu di Vizinhu pa Móda', icon: '🚗', color: 'sky',
+    desc: 'Children washing a neighbor\'s car for pocket money vocabulary', vocab: [
+        { k: 'Vizinhu ta pergunta kenha ta kre laba si karu suzu', e: 'neighbor asking who wants to wash his dirty car', ex: 'Vizinhu ta pergunta kenha ta kre laba si karu suzu di poera.' },
+        { k: 'Mininu ta korri buska bálde i sabon rápidu', e: 'children rushing to fetch a bucket and soap quickly', ex: 'Mininu ta korri buska bálde i sabon rápidu di kaza.' },
+        { k: 'Kada mininu ta risebe si própi trapu di limpesa', e: 'each child receiving their own cleaning rag', ex: 'Kada mininu ta risebe si própi trapu di limpesa ku txeu entuziasmu.' },
+        { k: 'El ta friga karu ku txeu forsa i dedikason', e: 'he scrubbing the car very hard and dedicated', ex: 'El ta friga karu ku txeu forsa i dedikason di primeru pásu.' },
+        { k: 'Sabon ta forma spuma branku riba di karu', e: 'the soap forming white foam all over the car', ex: 'Sabon ta forma spuma branku riba di karu di tudu ladu.' },
+        { k: 'Karu ta fika brilhanti dipos di óra di trabadju', e: 'the car ending up shining after an hour of work', ex: 'Karu ta fika brilhanti dipos di óra di trabadju di tudu mininu.' },
+    ]},
+  { id: 'kr_waterfightbreak1', title: 'A Water Fight Breaking Out Instead', titleKriolu: 'Un Lúta di Água Ta Kunsa nu Lugar', icon: '💦', color: 'emerald',
+    desc: 'A water fight breaking out instead vocabulary', vocab: [
+        { k: 'Un mininu ta poi mangueira na direson di otu ku risu', e: 'one child aiming the hose at another laughingly', ex: 'Un mininu ta poi mangueira na direson di otu ku risu grandi.' },
+        { k: 'Água ta bati na kara di otu mininu ku surpreza', e: 'the water hitting the other child\'s face in surprise', ex: 'Água ta bati na kara di otu mininu ku surpreza i grito.' },
+        { k: 'Tudu mininu ta abandona bálde pa lúta ku água', e: 'all the children abandoning the bucket for a water fight', ex: 'Tudu mininu ta abandona bálde pa lúta ku água ku txeu alegria.' },
+        { k: 'Vizinhu ta odja mininu koridu ku roupa moladu', e: 'the neighbor watching the children run around soaked', ex: 'Vizinhu ta odja mininu koridu ku roupa moladu ku txeu risu.' },
+        { k: 'Karu ta fika parsialmenti limpu na mei di kel bagunsa', e: 'the car ending up half-cleaned in the middle of the chaos', ex: 'Karu ta fika parsialmenti limpu na mei di kel bagunsa alegri.' },
+        { k: 'Vizinhu ta ri i ta pidi tudu mininu volta pa amanhan', e: 'the neighbor laughing and asking them all back tomorrow', ex: 'Vizinhu ta ri i ta pidi tudu mininu volta pa amanhan ku sorridu.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -26246,6 +26264,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_saltharvest1','kr_saltdry1'] },
   { unit:'Unit 647 — A Beekeeper Checking on a Backyard Hive & Harvesting Honey for the First Time', icon:'🐝', desc:'A Beekeeper Checking on a Backyard Hive vocabulary, and Harvesting Honey for the First Time vocabulary',
     lessons:['kr_beehive1','kr_honeyharvest1'] },
+  { unit:'Unit 648 — Children Washing a Neighbor\'s Car for Pocket Money & A Water Fight Breaking Out Instead', icon:'🚗', desc:'Children Washing a Neighbor\'s Car for Pocket Money vocabulary, and A Water Fight Breaking Out Instead vocabulary',
+    lessons:['kr_carwashkids1','kr_waterfightbreak1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -48304,6 +48324,24 @@ const PT_LESSONS = [
         { k: 'ela a dizer que o mel é mais doce do que tudo o que já conheceu', e: 'he saying the honey is sweeter than anything he\'s known', ex: 'Ela a dizer que o mel é mais doce do que tudo o que já conheceu antes.' },
         { k: 'família a colocar o mel em frascos para vender no mercado', e: 'family putting the honey into jars to sell at the market', ex: 'A família a colocar o mel em frascos para vender no mercado de sábado.' },
     ]},
+  { id: 'pt_carwashkids1', title: 'Children Washing a Neighbor\'s Car for Pocket Money', titleKriolu: 'Crianças a Lavar o Carro de um Vizinho por Uns Trocos', icon: '🚗', color: 'sky',
+    desc: 'Vocabulário de crianças a lavar o carro de um vizinho por uns trocos', vocab: [
+        { k: 'vizinho a perguntar quem quer lavar o seu carro sujo', e: 'neighbor asking who wants to wash his dirty car', ex: 'O vizinho a perguntar quem quer lavar o seu carro sujo de poeira.' },
+        { k: 'crianças a correr para buscar um balde e sabão depressa', e: 'children rushing to fetch a bucket and soap quickly', ex: 'As crianças a correr para buscar um balde e sabão depressa de casa.' },
+        { k: 'cada criança a receber o seu próprio pano de limpeza', e: 'each child receiving their own cleaning rag', ex: 'Cada criança a receber o seu próprio pano de limpeza, cheia de entusiasmo.' },
+        { k: 'ela a esfregar o carro com muita força e dedicação', e: 'he scrubbing the car very hard and dedicated', ex: 'Ela a esfregar o carro com muita força e dedicação desde o primeiro passo.' },
+        { k: 'sabão a formar espuma branca por cima do carro', e: 'the soap forming white foam all over the car', ex: 'O sabão a formar espuma branca por cima do carro, por todo o lado.' },
+        { k: 'carro a ficar brilhante depois de uma hora de trabalho', e: 'the car ending up shining after an hour of work', ex: 'O carro a ficar brilhante depois de uma hora de trabalho de todas as crianças.' },
+    ]},
+  { id: 'pt_waterfightbreak1', title: 'A Water Fight Breaking Out Instead', titleKriolu: 'Uma Luta de Água a Começar em Vez Disso', icon: '💦', color: 'emerald',
+    desc: 'Vocabulário de uma luta de água a começar em vez de lavar o carro', vocab: [
+        { k: 'uma criança a apontar a mangueira ao outro, a rir muito', e: 'one child aiming the hose at another laughingly', ex: 'Uma criança a apontar a mangueira ao outro, a rir muito.' },
+        { k: 'água a bater na cara da outra criança, de surpresa', e: 'the water hitting the other child\'s face in surprise', ex: 'A água a bater na cara da outra criança, de surpresa, com um grito.' },
+        { k: 'todas as crianças a abandonar o balde por uma luta de água', e: 'all the children abandoning the bucket for a water fight', ex: 'Todas as crianças a abandonar o balde por uma luta de água, cheias de alegria.' },
+        { k: 'vizinho a ver as crianças a correr todas encharcadas', e: 'the neighbor watching the children run around soaked', ex: 'O vizinho a ver as crianças a correr todas encharcadas, a rir muito.' },
+        { k: 'carro a ficar meio limpo no meio daquela bagunça alegre', e: 'the car ending up half-cleaned in the middle of the chaos', ex: 'O carro a ficar meio limpo no meio daquela bagunça tão alegre.' },
+        { k: 'vizinho a rir e a pedir a todas para voltarem amanhã', e: 'the neighbor laughing and asking them all back tomorrow', ex: 'O vizinho a rir e a pedir a todas para voltarem amanhã, com um sorriso.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -49611,6 +49649,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_saltharvest1','pt_saltdry1'] },
   { unit:'Unidade 649 — Um Apicultor a Verificar uma Colmeia no Quintal e A Colher Mel pela Primeira Vez', icon:'🐝', desc:'Vocabulário de um apicultor a verificar uma colmeia no quintal, e vocabulário de colher mel pela primeira vez',
     lessons:['pt_beehive1','pt_honeyharvest1'] },
+  { unit:'Unidade 650 — Crianças a Lavar o Carro de um Vizinho por Uns Trocos e Uma Luta de Água a Começar em Vez Disso', icon:'🚗', desc:'Vocabulário de crianças a lavar o carro de um vizinho por uns trocos, e vocabulário de uma luta de água a começar em vez de lavar o carro',
+    lessons:['pt_carwashkids1','pt_waterfightbreak1'] },
 ];
 
 
