@@ -24301,6 +24301,24 @@ const KR_LESSONS = [
         { k: 'Adolexenti ta spera na aeroportu ku txeu ansiedadi', e: 'the teenager waiting at the airport very anxiously', ex: 'Adolexenti ta spera na aeroportu ku txeu ansiedadi tê mai txiga.' },
         { k: 'Tudu ta risolve na último momentu ku txeu alívio', e: 'everything resolving at the last moment with great relief', ex: 'Tudu ta risolve na último momentu ku txeu alívio pa tudu jenti.' },
     ]},
+  { id: 'kr_wellrope1', title: 'A Child Learning to Draw Water from a Well with a Rope', titleKriolu: 'Mininu Ta Prende Tra Água di Poso ku Korda', icon: '🪣', color: 'stone',
+    desc: 'A child learning to draw water from a well with a rope vocabulary', vocab: [
+        { k: 'Avô ta mostra mininu kuma pa amara korda na bálde', e: 'grandfather showing the child how to tie the rope to the bucket', ex: 'Avô ta mostra mininu kuma pa amara korda na bálde ku nó forti.' },
+        { k: 'El ta splika kuma pa baxa bálde dévagar', e: 'he explaining how to lower the bucket slowly', ex: 'El ta splika kuma pa baxa bálde dévagar tê fundu di poso.' },
+        { k: 'Mininu ta odja bálde dizapareseba na skuridon', e: 'child watching the bucket disappear into the darkness', ex: 'Mininu ta odja bálde dizapareseba na skuridon di poso.' },
+        { k: 'El ta obi son di água kandu bálde ta txiga', e: 'he hearing the splash sound when the bucket reaches the water', ex: 'El ta obi son di água kandu bálde ta txiga na fundu.' },
+        { k: 'El ta kunsa puxa korda ku txeu forsa i kuidadu', e: 'he starting to pull the rope with great effort and care', ex: 'El ta kunsa puxa korda ku txeu forsa i kuidadu di primeru bes.' },
+        { k: 'Avô ta djuda mininu manten rítmu sertu di puxa', e: 'grandfather helping the child keep a steady rhythm of pulling', ex: 'Avô ta djuda mininu manten rítmu sertu di puxa korda.' },
+    ]},
+  { id: 'kr_bucketspill1', title: 'The Bucket Spilling Halfway Up', titleKriolu: 'Bálde Ta Spilha Água na Mei di Kaminhu', icon: '😅', color: 'red',
+    desc: 'The bucket spilling halfway up vocabulary', vocab: [
+        { k: 'Mininu ta puxa korda ku présa di más', e: 'child pulling the rope too fast', ex: 'Mininu ta puxa korda ku présa di más sen intende risku.' },
+        { k: 'Bálde ta bali di un ladu pa otu na mei di subida', e: 'the bucket swinging from side to side halfway up', ex: 'Bálde ta bali di un ladu pa otu na mei di subida di poso.' },
+        { k: 'Água ta spilha pa fora di bálde poku a poku', e: 'water spilling out of the bucket little by little', ex: 'Água ta spilha pa fora di bálde poku a poku ku kada bali.' },
+        { k: 'Mininu ta odja bálde txiga kuazi vazi na sima', e: 'child seeing the bucket arrive almost empty at the top', ex: 'Mininu ta odja bálde txiga kuazi vazi na sima ku desapontamentu.' },
+        { k: 'Avô ta ri suavi i ta splika kuma pa puxa más devagar', e: 'grandfather laughing gently and explaining how to pull more slowly', ex: 'Avô ta ri suavi i ta splika kuma pa puxa más devagar dinovu.' },
+        { k: 'Mininu ta tenta di nobu i ta konsigi trazi bálde xeiu', e: 'child trying again and managing to bring up a full bucket', ex: 'Mininu ta tenta di nobu i ta konsigi trazi bálde xeiu ku orgudju.' },
+    ]},
 ];
 
 // ═══════════════════════════════════════════
@@ -26386,6 +26404,8 @@ const KR_LEARNING_PATH = [
     lessons:['kr_brokenclock1','kr_clockmakerfix1'] },
   { unit:'Unit 654 — A Teenager Packing Their First Suitcase Alone & Forgetting Something Important', icon:'🧳', desc:'A Teenager Packing Their First Suitcase Alone vocabulary, and Forgetting Something Important vocabulary',
     lessons:['kr_firstsuitcase1','kr_suitcasepacking1'] },
+  { unit:'Unit 655 — A Child Learning to Draw Water from a Well with a Rope & The Bucket Spilling Halfway Up', icon:'🪣', desc:'A Child Learning to Draw Water from a Well with a Rope vocabulary, and The Bucket Spilling Halfway Up vocabulary',
+    lessons:['kr_wellrope1','kr_bucketspill1'] },
 ];
 
 // Flat ordered list of lesson IDs for the path (deduplicated)
@@ -48570,6 +48590,24 @@ const PT_LESSONS = [
         { k: 'adolescente a esperar no aeroporto muito ansioso', e: 'the teenager waiting at the airport very anxiously', ex: 'O adolescente a esperar no aeroporto muito ansioso até a mãe chegar.' },
         { k: 'tudo a resolver-se no último momento com muito alívio', e: 'everything resolving at the last moment with great relief', ex: 'Tudo a resolver-se no último momento com muito alívio para todos.' },
     ]},
+  { id: 'pt_wellrope1', title: 'A Child Learning to Draw Water from a Well with a Rope', titleKriolu: 'Uma Criança a Aprender a Tirar Água de um Poço com uma Corda', icon: '🪣', color: 'stone',
+    desc: 'Vocabulário de uma criança a aprender a tirar água de um poço com uma corda', vocab: [
+        { k: 'avô a mostrar à criança como amarrar a corda ao balde', e: 'grandfather showing the child how to tie the rope to the bucket', ex: 'O avô a mostrar à criança como amarrar a corda ao balde, com um nó forte.' },
+        { k: 'ele a explicar como baixar o balde devagar', e: 'he explaining how to lower the bucket slowly', ex: 'Ele a explicar como baixar o balde devagar até ao fundo do poço.' },
+        { k: 'criança a ver o balde desaparecer na escuridão', e: 'child watching the bucket disappear into the darkness', ex: 'A criança a ver o balde desaparecer na escuridão do poço.' },
+        { k: 'ela a ouvir o som da água quando o balde chega lá em baixo', e: 'he hearing the splash sound when the bucket reaches the water', ex: 'Ela a ouvir o som da água quando o balde chega lá em baixo, no fundo.' },
+        { k: 'ela a começar a puxar a corda com muito esforço e cuidado', e: 'he starting to pull the rope with great effort and care', ex: 'Ela a começar a puxar a corda com muito esforço e cuidado, pela primeira vez.' },
+        { k: 'avô a ajudar a criança a manter o ritmo certo de puxar', e: 'grandfather helping the child keep a steady rhythm of pulling', ex: 'O avô a ajudar a criança a manter o ritmo certo de puxar a corda.' },
+    ]},
+  { id: 'pt_bucketspill1', title: 'The Bucket Spilling Halfway Up', titleKriolu: 'O Balde a Entornar a Meio do Caminho', icon: '😅', color: 'red',
+    desc: 'Vocabulário do balde a entornar água a meio do caminho', vocab: [
+        { k: 'criança a puxar a corda depressa demais', e: 'child pulling the rope too fast', ex: 'A criança a puxar a corda depressa demais, sem perceber o risco.' },
+        { k: 'balde a balançar de um lado para o outro a meio da subida', e: 'the bucket swinging from side to side halfway up', ex: 'O balde a balançar de um lado para o outro a meio da subida do poço.' },
+        { k: 'água a entornar para fora do balde pouco a pouco', e: 'water spilling out of the bucket little by little', ex: 'A água a entornar para fora do balde pouco a pouco a cada balanço.' },
+        { k: 'criança a ver o balde chegar quase vazio lá acima', e: 'child seeing the bucket arrive almost empty at the top', ex: 'A criança a ver o balde chegar quase vazio lá acima, desiludida.' },
+        { k: 'avô a rir suavemente e a explicar como puxar mais devagar', e: 'grandfather laughing gently and explaining how to pull more slowly', ex: 'O avô a rir suavemente e a explicar como puxar mais devagar outra vez.' },
+        { k: 'criança a tentar outra vez e a conseguir trazer o balde cheio', e: 'child trying again and managing to bring up a full bucket', ex: 'A criança a tentar outra vez e a conseguir trazer o balde cheio, com orgulho.' },
+    ]},
 ];
 
 const PT_LEARNING_PATH = [
@@ -49891,6 +49929,8 @@ const PT_LEARNING_PATH = [
     lessons:['pt_brokenclock1','pt_clockmakerfix1'] },
   { unit:'Unidade 656 — Um Adolescente a Fazer a Sua Primeira Mala de Viagem Sozinho e A Esquecer-se de uma Coisa Importante', icon:'🧳', desc:'Vocabulário de um adolescente a fazer a sua primeira mala de viagem sozinho, e vocabulário de se esquecer de uma coisa importante ao viajar',
     lessons:['pt_firstsuitcase1','pt_suitcasepacking1'] },
+  { unit:'Unidade 657 — Uma Criança a Aprender a Tirar Água de um Poço com uma Corda e O Balde a Entornar a Meio do Caminho', icon:'🪣', desc:'Vocabulário de uma criança a aprender a tirar água de um poço com uma corda, e vocabulário do balde a entornar água a meio do caminho',
+    lessons:['pt_wellrope1','pt_bucketspill1'] },
 ];
 
 
