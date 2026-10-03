@@ -365,6 +365,25 @@
     .lab-pattern{font-family:'Bricolage Grotesque',sans-serif;font-size:1.25rem;font-weight:600;color:var(--ocean);margin-bottom:5px;letter-spacing:-.01em}
     [data-theme="dark"] .lab-pattern{color:var(--sky)}
     .lab-explain{font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.45}
+    .lab-why{font-size:.84rem;line-height:1.5;color:var(--text);background:var(--bg);border-radius:12px;padding:10px 12px;margin:0 0 12px}
+    .anat{margin-top:10px;text-align:left}
+    .anat-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
+    .anat-seg{--ac:var(--muted);background:var(--bg);border-radius:10px;padding:6px 9px 5px;border-bottom:3px solid var(--ac);min-width:0;max-width:100%}
+    .anat-words{font-weight:700;font-size:.9rem;color:var(--text);overflow-wrap:anywhere}
+    .anat-lbl{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ac);margin-top:2px}
+    .anat-who{--ac:#1B6B93}.anat-tense,.anat-aspect{--ac:#C2451A}.anat-not{--ac:#B42318}.anat-action{--ac:#12796F}
+    .anat-what{--ac:#5B3E96}.anat-where,.anat-to{--ac:#8A5A0B}.anat-how{--ac:#0E7490}.anat-when{--ac:#087083}.anat-joins{--ac:#5E6B78}
+    [data-theme="dark"] .anat-who{--ac:#6CC4F0}[data-theme="dark"] .anat-tense,[data-theme="dark"] .anat-aspect{--ac:#FF9466}
+    [data-theme="dark"] .anat-not{--ac:#FF7A7A}[data-theme="dark"] .anat-action{--ac:#3DDBB9}[data-theme="dark"] .anat-what{--ac:#C0AEFF}
+    [data-theme="dark"] .anat-where,[data-theme="dark"] .anat-to{--ac:#F5C063}[data-theme="dark"] .anat-how{--ac:#22D3EE}
+    [data-theme="dark"] .anat-when{--ac:#6EE7D7}[data-theme="dark"] .anat-joins{--ac:#A4B1BE}
+    .anat-en{font-size:.8rem;color:var(--muted);margin-top:8px;font-style:italic}
+    .anat-why{margin:10px 0 0;padding-left:18px;font-size:.83rem;line-height:1.5;color:var(--text)}
+    .anat-why li{margin-bottom:5px}
+    .anat-order{font-size:.74rem;color:var(--muted);margin-top:6px}
+    .anat-details{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 12px;margin-top:10px;text-align:left}
+    .anat-details summary{cursor:pointer;font-weight:750;font-size:.84rem;color:var(--ocean-2);list-style-position:inside}
+    [data-theme="dark"] .anat-details summary{color:var(--sky)}
     .lab-example{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--bg);border-radius:12px;margin-top:7px}
     .lab-mistake{display:flex;align-items:flex-start;gap:10px;border-left:3px solid var(--gold);background:#FFF8E7;border-radius:0 12px 12px 0;padding:12px 14px;margin-top:14px;font-size:.82rem;line-height:1.55;color:var(--text)}
     .lab-mistake-icon{font-size:.95rem;flex-shrink:0}
@@ -1526,6 +1545,7 @@
       <div class="translate-output" id="translate-output"></div>
       <div id="translate-variant" style="display:none;font-size:.72rem;color:var(--ocean-2);margin-top:6px"></div>
       <div class="translate-note" id="translate-note"></div>
+      <div id="translate-cache-note" style="font-size:.72rem;color:var(--muted);margin-top:6px"></div>
       <div class="translate-controls">
         <button class="mic-btn" id="trans-speak-btn" onclick="speakTranslation()" title="Listen">🔊</button>
         <button class="mic-btn" onclick="copyTranslation()" title="Copy">📋</button>
@@ -8178,7 +8198,7 @@ const KR_LESSONS = [
       { k: 'Kauza', e: 'Cause', ex: 'Kal e kauza di problema?' },
       { k: 'Sinhora', e: 'Lady / madam', ex: 'Sinhora sta sperandu.' },
       { k: 'Sangi', e: 'Blood', ex: 'Médiku meste di sangi.' },
-      { k: 'Kopu di agu', e: 'Glass of water', ex: 'N krê un kopu di agu.' },
+      { k: 'Kopu di agu', e: 'Glass of water', ex: 'N kre un kopu di agu.' },
       { k: 'Altura', e: 'Height', ex: 'Kal e bu altura?' },
       { k: 'Fin', e: 'End', ex: 'Nu txiga na fin di livru.' },
     ]
@@ -8404,7 +8424,7 @@ const KR_LESSONS = [
       { k: 'Dotor', e: 'doctor', ex: 'Dotor txiga.' },
       { k: 'Jeneral', e: 'general', ex: 'Jeneral da ordi.' },
       { k: 'Tenenti', e: 'lieutenant', ex: 'Tenenti ta komanda soldadu.' },
-      { k: 'Papia', e: 'to speak', ex: 'N krê papia ku bu.' },
+      { k: 'Papia', e: 'to speak', ex: 'N kre papia ku bu.' },
       { k: 'Spera', e: 'to wait / hope', ex: 'N ta spera li.' },
       { k: 'Pensa', e: 'to think', ex: 'N mesti pensa.' },
       { k: 'Enkontra', e: 'to find', ex: 'N ka ta konsigi enkontra txabi.' },
@@ -48769,6 +48789,10 @@ function tutorAvatar() { return langInfo().avatar || '🧔🏾'; }
 // Short English name of the course language, for UI text.
 function courseName() { return isPT() ? 'Portuguese' : 'Kriolu'; }
 
+// Spelling rules every AI request follows, so generated text matches the
+// spelling the lessons teach (Kriolu is written several ways in the wild).
+const KR_SPELLING_GUIDE = 'Write Kriolu in ALUPEC spelling exactly as this course does: k (never c or qu), s (never ç or ss), x for the "sh" sound, tx for "ch", dj for the "j" sound, nh and lh as in Portuguese, -on for the nasal ending (never -ão), and the final -u / -i of Santiago words (fidju, kaza, noti). "I" is always a capital N. Use Santiago (Badiu) grammar: the verb never changes, and ta, sta ta, dja or ka go in front of it.';
+const PT_SPELLING_GUIDE = 'Write European Portuguese as used in Portugal and Cape Verde, in current spelling: estar a + infinitive for ongoing actions (never the gerund), pronouns after the verb in plain statements (levanta-se), the article before possessives (o seu), and Portuguese vocabulary (autocarro, comboio, ecrã, telemóvel, pequeno-almoço) — never Brazilian forms.';
 function aiLang() {
   const PT = isPT();
   return {
@@ -48780,8 +48804,8 @@ function aiLang() {
       : 'You are Sôr António, a warm, encouraging Kriolu teacher from Santiago, Cape Verde.',
     culture: PT ? 'Portugal' : 'Cape Verde',
     note:    PT
-      ? 'Use European Portuguese (not Brazilian): tu/você forms, -mos endings, vocabulary and spelling as used in Portugal.'
-      : 'Use Kriolu of Santiago (Badiu) in ALUPEC-style spelling, as taught in this course.',
+      ? 'Use European Portuguese (not Brazilian): tu/você forms, -mos endings, vocabulary and spelling as used in Portugal. ' + PT_SPELLING_GUIDE
+      : 'Use Kriolu of Santiago (Badiu), as taught in this course. ' + KR_SPELLING_GUIDE,
   };
 }
 
@@ -53370,7 +53394,7 @@ function runStage(stage) {
         items = shuffle([...items, ...shuffle(reviewPool).slice(0, extra)]);
       }
     }
-    const pool = isSentence ? ['sentenceBuilder', 'fillBlank', 'markerDrill'] : poolForLesson(lessonPlan.lessonId);
+    const pool = isSentence ? (isPT() ? ['sentenceBuilder', 'fillBlank', 'structureDrill'] : ['sentenceBuilder', 'fillBlank', 'markerDrill', 'structureDrill']) : poolForLesson(lessonPlan.lessonId);
     const types = assignExerciseTypes(items.length, pool);
     state.session = {
       questions: items.map((item, i) => ({ item, type: types[i], lessonId: lessonPlan.lessonId })),
@@ -53495,6 +53519,7 @@ function renderStudyCard() {
       <div class="study-ex-label">Example</div>
       <div class="study-ex">${linkifyVerbs(w.ex)}</div>
       ${meaningLine(w, 'study-meaning')}
+      ${anatomyDetails(w, false, false)}
       <button class="study-speak small" onclick="userHasInteracted=true;speakText('${escapeJS(w.ex)}',this)">🔊 Hear example</button>
       <button class="study-speak small" style="opacity:.7" onclick="reportError('study')">🚩 Flag</button>
       ${getApiKey() ? `
@@ -53534,6 +53559,468 @@ function beginWordPractice() {
 // ── C. GRAMMAR SPOTLIGHT ──
 // One grammar point per lesson, taught with the lesson's own words ("focus on
 // form": tiny doses inside meaningful content, right when the learner needs it).
+// ── SENTENCE ANATOMY ──
+// Explains WHY a sentence is built the way it is, offline (no API key). Small
+// function-word lists give words a job (who / tense / action / where …), the
+// sentence is cut into those chunks, and rules that fire on it produce short
+// notes quoted from the sentence itself. Used by the Learn cards, the Sentence
+// Lab, answer feedback and the Grammar Spotlight.
+const ANAT_LABEL = { who:'who', tense:'tense', aspect:'-ing', not:'not', action:'action', what:'what', where:'where', to:'to / for', how:'how / with', when:'when', joins:'joins' };
+const KR_ANAT = {
+  pron: new Set(['n','mi','ami','bu','bo','abo','el','nu','nos','anos','nhos','abos','anhos','es','aés']),
+  poss: { si:'his / her / their', nha:'my', bu:'your', nos:'our', ses:'their', nhos:'your (plural)' },
+  det: new Set(['kel','kes','un','uns','tudu','kada','otu','kualker','algun','es','si','nha','bu','nos','ses','nhos','txeu','más','mas']),
+  place: new Set(['na','riba','dentu','pertu','frenti','dibaxu','atrás','trás','fora','longi','entri','djuntu','sobri']),
+  to: new Set(['pa']), how: new Set(['ku','sen']), whenPrep: new Set(['antis','dipos','duranti','ti','desdi']),
+  conj: new Set(['i','ma','ki','pamodi','nen']),
+  time: new Set(['oji','onti','amanhan','gosi','sempri','nunka','logu','sedu']),
+  timeNoun: new Set(['dia','manhan','tardi','noti','anu','simana','mes','bes','ora','momentu','tenpu']),
+  verbs: new Set(['bai','ben','txiga','sai','entra','ten','kre','sabe','gosta','mesti','pode','konxe','mora','fla','papia','fasi','faze','da','toma','odja','obi','kume','bebe','dormi','durmi','trabadja','studa','skrebe','lé','le','djuda','djobe','pensa','atxa','kumesa','kaba','fika','pasa','leba','traze','trazi','buska','ganha','perde','kunpra','vende','paga','sinti','kontinua','prende','abri','fitxa','lanta','senta','kore','anda','spera','txoma','txama']),
+  stative: new Set(['ten','kre','sabe','gosta','mesti','pode','konxe','mora','sta','e','é','atxa','sinti']),
+  num: new Set(['dos','dôs','tres','trés','kuatu','sinku','seis','seti','oitu','novi','dés','dez','vinti','sen']),
+  adj: new Set(['grandi','pikinoti','pikinu','nobu','novu','bedju','branku','pretu','burmedju','verdi','azul','amarelu','fresku','kenti','friu','bonitu','sabi','forti','altu','baxu','lentu','rápidu','koloridu','grosu','grossu','lebi','limpu','sudju','kalmu','suavi','stikadu','abertu','fitxadu','intiru','kontenti','tristi','kansadu','inportanti','spesial','únika','úniku','sertu','fundu','sabedu','diferenti','inesperadu','perfeitu','total','firmi']),
+};
+const PT_ANAT = {
+  pron: new Set(['eu','tu','ele','ela','nós','vós','eles','elas','você','vocês']),
+  art: { o:'m', a:'f', os:'mp', as:'fp', um:'m', uma:'f', uns:'mp', umas:'fp' },
+  det: new Set(['o','a','os','as','um','uma','uns','umas','este','esta','estes','estas','esse','essa','esses','essas','aquele','aquela','aqueles','aquelas','seu','sua','seus','suas','meu','minha','meus','minhas','teu','tua','teus','tuas','nosso','nossa','nossos','nossas','cada','todo','toda','todos','todas','outro','outra','outros','outras','muito','muita','muitos','muitas','pouco','pouca','poucos','poucas','vários','várias','algum','alguma','alguns','algumas','mais','menos','tão','bem']),
+  contr: { no:'em + o', na:'em + a', nos:'em + os', nas:'em + as', num:'em + um', numa:'em + uma', do:'de + o', da:'de + a', dos:'de + os', das:'de + as', dum:'de + um', duma:'de + uma', ao:'a + o', 'à':'a + a', aos:'a + os', 'às':'a + as', pelo:'por + o', pela:'por + a', pelos:'por + os', pelas:'por + as', neste:'em + este', nesta:'em + esta', nesse:'em + esse', nessa:'em + essa', naquele:'em + aquele', naquela:'em + aquela', deste:'de + este', desta:'de + esta', desse:'de + esse', dessa:'de + essa', daquele:'de + aquele', daquela:'de + aquela' },
+  prep: new Set(['em','de','com','para','por','sem','sobre','entre','até','contra','desde','após','antes','depois','dentro','perto','longe','fora','atrás','debaixo','durante','junto','frente','cima','através']),
+  place: new Set(['em','no','na','nos','nas','num','numa','dentro','perto','longe','fora','atrás','debaixo','sobre','entre','ao','à','aos','às','junto','pelo','pela','pelos','pelas','neste','nesta','nesse','nessa','naquele','naquela','através']),
+  to: new Set(['para']), how: new Set(['com','sem']), whenPrep: new Set(['antes','depois','durante','até','desde','após']),
+  conj: new Set(['e','mas','ou','que','porque','quando','enquanto','como','nem','onde']),
+  time: new Set(['hoje','ontem','amanhã','sempre','nunca','já','ainda','cedo','logo','agora']),
+  timeNoun: new Set(['manhã','tarde','noite','dia','dias','semana','semanas','ano','anos','mês','meses','vez','vezes','hora','horas','momento','verão','inverno','madrugada']),
+  finite: new Set(['é','são','era','eram','foi','foram','está','estão','estava','estavam','esteve','tem','têm','tinha','tinham','teve','vai','vão','ia','iam','há','havia','fica','ficam','ficou','ficava','faz','fazem','fazia','pode','podem','podia','deve','devem','quer','querem','queria','sou','estou','tenho','vou','posso','quero','gosto','gosta','precisa','precisava','precisam','consigo','percebo','sei','sabe']),
+  estar: new Set(['estar','está','estão','estava','estavam','esteve','estou','estamos','estás','ficar','fica','ficou','ficava','andar','anda','andava','continuar','continua','continuava','continuou']),
+  linkA: new Set(['começar','começa','começou','começava','voltar','volta','voltou','ajudar','ajuda','ajudava','ajudou','aprender','aprende','aprendeu','ensinar','ensina','ensinava','ensinou','passar','passou','passa','chegar','chegou','pôr-se','pôs-se','tornar','tornou']),
+  attract: new Set(['não','que','já','também','nunca','se','quando','onde','como','só','ainda','sempre','ninguém','nada','tudo']),
+  preAdj: new Set(['novo','nova','novos','novas','grande','grandes','pequeno','pequena','pequenos','pequenas','primeiro','primeira','primeiros','primeiras','último','última','últimos','últimas','bom','boa','bons','boas','mau','má','velho','velha','próprio','própria','mesmo','mesma','segundo','segunda','belo','bela','verdadeiro','verdadeira','antigo','antiga','único','única','longo','longa','breve','enorme']),
+  infStop: new Set(['lugar','mar','jantar','olhar','bar','par','colar','lar','altar','pilar','mulher','colher','prazer','ar','luar','sabor','calor','amor','flor','cor','dor','talher','qualquer','açúcar']),
+};
+const ANAT_CLITIC = /^(\p{L}+)-(se|me|te|nos|vos|lhe|lhes|o|a|os|as|lo|la|los|las)$/u;
+function anatTokens(sentence) {
+  return String(sentence || '').trim().split(/\s+/).filter(Boolean).map(raw => ({
+    raw,
+    w: raw.toLowerCase().normalize('NFC').replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ''),
+    comma: /[,;:—]$/.test(raw),
+  }));
+}
+// Cut role-tagged tokens into "who → tense → action → what → where …" chunks
+function anatSegments(toks) {
+  const ROLE_KIND = { subj:'who', tense:'tense', aspect:'aspect', not:'not', verb:'action', clitic:'action', conj:'joins' };
+  const segs = []; let cur = null;
+  const open = kind => { cur = { kind, toks: [] }; segs.push(cur); };
+  toks.forEach((t, i) => {
+    const prev = toks[i - 1];
+    const rk = ROLE_KIND[t.role];
+    if (rk) {
+      const glue = cur && cur.kind === rk && !(prev && prev.comma) && (rk !== 'action' || (prev && prev.role === 'clitic'));
+      if (!glue) open(rk);
+      cur.toks.push(t); return;
+    }
+    if (t.start) {
+      // "na frenti di…", "em frente…": a lone preposition joins the place phrase after it
+      if (!(cur && cur.kind === t.start && cur.toks.length === 1 && prev && prev.start)) open(t.start);
+      cur.toks.push(t); return;
+    }
+    const continuing = cur && !['tense','aspect','not','action','joins'].includes(cur.kind) && !(prev && prev.comma);
+    if (!continuing) open(segs.some(s => ['action','tense','aspect','not'].includes(s.kind)) ? 'what' : 'who');
+    cur.toks.push(t);
+  });
+  // A phrase with no verb at all is a thing being named, not a "who"
+  if (!segs.some(s => ['action','tense','aspect','not'].includes(s.kind))) segs.forEach(s => { if (s.kind === 'who') s.kind = 'what'; });
+  return segs;
+}
+const anatQ = s => `<b>${escapeHTML(s)}</b>`;
+const anatText = toks => toks.map(t => t.raw.replace(/[,;:.!?]+$/, '')).join(' ');
+
+function krAnatomy(sentence) {
+  const L = KR_ANAT, toks = anatTokens(sentence), n = toks.length;
+  const fn = w => L.pron.has(w) || L.det.has(w) || L.place.has(w) || L.to.has(w) || L.how.has(w) || L.whenPrep.has(w)
+    || L.conj.has(w) || L.time.has(w) || ['ta','sta','sa','dja','ka','di','e','é'].includes(w);
+  const isMk = i => toks[i] && (['ta','dja','ka'].includes(toks[i].w) || (['sta','sa'].includes(toks[i].w) && toks[i + 1] && toks[i + 1].w === 'ta'));
+  for (let i = 0; i < n;) {
+    if (!isMk(i)) { i++; continue; }
+    let j = i;
+    while (j < n && isMk(j)) {
+      const t = toks[j];
+      if (t.w === 'ka') t.role = 'not';
+      else if (t.w === 'sta' || t.w === 'sa') { t.role = 'tense'; toks[j + 1].role = 'tense'; j++; }
+      else t.role = 'tense';
+      j++;
+    }
+    if (j < n && !fn(toks[j].w)) toks[j].role = 'verb';
+    i = j + 1;
+  }
+  toks.forEach(t => { if (!t.role && ['sta','e','é'].includes(t.w)) t.role = 'verb'; });
+  // No marker at all: "N bai", "El kre…" — the bare verb follows the pronoun
+  let bare = false;
+  if (!toks.some(t => t.role === 'verb')) {
+    if (toks[0] && L.pron.has(toks[0].w) && toks[1] && !fn(toks[1].w)) { toks[1].role = 'verb'; bare = true; }
+    else {
+      const b = toks.findIndex((t, i) => i > 0 && L.verbs.has(t.w) && !fn(toks[i - 1].w) && !toks[i - 1].comma);
+      if (b > 0) { toks[b].role = 'verb'; bare = true; }
+    }
+  }
+  toks.forEach((t, i) => {
+    const next = toks[i + 1];
+    if (!t.role && L.pron.has(t.w) && next && ['tense','not','verb'].includes(next.role)) t.role = 'subj';
+    if (t.role) return;
+    if (L.conj.has(t.w)) t.role = 'conj';
+    else if (L.place.has(t.w)) t.start = 'where';
+    else if (L.to.has(t.w)) t.start = 'to';
+    else if (L.how.has(t.w)) t.start = 'how';
+    else if (L.whenPrep.has(t.w) || L.time.has(t.w)) t.start = 'when';
+    else if (['kel','tudu','kada','es','otu'].includes(t.w) && next && L.timeNoun.has(next.w)) t.start = 'when';
+  });
+  const segs = anatSegments(toks), W = toks.map(t => t.w), out = [];
+  const verb = toks.find(t => t.role === 'verb' && !['sta','e','é'].includes(t.w));
+  const vRaw = verb ? verb.raw.replace(/[,;:.!?]+$/, '') : '';
+  const pastBa = verb && /^\p{L}{3,}ba$/u.test(verb.w) && !['kaba','pruba','proba','djuba'].includes(verb.w);
+  const tense = segs.find(s => s.kind === 'tense');
+  if (tense && verb) {
+    const m = tense.toks.map(t => t.w).join(' ');
+    const means = { 'ta':'a habit, or an action that isn\'t finished — in a description like this it shows the action going on, which English says with "-ing"',
+      'sta ta':'happening right now, like English "is …-ing"', 'sa ta':'happening right now, like English "is …-ing"', 'dja':'already done' }[m] || 'the time of the action';
+    if (pastBa && m === 'ta') out.push(`${anatQ('ta ' + vRaw)}: ${anatQ('ta')} + a verb ending in ${anatQ('-ba')} = something that used to happen, or was going on, in the past ("used to …" / "was …-ing"). The -ba moves the whole action back in time.`);
+    else out.push(`${anatQ(m)} sits in front of ${anatQ(vRaw)} and carries the time: ${means}. The verb itself never changes — no -s, -ed or -ing endings.`);
+  } else if (bare && verb) {
+    out.push(L.stative.has(verb.w)
+      ? `No marker before ${anatQ(vRaw)}: verbs of state like <i>ten</i>, <i>kre</i> and <i>sabe</i> mean "now" on their own (<i>N kre</i> = I want).`
+      : `No marker before ${anatQ(vRaw)}: an action verb on its own means it already happened (<i>N bai</i> = I went).`);
+  }
+  if (W.includes('ka')) out.push(`${anatQ('ka')} = not. It always comes first, before the verb and any other marker${W.includes('ta') ? ' (<i>ka ta</i>, never <i>ta ka</i>)' : ''}.`);
+  const first = toks[0];
+  if (first && first.role === 'subj' && first.w === 'n') out.push(`${anatQ('N')} = I. It's always written as a capital N.`);
+  else if (first && first.role === 'subj' && first.w === 'el') out.push(`${anatQ(first.raw)} = he, she or it — Kriolu pronouns don't show gender.`);
+  else if (first && segs[0] && segs[0].kind === 'who' && !fn(first.w) && !first.comma && !L.verbs.has(first.w) && segs[1] && ['tense','not','action'].includes(segs[1].kind) && /^\p{Lu}/u.test(first.raw)) out.push(`${anatQ(anatText(segs[0].toks))} has no word for "the" in front: Kriolu leaves the article out when it's clear who is meant.`);
+  for (let i = 0; i < n - 1; i++) {
+    const t = toks[i], nx = toks[i + 1];
+    if (t.role || !L.poss[t.w] || fn(nx.w)) continue;
+    out.push(`${anatQ(t.raw + ' ' + nx.raw)}: ${anatQ(t.w)} (${L.poss[t.w]}) goes before the noun and never changes — Kriolu nouns have no gender for it to agree with.`); break;
+  }
+  const di = toks.findIndex((t, i) => t.w === 'di' && i > 0 && i < n - 1 && !fn(toks[i - 1].w) && !fn(toks[i + 1].w));
+  if (di > 0) out.push(`${anatQ(toks[di - 1].raw + ' di ' + toks[di + 1].raw.replace(/[,;:.!?]+$/, ''))}: the thing comes first and ${anatQ('di')} adds what it belongs to — English often flips this order (<i>kaza di Maria</i> = Maria's house).`);
+  const pdi = toks.findIndex((t, i) => L.place.has(t.w) && t.w !== 'na' && toks[i + 1] && toks[i + 1].w === 'di');
+  if (pdi >= 0) out.push(`${anatQ(toks[pdi].raw + ' di')}: place words connect to the place with ${anatQ('di')} (<i>riba di mesa</i> = on the table).`);
+  if (W.includes('na')) out.push(`${anatQ('na')} covers English "in", "at" and "on" — one word for location.`);
+  if (W.includes('pa')) out.push(`${anatQ('pa')} = to / for. Before a verb it means "in order to", and that verb takes no marker (<i>pa seka</i> = to dry).`);
+  const ku = W.indexOf('ku');
+  if (ku >= 0 && W[ku + 1] === 'txeu' && toks[ku + 2]) out.push(`${anatQ('ku txeu ' + toks[ku + 2].raw.replace(/[,;:.!?]+$/, ''))} = "with a lot of …": Kriolu often says HOW with ${anatQ('ku')} + a noun where English uses an adverb (<i>ku txeu kuidadu</i> = very carefully).`);
+  else if (ku >= 0) out.push(`${anatQ('ku')} = with (between two nouns it can also mean "and").`);
+  const pl = toks.findIndex((t, i) => (['tudu','kada'].includes(t.w) || L.num.has(t.w)) && toks[i + 1] && !fn(toks[i + 1].w) && !L.timeNoun.has(toks[i + 1].w));
+  if (pl >= 0) out.push(`${anatQ(toks[pl].raw + ' ' + toks[pl + 1].raw.replace(/[,;:.!?]+$/, ''))}: no plural -s on the noun — ${anatQ(toks[pl].w)} already tells you how many.`);
+  const adj = toks.findIndex((t, i) => i > 0 && L.adj.has(t.w) && !toks[i - 1].role && !fn(toks[i - 1].w));
+  if (adj > 0) out.push(`${anatQ(toks[adj - 1].raw + ' ' + toks[adj].raw.replace(/[,;:.!?]+$/, ''))}: the describing word comes after the noun, and it doesn't change for gender or plural.`);
+  const kel = toks.findIndex((t, i) => t.w === 'kel' && toks[i + 1]);
+  if (kel >= 0) out.push(`${anatQ('kel ' + toks[kel + 1].raw.replace(/[,;:.!?]+$/, ''))}: ${anatQ('kel')} = "that / the" for something specific or already mentioned.`);
+  const iv = toks.findIndex((t, i) => t.w === 'i' && toks[i + 1] && ['tense','not'].includes(toks[i + 1].role));
+  if (iv >= 0) out.push(`${anatQ('i')} joins two actions, and each verb keeps its own marker.`);
+  if (/\?\s*$/.test(sentence) && W.includes('ki')) out.push(`Question word + ${anatQ('ki')}, then the sentence in its normal order — nothing is swapped around like English "do you…".`);
+  else if (W.includes('ki')) out.push(`${anatQ('ki')} links a whole clause, like English "that / who / which".`);
+  const last = segs[segs.length - 1];
+  if (last && last.kind === 'when' && segs.length > 2) out.push(`${anatQ(anatText(last.toks))}: time phrases go at the end (or the very start) of the sentence, as in English.`);
+  return { toks, segs, notes: out.slice(0, 5) };
+}
+
+function ptGerund(inf) {
+  const m = inf.match(ANAT_CLITIC), base = m ? m[1] : inf, cl = m ? '-' + m[2] : '';
+  const g = base === 'pôr' ? 'pondo' : base.replace(/ar$/, 'ando').replace(/er$/, 'endo').replace(/ir$/, 'indo');
+  return g + cl;
+}
+function ptIsInf(w) {
+  const m = w.match(ANAT_CLITIC), base = m ? m[1] : w;
+  return /^\p{L}{2,}(ar|er|ir)$/u.test(base) && !PT_ANAT.infStop.has(base);
+}
+function ptAnatomy(sentence) {
+  const L = PT_ANAT, toks = anatTokens(sentence), n = toks.length;
+  const fn = w => L.det.has(w) || !!L.contr[w] || L.prep.has(w) || L.conj.has(w) || L.pron.has(w) || L.time.has(w) || w === 'não' || w === 'se';
+  let hasVerb = false;
+  toks.forEach((t, i) => {
+    const prev = toks[i - 1], next = toks[i + 1];
+    if (t.role) return;
+    if (t.w === 'não') { t.role = 'not'; return; }
+    if (t.w === 'a' && next && ptIsInf(next.w)) {
+      const link = prev && (L.linkA.has(prev.w) || prev.role === 'verb') && !L.estar.has(prev.w);
+      t.role = link ? 'conj' : 'aspect'; t.linkA = link; next.role = 'verb'; hasVerb = true; return;
+    }
+    if (ptIsInf(t.w) && prev && (L.prep.has(prev.w) || prev.w === 'ao')) { t.role = 'verb2'; return; }
+    if (['se','me','te','lhe','lhes'].includes(t.w) && prev && L.attract.has(prev.w) && next && !fn(next.w)) { t.role = 'clitic'; next.role = 'verb'; hasVerb = true; return; }
+    if (ANAT_CLITIC.test(t.w)) { t.role = 'verb'; hasVerb = true; return; }
+    if (L.finite.has(t.w) && !(prev && (L.det.has(prev.w) || L.contr[prev.w]))) { t.role = 'verb'; hasVerb = true; return; }
+    if (!hasVerb && i > 0 && prev && !L.det.has(prev.w) && !L.contr[prev.w] && !L.prep.has(prev.w) && !L.art[prev.w]) {
+      const strong = /^\p{L}{3,}(ava|avam|aram|eram|iram|ou|eu|iu)$/u.test(t.w);
+      const weak = /^\p{L}{3,}(ia|iam|am)$/u.test(t.w) && (!next || fn(next.w));
+      const pres = /^\p{L}{3,}[ae]$/u.test(t.w) && next && L.art[next.w] && toks[i - 2] && L.art[toks[i - 2].w] && !L.preAdj.has(t.w);
+      if (strong || weak || pres) { t.role = 'verb'; hasVerb = true; }
+    }
+  });
+  toks.forEach((t, i) => {
+    const next = toks[i + 1], next2 = toks[i + 2];
+    if (!t.role && L.pron.has(t.w) && next && ['verb','aspect','not','clitic'].includes(next.role)) t.role = 'subj';
+    if (t.role) return;
+    if (L.conj.has(t.w) && i > 0) t.role = 'conj';
+    else if ((['de','à','ao'].includes(t.w)) && next && L.timeNoun.has(next.w)) t.start = 'when';
+    else if (['nesse','nessa','naquele','naquela','neste','nesta'].includes(t.w) && next && L.timeNoun.has(next.w)) t.start = 'when';
+    else if (['todos','todas'].includes(t.w) && next && L.art[next.w] && next2 && L.timeNoun.has(next2.w)) t.start = 'when';
+    else if (L.place.has(t.w) && i > 0) t.start = 'where';
+    else if (L.to.has(t.w)) t.start = 'to';
+    else if (L.how.has(t.w)) t.start = 'how';
+    else if (L.whenPrep.has(t.w) || L.time.has(t.w)) t.start = 'when';
+  });
+  const segs = anatSegments(toks), W = toks.map(t => t.w), out = [];
+  const a = toks.findIndex(t => t.role === 'aspect' || t.linkA);
+  if (a >= 0) {
+    const v = toks[a + 1].raw.replace(/[,;:.!?]+$/, ''), prev = toks[a - 1];
+    if (toks[a].linkA) out.push(`${anatQ(prev.raw + ' a ' + v)}: verbs like começar, continuar and voltar join the next verb with ${anatQ('a')}, and that verb stays in the infinitive.`);
+    else if (prev && L.estar.has(prev.w)) out.push(`${anatQ(prev.raw + ' a ' + v)} = "is …-ing". Portugal builds the "-ing" form with estar ${anatQ('a')} + infinitive (Brazil says <i>${escapeHTML(ptGerund(v.toLowerCase()))}</i>).`);
+    else out.push(`${anatQ('a ' + v)} = "…-ing". Portugal says what is happening with (estar) ${anatQ('a')} + infinitive; in a caption like this the <i>está</i> is simply left out. Brazil would say <i>${escapeHTML(ptGerund(v.toLowerCase()))}</i>.`);
+  }
+  const cl = toks.find(t => ANAT_CLITIC.test(t.w));
+  const pro = toks.findIndex(t => t.role === 'clitic');
+  if (cl) out.push(`${anatQ(cl.raw.replace(/[,;:.!?]+$/, ''))}: in Portugal the pronoun goes after the verb, joined with a hyphen. It moves in front only after words like não, que, já, também or se.`);
+  else if (pro > 0) out.push(`${anatQ(toks[pro - 1].raw + ' ' + toks[pro].raw + ' ' + (toks[pro + 1] ? toks[pro + 1].raw.replace(/[,;:.!?]+$/, '') : ''))}: here the pronoun comes before the verb because ${anatQ(toks[pro - 1].w)} pulls it forward.`);
+  const contr = [...new Map(toks.filter(t => L.contr[t.w] && !(t.w === 'nos' && toks.indexOf(t) === 0)).map(t => [t.w, t])).values()].slice(0, 3);
+  if (contr.length) out.push(`${contr.map(t => anatQ(t.w) + ' = ' + L.contr[t.w]).join(', ')}: a preposition always fuses with the article after it — "em a" or "de o" is never written. The ending still shows the noun's gender and number.`);
+  const pa = toks.findIndex((t, i) => L.art[t.w] && toks[i + 1] && ['seu','sua','seus','suas','meu','minha','meus','minhas','teu','tua','nosso','nossa','nossos','nossas'].includes(toks[i + 1].w) && toks[i + 2]);
+  if (pa >= 0) out.push(`${anatQ(toks[pa].raw + ' ' + toks[pa + 1].raw + ' ' + toks[pa + 2].raw.replace(/[,;:.!?]+$/, ''))}: in Portugal the possessive normally has the article in front, and it agrees with the thing owned, not with the owner.`);
+  else {
+    const gp = [];
+    toks.forEach((t, i) => {
+      const nx = toks[i + 1];
+      const noun = nx && L.preAdj.has(nx.w) ? toks[i + 2] : nx;
+      if (gp.length < 2 && L.art[t.w] && !t.role && noun && !fn(noun.w) && !noun.role && !ptIsInf(noun.w) && !(toks[i - 1] && toks[i - 1].w === 'cada') && !gp.some(g => L.art[g[0].w][0] === L.art[t.w][0]))
+        gp.push([t, noun === nx ? nx : { raw: nx.raw + ' ' + noun.raw }]);
+    });
+    if (gp.length) out.push(`${gp.map(([t, nx]) => anatQ(t.raw.toLowerCase() + ' ' + nx.raw.replace(/[,;:.!?]+$/, '')) + ' (' + (L.art[t.w][0] === 'm' ? 'masculine' : 'feminine') + ')').join(' and ')}: every noun has a gender, and the article — and any describing word — matches it.`);
+  }
+  const adj = toks.findIndex((t, i) => {
+    if (i < 2 || t.role || fn(t.w)) return false;
+    const art = L.art[toks[i - 2].w]; if (!art || toks[i - 2].role || fn(toks[i - 1].w) || toks[i - 1].role || L.preAdj.has(toks[i - 1].w) || (toks[i - 3] && toks[i - 3].w === 'cada')) return false;
+    const end = { m:/o$/, f:/a$/, mp:/os$/, fp:/as$/ }[art];
+    return end.test(t.w) && t.w.length > 3;
+  });
+  if (adj > 0) out.push(`${anatQ(toks[adj - 1].raw + ' ' + toks[adj].raw.replace(/[,;:.!?]+$/, ''))}: the describing word usually comes after the noun and takes its gender and number (-o/-a, -os/-as).`);
+  const pi = toks.findIndex(t => t.role === 'verb2');
+  if (pi > 0) out.push(`${anatQ(toks[pi - 1].raw + ' ' + toks[pi].raw.replace(/[,;:.!?]+$/, ''))}: after a preposition Portuguese uses the infinitive, where English uses "-ing" or "to".`);
+  const com = W.indexOf('com');
+  if (com >= 0 && toks[com + 1] && ['muito','muita','muitos','muitas'].includes(W[com + 1]) && toks[com + 2]) out.push(`${anatQ(anatText(toks.slice(com, com + 3)))}: Portuguese often says HOW with ${anatQ('com')} + a noun, where English uses an adverb (<i>com muito cuidado</i> = very carefully).`);
+  const mu = toks.findIndex((t, i) => ['muita','muitas','muitos'].includes(t.w) && toks[i + 1]);
+  if (mu >= 0) out.push(`${anatQ(toks[mu].raw + ' ' + toks[mu + 1].raw.replace(/[,;:.!?]+$/, ''))}: when muito means "much / many" it agrees with the noun; before an adjective it never changes (<i>muito cansada</i>).`);
+  const tg = sentence.match(/\b(toda a gente|todos os dias|todas as semanas|todas as noites|todos os anos)\b/i);
+  if (tg) out.push(`${anatQ(tg[1].toLowerCase())}: Portuguese keeps the article between <i>todo</i> and the noun (<i>toda a gente</i> = everyone, <i>todos os dias</i> = every day).`);
+  const ns = toks.findIndex((t, i) => ['nesse','nessa','naquele','naquela'].includes(t.w) && toks[i + 1] && L.timeNoun.has(toks[i + 1].w));
+  if (ns >= 0) out.push(`${anatQ(toks[ns].raw + ' ' + toks[ns + 1].raw.replace(/[,;:.!?]+$/, ''))} = ${L.contr[toks[ns].w]}: "that …", pointing back to a time already in the story.`);
+  if (W.includes('não')) out.push(`${anatQ('não')} goes straight before the verb${pro > 0 ? ' — and pulls any pronoun in front with it' : ''}.`);
+  return { toks, segs, notes: out.slice(0, 5) };
+}
+
+function sentenceAnatomy(sentence) {
+  const s = String(sentence || '').trim();
+  if (!s || s.split(/\s+/).length < 2) return null;
+  return isPT() ? ptAnatomy(s) : krAnatomy(s);
+}
+function anatomyHTML(sentence, en) {
+  const a = sentenceAnatomy(sentence);
+  if (!a) return '';
+  const chain = a.segs.map(sg => `<div class="anat-seg anat-${sg.kind}"><div class="anat-words">${escapeHTML(sg.toks.map(t => t.raw).join(' '))}</div><div class="anat-lbl">${ANAT_LABEL[sg.kind]}</div></div>`).join('');
+  const order = a.segs.filter((s, i, arr) => i === 0 || arr[i - 1].kind !== s.kind).map(s => ANAT_LABEL[s.kind]).join(' → ');
+  return `<div class="anat"><div class="anat-chain">${chain}</div>
+    ${en ? `<div class="anat-en">🇬🇧 ${escapeHTML(en)}</div>` : ''}
+    ${a.notes.length ? `<ul class="anat-why">${a.notes.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
+    <div class="anat-order">Order: ${order}</div></div>`;
+}
+// Collapsible "why" panel for any vocab item with a real example sentence
+function anatomyDetails(item, open, withEnglish) {
+  const ex = item && item.ex;
+  if (!ex || ex.trim().split(/\s+/).length < 3) return '';
+  if (typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(item.k)) return '';
+  const body = anatomyHTML(ex, withEnglish ? exTranslation(item) : '');
+  if (!body) return '';
+  return `<details class="anat-details"${open ? ' open' : ''}><summary>🧩 Why is it built this way?</summary>${body}</details>`;
+}
+
+// ── STRUCTURE TOPICS ──
+// One rule per topic, with the reason behind it and a drill that blanks the
+// exact word the rule is about. Lessons without a hand-written Grammar
+// Spotlight get one of these, picked from what their own sentences use.
+const anatFind = (ex, re) => { const m = String(ex || '').match(re); return m; };
+const anatBlank = (ex, m, len) => ex.slice(0, m.index) + '_____' + ex.slice(m.index + len);
+const WB = '(?<![\\p{L}\\p{N}])', WE = '(?![\\p{L}\\p{N}])';
+function krPrepDrill(targets) {
+  const MEAN = { di:'of / \'s', na:'in / at / on', pa:'to / for', ku:'with' };
+  return ex => {
+    const m = anatFind(ex, new RegExp(WB + '(' + targets.join('|') + ')' + WE + ' \\p{L}', 'u'));
+    if (!m || m.index === 0) return null;
+    return { blanked: anatBlank(ex, m, m[1].length), answer: m[1], options: ['di','na','pa','ku'].map(t => ({ t, note: MEAN[t] })) };
+  };
+}
+const KR_TOPICS = [
+  { id:'markers', title:'The tense markers: ta, sta ta, dja, ka',
+    explain:'Kriolu verbs never change form. A small word in front of the verb carries the time: <b>ta</b> (habit or unfinished), <b>sta ta</b> (right now), <b>dja</b> (already), <b>ka</b> (not).',
+    why:'Like many creole languages — and the West African languages spoken by Kriolu\'s first speakers — Kriolu marks time with separate words instead of verb endings. The verb comes from Portuguese, but it was kept in one form, so the marker does the work English does with -s, -ed and -ing.',
+    mistake:'Don\'t change the verb itself — and keep <b>ka</b> first: <i>ka ta</i>, never <i>ta ka</i>.',
+    test: ex => !!findMarker(ex), drill: null },
+  { id:'possessive', title:'Possessives go first and never change',
+    explain:'<b>nha</b> (my), <b>bu</b> (your), <b>si</b> (his / her / their) and <b>nos</b> (our) go before the noun and stay the same for every noun.',
+    why:'Kriolu nouns have no grammatical gender, so there is nothing for the possessive to agree with — unlike Portuguese <i>meu / minha</i>.',
+    mistake:'Don\'t add an article or put it after the noun: <i>nha mai</i>, not "a nha mai" or "mai nha".',
+    test: ex => new RegExp(WB + '(si|nha|ses)' + WE + ' \\p{L}', 'iu').test(ex),
+    drill: ex => {
+      const m = anatFind(ex, new RegExp(WB + '(si|nha|nos|ses)' + WE + ' (?!ta' + WE + '|ka' + WE + '|sta' + WE + ')\\p{L}', 'u'));
+      if (!m) return null;
+      return { blanked: anatBlank(ex, m, m[1].length), answer: m[1], options: [['nha','my'],['bu','your'],['si','his / her / their'],['nos','our']].map(([t, note]) => ({ t, note })) };
+    } },
+  { id:'di', title:'di links a thing to its owner or whole',
+    explain:'<b>X di Y</b> = "the X of Y" or "Y\'s X": <i>kaza di Maria</i> = Maria\'s house, <i>kantu di prasa</i> = the corner of the square.',
+    why:'Kriolu has no "\'s" ending. The thing you\'re talking about comes first, and <b>di</b> introduces what it belongs to or is part of — the same order as Portuguese <i>de</i>.',
+    mistake:'Don\'t use English order: "Maria kaza" doesn\'t work — say <i>kaza di Maria</i>.',
+    test: ex => new RegExp('\\p{L} di \\p{L}', 'u').test(ex), drill: krPrepDrill(['di']) },
+  { id:'na_pa', title:'na = in / at / on · pa = to / for',
+    explain:'One word, <b>na</b>, covers English "in", "at" and "on". <b>pa</b> means "to" or "for" — and before a verb, "in order to".',
+    why:'Kriolu keeps a small set of prepositions and lets the context do the rest, where English splits location into in, at and on.',
+    mistake:'Don\'t look for separate words for in, at and on — <i>na kaza</i>, <i>na mesa</i>, <i>na skola</i> all use na.',
+    test: ex => new RegExp(WB + '(na|pa) \\p{L}', 'u').test(ex), drill: krPrepDrill(['na','pa']) },
+  { id:'ku', title:'ku + a noun says HOW',
+    explain:'<b>ku txeu kuidadu</b> = "with a lot of care" = very carefully. <b>ku</b> also means "with", and "and" between two nouns.',
+    why:'Kriolu often prefers <b>ku</b> + a noun to an adverb, so English "-ly" words usually become <b>ku</b> + the noun they come from.',
+    mistake:'Don\'t translate "-ly" word by word — reach for <i>ku</i> + a noun.',
+    test: ex => new RegExp(WB + 'ku \\p{L}', 'u').test(ex), drill: krPrepDrill(['ku']) },
+];
+const PT_TOPICS = [
+  { id:'aspect', title:'a + infinitive = "-ing"',
+    explain:'Portugal says what is happening with <b>estar a</b> + infinitive: <i>está a montar</i> = "is setting up". In captions and descriptions the <i>está</i> is often dropped: <i>o fotógrafo a montar…</i>',
+    why:'European Portuguese replaced the gerund (<i>montando</i>) with <b>a</b> + infinitive in everyday speech, while Brazil kept the gerund. Both are understood, but in Portugal and Cape Verde the <b>a</b> form is the norm.',
+    mistake:'Don\'t write <i>montando</i> — and don\'t drop the <b>a</b>: "o fotógrafo montar" is incomplete.',
+    test: ex => ptAnatomy(ex).toks.some(t => t.role === 'aspect'),
+    drill: ex => {
+      const a = ptAnatomy(ex), i = a.toks.findIndex(t => t.role === 'aspect');
+      if (i < 0) return null;
+      const v = a.toks[i + 1].raw.replace(/[,;:.!?]+$/, ''), phrase = 'a ' + v, m = anatFind(ex, new RegExp(WB + 'a ' + v.replace(/[-]/g, '\\-') + WE, 'u'));
+      if (!m) return null;
+      const g = ptGerund(v);
+      return { blanked: anatBlank(ex, m, phrase.length), answer: phrase, options: [{ t: phrase, note:'Portugal' }, { t: g, note:'gerund' }, { t: v, note:'infinitive alone' }, { t: 'a ' + g, note:'a + gerund' }] };
+    } },
+  { id:'contr', title:'Prepositions fuse with the article',
+    explain:'<b>em</b>, <b>de</b>, <b>a</b> and <b>por</b> merge with o / a / os / as: <i>na</i> (em + a), <i>do</i> (de + o), <i>ao</i> (a + o), <i>pela</i> (por + a).',
+    why:'The fused form is obligatory, and its ending still shows the gender and number of the noun — so you have to know whether the noun is masculine or feminine to choose it.',
+    mistake:'Never write "em a praça" or "de o fotógrafo" — it must be <i>na praça</i>, <i>do fotógrafo</i>.',
+    test: ex => new RegExp(WB + '(no|na|nos|nas|do|da|dos|das|ao|aos|pelo|pela|pelos|pelas)' + WE, 'u').test(ex),
+    drill: ex => {
+      const FAM = [['no','na','nos','nas'], ['do','da','dos','das'], ['ao','à','aos','às'], ['pelo','pela','pelos','pelas']];
+      const m = anatFind(ex, new RegExp('(?<=\\p{L}[,]? )(no|na|nos|nas|do|da|dos|das|ao|aos|pelo|pela|pelos|pelas)' + WE + ' \\p{L}', 'u'));
+      if (!m) return null;
+      const fam = FAM.find(f => f.includes(m[1]));
+      return { blanked: anatBlank(ex, m, m[1].length), answer: m[1], options: fam.map(t => ({ t, note: PT_ANAT.contr[t] })) };
+    } },
+  { id:'possart', title:'o seu, a sua — possessives take the article',
+    explain:'In Portugal a possessive normally comes with the article: <i>o seu tripé</i>, <i>a sua máquina</i>, <i>os seus filhos</i>.',
+    why:'<b>seu / sua</b> agrees with the thing owned, not with the owner: a man\'s camera is still <i>a sua máquina</i>, because <i>máquina</i> is feminine.',
+    mistake:'Don\'t drop the article (that\'s Brazilian style), and don\'t make it agree with the owner.',
+    test: ex => new RegExp(WB + '(o seu|a sua|os seus|as suas)' + WE, 'iu').test(ex),
+    drill: ex => {
+      const m = anatFind(ex, new RegExp(WB + '(o seu|a sua|os seus|as suas)' + WE, 'u'));
+      if (!m) return null;
+      return { blanked: anatBlank(ex, m, m[1].length), answer: m[1], options: ['o seu','a sua','os seus','as suas'].map(t => ({ t, note: '' })) };
+    } },
+  { id:'gender', title:'Articles agree with the noun',
+    explain:'Every noun is masculine or feminine, singular or plural. The article and any describing word match it: <i>o envelope branco</i>, <i>a foto revelada</i>, <i>as pedras brancas</i>.',
+    why:'Portuguese inherited grammatical gender from Latin. Matching endings tie the words of a phrase together, so the listener knows which words belong to which noun.',
+    mistake:'Learn each noun with its article (<i>a foto</i>, <i>o mapa</i>) — the -o / -a ending is a guide, not a guarantee.',
+    test: ex => ptAnatomy(ex).notes.some(n => /masculine|feminine/.test(n)),
+    drill: ex => {
+      const a = ptAnatomy(ex);
+      const i = a.toks.findIndex((t, j) => ['o','os','as'].includes(t.w) && !t.role && a.toks[j + 1] && !a.toks[j + 1].role && !PT_ANAT.det.has(a.toks[j + 1].w) && !ptIsInf(a.toks[j + 1].w));
+      if (i < 0) return null;
+      let pos = 0; for (let j = 0; j < i; j++) pos = ex.indexOf(a.toks[j].raw, pos) + a.toks[j].raw.length;
+      const at = ex.indexOf(a.toks[i].raw, pos);
+      if (at < 0) return null;
+      const ans = a.toks[i].raw;
+      return { blanked: ex.slice(0, at) + '_____' + ex.slice(at + ans.length), answer: ans.toLowerCase(), options: ['o','a','os','as'].map(t => ({ t, note: { o:'masc.', a:'fem.', os:'masc. plural', as:'fem. plural' }[t] })) };
+    } },
+  { id:'clitic', title:'The pronoun goes after the verb',
+    explain:'In ordinary statements Portugal attaches the pronoun after the verb with a hyphen: <i>levanta-se</i>, <i>chamo-me</i>, <i>ajudá-la</i>.',
+    why:'Words like <b>não</b>, <b>que</b>, <b>já</b>, <b>também</b> and <b>se</b> pull the pronoun in front (<i>não se levanta</i>); without one of them it stays after the verb.',
+    mistake:'Don\'t start a statement with the pronoun ("Se levanta cedo") — that\'s Brazilian. Say <i>Levanta-se cedo</i>.',
+    test: ex => anatTokens(ex).some(t => ANAT_CLITIC.test(t.w)),
+    drill: ex => {
+      const toks = anatTokens(ex), i = toks.findIndex((t, j) => ANAT_CLITIC.test(t.w) && /^(se|me|te|lhe)$/.test(t.w.match(ANAT_CLITIC)[2]) && !(toks[j - 1] && ['para','de','sem','por','que','não','já','também','se'].includes(toks[j - 1].w)));
+      if (i < 0) return null;
+      const word = toks[i].raw.replace(/[,;:.!?]+$/, ''), m = word.match(/^(.+)-(\p{L}+)$/u), at = ex.indexOf(word);
+      if (!m || at < 0) return null;
+      return { blanked: ex.slice(0, at) + '_____' + ex.slice(at + word.length), answer: word, options: [{ t: word, note:'Portugal' }, { t: m[2] + ' ' + m[1], note:'pronoun first' }] };
+    } },
+  { id:'prepinf', title:'Preposition + infinitive',
+    explain:'After <b>para</b>, <b>antes de</b>, <b>depois de</b>, <b>sem</b> and <b>ao</b>, Portuguese uses the infinitive where English uses "-ing" or "to": <i>antes de dormir</i> = before sleeping.',
+    why:'The infinitive is the verb\'s "name" form, and it is the form that follows a preposition. The gerund (<i>dormindo</i>) can\'t go there.',
+    mistake:'Don\'t use the gerund after a preposition: <i>antes de dormir</i>, not "antes de dormindo".',
+    test: ex => ptAnatomy(ex).toks.some(t => t.role === 'verb2'),
+    drill: ex => {
+      const m = anatFind(ex, new RegExp(WB + '(para|de|sem|ao) (\\p{L}{2,}?(?:ar|er|ir))' + WE, 'u'));
+      if (!m || PT_ANAT.infStop.has(m[2])) return null;
+      const at = m.index + m[1].length + 1, inf = m[2];
+      const pres = inf.replace(/ar$/, 'a').replace(/(er|ir)$/, 'e');
+      return { blanked: ex.slice(0, at) + '_____' + ex.slice(at + inf.length), answer: inf, options: [{ t: inf, note:'infinitive' }, { t: ptGerund(inf), note:'gerund' }, { t: pres, note:'present' }] };
+    } },
+];
+function structureTopics() { return isPT() ? PT_TOPICS : KR_TOPICS; }
+function anatHash(s) { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; }
+// The rule this lesson's own sentences use most; rotated by lesson id among
+// the well-represented ones, so neighbouring lessons don't all repeat one rule.
+function spotlightTopic(lesson) {
+  const topics = structureTopics();
+  const sents = (lesson.vocab || []).map(v => v.ex).filter(ex => ex && ex.split(/\s+/).length >= 3);
+  const scored = topics.map(t => ({ t, n: sents.filter(ex => { try { return t.test(ex); } catch (e) { return false; } }).length }));
+  const good = scored.filter(s => s.n >= 3);
+  if (good.length) return good[anatHash(lesson.id) % good.length].t;
+  const best = scored.slice().sort((a, b) => b.n - a.n)[0];
+  return best && best.n ? best.t : topics[0];
+}
+// A blank-the-structure question for one sentence: the given topic first,
+// else any topic that has a drill for it (rotated per sentence for variety).
+function structureDrillFor(ex, topicId) {
+  const topics = structureTopics().filter(t => t.drill);
+  const pref = topics.find(t => t.id === topicId);
+  const start = anatHash(ex) % (topics.length || 1);
+  const order = pref ? [pref] : topics.slice(start).concat(topics.slice(0, start));
+  for (const t of order) {
+    let d = null;
+    try { d = t.drill(ex); } catch (e) { d = null; }
+    if (d && d.options.some(o => o.t === d.answer)) return { ...d, topicId: t.id };
+  }
+  return null;
+}
+function renderStructureDrill(q, container) {
+  const d = q.drill || (q.drill = structureDrillFor(q.item.ex || '', q.topicId));
+  if (!d) { renderFillBlank(q, container); return; }
+  const topic = structureTopics().find(t => t.id === d.topicId);
+  const opts = shuffle([...d.options]);
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🧩 Structure Check</div>
+    <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">${escapeHTML(topic ? topic.title : 'Which form fits?')}</div>
+    <div class="exercise-word" style="font-size:1.2rem">${escapeHTML(d.blanked)}</div>
+    ${meaningLine(q.item, 'sd-meaning')}
+    <div class="choices-grid" style="grid-template-columns:1fr">${opts.map(o =>
+      `<button class="choice-btn" data-t="${escapeHTML(o.t)}" onclick="sdAnswer(this)"><b>${escapeHTML(o.t)}</b>${o.note ? ' — ' + escapeHTML(o.note) : ''}</button>`).join('')}</div>
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    </div><div id="feedback-area"></div>`;
+}
+function sdAnswer(btn) {
+  if (state.awaitingNext) return;
+  state.awaitingNext = true;
+  const q = state.session.questions[state.qIndex], d = q.drill;
+  lastUserAnswer = btn.dataset.t;
+  const ok = btn.dataset.t === d.answer;
+  document.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; if (b.dataset.t === d.answer && !ok) b.classList.add('reveal-correct'); });
+  btn.classList.add(ok ? 'selected-correct' : 'selected-wrong');
+  if (ok) { state.score++; recordWordResult(q.item, true); playSound('correct'); }
+  else { recordWordResult(q.item, false); playSound('wrong'); loseLife(); }
+  const topic = structureTopics().find(t => t.id === d.topicId);
+  showFeedback(ok, ok ? '' : `Correct: <em>${escapeHTML(d.answer)}</em>`);
+  const bar = document.querySelector('#feedback-area .feedback-bar');
+  if (bar && topic) bar.insertAdjacentHTML('afterend', `<div class="skill-why ${ok ? 'correct' : 'wrong'}"><div class="skill-why-label">Why</div><div class="skill-why-text">${topic.why}</div></div>`);
+}
+
 const KR_GRAMMAR_SPOTLIGHTS = {
   greetings:      { title:'sta = "to be" (how you are)', explain:'Use <b>sta</b> for states and feelings — how someone IS right now. Pattern: person + sta + state.', examples:[['N sta dretu.','I am fine.'],['Kuma bu sta?','How are you?'],['El sta kansadu.','He is tired.']], mistake:'Don\'t reach for <b>e</b> here — that one is for identity. "N e dretu" would mean <i>I am a fine person</i>.' },
   introductions:  { title:'e = "to be" (who you are)', explain:'Use <b>e</b> for identity — names, origins, professions. <b>sta</b> is for states; <b>e</b> is for who/what something IS.', examples:[['Nha nomi e Maria.','My name is Maria.'],['N e di Kabu Verdi.','I am from Cape Verde.'],['El e nha mai.','She is my mother.']], mistake:'Don\'t reach for <b>sta</b> here — that one is for states and feelings, not identity.' },
@@ -53550,15 +54037,16 @@ const KR_GRAMMAR_SPOTLIGHTS = {
 };
 function getSpotlight(lesson) {
   if (GRAMMAR_SPOTLIGHTS[lesson.id]) return GRAMMAR_SPOTLIGHTS[lesson.id];
-  // Generic fallback: teach the tense markers using this lesson's own sentences
-  const own = lesson.vocab.filter(v => findMarker(v.ex)).slice(0, 3)
-    .map(v => [v.ex, v.e]);
-  return {
-    title: 'The 4 magic markers',
-    explain: 'Kriolu verbs never change — the little words before them do all the work: <b>ta</b> (habit), <b>sta ta</b> (right now), <b>dja</b> (already), <b>ka</b> (not).',
-    examples: own.length ? own : [['N ta papia Kriolu.','I speak Kriolu.'],['N sta ta prende.','I am learning right now.'],['N dja odja.','I already saw.']],
-    mistake: 'Don\'t mix markers — each one does a different job, and the verb itself never changes.'
-  };
+  // Generic fallback: the structure rule this lesson's own sentences use most
+  // (language-aware, so Portuguese lessons never get the Kriolu markers).
+  const topic = spotlightTopic(lesson);
+  const own = lesson.vocab.filter(v => v.ex && v.ex.split(/\s+/).length >= 3 && (() => { try { return topic.test(v.ex); } catch (e) { return false; } })())
+    .slice(0, 3).map(v => [v.ex, exTranslation(v) || v.e]);
+  const fallback = isPT()
+    ? [['O fotógrafo a montar o tripé na praça.','The photographer setting up the tripod in the square.']]
+    : [['N ta papia Kriolu.','I speak Kriolu.'],['N sta ta prende.','I am learning right now.'],['N dja odja.','I already saw.']];
+  return { title: topic.title, explain: topic.explain, why: topic.why, mistake: topic.mistake, topicId: topic.id,
+    examples: own.length ? own : fallback };
 }
 function renderGrammarSpotlight(stage) {
   /* spotlight examples already carry translations */
@@ -53576,20 +54064,33 @@ function renderGrammarSpotlight(stage) {
           <button class="speak-btn" style="margin:0;font-size:.95rem" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>
           <div><div style="font-weight:700">${linkifyVerbs(k)}</div><div style="font-size:.8rem;color:var(--muted)">${escapeHTML(e)}</div></div>
         </div>`).join('')}
+      ${sp.why ? `<div class="lab-why"><b>Why is it like this?</b> ${sp.why}</div>` : ''}
       ${sp.mistake ? `<div class="lab-mistake"><span class="lab-mistake-icon">⚠️</span><span>${sp.mistake}</span></div>` : ''}
+      ${sp.examples[0] && sp.examples[0][0].split(/\s+/).length >= 3 ? `<details class="anat-details"><summary>🧩 Take the first example apart</summary>${anatomyHTML(sp.examples[0][0], '')}</details>` : ''}
     </div>
     <button class="lab-continue" onclick="spotlightDrill()">Try it — quick drill →</button>`;
 }
 function spotlightDrill() {
   // A 4-question check of the grammar point, using the lesson's own sentences
   const lesson = lessonPlan.lesson;
-  let pool = lesson.vocab.filter(v => findMarker(v.ex));
-  if (pool.length < 2) pool = lesson.vocab.filter(v => v.ex && v.ex.split(' ').length >= 3);
-  const items = shuffle([...pool]).slice(0, 4);
+  // Drill the exact rule the spotlight taught when it has a drill; otherwise
+  // the tense markers (Kriolu) or any structure check (Portuguese).
+  const sp = getSpotlight(lesson);
+  const topic = sp.topicId && structureTopics().find(t => t.id === sp.topicId && t.drill);
+  let items, types;
+  if (topic) {
+    items = shuffle(lesson.vocab.filter(v => v.ex && structureDrillFor(v.ex, topic.id))).slice(0, 4);
+    types = items.map(() => 'structureDrill');
+  }
+  if (!items || items.length < 2) {
+    let pool = isPT() ? [] : lesson.vocab.filter(v => findMarker(v.ex));
+    if (pool.length < 2) pool = lesson.vocab.filter(v => v.ex && v.ex.split(' ').length >= 3);
+    items = shuffle([...pool]).slice(0, 4);
+    types = assignExerciseTypes(items.length, isPT() ? ['structureDrill', 'fillBlank'] : ['markerDrill', 'fillBlank']);
+  }
   if (!items.length) { completeStage(); return; }
-  const types = assignExerciseTypes(items.length, ['markerDrill', 'fillBlank']);
   state.session = {
-    questions: items.map((item, i) => ({ item, type: types[i], lessonId: lessonPlan.lessonId })),
+    questions: items.map((item, i) => ({ item, type: types[i], lessonId: lessonPlan.lessonId, topicId: types[i] === 'structureDrill' && topic ? topic.id : null })),
     lessonId: lessonPlan.lessonId, lessonTitle: lessonPlan.lesson.title, staged: true
   };
   state.qIndex = 0; state.awaitingNext = false;
@@ -53651,7 +54152,7 @@ const KR_SENTENCE_PATTERNS = {
     { pattern: 'R vs RR — and the borrowed letters', en: 'A single R starts words; RR marks the strong rolled R inside them (karru = car, karu = expensive). C, Q and W are not native Kriolu letters — they appear only in foreign names, loanwords, and acronyms.',
       examples: [['karru (car) / karu (expensive)','R at word start: rua (street)'], ['Loanwords only: C, Q, W','e.g. "Wi-Fi", names like "Quim"']] },
     { pattern: 'Capital N = "I"', en: 'A lone capital N is always the pronoun "I", no matter how it\'s pronounced or which island\'s Creole you use.',
-      examples: [['N sta li. (I am here.)','N krê (I want)'], ['N ten sodadi (I miss/long)','']] },
+      examples: [['N sta li. (I am here.)','N kre (I want)'], ['N ten sodadi (I miss/long)','']] },
   ],
   casual_talk: [
     { pattern: 'Manera + [mano/mana]?', en: 'The most common casual greeting — like "what\'s up, bro?"',
@@ -53706,8 +54207,8 @@ const KR_SENTENCE_PATTERNS = {
       examples: [['Kantu ku é?','How much is it?'], ['Kantu pesoa?','How many people?']] },
   ],
   food: [
-    { pattern: 'N krê + [food]', en: 'Order or express wanting food with "N krê" (I want).',
-      examples: [['N krê un katxupa.','I want a cachupa.'], ['N krê agu, pur favor.','I want water, please.']] },
+    { pattern: 'N kre + [food]', en: 'Order or express wanting food with "N kre" (I want).',
+      examples: [['N kre un katxupa.','I want a cachupa.'], ['N kre agu, pur favor.','I want water, please.']] },
     { pattern: 'N gosta di + [food]', en: 'Say what you like to eat.',
       examples: [['N gosta di pexi.','I like fish.'], ['N gosta di kafé.','I like coffee.']] },
     { pattern: 'Kantu ku é + [food]?', en: 'Ask the price of food.',
@@ -53721,14 +54222,44 @@ const KR_SENTENCE_PATTERNS = {
   ],
 };
 
-// Generic fallback patterns that work for any vocabulary lesson
+// Patterns for lessons without hand-written ones, read off the lesson's own
+// sentences: sentences with the same chunk shape share a pattern, so every
+// example shown is a real, correct sentence from the lesson.
 function genericPatterns(lesson) {
-  const v = lesson.vocab.filter(w => w.k && w.e);
+  const groups = new Map();
+  (lesson.vocab || []).forEach(v => {
+    if (!v.ex || v.ex.split(/\s+/).length < 3) return;
+    const a = sentenceAnatomy(v.ex);
+    if (!a || !a.segs.some(sg => ['action','tense','aspect'].includes(sg.kind))) return;
+    const parts = [];
+    a.segs.forEach(sg => {
+      const lit = ['tense','not','joins','aspect'].includes(sg.kind);
+      const head = sg.toks[0], startWord = head.start && ['where','to','how'].includes(sg.kind) ? head.w + ' ' : '';
+      const p = lit ? sg.toks.map(t => t.w).join(' ') : `${startWord}[${ANAT_LABEL[sg.kind]}]`;
+      if (parts[parts.length - 1] !== p) parts.push(p);
+    });
+    const key = parts.join(' + ');
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push({ v, a });
+  });
+  const shaped = [...groups.entries()].sort((x, y) => y[1].length - x[1].length).slice(0, 3).map(([pattern, list]) => ({
+    pattern,
+    en: list.length > 1 ? `${list.length} sentences in this lesson follow this shape.` : 'A sentence shape from this lesson.',
+    why: list[0].a.notes[0] || '',
+    examples: list.slice(0, 2).map(({ v }) => [v.ex, exTranslation(v) || v.e]),
+  }));
+  if (shaped.length || isPT()) return shaped;
+  return krTemplatePatterns(lesson);
+}
+// Last resort for word-list lessons with no example sentences (Kriolu only)
+function krTemplatePatterns(lesson) {
+  const v = lesson.vocab.filter(w => w.k && w.e && w.k.split(/\s+/).length <= 2);
+  if (!v.length) return [];
   const pick = i => (v[i % v.length] || { k:'', e:'' });
   const lc = s => (s || '').toLowerCase();
   return [
-    { pattern: 'N krê + [word]', en: 'Use "N krê" (I want) before a word to express a need or desire.',
-      examples: [[`N krê ${lc(pick(0).k)}.`, `I want ${lc(pick(0).e)}.`]] },
+    { pattern: 'N kre + [word]', en: 'Use "N kre" (I want) before a word to express a need or desire.',
+      examples: [[`N kre ${lc(pick(0).k)}.`, `I want ${lc(pick(0).e)}.`]] },
     { pattern: 'Undi ki + [word] + sta?', en: 'Ask where something is with "Undi ki … sta?"',
       examples: [[`Undi ki ${lc(pick(1).k)} sta?`, `Where is ${lc(pick(1).e)}?`]] },
     { pattern: 'N gosta di + [word]', en: 'Say what you like with "N gosta di".',
@@ -53752,7 +54283,23 @@ function renderSentenceLab(lessonId) {
 }
 
 function renderLabPatterns(lesson, patterns, container) {
-  const intro = `Before practicing words, learn how to <b>build sentences</b> with them. Master these patterns and you can create your own Kriolu — the path to real fluency. 🗝️`;
+  const intro = `Before practicing words, learn how to <b>build sentences</b> with them — and why they're built that way. Master these patterns and you can create your own ${escapeHTML(courseName())}. 🗝️`;
+  // Anatomy card: the lesson sentence with the most to explain, taken apart
+  let sample = null, best = -1;
+  (lesson.vocab || []).forEach(v => {
+    if (!v.ex || v.ex.split(/\s+/).length < 4) return;
+    const a = sentenceAnatomy(v.ex), score = a ? a.notes.length * 10 + a.segs.length : -1;
+    if (score > best) { best = score; sample = v; }
+  });
+  const anatCard = sample ? `<div class="lab-card">
+      <div class="lab-pattern">🔬 Anatomy of a sentence</div>
+      <div class="lab-explain">Each colour is one job in the sentence. Read the notes to see why the words sit where they do.</div>
+      <div class="lab-example">
+        <button class="lab-speak" onclick="userHasInteracted=true;speakText('${escapeJS(sample.ex)}',this)">🔊</button>
+        <div><div class="lab-ex-k">${escapeHTML(sample.ex)}</div></div>
+      </div>
+      ${anatomyHTML(sample.ex, exTranslation(sample) || '')}
+    </div>` : '';
   const cards = patterns.map((p, i) => {
     const exHTML = (p.examples || []).map(([k, e]) => `
       <div class="lab-example">
@@ -53762,12 +54309,13 @@ function renderLabPatterns(lesson, patterns, container) {
     return `<div class="lab-card" style="animation-delay:${i*0.06}s">
       <div class="lab-pattern">${escapeHTML(p.pattern)}</div>
       <div class="lab-explain">${escapeHTML(p.en)}</div>
+      ${p.why ? `<div class="lab-why">💡 ${p.why}</div>` : ''}
       ${exHTML}
     </div>`;
   }).join('');
   container.innerHTML = `
     <div class="lab-intro">${intro}</div>
-    <div class="lab-cards">${cards}</div>
+    <div class="lab-cards">${anatCard}${cards}</div>
     <div class="lab-tip">💡 Tip: tap 🔊 to hear each example. Try saying them aloud before moving on.</div>
     <button class="lab-continue" onclick="beginWordPractice()">Got it — now apply it →</button>
   `;
@@ -53842,6 +54390,7 @@ function renderQuestion() {
   else if (q.type === 'speaking') renderSpeaking(q, content);
   else if (q.type === 'sentenceBuilder') renderSentenceBuilder(q, content);
   else if (q.type === 'markerDrill') renderMarkerDrill(q, content);
+  else if (q.type === 'structureDrill') renderStructureDrill(q, content);
   else if (q.type === 'grammarChoice') renderGrammarChoice(q, content);
   else renderFlashcard(q, content);
 }
@@ -54758,14 +55307,7 @@ function checkSentence() {
     document.getElementById('sb-answer').style.borderColor = 'var(--wrong)';
     showFeedback(false, `Correct: <em>${escapeHTML(sbState.target)}</em>${sbMeaningNote() ? '<br>' + sbMeaningNote() : ''}`);
   }
-  // Kriolu sentences built around a tense marker (ta/sta ta/dja/ka) get a
-  // one-line grammar note — reuses the same MARKER_INFO glosses as the
-  // marker-drill legend, so no new content to maintain.
-  const mk = (typeof isPT !== 'function' || !isPT()) && findMarker(sbState.target);
-  if (mk) {
-    const bar = document.querySelector('#feedback-area .feedback-bar');
-    if (bar) bar.insertAdjacentHTML('afterend', `<div class="skill-why ${isCorrect ? 'correct' : 'wrong'}"><div class="skill-why-label">Grammar note</div><div class="skill-why-text"><b>${escapeHTML(mk)}</b> — ${escapeHTML(MARKER_INFO[mk] || '')}</div></div>`);
-  }
+  // The structure panel (added by showFeedback) explains the word order.
 }
 
 // — Word Matching —
@@ -54843,7 +55385,7 @@ function matchSelect(idx, side, btn) {
 // On-demand, cached explanations: why an answer was wrong, extra examples,
 // usage context, and word-by-word sentence breakdowns. Each is generated ONCE
 // per word (cached locally like the TTS audio), so repeats are instant & free.
-const ANTONIO_SYS_KR = "You are Sôr António, a warm Cape Verdean Kriolu tutor (Santiago/Badiu variety). Answer in English with Kriolu examples where helpful. Plain text only, no markdown. Be brief and encouraging.";
+const ANTONIO_SYS_KR = "You are Sôr António, a warm Cape Verdean Kriolu tutor (Santiago/Badiu variety). Answer in English with Kriolu examples where helpful. Plain text only, no markdown. Be brief and encouraging. " + KR_SPELLING_GUIDE;
 const ANTONIO_SYS_PT = "You are Sôr António, a warm tutor from Cape Verde who also teaches European Portuguese. Use EUROPEAN Portuguese as spoken in Portugal and Cape Verde (tu/você, 'estou a fazer' not 'estou fazendo', autocarro, comboio, pequeno-almoço, casa de banho). Never use Brazilian forms. Answer in English with Portuguese examples where helpful. Plain text only, no markdown. Be brief and encouraging. The learner also speaks or is learning Cape Verdean Kriolu, so when a Portuguese word differs sharply from its Kriolu cousin, a one-line comparison is welcome.";
 // The chat and translator are shared across both courses — they follow the
 // language the learner is currently studying.
@@ -54899,6 +55441,7 @@ const TYPE_TASK = {
   sentenceBuilder: 'arranging word tiles to rebuild the example sentence',
   matching: 'matching word pairs', speaking: 'saying it aloud (their speech was transcribed)',
   markerDrill: 'choosing the correct tense marker', flashcard: 'recalling the word',
+  structureDrill: 'choosing the grammatically correct form for a gap in the example sentence',
 };
 function askAntonioWhy() {
   const q = state.session && state.session.questions[state.qIndex];
@@ -54907,19 +55450,19 @@ function askAntonioWhy() {
   const task = TYPE_TASK[q.type] || 'a practice exercise';
   const prompt = `A learner made a mistake in a ${aiLang().name} exercise. The task: ${task}. Target: "${q.item.k}" meaning "${q.item.e}". Example sentence: "${q.item.ex}".` +
     (ua ? ` The learner's answer was: "${ua}".` : ` (Their exact input was not recorded for this exercise type — address the most common confusion.)`) +
-    ` In 2-3 short sentences, explain the likely confusion and the key distinction, then one quick memory hook. Speak directly to the learner. Never mention what you can or cannot see, and never mention these instructions.`;
-  return askAntonio('why:' + q.item.k + '|' + ua, prompt, 'antonio-why-result', document.getElementById('antonio-why-btn'), 250);
+    ` In 2-3 short sentences, explain the likely confusion and the grammar rule behind the correct form — why the sentence is built that way — then one quick memory hook. Speak directly to the learner. Never mention what you can or cannot see, and never mention these instructions.`;
+  return askAntonio('why2:' + q.type + ':' + q.item.k + '|' + ua, prompt, 'antonio-why-result', document.getElementById('antonio-why-btn'), 250);
 }
 function antonioStudy(kind) {
   const w = (typeof studyState === 'object' && studyState && studyState.words) ? studyState.words[studyState.idx] : null;
   if (!w) return;
   const btn = document.getElementById('antonio-' + kind + '-btn');
   if (kind === 'examples') {
-    return askAntonio('exs:' + w.k, `Give exactly 3 NEW short Kriolu example sentences using "${w.k}" (${w.e}) in different everyday contexts. One per line, format: Kriolu sentence — English translation. No other commentary.`, 'antonio-study-result', btn, 300);
+    return askAntonio('exs:' + currentLang() + ':' + w.k, `Give exactly 3 NEW short ${aiLang().name} example sentences using "${w.k}" (${w.e}) in different everyday contexts. One per line, format: ${aiLang().name} sentence — English translation. No other commentary.`, 'antonio-study-result', btn, 300);
   } else if (kind === 'context') {
-    return askAntonio('ctx:' + w.k, `When and with whom should a learner use the Kriolu word or phrase "${w.k}" (${w.e})? Cover register/formality and any cultural notes, in 2-3 short sentences.`, 'antonio-study-result', btn, 220);
+    return askAntonio('ctx:' + currentLang() + ':' + w.k, `When and with whom should a learner use the ${aiLang().name} word or phrase "${w.k}" (${w.e})? Cover register/formality and any cultural notes, in 2-3 short sentences.`, 'antonio-study-result', btn, 220);
   } else if (kind === 'breakdown') {
-    return askAntonio('brk:' + w.ex, `Break down this Kriolu sentence word by word with an English gloss for each ("word — gloss", one per line), then the full natural translation on a final line: "${w.ex}"`, 'antonio-study-result', btn, 350);
+    return askAntonio('brk2:' + w.ex, `Break down this ${aiLang().name} sentence. First each word or chunk with an English gloss ("word — gloss", one per line). Then 2-3 short lines on WHY the words are in this order: what each grammar word does and how the order differs from English. Finish with the full natural translation on its own line: "${w.ex}"`, 'antonio-study-result', btn, 450);
   }
 }
 
@@ -54929,9 +55472,13 @@ function showFeedback(correct, extra) {
   const whyBtn = (!correct && getApiKey() && state.session && state.session.questions[state.qIndex] && state.session.questions[state.qIndex].type !== 'grammarChoice')
     ? `<button class="reveal-btn" id="antonio-why-btn" style="margin-top:8px" onclick="askAntonioWhy()">${tutorAvatar()} ${tutorName()} — why?</button><div id="antonio-why-result"></div>`
     : '';
+  // Sentence exercises close with the structure behind the sentence — open
+  // after building one (that's where word order is the whole task).
+  const fq = state.session && state.session.questions[state.qIndex];
+  const anat = fq && ['sentenceBuilder','fillBlank','markerDrill','structureDrill','dictation'].includes(fq.type) ? anatomyDetails(fq.item, fq.type === 'sentenceBuilder', false) : '';
   area.innerHTML = `<div class="feedback-bar ${correct?'correct':'wrong'}">
     <span>${correct ? '✅ Correct!' : '❌ Not quite'}</span>${extra ? `<span>${extra}</span>` : ''}
-  </div>${whyBtn}<button class="next-btn" onclick="advanceQuestion()">Continue →</button>
+  </div>${anat}${whyBtn}<button class="next-btn" onclick="advanceQuestion()">Continue →</button>
   <div style="text-align:center"><button class="skip-btn" style="font-size:.72rem;opacity:.75" onclick="reportError('exercise')">🚩 Report an issue with this word</button></div>`;
 }
 
@@ -57340,9 +57887,67 @@ function clearTranslate() {
   document.getElementById('translate-result-card').style.display = 'none';
 }
 
-async function doTranslate() {
+// ── TRANSLATOR CONSISTENCY ──
+// The same text used to come back differently because (1) requests ran at the
+// default sampling temperature of 1.0, (2) the prompt named no spelling system
+// for Kriolu, which is written several ways, (3) the model wasn't told which
+// words this course teaches, so it picked among synonyms and regional forms,
+// and (4) nothing was cached. Each is handled here.
+let _glossIdx = null, _glossLang = null;
+const GLOSS_STOP = new Set(['the','and','for','with','you','your','are','was','were','that','this','these','those','have','has','had','from','into','not','but','its','his','her','their','our','they','them','she','him','who','what','when','where','how','why','all','very','some','any','can','will','would','just','one','out','about','que','com','para','uma','umas','uns','dos','das','nos','nas','não','por','mais','muito','muita','pelo','pela','ele','ela','eles','elas','kel','kes','ku','pa','na','di','ta','ka','sta','dja']);
+function glossWords(text) {
+  return (String(text || '').toLowerCase().normalize('NFC').match(/\p{L}{3,}/gu) || []).filter(w => !GLOSS_STOP.has(w));
+}
+// Word → short course entries (≤3 words), in both directions, shortest first
+function glossaryIndex() {
+  const lang = currentLang();
+  if (_glossIdx && _glossLang === lang) return _glossIdx;
+  const byK = new Map(), byE = new Map();
+  const add = (map, w, entry) => { if (!map.has(w)) map.set(w, []); map.get(w).push(entry); };
+  LESSONS.forEach(l => (l.vocab || []).forEach(v => {
+    if (!v.k || !v.e || v.k.split(/\s+/).length > 3 || (typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(v.k))) return;
+    const entry = { k: v.k, e: v.e, n: v.k.split(/\s+/).length };
+    new Set(glossWords(v.k)).forEach(w => add(byK, w, entry));
+    new Set(glossWords(v.e)).forEach(w => add(byE, w, entry));
+  }));
+  [byK, byE].forEach(m => m.forEach((list, w) => m.set(w, list.sort((a, b) => a.n - b.n).slice(0, 4))));
+  _glossIdx = { byK, byE }; _glossLang = lang;
+  return _glossIdx;
+}
+function courseGlossary(text, fromTarget, limit) {
+  const map = fromTarget ? glossaryIndex().byK : glossaryIndex().byE;
+  const seen = new Set(), out = [];
+  glossWords(text).forEach(w => (map.get(w) || []).forEach(en => {
+    const key = en.k + '|' + en.e;
+    if (!seen.has(key) && out.length < (limit || 30)) { seen.add(key); out.push(en); }
+  }));
+  return out;
+}
+const TRANSLATE_CACHE_KEY = 'kriolu_translate_cache', TRANSLATE_CACHE_MAX = 200;
+function translateCacheKey(input, dir) { return currentLang() + '|' + dir + '|' + input.trim().replace(/\s+/g, ' ').toLowerCase(); }
+function translateCacheGet(k) {
+  try { return (JSON.parse(localStorage.getItem(TRANSLATE_CACHE_KEY) || '{}'))[k] || null; } catch (e) { return null; }
+}
+function translateCachePut(k, v) {
+  try {
+    const c = JSON.parse(localStorage.getItem(TRANSLATE_CACHE_KEY) || '{}');
+    delete c[k]; c[k] = v;   // re-insert so the oldest entries are trimmed first
+    const keys = Object.keys(c);
+    keys.slice(0, Math.max(0, keys.length - TRANSLATE_CACHE_MAX)).forEach(x => delete c[x]);
+    localStorage.setItem(TRANSLATE_CACHE_KEY, JSON.stringify(c));
+  } catch (e) {}
+}
+
+async function doTranslate(fresh) {
   const input = document.getElementById('translate-input').value.trim();
   if (!input) return;
+  const cacheKey = translateCacheKey(input, transDirection);
+  const cached = fresh === true ? null : translateCacheGet(cacheKey);
+  if (cached) {
+    lastTranslation = { text: cached.translation, source: input };
+    showTranslation(cached.translation, cached.note || '', cached.variant || '', true);
+    return;
+  }
   const key = getApiKey();
   if (!key) {
     // Show the inline key panel right here instead of jumping to another tab
@@ -57365,8 +57970,15 @@ async function doTranslate() {
   // Only English→Kriolu has a second dialect worth surfacing (São Vicente vs.
   // Santiago) — every other direction leaves "variant" as an empty string.
   const wantVariant = !k2e && !isPT();
-  const sysPrompt = `You are an expert translator between ${TL} and English.
+  const gloss = courseGlossary(input, k2e);
+  const sysPrompt = `You are an expert translator between ${TL} and English for a language-learning course.
 Translate the user's text ${k2e ? `from ${TL} to natural English` : `from English to natural ${TL}`}.
+Consistency rules:
+- Give the single most standard, everyday translation — the one you would give every time for this text. Don't vary the wording between requests and don't put alternatives in the translation.
+- ${isPT() ? PT_SPELLING_GUIDE : KR_SPELLING_GUIDE}
+- Keep the meaning, tense and person exactly; don't add or drop information.${gloss.length ? `
+- The learner studies these course entries. When one of them fits the meaning in this text, use exactly that form so the translation matches the lessons:
+${gloss.map(g => `${g.k} = ${g.e}`).join('\n')}` : ''}
 Respond with ONLY valid JSON, no markdown fences, in this exact format:
 {"translation":"the translated text","note":"a one-sentence note about word choice, grammar, or culture if helpful, else empty string"${wantVariant ? ',"variant":"the same sentence as it would actually be said in São Vicente Kriolu, if meaningfully different from the Santiago translation — else empty string"' : ''}}`;
 
@@ -57374,7 +57986,8 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:400, system:sysPrompt, messages:[{role:'user', content:input}] })
+      // temperature 0: the most likely wording every time, not a fresh sample
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:400, temperature:0, system:sysPrompt, messages:[{role:'user', content:input}] })
     });
     const data = await resp.json();
     if (data.error) {
@@ -57387,6 +58000,7 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
       const translated = parsed.translation || raw;
       lastTranslation = { text: translated, source: input };
       state.translationsCount = (state.translationsCount||0) + 1; saveState(); checkAchievements();
+      if (parsed.translation) translateCachePut(cacheKey, { translation: translated, note: parsed.note || '', variant: parsed.variant || '' });
       showTranslation(translated, parsed.note || '', parsed.variant || '');
     }
   } catch(e) {
@@ -57395,7 +58009,7 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
   btn.disabled = false; btn.textContent = 'Translate →';
 }
 
-function showTranslation(text, note, variant) {
+function showTranslation(text, note, variant, fromCache) {
   // Normalize escaped/real newlines into a single form
   const normalized = String(text || '')
     .replace(/\\r\\n/g, '\n')   // literal backslash-r-n
@@ -57412,6 +58026,10 @@ function showTranslation(text, note, variant) {
   const variantEl = document.getElementById('translate-variant');
   if (variant) { variantEl.innerHTML = `🌊 <b>Also heard as</b> (São Vicente): ${escapeHTML(variant)}`; variantEl.style.display = 'block'; }
   else { variantEl.style.display = 'none'; variantEl.innerHTML = ''; }
+  const cacheEl = document.getElementById('translate-cache-note');
+  if (cacheEl) cacheEl.innerHTML = fromCache
+    ? `Saved translation — the same text always gets the same answer. <button class="skip-btn" style="font-size:.72rem;padding:2px 6px" onclick="doTranslate(true)">↻ Translate again</button>`
+    : '';
   document.getElementById('translate-result-card').style.display = 'block';
 }
 
