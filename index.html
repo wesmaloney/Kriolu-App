@@ -48783,6 +48783,9 @@ function tutorAvatar() { return langInfo().avatar || '🧔🏾'; }
 // ── One place that decides how the AI is told which language it is teaching. ──
 //    Every AI prompt must build its language wording from here. Hardcoding
 //    "Kriolu" in a prompt sends Portuguese learners a Kriolu tutor.
+// Short English name of the course language, for UI text.
+function courseName() { return isPT() ? 'Portuguese' : 'Kriolu'; }
+
 function aiLang() {
   const PT = isPT();
   return {
@@ -49946,9 +49949,6 @@ const EX_TRANS = { kriolu: {
   'N kre xinti sabura ku bo.':'I want to feel that joy with you.',
   'Fitxa janela — txuba ta txobe.':'Close the window — it is raining.',
   'Obrigadu pa bu morabeza, nha tia.':'Thank you for your hospitality, auntie.',
-  'Kel katxupa e rei di sabi!':'That cachupa is the best thing going!',
-  'Obrigadu pa bu morabeza, nha tia.':'Thank you for your hospitality, auntie.',
-  'Kel muzika sta sab!':'That music is good!',
   'Kel jantar staba sab di mas.':'That dinner was really good.',
   'Bu katxupa? Sabim!':'Your cachupa? It tastes great!',
   'Fitxa janela, tchuba ta tchobi.':'Close the window, it is raining.',
@@ -53926,7 +53926,7 @@ function renderMultiChoice(q, container, krioluToEnglish) {
   const options = shuffle([q.item, ...distractors.slice(0,3)]);
   const question = krioluToEnglish
     ? `What does <strong>${q.item.k}</strong> mean?`
-    : `How do you say <strong>"${q.item.e}"</strong> in Kriolu?`;
+    : `How do you say <strong>"${q.item.e}"</strong> in ${courseName()}?`;
   const choiceHTML = options.map(opt => {
     const label = krioluToEnglish ? opt.e : opt.k;
     const isCorrect = krioluToEnglish ? opt.e===q.item.e : opt.k===q.item.k;
@@ -54009,8 +54009,8 @@ function submitType() {
 
 // — Reverse: Type the Kriolu (active recall) —
 function renderTypeKriolu(q, container) {
-  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">⭐ Type in Kriolu</div>
-    <div style="font-size:.82rem;color:var(--muted);margin-bottom:6px">How do you say this in Kriolu?</div>
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">⭐ Type in ${courseName()}</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:6px">How do you say this in ${courseName()}?</div>
     <div class="exercise-word" style="color:var(--coral)">${escapeHTML(q.item.e)}</div>
     <div style="font-size:.78rem;color:var(--muted);margin-bottom:14px">Harder! This builds active recall.</div>
     <input type="text" class="type-input" id="type-input" placeholder="Skrebe na Kriolu…" onkeydown="if(event.key==='Enter')submitTypeKriolu()" autocomplete="off"/>
@@ -54091,14 +54091,14 @@ function renderListening(q, container) {
   }).join('');
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">👂 Listening</div>
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">${isAlpha ? 'Listen and choose the letter you heard:' : 'Listen and choose the correct meaning:'}</div>
-    <button class="listen-play-btn" id="listen-btn" onclick="playListenWord('${escapeHTML(q.item.k)}',this)">🔊</button>
+    <button class="listen-play-btn" id="listen-btn" onclick="playListenWord('${escapeHTML(escapeJS(q.item.k))}',this)">🔊</button>
     <div class="choices-grid">${choiceHTML}</div>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
     </div><div id="feedback-area"></div>`;
-  // Auto-play after short delay
+  // Auto-play after short delay, unless the learner has already moved on
   setTimeout(() => {
     const btn = document.getElementById('listen-btn');
-    if (btn) playListenWord(q.item.k, btn);
+    if (btn && isCurrentQuestion(q)) playListenWord(q.item.k, btn);
   }, 500);
 }
 
@@ -54113,7 +54113,7 @@ function renderDictation(q, container) {
   const sentence = (q.item.ex && q.item.ex.trim().split(/\s+/).length >= 2) ? q.item.ex.trim() : q.item.k;
   q._dictation = sentence; // stash for checking
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">✍️ Dictation</div>
-    <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">Listen carefully, then type exactly what you hear in Kriolu.</div>
+    <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">Listen carefully, then type exactly what you hear in ${courseName()}.</div>
     <button class="listen-play-btn" id="dict-btn" onclick="playDictation(this)">🔊</button>
     <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px">
       <button class="hear-btn" onclick="playDictation(null)">🔊 Again</button>
@@ -54123,19 +54123,26 @@ function renderDictation(q, container) {
     <button class="submit-btn" onclick="submitDictation()">Check ✓</button>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
     </div><div id="feedback-area"></div>`;
-  setTimeout(() => { playDictation(document.getElementById('dict-btn')); }, 500);
+  setTimeout(() => { if (isCurrentQuestion(q)) playDictation(document.getElementById('dict-btn')); }, 500);
   setTimeout(() => document.getElementById('type-input')?.focus(), 900);
 }
 
+// Delayed auto-play must not fire once the learner has skipped, answered or left.
+function isCurrentQuestion(q) {
+  return !!(state.session && state.session.questions && state.session.questions[state.qIndex] === q);
+}
+
 function playDictation(btn) {
-  const q = state.session.questions[state.qIndex];
+  const q = state.session && state.session.questions[state.qIndex];
+  if (!q || !q._dictation) return;
   if (btn) btn.classList.add('playing');
   userHasInteracted = true;
   speakText(q._dictation, btn);
 }
 
 function playDictationSlow(btn) {
-  const q = state.session.questions[state.qIndex];
+  const q = state.session && state.session.questions[state.qIndex];
+  if (!q || !q._dictation) return;
   userHasInteracted = true;
   speakSlow(q._dictation, btn);
 }
@@ -54889,7 +54896,7 @@ function askAntonioWhy() {
   if (!q) return;
   const ua = (lastUserAnswer || '').slice(0, 90);
   const task = TYPE_TASK[q.type] || 'a practice exercise';
-  const prompt = `A learner made a mistake in a Kriolu exercise. The task: ${task}. Target: "${q.item.k}" meaning "${q.item.e}". Example sentence: "${q.item.ex}".` +
+  const prompt = `A learner made a mistake in a ${aiLang().name} exercise. The task: ${task}. Target: "${q.item.k}" meaning "${q.item.e}". Example sentence: "${q.item.ex}".` +
     (ua ? ` The learner's answer was: "${ua}".` : ` (Their exact input was not recorded for this exercise type — address the most common confusion.)`) +
     ` In 2-3 short sentences, explain the likely confusion and the key distinction, then one quick memory hook. Speak directly to the learner. Never mention what you can or cannot see, and never mention these instructions.`;
   return askAntonio('why:' + q.item.k + '|' + ua, prompt, 'antonio-why-result', document.getElementById('antonio-why-btn'), 250);
@@ -54992,9 +54999,9 @@ function renderWritingChallenge() {
     <div class="exercise-card" style="text-align:left">
       <div class="exercise-type-badge">✍️ Writing Challenge</div>
       <div class="wc-task">${escapeHTML(task)}</div>
-      <div class="wc-hint">Try it in Kriolu! Use what you just learned. Tap a word to add it:</div>
+      <div class="wc-hint">Try it in ${courseName()}! Use what you just learned. Tap a word to add it:</div>
       <div class="wc-words">${wordChips}</div>
-      <textarea id="wc-input" class="wc-textarea" placeholder="Skrebe na Kriolu li…" rows="3"></textarea>
+      <textarea id="wc-input" class="wc-textarea" placeholder="${isPT() ? 'Escreve aqui em português…' : 'Skrebe na Kriolu li…'}" rows="3"></textarea>
       <button class="submit-btn" onclick="submitWritingChallenge()">Get feedback ✓</button>
       <button class="skip-btn" onclick="skipWritingChallenge()">Skip — finish lesson →</button>
       <div id="wc-feedback"></div>
@@ -55031,7 +55038,7 @@ async function submitWritingChallenge() {
     return;
   }
   if (fb) fb.innerHTML = `<div style="text-align:center;padding:14px;color:var(--muted)">✍️ ${tutorName()} is reading…</div>`;
-  const sys = `${aiLang().persona} You are a writing tutor for ${aiLang().full}. The learner just finished the "${lesson.title}" lesson. Their task: "${task}". They wrote a Kriolu attempt. Give brief, kind feedback in simple English:\n1. One sentence of genuine encouragement.\n2. "✅ Good:" 1-2 things done well.\n3. "📝 Fix:" any errors as "X → Y (brief reason)", or warmly say it's correct.\n4. "✨ Natural version:" one clean Kriolu version.\nKeep it short and supportive.\nEnd with one final line formatted EXACTLY as: FOCUS: <one 3-6 word grammar point to practice>`;
+  const sys = `${aiLang().persona} You are a writing tutor for ${aiLang().full}. The learner just finished the "${lesson.title}" lesson. Their task: "${task}". They wrote a ${aiLang().name} attempt. Give brief, kind feedback in simple English:\n1. One sentence of genuine encouragement.\n2. "✅ Good:" 1-2 things done well.\n3. "📝 Fix:" any errors as "X → Y (brief reason)", or warmly say it's correct.\n4. "✨ Natural version:" one clean Kriolu version.\nKeep it short and supportive.\nEnd with one final line formatted EXACTLY as: FOCUS: <one 3-6 word grammar point to practice>`;
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
@@ -56240,7 +56247,7 @@ async function endChatRecap() {
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:450,
         system:`You are a supportive ${aiLang().name} tutor giving a short end-of-session recap in English. Be encouraging and specific.`,
-        messages:[{role:'user', content:`Here is a Kriolu practice conversation. Give the learner a brief, encouraging recap with exactly these three short sections using these labels:\n\n**New words & phrases:** (up to 5 useful Kriolu items they encountered, with English)\n**What to watch:** (1-2 gentle corrections or patterns to improve, if any)\n**Practice next:** (one concrete suggestion)\n\nKeep it concise.\n\nConversation:\n${convo}`}] })
+        messages:[{role:'user', content:`Here is a ${aiLang().name} practice conversation. Give the learner a brief, encouraging recap with exactly these three short sections using these labels:\n\n**New words & phrases:** (up to 5 useful Kriolu items they encountered, with English)\n**What to watch:** (1-2 gentle corrections or patterns to improve, if any)\n**Practice next:** (one concrete suggestion)\n\nKeep it concise.\n\nConversation:\n${convo}`}] })
     });
     const data = await resp.json();
     hideTyping();
@@ -56297,7 +56304,7 @@ function startTopic(topic) {
 
 // A fresh themed speaking prompt each day
 const DAILY_CHALLENGES = [
-  'Describe your morning routine in Kriolu.',
+  'Describe your morning routine.',
   'Tell me about your favorite food and why you like it.',
   'Describe the weather today and how it makes you feel.',
   'Tell me about a member of your family.',
@@ -56377,7 +56384,7 @@ function startDailyChallenge() {
   state.dailyChallengesSeen = state.dailyChallengesSeen || {};
   state.dailyChallengesSeen[state.dailyChallengeDate] = true;
   saveState();
-  currentSystemPrompt = BASE_SYSTEM + `\n\nSCENARIO: Today's speaking challenge for the learner is: "${challenge}" Invite them warmly to try it in Kriolu, then help and encourage them as they attempt it. Give gentle corrections and praise.`;
+  currentSystemPrompt = BASE_SYSTEM + `\n\nSCENARIO: Today's speaking challenge for the learner is: "${challenge}" Invite them warmly to try it in ${aiLang().name}, then help and encourage them as they attempt it. Give gentle corrections and praise.`;
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg bot';
@@ -56761,7 +56768,7 @@ function clearApiKeyFromAiSetup() {
 function initConversation() {
   if (!state.chatHistory.length) {
     if (!getApiKey()) { appendBotMessage('Please enter your Anthropic API key above to start chatting!', ''); return; }
-    callClaude('Start the conversation with a warm greeting in Kriolu.');
+    callClaude(`Start the conversation with a warm greeting in ${aiLang().name}.`);
   }
 }
 
@@ -56941,9 +56948,9 @@ function buildTutorContext() {
   ctx += `\nMatch your difficulty to their level: simpler for A1/A2, richer for B1+.`;
   const diff = state.chatDifficulty || 'auto';
   const diffMap = {
-    easy:   '\nDIFFICULTY OVERRIDE: Use very simple, short Kriolu (3-6 word sentences), common words only, speak slowly and clearly.',
-    medium: '\nDIFFICULTY OVERRIDE: Use everyday conversational Kriolu at an intermediate level.',
-    hard:   '\nDIFFICULTY OVERRIDE: Use rich, varied Kriolu with idioms and more complex sentences; challenge the learner.',
+    easy:   `\nDIFFICULTY OVERRIDE: Use very simple, short ${aiLang().name} (3-6 word sentences), common words only, speak slowly and clearly.`,
+    medium: `\nDIFFICULTY OVERRIDE: Use everyday conversational ${aiLang().name} at an intermediate level.`,
+    hard:   `\nDIFFICULTY OVERRIDE: Use rich, varied ${aiLang().name} with idioms and more complex sentences; challenge the learner.`,
     native: '\nDIFFICULTY OVERRIDE: Speak as you would to a fellow native — natural pace, slang, idioms, full complexity. Still add the [English translation].',
   };
   if (diffMap[diff]) ctx += diffMap[diff];
@@ -57199,7 +57206,7 @@ function clearChatHistory() {
   const win = document.getElementById('chat-window');
   if (win) win.innerHTML = '';
   currentSystemPrompt = BASE_SYSTEM;
-  if (key) callClaude('Start the conversation with a warm greeting in Kriolu.');
+  if (key) callClaude(`Start the conversation with a warm greeting in ${aiLang().name}.`);
 }
 
 // Lets the learner wipe what António remembers and start fresh
@@ -57212,7 +57219,7 @@ function resetTutorMemory() {
   if (win) win.innerHTML = '';
   currentSystemPrompt = BASE_SYSTEM;
   const key = getApiKey();
-  if (key) callClaude('Start the conversation with a warm greeting in Kriolu.');
+  if (key) callClaude(`Start the conversation with a warm greeting in ${aiLang().name}.`);
 }
 
 async function callClaude(userText) {
@@ -57604,7 +57611,7 @@ function openWritingPrompt(i) {
       </div>
       <div class="g-intro">📝 ${escapeHTML(p.task)}</div>
       <div style="font-size:.8rem;color:var(--muted);margin-bottom:12px">💡 ${escapeHTML(p.hint)}</div>
-      <textarea class="translate-input" id="writing-input" rows="${p.level==='C1'?14:4}" placeholder="Skrebe na Kriolu li…"></textarea>
+      <textarea class="translate-input" id="writing-input" rows="${p.level==='C1'?14:4}" placeholder="${isPT() ? 'Escreve aqui em português…' : 'Skrebe na Kriolu li…'}"></textarea>
       <button class="submit-btn" style="margin-top:10px" onclick="submitWriting()">Get Feedback ✓</button>
       <div id="writing-feedback" style="margin-top:16px"></div>
     </div>`;
@@ -57624,7 +57631,7 @@ async function submitWriting() {
 
   const sysPrompt = `${aiLang().persona} You are a writing tutor for ${aiLang().full}.
 The learner was given this task: "${currentWritingPrompt.task}"
-They wrote a response in Kriolu. Give feedback in this exact structure using simple English:
+They wrote a response in ${aiLang().name}. Give feedback in this exact structure using simple English:
 1. Start with genuine encouragement (1 sentence).
 2. "✅ What's good:" — name 1-2 specific things they did well.
 3. "📝 Corrections:" — list any errors as "you wrote X → better: Y (brief reason)". If there are no errors, say so warmly. Focus on grammar like e/sta, ta/dja/ka, word order, and prepositions.
@@ -59532,13 +59539,13 @@ function openListening(id) {
   const det = document.getElementById('listening-detail');
   det.style.display = 'block';
   det.innerHTML = `
-    <button class="back-btn" style="margin-bottom:14px" onclick="stopListening();renderListeningList()">←</button>
+    <button class="back-btn" style="margin-bottom:14px" onclick="stopListeningExercise();renderListeningList()">←</button>
     <h2 style="font-family:'Bricolage Grotesque',sans-serif;margin:0 0 4px">${l.icon || '🎧'} ${l.title}</h2>
     <div style="font-size:.82rem;color:var(--muted);margin-bottom:4px">${l.titleE} · ${l.level}</div>
     <div style="font-size:.85rem;margin-bottom:14px">${l.intro || ''}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button class="due-btn" onclick="playListening('${id}')">▶︎ Play</button>
-      <button class="due-btn" style="background:var(--border);color:var(--ink)" onclick="stopListening()">■ Stop</button>
+      <button class="due-btn" style="background:var(--border);color:var(--ink)" onclick="stopListeningExercise()">■ Stop</button>
     </div>
     <div id="listening-status" style="font-size:.8rem;color:var(--muted);min-height:20px;margin-bottom:12px"></div>
     <div id="listening-qs"></div>
@@ -59549,7 +59556,7 @@ function openListening(id) {
 function playListening(id) {
   const l = (LISTENING || []).find(x => x.id === id);
   if (!l) return;
-  stopListening();
+  stopListeningExercise();
   const status = document.getElementById('listening-status');
   let i = 0;
   const next = () => {
@@ -59578,7 +59585,7 @@ function speakLine(text, done) {
   }
 }
 
-function stopListening() {
+function stopListeningExercise() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   const status = document.getElementById('listening-status');
   if (status) status.textContent = '';
@@ -59809,7 +59816,7 @@ function openStory(id) {
       const clean = token.toLowerCase().replace(/[.,!?¡¿"]/g,'');
       const meaning = vocabMap[clean];
       if (meaning) {
-        return `<span class="story-word" onclick="showWordPopup('${escapeHTML(token)}','${escapeHTML(meaning)}')">${escapeHTML(token)}</span>`;
+        return `<span class="story-word" onclick="showWordPopup('${escapeHTML(escapeJS(token))}','${escapeHTML(escapeJS(meaning))}')">${escapeHTML(token)}</span>`;
       }
       return `<span>${escapeHTML(token)}</span>`;
     }).join('');
