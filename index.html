@@ -367,6 +367,32 @@
     .lab-explain{font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.45}
     select.ai-dialect-select{max-width:min(240px,100%)}
     .ai-dialect-bar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:-4px 0 14px;font-size:.78rem;font-weight:700;color:var(--muted)}
+    .story-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .story-icon{font-size:2.2rem}
+    .story-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.15rem;color:var(--ocean)}
+    [data-theme="dark"] .story-title{color:var(--sky)}
+    .story-sub{font-size:.8rem;color:var(--muted)}
+    .story-toggle{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:10px;cursor:pointer}
+    .story-panels{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+    .story-part{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ocean-2);margin:6px 0 0}
+    .story-panel{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 12px;box-shadow:var(--shadow)}
+    .story-new{animation:riseIn .4s cubic-bezier(.2,.8,.2,1) both}
+    .story-num{flex:0 0 26px;height:26px;border-radius:50%;background:var(--grad-sun);color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+    .story-body{flex:1;min-width:0}
+    .sm-k{font-weight:700;font-size:.98rem;color:var(--text);overflow-wrap:anywhere}
+    .sm-e{font-size:.8rem;color:var(--muted);margin-top:3px;font-style:italic}
+    .story-order{display:flex;flex-direction:column;gap:8px}
+    .story-opt{text-align:left;display:flex;align-items:center;gap:8px}
+    .story-badge{flex:0 0 24px;height:24px;border-radius:50%;border:2px solid var(--border);font-weight:800;font-size:.8rem;display:inline-flex;align-items:center;justify-content:center}
+    .story-opt.picked{opacity:.8}.story-opt.picked .story-badge{background:var(--ocean-2);border-color:var(--ocean-2);color:#fff}
+    .mission-bar{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--coral);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px}
+    .mission-head{display:flex;align-items:center;gap:8px;font-size:.85rem;flex-wrap:wrap}
+    .mission-count{margin-left:auto;font-size:.78rem;font-weight:800;color:var(--ocean-2)}
+    .mission-x{border:none;background:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:2px 4px}
+    .mission-words{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .mission-chip{display:inline-flex;flex-direction:column;border:1.5px dashed var(--border);border-radius:10px;padding:4px 9px;font-size:.82rem;font-weight:700;color:var(--text)}
+    .mission-chip small{font-size:.66rem;font-weight:600;color:var(--muted)}
+    .mission-chip.used{border-style:solid;border-color:var(--correct);background:rgba(20,184,166,.12)}
     .fix-tokens{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
     .fix-tok{border:2px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:7px 10px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit}
     .fix-tok:hover:not(:disabled){border-color:var(--sky)}
@@ -1757,6 +1783,7 @@
       <button class="scenario-chip" onclick="startScenario('family')">👨‍👩‍👧 Family Talk</button>
       <button class="scenario-chip" onclick="startScenario('freeform')">💬 Free Chat</button>
     </div>
+    <div class="mission-bar" id="mission-bar" style="display:none"></div>
     <div class="chat-window" id="chat-window"></div>
     <div class="chat-input-row">
       <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak">🎤</button>
@@ -51678,7 +51705,7 @@ function saveState() {
     communityFilter:state.communityFilter,
     notifEnabled:state.notifEnabled, reminderHour:state.reminderHour, lastReminderDate:state.lastReminderDate,
     checkpointsPassed:state.checkpointsPassed, grammarFocus:state.grammarFocus, lastWarmupDate:state.lastWarmupDate,
-    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, aiDialect:state.aiDialect, dailyReviewLimit:state.dailyReviewLimit, reviewLog:state.reviewLog, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
+    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, aiDialect:state.aiDialect, activeMission:state.activeMission, missionsDone:state.missionsDone, dailyReviewLimit:state.dailyReviewLimit, reviewLog:state.reviewLog, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
     lastReviewDate:state.lastReviewDate, lastLessonDate:state.lastLessonDate, lastApplyDate:state.lastApplyDate,
     spotlightsDone:state.spotlightsDone, markerCorrect:state.markerCorrect, podcastRuns:state.podcastRuns, microfixDone:state.microfixDone, warmupDone:state.warmupDone, antonioAsks:state.antonioAsks, grammarSkillsDone:state.grammarSkillsDone, errorReports:state.errorReports, dailyStats:state.dailyStats, recentMiss:state.recentMiss, passagesDone:state.passagesDone,
     lang:state.lang, langData:state.langData,
@@ -52598,6 +52625,9 @@ function initChatAntonio() {
   }
   antonioStartBlink();
   antonioSetState('idle');
+  // A mission in progress keeps its scene prompt and word tracker
+  if (state.activeMission && state.activeMission.lang === currentLang()) currentSystemPrompt = missionPrompt(state.activeMission);
+  renderMissionBar();
   // Restore the difficulty selector to the saved preference
   const diffSel = document.getElementById('difficulty-select');
   if (diffSel) diffSel.value = state.chatDifficulty || 'auto';
@@ -53250,6 +53280,18 @@ function renderPathUnit(unit, ui, nextId) {
         ${allDone && !passed ? '<span class="path-next-tag">Test</span>' : ''}
       </div>`;
     })()}
+    ${(() => {
+      const allDone = unitDone === unitLessons.length;
+      const done = (state.missionsDone || {})[unit.id];
+      const status = done ? '🏅' : allDone ? '🎭' : '🔒';
+      const cls = done ? 'path-done' : allDone ? 'path-next' : 'path-locked';
+      return `<div class="path-lesson ${cls}" onclick="${allDone ? `startUnitMission(${ui})` : `pathLockedMsg()`}">
+        <span class="path-status">${status}</span>
+        <span class="path-icon">🎭</span>
+        <span class="path-name">Mission with ${escapeHTML(tutorName())}<span class="path-sub"> · a role-play using this unit's words${done ? ' — complete!' : ''}</span></span>
+        ${allDone && !done ? '<span class="path-next-tag">Play</span>' : ''}
+      </div>`;
+    })()}
   </div>`;
 }
 
@@ -53369,6 +53411,8 @@ function beginStagedLesson(lessonId) {
 
   // Build the staged plan: for each set → LEARN then PRACTICE (cumulative)
   const stages = [];
+  // Scene lessons open with the story itself (see STORY MODE)
+  if (isStoryLesson(lesson)) stages.push({ type:'story', words:pool, label:'Story' });
   let cumulative = [];
   sets.forEach((set, i) => {
     cumulative = cumulative.concat(set);
@@ -53393,13 +53437,23 @@ function beginStagedLesson(lessonId) {
   lessonPlan = { lessonId, lesson, stages, current: -1, totalSets: sets.length, counted: {} };
   // Restore saved per-lesson stage progress, if any
   if (!state.lessonProgress) state.lessonProgress = {};
-  const saved = state.lessonProgress[lessonId];
+  let saved = state.lessonProgress[lessonId];
+  // Progress saved before the Story stage existed: shift its stage indices up
+  // by one. A lesson that was already finished gets the story marked done too.
+  const hasStory = stages[0].type === 'story';
+  if (hasStory && saved && !saved.hasStory && (saved.stageCount || -1) === stages.length - 1) {
+    const sh = o => { const r = {}; Object.keys(o || {}).forEach(k => { r[Number(k) + 1] = o[k]; }); return r; };
+    const wasComplete = Array.isArray(saved.done) && saved.done.length >= saved.stageCount;
+    saved = { ...saved, stageCount: stages.length, hasStory: true,
+      done: (saved.done || []).map(i => Number(i) + 1).concat(wasComplete ? [0] : []),
+      stageScores: sh(saved.stageScores), stageTotals: sh(saved.stageTotals), xpAwarded: sh(saved.xpAwarded) };
+  }
   // MIGRATION GUARD: if the lesson's stage structure changed since this progress
   // was saved (e.g. the Build Sentences stage was added), stage indices no longer
   // line up. Keep the learn/practice checkmarks (those indices are stable — they
   // always come first) and drop the tail stages so nothing is falsely credited.
   const structureChanged = saved && (saved.stageCount || -1) !== stages.length;
-  const stableCount = sets.length * 2; // learn+practice pairs are always first
+  const stableCount = sets.length * 2 + (hasStory ? 1 : 0); // (story +) learn/practice pairs are always first
   const keepIdx = i => !structureChanged || Number(i) < stableCount;
   const filterMap = obj => { const o = {}; Object.keys(obj || {}).forEach(k => { if (keepIdx(k)) o[k] = obj[k]; }); return o; };
   lessonPlan.done = new Set((saved && Array.isArray(saved.done) ? saved.done : []).filter(keepIdx));
@@ -53441,11 +53495,12 @@ function saveLessonProgress() {
     xpAwarded: lessonPlan.xpAwarded || {},
     stageCount: lessonPlan.stages.length,
     ladder: lessonPlan.ladder || null,
+    hasStory: lessonPlan.stages[0] && lessonPlan.stages[0].type === 'story',
   };
   saveState();
 }
 
-const STAGE_ICONS = { learn:'📖', practice:'✍️', spotlight:'💡', sentencelab:'🧪', sentencepractice:'🧩', mastery:'🎯', writing:'🖊️' };
+const STAGE_ICONS = { story:'🎬', learn:'📖', practice:'✍️', spotlight:'💡', sentencelab:'🧪', sentencepractice:'🧩', mastery:'🎯', writing:'🖊️' };
 
 // Shows the lesson plan overview / progress between stages.
 // Completed stages are freely re-selectable; the next stage is the recommended one.
@@ -53595,6 +53650,9 @@ function runStage(stage) {
     lessonPlan.activeStageIdx = idx;
     lessonPlan.activeStageTotal = questions.length;
     showScreen('exercise'); renderQuestion();
+  } else if (stage.type === 'story') {
+    storyState = null;
+    renderStory();
   } else if (stage.type === 'spotlight') {
     renderGrammarSpotlight(stage);
   } else if (stage.type === 'sentencelab') {
@@ -54288,8 +54346,8 @@ function choiceAnswer(btn) {
   lastUserAnswer = btn.textContent.trim();
   document.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; if (b.dataset.ok === '1' && !ok) b.classList.add('reveal-correct'); });
   btn.classList.add(ok ? 'selected-correct' : 'selected-wrong');
-  if (ok) { state.score++; recordWordResult(q.item, true); playSound('correct'); }
-  else { recordWordResult(q.item, false); playSound('wrong'); loseLife(); }
+  if (ok) { state.score++; if (!q.noRecord) recordWordResult(q.item, true); playSound('correct'); }
+  else { if (!q.noRecord) recordWordResult(q.item, false); playSound('wrong'); loseLife(); }
   showFeedback(ok, ok ? '' : (q.correctText ? `Correct: <em>${escapeHTML(q.correctText)}</em>` : ''));
   if (q.reveal) {
     const bar = document.querySelector('#feedback-area .feedback-bar');
@@ -54519,6 +54577,232 @@ function speedFinish(won) {
   // A missed clock isn't a mistake — keep the headline neutral
   const head = document.querySelector('#feedback-area .feedback-bar');
   if (!won && head) { head.classList.remove('wrong'); head.firstElementChild.textContent = '⏱️'; }
+}
+
+// ── STORY MODE ──
+// Scene lessons (mostly caption-style lines that tell one or two short
+// stories) open with the story itself: one panel at a time, with audio and an
+// English toggle, then a few comprehension questions. Meaning first, drills
+// after — the words arrive inside something that makes sense.
+function isStoryLesson(lesson) {
+  if (!lesson || !lesson.vocab || lesson.vocab.length < 6 || lesson.id === 'alphabet') return false;
+  const captions = lesson.vocab.filter(v => keyWordCount(v) >= 4 && v.ex).length;
+  return captions / lesson.vocab.length >= 0.7;
+}
+// Two-part lessons ("X, then Y" / "… — depois: …") are split in the middle
+function storyParts(lesson) {
+  const desc = String(lesson.desc || '').replace(/^Vocabulário (de |do |da |dos |das )?/i, '');
+  const m = desc.split(/, then | — depois: /);
+  const n = lesson.vocab.length;
+  if (m.length === 2) return [{ title: m[0], from: 0, to: Math.ceil(n / 2) }, { title: m[1], from: Math.ceil(n / 2), to: n }];
+  return [{ title: '', from: 0, to: n }];
+}
+const storyLine = v => (v.ex && v.ex.trim()) || v.k;
+const storyMeaning = v => exTranslation(v) || sentenceMeaning(v) || v.e;
+let storyState = null;
+function renderStory() {
+  const lesson = lessonPlan.lesson;
+  if (!storyState || storyState.lessonId !== lesson.id) storyState = { lessonId: lesson.id, shown: 1, english: false };
+  document.getElementById('lab-title').textContent = '🎬 Story';
+  showScreen('sentencelab');
+  const parts = storyParts(lesson), v = lesson.vocab, shown = storyState.shown;
+  let html = '';
+  parts.forEach((p, pi) => {
+    if (p.from >= shown) return;
+    if (parts.length > 1) html += `<div class="story-part">${pi === 0 ? 'Part 1' : 'Part 2 · then…'}${p.title ? ` — ${escapeHTML(p.title)}` : ''}</div>`;
+    for (let i = p.from; i < Math.min(p.to, shown); i++) {
+      const line = storyLine(v[i]);
+      html += `<div class="story-panel${i === shown - 1 ? ' story-new' : ''}">
+        <div class="story-num">${i + 1}</div>
+        <div class="story-body">
+          <div class="sm-k">${escapeHTML(line)}</div>
+          <div class="sm-e"${storyState.english ? '' : ' hidden'}>${escapeHTML(storyMeaning(v[i]))}</div>
+        </div>
+        <button class="lab-speak" aria-label="Play" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(line)}">🔊</button>
+      </div>`;
+    }
+  });
+  const last = shown >= v.length;
+  document.getElementById('sentencelab-content').innerHTML = `
+    <div class="story-head"><span class="story-icon">${lesson.icon}</span><div><div class="story-title">${escapeHTML(lesson.title)}</div>
+      <div class="story-sub">Read or listen to the story first — the words will make sense before you drill them.</div></div></div>
+    <label class="story-toggle"><input type="checkbox" ${storyState.english ? 'checked' : ''} onchange="storyState.english=this.checked;renderStory()"> Show English</label>
+    <div class="story-panels">${html}</div>
+    ${last ? `<button class="lab-continue sun" onclick="startStoryQuiz()">Check your understanding →</button>`
+           : `<button class="lab-continue" onclick="storyNext()">Next ▸ <span style="opacity:.75;font-weight:600">${shown}/${v.length}</span></button>`}
+    <button class="study-skip" onclick="completeStage()">Skip the story →</button>`;
+  // Read each new panel aloud as it appears (after the learner has interacted)
+  if (userHasInteracted && storyState.autoplay) speakText(storyLine(v[shown - 1]), null);
+}
+function storyNext() {
+  userHasInteracted = true;
+  storyState.shown = Math.min(lessonPlan.lesson.vocab.length, storyState.shown + 1);
+  storyState.autoplay = true;
+  renderStory();
+  const panels = document.querySelectorAll('.story-panel');
+  if (panels.length) panels[panels.length - 1].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+// Comprehension: put events in order, did-this-happen checks, and one
+// listen-for-meaning question on a line from the story
+function startStoryQuiz() {
+  const lesson = lessonPlan.lesson, v = lesson.vocab;
+  const qs = [];
+  const pick = Math.max(1, Math.floor(v.length / 4));
+  const order = [0, pick, pick * 2, Math.min(v.length - 1, pick * 3)].filter((x, i, a) => a.indexOf(x) === i);
+  if (order.length >= 3) qs.push({ type: 'storyOrder', item: v[0], story: order.map(i => v[i]), noRecord: true, lessonId: lesson.id });
+  const others = shuffle(LESSONS.filter(l => l.id !== lesson.id && isStoryLesson(l))).slice(0, 3).flatMap(l => l.vocab);
+  const truth = shuffle([...v]).slice(0, 2), lies = shuffle(others).slice(0, 2);
+  [[truth[0], true], [lies[0], false], [truth[1], true], [lies[1], false]].slice(0, 3).forEach(([it, real]) => {
+    if (it) qs.push({ type: 'storyTF', item: v[0], claim: storyMeaning(it), real, noRecord: true, lessonId: lesson.id });
+  });
+  const listenable = v.filter(x => typeEligible('listenMeaning', x));
+  if (listenable.length) qs.push({ type: 'listenMeaning', item: listenable[Math.floor(Math.random() * listenable.length)], lessonId: lesson.id });
+  if (!qs.length) { completeStage(); return; }
+  if (!lessonPlan.stageScores) lessonPlan.stageScores = {};
+  if (!lessonPlan.stageTotals) lessonPlan.stageTotals = {};
+  const idx = lessonPlan.current;
+  lessonPlan.scoreBaseline = state.score - (lessonPlan.stageScores[idx] || 0);
+  state.score = lessonPlan.scoreBaseline;
+  lessonPlan.activeStageIdx = idx;
+  lessonPlan.activeStageTotal = qs.length;
+  state.session = { questions: qs, lessonId: lesson.id, lessonTitle: lesson.title, staged: true };
+  state.qIndex = 0; state.awaitingNext = false;
+  showScreen('exercise'); renderQuestion();
+}
+function renderStoryOrder(q, container) {
+  q.picked = [];
+  const opts = shuffle(q.story.map((it, i) => ({ it, i })));
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🎬 Story Order</div>
+    <div style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Tap these moments in the order they happened.</div>
+    <div class="story-order">${opts.map(o => `<button class="choice-btn story-opt" data-i="${o.i}" onclick="storyOrderPick(this)"><span class="story-badge"></span>${escapeHTML(storyLine(o.it))}</button>`).join('')}</div>
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    </div><div id="feedback-area"></div>`;
+}
+function storyOrderPick(btn) {
+  const q = state.session.questions[state.qIndex];
+  if (state.awaitingNext || btn.disabled) return;
+  q.picked.push(Number(btn.dataset.i));
+  btn.disabled = true; btn.classList.add('picked');
+  btn.querySelector('.story-badge').textContent = q.picked.length;
+  if (q.picked.length < q.story.length) return;
+  state.awaitingNext = true;
+  const ok = q.picked.every((v, i) => v === i);
+  lastUserAnswer = 'order ' + q.picked.map(i => i + 1).join(',');
+  if (ok) { state.score++; playSound('correct'); } else { playSound('wrong'); loseLife(); }
+  showFeedback(ok, ok ? 'That\'s the story, in order.' : '');
+  if (!ok) {
+    const bar = document.querySelector('#feedback-area .feedback-bar');
+    if (bar) bar.insertAdjacentHTML('afterend', `<div class="odd-reveal">${q.story.map((it, i) => `<div><b>${i + 1}.</b> ${escapeHTML(storyLine(it))}</div>`).join('')}</div>`);
+  }
+}
+function renderStoryTF(q, container) {
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🎬 Did It Happen?</div>
+    <div style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Did this happen in the story?</div>
+    <div class="exercise-word" style="font-size:1.15rem">“${escapeHTML(q.claim)}”</div>
+    <div class="choices-grid">${choiceBtn('Yes, it happened', q.real)}${choiceBtn('No, it didn\'t', !q.real)}</div>
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    </div><div id="feedback-area"></div>`;
+}
+
+// ── UNIT MISSIONS WITH SÔR ANTÓNIO ──
+// At the end of a unit, a short role-play: António sets a scene that fits the
+// unit and plays a part in it, and the learner's goal is to use the unit's
+// words naturally. The app (not the model) tracks which words were used, so
+// completion is reliable; António is told the live progress each turn.
+function missionWords(unit) {
+  const ids = unit.lessons.filter((id, i) => unit.lessons.indexOf(id) === i);
+  const vocab = ids.map(id => LESSONS.find(l => l.id === id)).filter(Boolean).flatMap(l => l.vocab)
+    .filter(v => v.k && v.e && keyWordCount(v) <= 3 && !(typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(v.k)));
+  // Prefer words the learner finds harder, then shuffle for variety
+  const ranked = shuffle(vocab).sort((a, b) => getWordDifficulty(b) - getWordDifficulty(a));
+  const seen = new Set(), out = [];
+  for (const v of ranked) { const key = v.k.toLowerCase(); if (!seen.has(key)) { seen.add(key); out.push({ k: v.k, e: v.e, used: false }); } if (out.length >= 6) break; }
+  // Caption-only units: fall back to the key word of each caption line
+  if (out.length < 3) {
+    ids.map(id => LESSONS.find(l => l.id === id)).filter(Boolean).flatMap(l => l.vocab).forEach(v => {
+      if (out.length >= 6) return;
+      const word = (v.k.match(/\p{L}{5,}/gu) || []).find(w => !seen.has(w.toLowerCase()));
+      if (word) { seen.add(word.toLowerCase()); out.push({ k: word, e: v.e, used: false, fromCaption: true }); }
+    });
+  }
+  return out;
+}
+const foldWord = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+function textUsesWord(text, word) {
+  const t = ' ' + foldWord(text) + ' ', w = foldWord(word);
+  if (!w) return false;
+  if (t.includes(' ' + w + ' ')) return true;
+  // One-letter slips in longer single words still count (txuba / txuva)
+  if (!w.includes(' ') && w.length >= 5) return t.trim().split(' ').some(tok => tok.length >= w.length - 1 && levenshtein(tok, w) <= 1);
+  return false;
+}
+function missionPrompt(m) {
+  const place = isPT() ? 'Portugal or Cape Verde' : 'Cape Verde';
+  return BASE_SYSTEM + `\n\nUNIT MISSION: "${m.title}" — ${m.desc}.
+Invent a short, realistic everyday situation in ${place} that fits this unit, give yourself a role in it, and set the scene in 1–2 sentences. Then play that role.
+The learner's goal is to use these words naturally while you talk: ${m.words.map(w => `${w.k} (${w.e})`).join(', ')}.
+Create natural openings for them — ask questions whose natural answers use the words. Never just ask the learner to translate a word. Keep each turn short (2–3 sentences).`;
+}
+function missionContext() {
+  const m = state.activeMission;
+  if (!m || m.lang !== currentLang()) return '';
+  const used = m.words.filter(w => w.used).map(w => w.k), left = m.words.filter(w => !w.used).map(w => w.k);
+  return m.done
+    ? `\nMISSION COMPLETE: the learner has used ${used.length} target words. Congratulate them warmly in one line, then wrap up the scene.`
+    : `\nMISSION PROGRESS: used so far: ${used.join(', ') || 'none'}. Still to use: ${left.join(', ')}. Steer the scene so these come up naturally.`;
+}
+function renderMissionBar() {
+  const bar = document.getElementById('mission-bar');
+  if (!bar) return;
+  const m = state.activeMission;
+  if (!m || m.lang !== currentLang()) { bar.style.display = 'none'; bar.innerHTML = ''; return; }
+  const n = m.words.filter(w => w.used).length;
+  bar.style.display = '';
+  bar.innerHTML = `<div class="mission-head"><b>🎭 Mission · ${escapeHTML(m.title)}</b>
+      <span class="mission-count">${m.done ? '🎉 Complete!' : `${n}/${m.need} words used`}</span>
+      <button class="mission-x" onclick="endMission()" aria-label="End mission">✕</button></div>
+    <div class="mission-words">${m.words.map(w => `<span class="mission-chip${w.used ? ' used' : ''}" title="${escapeHTML(w.e)}">${w.used ? '✓ ' : ''}${escapeHTML(w.k)}<small>${escapeHTML(w.e)}</small></span>`).join('')}</div>`;
+}
+function startUnitMission(unitIdx) {
+  const unit = LEARNING_PATH[unitIdx];
+  if (!unit) return;
+  const words = missionWords(unit);
+  if (words.length < 3) { showToast('This unit has no mission words yet'); return; }
+  const title = String(unit.unit || '').replace(/^(Unit|Unidade) \d+\s*—\s*/, '');
+  state.activeMission = { unitId: unit.id, lang: currentLang(), title, desc: unit.desc || '', words, need: Math.min(4, words.length), done: false };
+  state.chatHistory = [];
+  saveState();
+  showTab('conversation');
+  const win = document.getElementById('chat-window');
+  if (win) win.innerHTML = '';
+  currentSystemPrompt = missionPrompt(state.activeMission);
+  renderMissionBar();
+  if (!getApiKey()) { appendBotMessage('Add your Anthropic API key in the AI Tutor setup to start this mission with me! ☝️', ''); return; }
+  callClaude('Start the mission.');
+}
+function endMission() {
+  state.activeMission = null;
+  saveState();
+  currentSystemPrompt = BASE_SYSTEM;
+  renderMissionBar();
+}
+// Called with each learner message
+function missionCheck(text) {
+  const m = state.activeMission;
+  if (!m || m.lang !== currentLang() || m.done) return;
+  let newly = 0;
+  m.words.forEach(w => { if (!w.used && textUsesWord(text, w.k)) { w.used = true; newly++; } });
+  if (m.words.filter(w => w.used).length >= m.need) {
+    m.done = true;
+    if (!state.missionsDone) state.missionsDone = {};
+    const first = !state.missionsDone[m.unitId];
+    state.missionsDone[m.unitId] = localDateKey(new Date());
+    if (first) addXP(20);
+    celebrate();
+    showToast(first ? '🎉 Mission complete! +20 XP' : '🎉 Mission complete again!');
+  } else if (newly) playSound('correct');
+  saveState(); checkAchievements();
+  renderMissionBar();
 }
 
 const KR_GRAMMAR_SPOTLIGHTS = {
@@ -54896,6 +55180,8 @@ function renderQuestion() {
   else if (q.type === 'completeDialogue') renderCompleteDialogue(q, content);
   else if (q.type === 'listenMeaning') renderListenMeaning(q, content);
   else if (q.type === 'speedMatch') renderSpeedMatch(q, content);
+  else if (q.type === 'storyOrder') renderStoryOrder(q, content);
+  else if (q.type === 'storyTF') renderStoryTF(q, content);
   else if (q.type === 'grammarChoice') renderGrammarChoice(q, content);
   else renderFlashcard(q, content);
 }
@@ -55984,7 +56270,7 @@ function antonioStudy(kind) {
 function showFeedback(correct, extra) {
   const area = document.getElementById('feedback-area');
   if (!area) return;
-  const whyBtn = (!correct && getApiKey() && state.session && state.session.questions[state.qIndex] && !['grammarChoice', 'speedMatch'].includes(state.session.questions[state.qIndex].type))
+  const whyBtn = (!correct && getApiKey() && state.session && state.session.questions[state.qIndex] && !['grammarChoice', 'speedMatch', 'storyOrder', 'storyTF'].includes(state.session.questions[state.qIndex].type))
     ? `<button class="reveal-btn" id="antonio-why-btn" style="margin-top:8px" onclick="askAntonioWhy()">${tutorAvatar()} ${tutorName()} — why?</button><div id="antonio-why-result"></div>`
     : '';
   // Sentence exercises close with the structure behind the sentence — open
@@ -57789,6 +58075,7 @@ function startScenario(scenario) {
   // Capture memory from the conversation we're about to clear
   if (key && (state.chatHistory || []).length >= 2) updateTutorMemory(key);
   currentSystemPrompt = SCENARIOS[scenario] || BASE_SYSTEM;
+  state.activeMission = null; renderMissionBar();
   state.chatHistory = [];
   saveState();
   const win = document.getElementById('chat-window');
@@ -58083,6 +58370,7 @@ async function sendMessage() {
   lastInputWasSpeech = false;
   input.value = '';
   appendUserMessage(text, wasSpeech);
+  missionCheck(text);
   state.chatMessages++;
   state.lastApplyDate = new Date().toDateString();   // chatting counts as "apply"
   awardChatXP();
@@ -58293,6 +58581,7 @@ function clearChatHistory() {
   const win = document.getElementById('chat-window');
   if (win) win.innerHTML = '';
   currentSystemPrompt = BASE_SYSTEM;
+  state.activeMission = null; renderMissionBar();
   if (key) callClaude(`Start the conversation with a warm greeting in ${aiLang().name}.`);
 }
 
@@ -58327,7 +58616,7 @@ async function callClaude(userText) {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, system:currentSystemPrompt + buildTutorContext(), messages })
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, system:currentSystemPrompt + buildTutorContext() + missionContext(), messages })
     });
     const data = await resp.json();
     hideTyping();
@@ -58339,7 +58628,8 @@ async function callClaude(userText) {
       const { kriolu, translation } = parseResponse(fullText);
       appendBotMessage(formatBotText(kriolu), translation);
       // Every few exchanges, quietly distill the conversation into durable memory
-      if (state.chatHistory.filter(m => m.role === 'user').length % 4 === 0) {
+      const userTurns = state.chatHistory.filter(m => m.role === 'user').length;
+      if (userTurns > 0 && userTurns % 4 === 0) {
         updateTutorMemory(key);
       }
     }
