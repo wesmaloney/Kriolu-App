@@ -393,6 +393,15 @@
     .mission-chip{display:inline-flex;flex-direction:column;border:1.5px dashed var(--border);border-radius:10px;padding:4px 9px;font-size:.82rem;font-weight:700;color:var(--text)}
     .mission-chip small{font-size:.66rem;font-weight:600;color:var(--muted)}
     .mission-chip.used{border-style:solid;border-color:var(--correct);background:rgba(20,184,166,.12)}
+    .about-row{display:flex;gap:8px;align-items:flex-start}
+    .about-row .wc-textarea{flex:1}
+    .mic-btn.listening{background:var(--coral);color:#fff}
+    .about-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 13px;margin-top:10px;font-size:.88rem;line-height:1.55;text-align:left;display:flex;flex-direction:column;gap:6px}
+    .about-lbl{display:block;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .about-tip{color:var(--text)}
+    .about-reply{background:var(--bg);border-radius:10px;padding:8px 10px;font-weight:600}
+    .about-e{font-size:.78rem;color:var(--muted);font-weight:500;margin-top:2px}
+    .study-caption{font-size:.8rem;color:var(--muted);font-style:italic;margin:4px 0 6px}
     .fix-tokens{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
     .fix-tok{border:2px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:7px 10px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit}
     .fix-tok:hover:not(:disabled){border-color:var(--sky)}
@@ -51709,7 +51718,7 @@ function saveState() {
     communityFilter:state.communityFilter,
     notifEnabled:state.notifEnabled, reminderHour:state.reminderHour, lastReminderDate:state.lastReminderDate,
     checkpointsPassed:state.checkpointsPassed, grammarFocus:state.grammarFocus, lastWarmupDate:state.lastWarmupDate,
-    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, aiDialect:state.aiDialect, krPhonetic:state.krPhonetic, activeMission:state.activeMission, missionsDone:state.missionsDone, dailyReviewLimit:state.dailyReviewLimit, reviewLog:state.reviewLog, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
+    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, aiDialect:state.aiDialect, myLines:state.myLines, krPhonetic:state.krPhonetic, activeMission:state.activeMission, missionsDone:state.missionsDone, dailyReviewLimit:state.dailyReviewLimit, reviewLog:state.reviewLog, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
     lastReviewDate:state.lastReviewDate, lastLessonDate:state.lastLessonDate, lastApplyDate:state.lastApplyDate,
     spotlightsDone:state.spotlightsDone, markerCorrect:state.markerCorrect, podcastRuns:state.podcastRuns, microfixDone:state.microfixDone, warmupDone:state.warmupDone, antonioAsks:state.antonioAsks, grammarSkillsDone:state.grammarSkillsDone, errorReports:state.errorReports, dailyStats:state.dailyStats, recentMiss:state.recentMiss, passagesDone:state.passagesDone,
     lang:state.lang, langData:state.langData,
@@ -51880,7 +51889,8 @@ function getDueWords() {
 function countDueWords() { return getDueWords().length; }
 
 function recordWordResult(item, correct) {
-  const key = item.k;
+  // A caption drilled through its key word is still recorded under the caption
+  const key = item._key || item.k, src = item._src || item;
   // Count it against today's review limit when the word was due
   const srd = state.srData && state.srData[key];
   if (srd && srd.due <= Date.now() && (srd.reps > 0 || srd.lapsed)) {
@@ -51913,10 +51923,10 @@ function recordWordResult(item, correct) {
     s.wrong++;
     s.streak = 0;
     srUpdate(key, 1);                         // SR: failed
-    if (!state.wrongItems.find(w => w.k === item.k)) state.wrongItems.push(item);
+    if (!state.wrongItems.find(w => w.k === key)) state.wrongItems.push(src);
   }
   state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
-  ladderRecord(item, correct);
+  ladderRecord(src, correct);
 }
 
 // A word needs this many correct answers in a row (after a mistake) to leave the
@@ -53597,7 +53607,7 @@ function runStage(stage) {
     const toLearn = L ? stage.words.filter(w => L[w.k] < LADDER_TOP) : stage.words;
     if (!toLearn.length) { showToast('✓ You already know these words — skipping ahead'); completeStage(); return; }
     if (toLearn.length < stage.words.length) showToast(`✓ Skipping ${stage.words.length - toLearn.length} word${stage.words.length - toLearn.length === 1 ? '' : 's'} you already know`);
-    studyState = { lessonId: lessonPlan.lessonId, idx: 0, words: toLearn, staged: true };
+    studyState = { lessonId: lessonPlan.lessonId, idx: 0, words: toLearn.map(drillView), staged: true };
     showScreen('study');
     renderStudyCard();
   } else if (stage.type === 'practice' || stage.type === 'mastery' || stage.type === 'sentencepractice') {
@@ -53771,7 +53781,7 @@ function renderStudyCard() {
       <div class="study-e">${escapeHTML(w.e)}</div>
       <div class="study-ex-label">Example</div>
       <div class="study-ex">${linkifyVerbs(w.ex)}</div>
-      ${meaningLine(w, 'study-meaning')}
+      ${w._key ? `<div class="study-caption">🎬 ${escapeHTML(w.captionE || '')}</div>` : meaningLine(w, 'study-meaning')}
       ${anatomyDetails(w, false, false)}
       <button class="study-speak small" onclick="userHasInteracted=true;speakText('${escapeJS(w.ex)}',this)">🔊 Hear example</button>
       <button class="study-speak small" style="opacity:.7" onclick="flagContentIssue('study')">🚩 Flag</button>
@@ -54286,13 +54296,14 @@ const LADDER_TYPES = [
   ['multiChoice', 'listening', 'oddOneOut'],
   ['multiChoiceKriolu', 'typeAnswer', 'flashcard'],
   ['fillBlank', 'sentenceBuilder', 'structureDrill', 'markerDrill', 'fixSentence', 'completeDialogue', 'listenMeaning'],
-  ['typeKriolu', 'dictation', 'speaking'],
+  ['typeKriolu', 'dictation', 'speaking', 'aboutYou'],
 ];
 const exWordCount = item => ((item && item.ex) || '').trim().split(/\s+/).filter(Boolean).length;
 const keyWordCount = item => ((item && item.k) || '').trim().split(/\s+/).filter(Boolean).length;
 function typeEligible(t, item) {
   // Alphabet cards are only ever practised by listening and speaking
   if (typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(item.k)) return t === 'listening' || t === 'speaking';
+  item = drillView(item);   // captions are drilled through their key word
   const exN = exWordCount(item), kN = keyWordCount(item);
   switch (t) {
     case 'fillBlank': case 'sentenceBuilder': return exN >= 3;
@@ -54307,6 +54318,7 @@ function typeEligible(t, item) {
       return !!l && l.id !== 'alphabet' && l.vocab.filter(v => v.k !== item.k && keyWordCount(v) <= 4).length >= 2;
     }
     case 'typeKriolu': return kN <= 4;
+    case 'aboutYou': return kN <= 3 && !!getApiKey();
     case 'dictation': return exN <= 10;
     case 'speaking': return kN <= 6 && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
     default: return true;
@@ -54334,8 +54346,13 @@ function globalRung(item) {
   return Math.max(0, Math.min(3, (s.streak || 0)));
 }
 function ladderTypesFor(items, rungOf) {
-  let prev = null;
-  return items.map(it => { const t = ladderType(it, rungOf(it), prev); prev = t; return t; });
+  let prev = null, aboutUsed = false;
+  return items.map(it => {
+    // At most one "Say it about you" per stage — it's longer, and uses the AI
+    let t = ladderType(it, rungOf(it), aboutUsed ? 'aboutYou' : prev);
+    if (t === 'aboutYou') { if (aboutUsed) t = ladderType(it, 3, 'aboutYou'); aboutUsed = true; }
+    prev = t; return t;
+  });
 }
 function ladderRecord(item, correct) {
   const L = lessonPlan && lessonPlan.ladder;
@@ -54439,6 +54456,7 @@ function fixAnswer(btn) {
 
 // 2. ODD ONE OUT — three words from this lesson's scene, one from elsewhere.
 function lessonOfItem(item) {
+  item = (item && item._src) || item;
   const id = state.session && state.session.lessonId;
   const cur = id && LESSONS.find(l => l.id === id);
   if (cur && cur.vocab.some(v => v.k === item.k)) return cur;
@@ -54448,10 +54466,10 @@ function renderOddOneOut(q, container) {
   const lesson = lessonOfItem(q.item);
   if (!lesson) { renderMultiChoice(q, container, false); return; }
   const short = v => v.k && keyWordCount(v) <= 4;
-  const mates = lesson ? shuffle(lesson.vocab.filter(v => v.k !== q.item.k && short(v))).slice(0, 2) : [];
+  const mates = lesson ? shuffle(lesson.vocab.map(drillView).filter(v => v.k !== q.item.k && (v._key || v.k) !== q.item._key && short(v))).slice(0, 2) : [];
   const ids = new Set((lesson ? [lesson.id] : []));
   const far = shuffle(LESSONS.filter(l => !ids.has(l.id) && l.icon !== (lesson && lesson.icon)).slice()).slice(0, 6).flatMap(l => l.vocab).filter(short);
-  const odd = far.find(v => !lesson.vocab.some(x => x.k === v.k || x.e === v.e));
+  const odd = far.find(v => !lesson.vocab.some(x => x.k === v.k || x.e === v.e) && v.k.toLowerCase() !== q.item.k.toLowerCase());
   if (mates.length < 2 || !odd) { renderMultiChoice(q, container, false); return; }
   const opts = shuffle([q.item, ...mates, odd]);
   q.reveal = `<div class="odd-reveal">${opts.map(v => `<div><b>${escapeHTML(v.k)}</b> — ${escapeHTML(v.e)}${v === odd ? ' <span class="odd-tag">odd one out</span>' : ''}</div>`).join('')}</div>`;
@@ -54501,6 +54519,7 @@ function renderCompleteDialogue(q, container) {
 // 4. LISTENING: WHAT HAPPENED? — hear a whole sentence, pick its meaning
 // against other sentences from the same lesson (so you must really listen).
 function sentenceMeaning(item) {
+  item = (item && item._src) || item;
   const t = exTranslation(item);
   if (t) return t;
   const norm = x => String(x || '').toLowerCase().replace(/[.,!?;:]/g, '').trim();
@@ -54534,6 +54553,7 @@ function renderListenMeaning(q, container) {
 const SPEED_SECONDS = 30;
 let speedTimer = null;
 function speedRoundFor(words) {
+  words = words.map(drillView);
   const short = words.filter(v => v.k && v.e && keyWordCount(v) <= 4 && !(typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(v.k)));
   const uniq = []; const seenE = new Set();
   short.forEach(v => { if (!seenE.has(v.e)) { seenE.add(v.e); uniq.push(v); } });
@@ -54723,7 +54743,7 @@ function renderStoryTF(q, container) {
 // completion is reliable; António is told the live progress each turn.
 function missionWords(unit) {
   const ids = unit.lessons.filter((id, i) => unit.lessons.indexOf(id) === i);
-  const vocab = ids.map(id => LESSONS.find(l => l.id === id)).filter(Boolean).flatMap(l => l.vocab)
+  const vocab = ids.map(id => LESSONS.find(l => l.id === id)).filter(Boolean).flatMap(l => l.vocab).map(drillView)
     .filter(v => v.k && v.e && keyWordCount(v) <= 3 && !(typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(v.k)));
   // Prefer words the learner finds harder, then shuffle for variety
   const ranked = shuffle(vocab).sort((a, b) => getWordDifficulty(b) - getWordDifficulty(a));
@@ -54815,6 +54835,181 @@ function missionCheck(text) {
   } else if (newly) playSound('correct');
   saveState(); checkAchievements();
   renderMissionBar();
+}
+
+// ── CAPTION KEY WORDS ──
+// About a third of the course's items are whole scene captions ("Avô ta afina
+// kavakinhu antis di aula"). Drilled as "words", they're long and repetitive.
+// For each caption we find its key word: a word in it that the course also
+// teaches as a short entry, whose English meaning also appears in the
+// caption's English (so it means the same thing here). Exercises then drill
+// that word, with the whole caption as its example sentence. The caption
+// stays the item's identity, so saved progress is untouched.
+const FOCUS_STOP = new Set(['the','and','for','with','into','from','that','this','his','her','their','its','your','our','very','much','many','some','all','each','every','one','two','three','first','last','new','old','big','small','great','little','good','after','before','while','being','been','have','has','had','was','were','are','is','be','to','of','in','on','at','a','an','up','out','down','off','over','again','still','just','then','them','they','him','she','he','who','what']);
+let _focusIdx = null, _focusLang = null;
+const foldF = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const stemF = w => w.replace(/(ing|ers|er|ed|es|s)$/, '');
+function focusIndex() {
+  const lang = currentLang();
+  if (_focusIdx && _focusLang === lang) return _focusIdx;
+  const short = new Map(), freq = new Map();
+  LESSONS.forEach(l => (l.vocab || []).forEach(v => {
+    if (!v.k || !v.e) return;
+    const n = v.k.trim().split(/\s+/).length;
+    const toks = foldF(v.k).match(/\p{L}{3,}/gu) || [];
+    if (n >= 4) toks.forEach(t => freq.set(t, (freq.get(t) || 0) + 1));
+    else if (n <= 2 && !(typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(v.k))) {
+      const key = foldF(v.k).replace(/[^\p{L}\p{N} -]/gu, '').trim();
+      if (key && !short.has(key)) short.set(key, v);
+    }
+  }));
+  _focusIdx = { short, freq }; _focusLang = lang;
+  return _focusIdx;
+}
+function glossWordsF(e) {
+  return new Set((foldF(e).replace(/\([^)]*\)/g, ' ').match(/[a-z]{3,}/g) || []).filter(w => !FOCUS_STOP.has(w)).map(stemF));
+}
+// The key word for one caption, or null (short items are their own key word)
+function captionFocus(item, taken) {
+  if (!item || !item.k || item.k.trim().split(/\s+/).length < 4) return null;
+  const { short, freq } = focusIndex();
+  const capGloss = glossWordsF(item.e);
+  const toks = item.k.trim().split(/\s+/).map(t => t.replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '')).filter(Boolean);
+  const cands = [];
+  for (let i = 0; i < toks.length; i++) {
+    for (const n of [2, 1]) {                       // prefer a two-word chunk (kaxa di karton) when the course teaches it
+      if (i + n > toks.length) continue;
+      const chunk = toks.slice(i, i + n).join(' '), key = foldF(chunk);
+      const entry = short.get(key);
+      if (!entry || key.length < 3) continue;
+      const eg = glossWordsF(entry.e);
+      if (!eg.size || ![...eg].some(w => capGloss.has(w))) continue;   // must mean the same thing here
+      cands.push({ k: chunk, e: entry.e, n, rare: Math.min(...key.split(' ').map(w => freq.get(w) || 0)) });
+    }
+  }
+  if (!cands.length) return null;
+  cands.sort((a, b) => (b.n - a.n) || (a.rare - b.rare) || (b.k.length - a.k.length));
+  const pick = cands.find(c => !(taken && taken.has(foldF(c.k)))) || cands[0];
+  if (taken) taken.add(foldF(pick.k));
+  return { k: pick.k, e: pick.e };
+}
+// Per-lesson key words, chosen so a lesson's captions get different words where possible
+const _lessonFocus = new Map();
+function lessonFocusMap(lesson) {
+  const id = currentLang() + ':' + lesson.id;
+  if (_lessonFocus.has(id)) return _lessonFocus.get(id);
+  const taken = new Set(), m = new Map();
+  // Idioms and proverbs mean more than their words — never break them up
+  if (/idiom|proverb|express|saying|ditado|provérb|sabedoria/i.test(lesson.id + ' ' + lesson.title)) { _lessonFocus.set(id, m); return m; }
+  lesson.vocab.forEach(v => { const f = captionFocus(v, taken); if (f) m.set(v.k, f); });
+  _lessonFocus.set(id, m);
+  return m;
+}
+function focusFor(item) {
+  if (!item || item._key || !item.k || item.k.trim().split(/\s+/).length < 4) return null;
+  const lesson = LESSONS.find(l => l.vocab.includes(item)) || lessonOfItem(item);
+  return lesson ? (lessonFocusMap(lesson).get(item.k) || null) : null;
+}
+// What an exercise shows for an item: the key word (with the caption as its
+// example), keeping the caption's key for progress
+function drillView(item) {
+  if (!item || item._key) return item;
+  const f = focusFor(item);
+  if (!f) return item;
+  return { ...item, k: f.k, e: f.e, ex: item.ex || item.k, _key: item.k, _src: item, captionE: item.e };
+}
+
+// ── SAY IT ABOUT YOU ──
+// A "produce" exercise: use one new word in a sentence that is true about
+// your own life, then Sôr António checks it, corrects it, offers a more
+// natural version and reacts to what you said. Making your own sentence
+// (rather than recognising one) is one of the strongest ways to remember a
+// word. Needs the AI key; without it the ladder simply picks other exercises.
+const ABOUT_PROMPTS = [
+  w => `Use <b>${w}</b> in a sentence about your own life.`,
+  w => `Tell me something about your family or friends using <b>${w}</b>.`,
+  w => `Use <b>${w}</b> to say something about where you live.`,
+  w => `Use <b>${w}</b> to describe something you did recently.`,
+  w => `Use <b>${w}</b> to say what you like — or don't like.`,
+];
+let aboutRec = null;
+function renderAboutYou(q, container) {
+  if (!getApiKey()) { renderTypeKriolu(q, container); return; }
+  const p = ABOUT_PROMPTS[anatHash(q.item.k) % ABOUT_PROMPTS.length];
+  const hasMic = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  container.innerHTML = `<div class="exercise-card" style="text-align:left"><div class="exercise-type-badge">🙋 Say It About You</div>
+    <div class="wc-task">${p(escapeHTML(q.item.k))}</div>
+    <div class="wc-hint">${escapeHTML(q.item.k)} = ${escapeHTML(q.item.e)}. Keep it short and true — ${escapeHTML(tutorName())} will help with the rest.</div>
+    <div class="about-row">
+      <textarea id="about-input" class="wc-textarea" rows="2" placeholder="${isPT() ? 'Escreve aqui em português…' : 'Skrebe na Kriolu li…'}"></textarea>
+      ${hasMic ? `<button class="mic-btn" id="about-mic" onclick="aboutMic()" title="Say it">🎤</button>` : ''}
+    </div>
+    <button class="submit-btn" onclick="submitAboutYou()">Check with ${escapeHTML(tutorName())} ✓</button>
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    <div id="about-result"></div></div><div id="feedback-area"></div>`;
+}
+function aboutMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  try { if (aboutRec) { aboutRec.stop(); aboutRec = null; return; } } catch (e) {}
+  aboutRec = new SR(); aboutRec.lang = 'pt-PT'; aboutRec.interimResults = false;
+  const btn = document.getElementById('about-mic'); if (btn) btn.classList.add('listening');
+  aboutRec.onresult = ev => { const t = ev.results[0][0].transcript; const ta = document.getElementById('about-input'); if (ta) ta.value = (ta.value ? ta.value + ' ' : '') + t; };
+  aboutRec.onend = () => { if (btn) btn.classList.remove('listening'); aboutRec = null; };
+  aboutRec.start();
+}
+async function submitAboutYou() {
+  const q = state.session.questions[state.qIndex];
+  const ta = document.getElementById('about-input'), out = document.getElementById('about-result');
+  const text = (ta && ta.value || '').trim();
+  if (!text) { out.innerHTML = '<div class="feedback-bar wrong">Write or say something first 😊</div>'; return; }
+  if (state.awaitingNext) return;
+  out.innerHTML = `<div style="text-align:center;padding:12px;color:var(--muted)">${tutorAvatar()} ${escapeHTML(tutorName())} is reading…</div>`;
+  const L = aiLang();
+  const sys = `${L.persona} ${L.note}
+The learner is practising one word: "${q.item.k}" (${q.item.e}). They wrote a sentence about their own life using it.
+Reply with ONLY valid JSON, no markdown:
+{"uses_word": true/false (did they use the word or a correct form of it, with the right meaning),
+ "correct": true/false (is the whole sentence correct ${L.name}),
+ "fixed": "their sentence with only the mistakes corrected (same as theirs if correct)",
+ "natural": "how a native speaker would naturally say the same thing",
+ "tip": "one short tip in English about their main mistake, or a word of praise if it was correct",
+ "reply": "a short, warm reaction to what they told you, in ${L.name}, with the English in [brackets]"}`;
+  let r = null;
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 500, system: sys, messages: [{ role: 'user', content: text }] })
+    });
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    r = JSON.parse(data.content[0].text.replace(/```json|```/g, '').trim());
+  } catch (e) {
+    out.innerHTML = `<div class="feedback-bar wrong">⚠️ ${escapeHTML(String(e.message || 'Connection error'))}</div>`;
+    return;
+  }
+  state.awaitingNext = true;
+  lastUserAnswer = text;
+  const used = !!r.uses_word;
+  // The word was produced correctly if they used it with the right meaning;
+  // other grammar slips get corrected but don't count against the word.
+  if (used) { state.score++; recordWordResult(q.item, true); playSound('correct'); }
+  else { recordWordResult(q.item, false); playSound('wrong'); }
+  if (!state.myLines) state.myLines = [];
+  state.myLines.push({ k: q.item.k, text: r.fixed || text, d: localDateKey(new Date()), lang: currentLang() });
+  state.myLines = state.myLines.slice(-30);
+  saveState();
+  const { kriolu, translation } = parseResponse(r.reply || '');
+  out.innerHTML = '';
+  showFeedback(used, used ? (r.correct ? 'Natural and correct!' : 'You used the word — small fixes below.') : `Try to use <b>${escapeHTML(q.item.k)}</b> next time.`);
+  const bar = document.querySelector('#feedback-area .feedback-bar');
+  if (bar) bar.insertAdjacentHTML('afterend', `<div class="about-card">
+      ${r.correct ? '' : `<div><span class="about-lbl">Corrected</span>${escapeHTML(r.fixed || '')}</div>`}
+      ${r.natural && r.natural !== r.fixed ? `<div><span class="about-lbl">More natural</span>${escapeHTML(r.natural)}</div>` : ''}
+      ${r.tip ? `<div class="about-tip">💡 ${escapeHTML(r.tip)}</div>` : ''}
+      ${kriolu ? `<div class="about-reply">${tutorAvatar()} ${escapeHTML(kriolu)} <button class="lab-speak" onclick="speakText(this.dataset.s,this)" data-s="${escapeHTML(kriolu)}">🔊</button>${translation ? `<div class="about-e">${escapeHTML(translation)}</div>` : ''}</div>` : ''}
+    </div>`);
 }
 
 const KR_GRAMMAR_SPOTLIGHTS = {
@@ -55171,6 +55366,7 @@ function renderQuestion() {
   }
 
   const q = session.questions[qIndex];
+  if (q.item && !q.item._key && !['storyOrder', 'storyTF', 'speedMatch'].includes(q.type)) q.item = drillView(q.item);
   const content = document.getElementById('exercise-content');
   content.innerHTML = '';
 
@@ -55194,6 +55390,7 @@ function renderQuestion() {
   else if (q.type === 'speedMatch') renderSpeedMatch(q, content);
   else if (q.type === 'storyOrder') renderStoryOrder(q, content);
   else if (q.type === 'storyTF') renderStoryTF(q, content);
+  else if (q.type === 'aboutYou') renderAboutYou(q, content);
   else if (q.type === 'grammarChoice') renderGrammarChoice(q, content);
   else renderFlashcard(q, content);
 }
@@ -56243,6 +56440,7 @@ async function askAntonio(cacheKey, prompt, targetId, btn, maxTok) {
 }
 let lastUserAnswer = null;
 const TYPE_TASK = {
+  aboutYou: 'using the word in their own sentence about their life',
   multiChoice: 'choosing the English meaning', get multiChoiceKriolu() { return 'choosing the ' + courseName() + ' word'; },
   typeAnswer: 'typing the English meaning', get typeKriolu() { return 'typing the ' + courseName() + ' word'; },
   listening: 'identifying what they heard', dictation: 'writing down what they heard',
@@ -56282,7 +56480,7 @@ function antonioStudy(kind) {
 function showFeedback(correct, extra) {
   const area = document.getElementById('feedback-area');
   if (!area) return;
-  const whyBtn = (!correct && getApiKey() && state.session && state.session.questions[state.qIndex] && !['grammarChoice', 'speedMatch', 'storyOrder', 'storyTF'].includes(state.session.questions[state.qIndex].type))
+  const whyBtn = (!correct && getApiKey() && state.session && state.session.questions[state.qIndex] && !['grammarChoice', 'speedMatch', 'storyOrder', 'storyTF', 'aboutYou'].includes(state.session.questions[state.qIndex].type))
     ? `<button class="reveal-btn" id="antonio-why-btn" style="margin-top:8px" onclick="askAntonioWhy()">${tutorAvatar()} ${tutorName()} — why?</button><div id="antonio-why-result"></div>`
     : '';
   // Sentence exercises close with the structure behind the sentence — open
@@ -58386,6 +58584,8 @@ function buildTutorContext() {
   ctx += `\nCEFR level: ${lvl.current.code} (${lvl.current.name}). Mastered words: ${lvl.words}. Lessons done: ${lvl.lessons}. Day streak: ${state.streak || 0}.`;
   if (recentLessons.length) ctx += `\nRecently studied: ${recentLessons.join(', ')}.`;
   if (weak.length) ctx += `\nWords they find tricky (weave in gentle review when natural): ${weak.join(', ')}.`;
+  const mine = (state.myLines || []).filter(m => (m.lang || 'kriolu') === currentLang()).slice(-4).map(m => m.text);
+  if (mine.length) ctx += `\nThings they've told you about themselves in practice (bring up naturally): ${mine.join(' | ')}`;
   // #4: pull the learner's DUE spaced-repetition words into conversation —
   // retrieval + production + context all at once.
   if (state.learnerGoal && GOAL_INFO[state.learnerGoal]) {
