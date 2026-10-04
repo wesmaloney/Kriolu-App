@@ -422,6 +422,16 @@
     .ladder-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.74rem;color:var(--muted);margin-top:8px}
     .ladder-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
     .ladder-note{font-size:.74rem;color:var(--muted);margin-top:6px}
+    .tile-link{cursor:pointer}.tile-link .bt-link{font-size:.72rem;font-weight:800;color:var(--ocean-2);margin-top:4px}
+    .ladder-legend button{background:none;border:1px solid transparent;border-radius:99px;padding:3px 8px;margin:-3px -4px;font:inherit;color:inherit;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+    .ladder-legend button:hover{border-color:var(--border)}.ladder-legend button.on{border-color:var(--ocean-2);color:var(--ocean);font-weight:800;text-decoration:none}
+    .ladder-words{margin-top:10px;border-top:1px solid var(--border);padding-top:8px}
+    .wl-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+    .wl-row:last-child{border-bottom:none}
+    .wl-say{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:.85rem}
+    .wl-main{min-width:0;flex:1}.wl-k{font-weight:800;color:var(--ocean);overflow-wrap:anywhere}.wl-e{font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
+    .wl-where{font-size:.7rem;color:var(--muted);opacity:.85}
+    .wl-empty{font-size:.85rem;color:var(--muted);padding:8px 0}
     .lab-why{font-size:.84rem;line-height:1.5;color:var(--text);background:var(--bg);border-radius:12px;padding:10px 12px;margin:0 0 12px}
     .anat{margin-top:10px;text-align:left}
     .anat-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
@@ -1455,7 +1465,7 @@
       </div>
       <div class="bento-tile tile-xp"><div class="bt-icon">⭐</div><div class="bt-val" id="stat-xp">0</div><div class="bt-label">Total XP</div></div>
       <div class="bento-tile tile-lessons"><div class="bt-icon">✅</div><div class="bt-val" id="stat-lessons">0</div><div class="bt-label">Lessons Done</div></div>
-      <div class="bento-tile bento-wide"><div class="bt-icon">🧠</div><div class="bt-val" id="stat-words">0</div><div class="bt-label">Words Mastered</div></div>
+      <div class="bento-tile bento-wide tile-link" id="tile-mastered" role="button" tabindex="0" onclick="showMasteredWords()" onkeydown="if(event.key==='Enter')showMasteredWords()"><div class="bt-icon">🧠</div><div class="bt-val" id="stat-words">0</div><div class="bt-label">Words Mastered</div><div class="bt-link">See the list →</div></div>
     </div>
     <div id="level-slot"></div>
     <div id="daily-card-slot"></div>
@@ -53453,6 +53463,7 @@ function beginStagedLesson(lessonId) {
   if (!isAlphabet) stages.push({ type:'writing', words:pool, label:'Writing Challenge' });
 
   lessonPlan = { lessonId, lesson, stages, current: -1, totalSets: sets.length, counted: {} };
+  ladderOpenGroup = null;   // a new lesson opens with its word groups closed
   // Restore saved per-lesson stage progress, if any
   if (!state.lessonProgress) state.lessonProgress = {};
   let saved = state.lessonProgress[lessonId];
@@ -53577,9 +53588,95 @@ function ladderSummaryHTML() {
   const seg = (n, cls) => n ? `<div class="ladder-seg ${cls}" style="flex:${n}"></div>` : '';
   return `<div class="ladder-card">
     <div class="ladder-bar">${seg(counts[4], 'r4')}${seg(counts[3], 'r3')}${seg(counts[2], 'r2')}${seg(counts[1], 'r1')}${seg(counts[0], 'r0')}</div>
-    <div class="ladder-legend"><span><i class="r4"></i>${counts[4]} mastered</span><span><i class="r3"></i>${counts[3]} produce</span><span><i class="r2"></i>${counts[2]} use it</span><span><i class="r1"></i>${counts[1] + counts[0]} recognise / recall</span></div>
-    <div class="ladder-note">Each word gets a harder task every time it comes back. Words you already know (${counts[4]} of ${total}) skip ahead.</div>
+    <div class="ladder-legend">${LADDER_GROUPS.map(g => {
+      const n = g.rungs.reduce((a, r) => a + counts[r], 0);
+      return `<button type="button" class="${ladderOpenGroup === g.id ? 'on' : ''}" onclick="toggleLadderGroup('${g.id}')" aria-expanded="${ladderOpenGroup === g.id}"><i class="${g.cls}"></i>${n} ${g.label}</button>`;
+    }).join('')}</div>
+    <div class="ladder-note">Each word gets a harder task every time it comes back. Words you already know (${counts[4]} of ${total}) skip ahead. Tap a group to see its words.</div>
+    <div class="ladder-words" id="ladder-words"${ladderOpenGroup ? '' : ' hidden'}>${ladderOpenGroup ? ladderGroupHTML(ladderOpenGroup) : ''}</div>
   </div>`;
+}
+// The ladder groups shown under a lesson plan; each can be opened to list its words
+const LADDER_GROUPS = [
+  { id: 'mastered', label: 'mastered', cls: 'r4', rungs: [4] },
+  { id: 'produce', label: 'produce', cls: 'r3', rungs: [3] },
+  { id: 'use', label: 'use it', cls: 'r2', rungs: [2] },
+  { id: 'recognise', label: 'recognise / recall', cls: 'r1', rungs: [1, 0] },
+];
+let ladderOpenGroup = null;
+function ladderGroupHTML(id) {
+  const g = LADDER_GROUPS.find(x => x.id === id), L = lessonPlan && lessonPlan.ladder;
+  if (!g || !L) return '';
+  const lesson = lessonPlan.lesson || LESSONS.find(l => l.id === lessonPlan.lessonId);
+  const byKey = new Map(((lesson && lesson.vocab) || []).map(v => [v.k, v]));
+  const items = Object.keys(L).filter(k => g.rungs.includes(Math.min(LADDER_TOP, L[k]))).map(k => byKey.get(k) || { k, e: '' });
+  const blurb = { mastered: 'Words you know well — they skip practice in this lesson.', produce: 'Next time: say or write these yourself.',
+    use: 'Next time: use these in a sentence.', recognise: 'Still new — next time you pick or recall the meaning.' }[id];
+  return `<div class="wl-e" style="margin-bottom:4px">${blurb}</div>` + wordRowsHTML(items.map(v => {
+    const d = drillView(v);
+    return d._key ? { k: d.k, e: d.e, where: v.k } : { k: v.k, e: v.e };
+  }), 'No words here yet.');
+}
+function toggleLadderGroup(id) {
+  ladderOpenGroup = ladderOpenGroup === id ? null : id;
+  const panel = document.getElementById('ladder-words');
+  if (!panel) return;
+  panel.hidden = !ladderOpenGroup;
+  panel.innerHTML = ladderOpenGroup ? ladderGroupHTML(ladderOpenGroup) : '';
+  panel.closest('.ladder-card').querySelectorAll('.ladder-legend button').forEach((b, i) => {
+    const on = LADDER_GROUPS[i].id === ladderOpenGroup;
+    b.classList.toggle('on', on); b.setAttribute('aria-expanded', on);
+  });
+}
+
+// ── WORD LISTS ── rows with a 🔊 button, shared by the mastered-words list and the lesson ladder groups
+function wordRowsHTML(rows, emptyText) {
+  if (!rows.length) return `<div class="wl-empty">${escapeHTML(emptyText || 'Nothing here yet.')}</div>`;
+  return rows.map(r => `<div class="wl-row">
+      <button class="wl-say" title="Listen" aria-label="Listen" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(r.k)}">🔊</button>
+      <div class="wl-main"><div class="wl-k">${escapeHTML(r.k)}</div>${r.e ? `<div class="wl-e">${escapeHTML(r.e)}</div>` : ''}${r.where ? `<div class="wl-where">${escapeHTML(r.where)}</div>` : ''}</div>
+    </div>`).join('');
+}
+// Home → "Words Mastered": every word answered right MASTERY_THRESHOLD times, searchable
+const MASTERED_PAGE = 150;
+let masteredList = [], masteredShown = MASTERED_PAGE;
+function masteredWordRows() {
+  const byKey = new Map();
+  LESSONS.forEach(l => (l.vocab || []).forEach(v => { if (v.k && !byKey.has(v.k)) byKey.set(v.k, { v, l }); }));
+  return Object.entries(state.wordScores || {})
+    .filter(([, sc]) => (sc.correct || 0) >= MASTERY_THRESHOLD)
+    .map(([k]) => { const h = byKey.get(k); return { k, e: h ? h.v.e : '', where: h ? h.l.title : '' }; })
+    .sort((a, b) => a.k.localeCompare(b.k, undefined, { sensitivity: 'base' }));
+}
+function showMasteredWords() {
+  userHasInteracted = true;
+  masteredList = masteredWordRows(); masteredShown = MASTERED_PAGE;
+  document.getElementById('mastered-overlay')?.remove();
+  const ov = document.createElement('div');
+  ov.id = 'mastered-overlay';
+  ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Words mastered');
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(8,30,40,.75);z-index:950;display:flex;align-items:center;justify-content:center;padding:16px';
+  ov.onclick = e => { if (e.target === ov) ov.remove(); };
+  ov.innerHTML = `<div style="background:var(--bg);border-radius:20px;padding:20px 18px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <div style="font-weight:800;font-size:1.1rem;color:var(--ocean);flex:1">🧠 Words Mastered (${masteredList.length})</div>
+      <button class="wl-say" aria-label="Close" onclick="document.getElementById('mastered-overlay').remove()">✕</button>
+    </div>
+    <div style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Words you've answered correctly ${MASTERY_THRESHOLD}+ times in ${courseName()}.</div>
+    ${masteredList.length > 8 ? `<input type="search" class="type-input" id="mastered-search" placeholder="Search a word or meaning…" oninput="masteredShown=MASTERED_PAGE;renderMasteredRows()" style="margin-bottom:8px" autocomplete="off"/>` : ''}
+    <div id="mastered-rows" style="overflow:auto;flex:1;min-height:0"></div>
+  </div>`;
+  document.body.appendChild(ov);
+  renderMasteredRows();
+}
+function renderMasteredRows() {
+  const box = document.getElementById('mastered-rows');
+  if (!box) return;
+  const q = foldF(document.getElementById('mastered-search')?.value || '').trim();
+  const rows = q ? masteredList.filter(r => foldF(r.k + ' ' + r.e).includes(q)) : masteredList;
+  const empty = masteredList.length ? 'No mastered word matches that.' : `No words mastered yet — answer a word correctly ${MASTERY_THRESHOLD} times to master it.`;
+  box.innerHTML = wordRowsHTML(rows.slice(0, masteredShown), empty)
+    + (rows.length > masteredShown ? `<button class="due-btn" style="margin-top:10px;width:100%" onclick="masteredShown+=MASTERED_PAGE;renderMasteredRows()">Show more (${rows.length - masteredShown} left)</button>` : '');
 }
 
 // Run a specific stage by index (used for both progression and replay)
