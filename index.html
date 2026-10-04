@@ -365,6 +365,8 @@
     .lab-pattern{font-family:'Bricolage Grotesque',sans-serif;font-size:1.25rem;font-weight:600;color:var(--ocean);margin-bottom:5px;letter-spacing:-.01em}
     [data-theme="dark"] .lab-pattern{color:var(--sky)}
     .lab-explain{font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.45}
+    select.ai-dialect-select{max-width:min(240px,100%)}
+    .ai-dialect-bar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:-4px 0 14px;font-size:.78rem;font-weight:700;color:var(--muted)}
     .lab-why{font-size:.84rem;line-height:1.5;color:var(--text);background:var(--bg);border-radius:12px;padding:10px 12px;margin:0 0 12px}
     .anat{margin-top:10px;text-align:left}
     .anat-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
@@ -1247,6 +1249,20 @@
         <option value="saovicente">São Vicente</option>
       </select>
     </div>
+    <div class="setting-row" data-ai-dialect-wrap>
+      <div><div class="setting-label">🗣️ AI Reply Dialect</div><div class="setting-sub">Which Kriolu Sôr António and the translator use</div></div>
+      <select class="voice-select ai-dialect-select" aria-label="AI reply dialect" onchange="setAiDialect(this.value)"></select>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">📚 Daily Review Limit</div><div class="setting-sub">Most words due for review in one day; the rest wait for later days</div></div>
+      <select id="review-limit-select" class="voice-select" onchange="setDailyReviewLimit(this.value)">
+        <option value="15">15 words</option>
+        <option value="30">30 words</option>
+        <option value="50">50 words</option>
+        <option value="100">100 words</option>
+        <option value="0">No limit</option>
+      </select>
+    </div>
     <div class="setting-row">
       <div><div class="setting-label">🎯 My Goal</div><div class="setting-sub">Tailors recommendations & the tutor</div></div>
       <select id="goal-select" class="voice-select" onchange="state.learnerGoal=this.value;saveState();showToast('Goal updated ✓')">
@@ -1529,6 +1545,10 @@
       <button class="swap-btn" onclick="swapDirection()" title="Swap direction">⇄</button>
       <div class="lang-pill" id="lang-to">🇬🇧 English</div>
     </div>
+    <div class="ai-dialect-bar" data-ai-dialect-wrap>
+      <span>🗣️ Kriolu dialect:</span>
+      <select class="voice-select ai-dialect-select" aria-label="Translator dialect" onchange="setAiDialect(this.value)"></select>
+    </div>
 
     <div class="translate-card">
       <div class="translate-label" id="input-label">Kriolu</div>
@@ -1693,6 +1713,10 @@
           <option value="hard">Advanced</option>
           <option value="native">Native speed</option>
         </select>
+      </div>
+      <div class="difficulty-dial" data-ai-dialect-wrap>
+        <span style="font-size:.75rem;color:var(--muted);font-weight:700">🗣️ Dialect:</span>
+        <select class="voice-select ai-dialect-select" aria-label="Sôr António's dialect" onchange="setAiDialect(this.value)"></select>
       </div>
       <button class="challenge-btn" onclick="renderDailyChallengeScreen()">🎯 Daily Challenge</button>
     </div>
@@ -48791,21 +48815,45 @@ function courseName() { return isPT() ? 'Portuguese' : 'Kriolu'; }
 
 // Spelling rules every AI request follows, so generated text matches the
 // spelling the lessons teach (Kriolu is written several ways in the wild).
-const KR_SPELLING_GUIDE = 'Write Kriolu in ALUPEC spelling exactly as this course does: k (never c or qu), s (never ç or ss), x for the "sh" sound, tx for "ch", dj for the "j" sound, nh and lh as in Portuguese, -on for the nasal ending (never -ão), and the final -u / -i of Santiago words (fidju, kaza, noti). "I" is always a capital N. Use Santiago (Badiu) grammar: the verb never changes, and ta, sta ta, dja or ka go in front of it.';
+const KR_ORTHOGRAPHY = 'Write Kriolu in ALUPEC spelling exactly as this course does: k (never c or qu), s (never ç or ss), x for the "sh" sound, tx for "ch", dj for the "j" sound, nh and lh as in Portuguese, -on for the nasal ending (never -ão).';
+// Kriolu dialects the AI (Sôr António and the translator) can reply in. The
+// lessons teach Santiago; the others are offered for learners who need them.
+const KR_DIALECTS = {
+  santiago:   { label:'Santiago (Badiu)',         island:'Santiago',
+    guide:'Use Santiago (Badiu) Kriolu: the verb never changes, and ta, sta ta, dja or ka go in front of it; -ba for the past habitual (N ta kumeba); bu for "you", nhos for "you all"; the final -u / -i of Santiago words (fidju, kaza, noti). "I" is a capital N.' },
+  saovicente: { label:'São Vicente (Sampadjudu)', island:'São Vicente',
+    guide:'Use São Vicente (Sampadjudu) Kriolu as spoken in Mindelo: bo for "you" and bzot for "you all", m / mi for "I", ti ta for an action happening now, tava for the past habitual, verbs with a stressed final vowel (fazê, bebê, kmê), and the shortened words typical of São Vicente (sab for sabi).' },
+  santoantao: { label:'Santo Antão',              island:'Santo Antão',
+    guide:'Use Santo Antão Kriolu (Barlavento group, close to São Vicente): bo for "you" and bzot for "you all", ti ta for an action happening now, tava for the past habitual, verbs with a stressed final vowel (fazê). Where Santo Antão speech differs from São Vicente, use the Santo Antão form.' },
+  fogo:       { label:'Fogo',                     island:'Fogo',
+    guide:'Use Fogo Kriolu (Sotavento group, close to Santiago): bu for "you", ta, sta ta, dja or ka in front of an unchanging verb, -ba for the past habitual. Where Fogo speech differs from Santiago, use the Fogo form.' },
+};
+// The learner's choice for AI replies; until they pick one it follows their
+// dialect focus from onboarding / Settings.
+function aiDialect() {
+  const d = typeof state !== 'undefined' && state && state.aiDialect;
+  if (d && KR_DIALECTS[d]) return d;
+  return typeof state !== 'undefined' && state && state.dialect === 'saovicente' ? 'saovicente' : 'santiago';
+}
+function krSpellingGuide() {
+  const d = aiDialect(), D = KR_DIALECTS[d];
+  return KR_ORTHOGRAPHY + ' ' + D.guide + (d === 'santiago' ? ''
+    : ' The lessons teach Santiago forms, so when your word differs from Santiago, give the Santiago form in brackets the first time it appears — e.g. bo (Santiago: bu).');
+}
 const PT_SPELLING_GUIDE = 'Write European Portuguese as used in Portugal and Cape Verde, in current spelling: estar a + infinitive for ongoing actions (never the gerund), pronouns after the verb in plain statements (levanta-se), the article before possessives (o seu), and Portuguese vocabulary (autocarro, comboio, ecrã, telemóvel, pequeno-almoço) — never Brazilian forms.';
 function aiLang() {
   const PT = isPT();
   return {
     name:    PT ? 'European Portuguese' : 'Kriolu',
-    full:    PT ? 'European Portuguese (Portugal)' : 'Kriolu (Cape Verdean Creole, Santiago/Badiu variant)',
+    full:    PT ? 'European Portuguese (Portugal)' : `Kriolu (Cape Verdean Creole, ${KR_DIALECTS[aiDialect()].label} variety)`,
     tutor:   'Sôr António',
     persona: PT
       ? 'You are Sôr António, a warm, encouraging tutor from Santiago, Cape Verde, who also teaches precise European Portuguese.'
-      : 'You are Sôr António, a warm, encouraging Kriolu teacher from Santiago, Cape Verde.',
+      : `You are Sôr António, a warm, encouraging Kriolu teacher from Cape Verde who speaks and teaches the ${KR_DIALECTS[aiDialect()].label} variety.`,
     culture: PT ? 'Portugal' : 'Cape Verde',
     note:    PT
       ? 'Use European Portuguese (not Brazilian): tu/você forms, -mos endings, vocabulary and spelling as used in Portugal. ' + PT_SPELLING_GUIDE
-      : 'Use Kriolu of Santiago (Badiu), as taught in this course. ' + KR_SPELLING_GUIDE,
+      : krSpellingGuide(),
   };
 }
 
@@ -49115,6 +49163,7 @@ function applyLanguageChrome() {
   // The island-dialect choice only means something in the Kriolu course
   const dialectRow = document.getElementById('dialect-row');
   if (dialectRow) dialectRow.style.display = isPT() ? 'none' : '';
+  syncAiDialectUI();
   // The Music section teaches through Cape Verdean song — Kriolu only.
   const musicTab = document.getElementById('readtab-music');
   if (musicTab) musicTab.style.display = isPT() ? 'none' : '';
@@ -51609,7 +51658,7 @@ function saveState() {
     communityFilter:state.communityFilter,
     notifEnabled:state.notifEnabled, reminderHour:state.reminderHour, lastReminderDate:state.lastReminderDate,
     checkpointsPassed:state.checkpointsPassed, grammarFocus:state.grammarFocus, lastWarmupDate:state.lastWarmupDate,
-    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
+    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, aiDialect:state.aiDialect, dailyReviewLimit:state.dailyReviewLimit, reviewLog:state.reviewLog, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
     lastReviewDate:state.lastReviewDate, lastLessonDate:state.lastLessonDate, lastApplyDate:state.lastApplyDate,
     spotlightsDone:state.spotlightsDone, markerCorrect:state.markerCorrect, podcastRuns:state.podcastRuns, microfixDone:state.microfixDone, warmupDone:state.warmupDone, antonioAsks:state.antonioAsks, grammarSkillsDone:state.grammarSkillsDone, errorReports:state.errorReports, dailyStats:state.dailyStats, recentMiss:state.recentMiss, passagesDone:state.passagesDone,
     lang:state.lang, langData:state.langData,
@@ -51720,15 +51769,20 @@ function srUpdate(wordKey, quality) {
   let d = state.srData[wordKey] || { ef: 2.5, interval: 0, reps: 0, due: 0 };
 
   if (quality < 3) {
-    // Failed — reset repetitions, review again soon (10 min)
+    // Failed — reset repetitions, review again soon (10 min). "lapsed" keeps it
+    // in the due list; before, a failed word (reps 0) silently left review.
     d.reps = 0;
     d.interval = 0;
+    d.lapsed = true;
     d.due = Date.now() + 10 * 60 * 1000;
   } else {
+    d.lapsed = false;
     d.reps += 1;
     if (d.reps === 1) d.interval = 1;
     else if (d.reps === 2) d.interval = 3;
     else d.interval = Math.round(d.interval * d.ef);
+    // ±10% spread, so a lesson's words don't all come back on the same day
+    if (d.interval >= 3) d.interval = Math.max(2, Math.round(d.interval * (0.9 + Math.random() * 0.2)));
     // Update ease factor (SM-2 formula)
     d.ef = Math.max(1.3, d.ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
     d.due = Date.now() + d.interval * 24 * 60 * 60 * 1000;
@@ -51736,7 +51790,8 @@ function srUpdate(wordKey, quality) {
   state.srData[wordKey] = d;
 }
 
-function getDueWords() {
+// Every word that is due, most overdue first (the full backlog)
+function getDueBacklog() {
   const now = Date.now();
   const due = [];
   const pool = LESSONS.flatMap(l => l.vocab).concat(state.savedFromChat || []);
@@ -51745,15 +51800,43 @@ function getDueWords() {
     if (seen.has(v.k)) return;
     seen.add(v.k);
     const d = state.srData?.[v.k];
-    if (d && d.due <= now && d.reps > 0) due.push(v);
+    if (d && d.due <= now && (d.reps > 0 || d.lapsed)) due.push(v);
   });
-  return due;
+  return due.sort((a, b) => state.srData[a.k].due - state.srData[b.k].due);
+}
+// Daily review limit (Settings). Each lesson adds new words to the schedule,
+// so without a limit the due count can outgrow what anyone can review in a day.
+function dailyReviewLimit() {
+  const n = Number(state.dailyReviewLimit);
+  return Number.isFinite(n) && n >= 0 ? n : 30;
+}
+function setDailyReviewLimit(v) {
+  state.dailyReviewLimit = Math.max(0, Number(v) || 0);
+  saveState();
+  showToast(state.dailyReviewLimit ? `📚 Up to ${state.dailyReviewLimit} review words a day` : '📚 No daily review limit');
+  if (typeof renderReview === 'function') renderReview();
+}
+function reviewsDoneToday() {
+  const log = state.reviewLog;
+  return log && log.day === localDateKey(new Date()) ? (log[currentLang()] || 0) : 0;
+}
+// Today's share of the backlog: what the app asks for today
+function getDueWords() {
+  const backlog = getDueBacklog(), lim = dailyReviewLimit();
+  return lim ? backlog.slice(0, Math.max(0, lim - reviewsDoneToday())) : backlog;
 }
 
 function countDueWords() { return getDueWords().length; }
 
 function recordWordResult(item, correct) {
   const key = item.k;
+  // Count it against today's review limit when the word was due
+  const srd = state.srData && state.srData[key];
+  if (srd && srd.due <= Date.now() && (srd.reps > 0 || srd.lapsed)) {
+    const day = localDateKey(new Date());
+    if (!state.reviewLog || state.reviewLog.day !== day) state.reviewLog = { day };
+    state.reviewLog[currentLang()] = (state.reviewLog[currentLang()] || 0) + 1;
+  }
   const isNewWord = !state.wordScores[key];
   if (!state.wordScores[key]) state.wordScores[key] = { correct:0, wrong:0, streak:0 };
   // Rolling daily stats — powers the live weekly insights
@@ -51784,8 +51867,10 @@ function recordWordResult(item, correct) {
   state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
 }
 
-// A word needs this many correct answers in a row (after a mistake) to leave the review list
-const REVIEW_CLEAR_STREAK = 3;
+// A word needs this many correct answers in a row (after a mistake) to leave the
+// review list. It was 3 while a review session asked each word once, so a word
+// took three sessions to clear and the list outgrew any learner.
+const REVIEW_CLEAR_STREAK = 2;
 
 function isInReview(v) {
   const s = state.wordScores[v.k];
@@ -52193,9 +52278,32 @@ function toggleNotification() {
 }
 
 // Save the preferred reminder hour (0-23). Called from the time selector.
+// Fill and show every AI-dialect picker (Settings, translator, chat). Kriolu
+// only — the Portuguese course has one variety, so the pickers hide there.
+function syncAiDialectUI() {
+  const cur = aiDialect();
+  document.querySelectorAll('.ai-dialect-select').forEach(sel => {
+    if (!sel.options.length) sel.innerHTML = Object.entries(KR_DIALECTS).map(([k, d]) => `<option value="${k}">${escapeHTML(d.label)}</option>`).join('');
+    sel.value = cur;
+  });
+  document.querySelectorAll('[data-ai-dialect-wrap]').forEach(el => { el.style.display = isPT() ? 'none' : ''; });
+  const rl = document.getElementById('review-limit-select');
+  if (rl) rl.value = String(dailyReviewLimit());
+}
+function setAiDialect(d) {
+  if (!KR_DIALECTS[d]) return;
+  state.aiDialect = d;
+  saveState();
+  syncAiDialectUI();
+  // A result shown on screen was made in the previous dialect
+  const card = document.getElementById('translate-result-card');
+  if (card) card.style.display = 'none';
+  showToast(`🗣️ Sôr António and the translator now use ${KR_DIALECTS[d].label}`);
+}
 function setDialect(d) {
   state.dialect = d;
   saveState();
+  syncAiDialectUI();
   if (d === 'saovicente') showToast('🏝️ São Vicente mode — António will note Sampadjudu variants');
   else showToast('🏝️ Santiago (Badiu) focus');
 }
@@ -55390,11 +55498,13 @@ function matchSelect(idx, side, btn) {
 // On-demand, cached explanations: why an answer was wrong, extra examples,
 // usage context, and word-by-word sentence breakdowns. Each is generated ONCE
 // per word (cached locally like the TTS audio), so repeats are instant & free.
-const ANTONIO_SYS_KR = "You are Sôr António, a warm Cape Verdean Kriolu tutor (Santiago/Badiu variety). Answer in English with Kriolu examples where helpful. Plain text only, no markdown. Be brief and encouraging. " + KR_SPELLING_GUIDE;
+function antonioSysKr() {
+  return `You are Sôr António, a warm Cape Verdean Kriolu tutor who speaks the ${KR_DIALECTS[aiDialect()].label} variety. Answer in English with Kriolu examples where helpful. Plain text only, no markdown. Be brief and encouraging. ` + krSpellingGuide();
+}
 const ANTONIO_SYS_PT = "You are Sôr António, a warm tutor from Cape Verde who also teaches European Portuguese. Use EUROPEAN Portuguese as spoken in Portugal and Cape Verde (tu/você, 'estou a fazer' not 'estou fazendo', autocarro, comboio, pequeno-almoço, casa de banho). Never use Brazilian forms. Answer in English with Portuguese examples where helpful. Plain text only, no markdown. Be brief and encouraging. The learner also speaks or is learning Cape Verdean Kriolu, so when a Portuguese word differs sharply from its Kriolu cousin, a one-line comparison is welcome.";
 // The chat and translator are shared across both courses — they follow the
 // language the learner is currently studying.
-Object.defineProperty(window, 'ANTONIO_SYS', { get(){ return isPT() ? ANTONIO_SYS_PT : ANTONIO_SYS_KR; } });
+Object.defineProperty(window, 'ANTONIO_SYS', { get(){ return isPT() ? ANTONIO_SYS_PT : antonioSysKr(); } });
 function antonioCacheGet(k) {
   try { return (JSON.parse(localStorage.getItem('kriolu_antonio_cache') || '{}'))[k] || null; } catch (e) { return null; }
 }
@@ -55424,6 +55534,7 @@ async function askAntonioAI(prompt, maxTok) {
 async function askAntonio(cacheKey, prompt, targetId, btn, maxTok) {
   const target = document.getElementById(targetId);
   if (!target) return;
+  cacheKey = (isPT() ? 'pt' : aiDialect()) + '|' + cacheKey;   // answers differ by course and dialect
   state.antonioAsks = (state.antonioAsks || 0) + 1;
   saveState();
   const cached = antonioCacheGet(cacheKey);
@@ -55784,12 +55895,21 @@ function renderReview() {
 
   // "Due today" SR banner — the highest-value review action
   let dueBanner = '';
+  const waiting = getDueBacklog().length - due.length, lim = dailyReviewLimit();
+  // Overflow beyond today's limit waits for later days. If it keeps building,
+  // new words are arriving faster than they're reviewed — say so plainly.
+  const waitNote = waiting > 0
+    ? `<div style="font-size:.78rem;opacity:.9;margin-top:6px">${waiting} more ${waiting === 1 ? 'is' : 'are'} waiting for later days (daily limit ${lim} — change it in Settings).${waiting > lim * 2 ? ' You\'re adding words faster than you review them: a review before each new lesson keeps this down.' : ''}</div>`
+    : '';
   if (due.length) {
     dueBanner = `<div class="due-today-card">
-      <div style="flex:1"><div style="font-weight:800;font-size:1.05rem;margin-bottom:2px">⏰ ${due.length} word${due.length===1?'':'s'} due for review</div>
-        <div style="font-size:.82rem;opacity:.92">Your spaced-repetition schedule says now is the perfect time to review these.</div></div>
+      <div style="flex:1"><div style="font-weight:800;font-size:1.05rem;margin-bottom:2px">⏰ ${due.length} word${due.length===1?'':'s'} due for review today</div>
+        <div style="font-size:.82rem;opacity:.92">Your spaced-repetition schedule says now is the perfect time to review these.</div>${waitNote}</div>
       <button class="due-btn" onclick="startDueSession()">Review →</button>
     </div>`;
+  } else if (waiting > 0) {
+    dueBanner = `<div class="due-today-card"><div style="flex:1"><div style="font-weight:800;font-size:1.05rem;margin-bottom:2px">✅ Today's reviews are done</div>${waitNote}</div>
+      <button class="due-btn" onclick="startDueSession(true)">Review more →</button></div>`;
   }
 
   // Practice Toolkit — the "apply your training" hub (#2 #6 #7)
@@ -56342,8 +56462,9 @@ function fallbackCopy(txt, done) {
   ta.remove();
 }
 
-function startDueSession() {
-  const words = shuffle(getDueWords()).slice(0, 20);
+function startDueSession(extra) {
+  // extra: past today's limit, from the waiting words (most overdue first)
+  const words = extra === true ? getDueBacklog().slice(0, 20) : shuffle(getDueWords()).slice(0, 20);
   if (!words.length) { showToast('🎉 Nothing due right now — bon trabadju!'); return; }
   const types = contextualTypes(words);
   const questions = words.map((item, i) => ({ item, type: types[i], lessonId: 'due' }));
@@ -56353,10 +56474,15 @@ function startDueSession() {
 }
 
 function startReviewSession() {
-  const words = shuffle(getReviewWords()).slice(0, 15);
+  // 10 words, each asked twice (second round reshuffled, different exercise),
+  // so one good session clears a word from the list
+  const words = shuffle(getReviewWords()).slice(0, 10);
   if (!words.length) return;
-  const types = assignExerciseTypes(words.length);
-  const questions = words.map((item, i) => ({
+  const round2 = shuffle([...words]);
+  if (words.length > 1 && round2[0] === words[words.length - 1]) round2.push(round2.shift());
+  const all = [...words, ...round2];
+  const types = assignExerciseTypes(all.length);
+  const questions = all.map((item, i) => ({
     item, type: types[i], lessonId: 'review'
   }));
   lessonPlan = null; state.session = { questions, lessonId: 'review', lessonTitle: 'Review Mistakes' };
@@ -57503,8 +57629,8 @@ function buildTutorContext() {
   if (state.learnerGoal && GOAL_INFO[state.learnerGoal]) {
     ctx += `\nThe learner's goal: ${GOAL_INFO[state.learnerGoal].line}. Lean conversations toward this when natural.`;
   }
-  if (state.dialect === 'saovicente') {
-    ctx += `\nDIALECT: the learner focuses on São Vicente (Sampadjudu) Creole. The app teaches Santiago forms; when a São Vicente variant differs meaningfully (e.g. bo/bosê for bu, different pronunciation), briefly note it.`;
+  if (!isPT() && aiDialect() !== 'santiago') {
+    ctx += `\nDIALECT: reply in ${KR_DIALECTS[aiDialect()].label} Kriolu, as the learner chose. The lessons teach Santiago forms, so when your word differs, show the Santiago form in brackets once (e.g. bo (Santiago: bu)).`;
   }
   const dueChat = getDueWords().slice(0, 3);
   if (dueChat.length) {
@@ -57933,7 +58059,7 @@ function courseGlossary(text, fromTarget, limit) {
   return out;
 }
 const TRANSLATE_CACHE_KEY = 'kriolu_translate_cache', TRANSLATE_CACHE_MAX = 200;
-function translateCacheKey(input, dir) { return currentLang() + '|' + dir + '|' + input.trim().replace(/\s+/g, ' ').toLowerCase(); }
+function translateCacheKey(input, dir) { return currentLang() + '|' + (isPT() ? '' : aiDialect()) + '|' + dir + '|' + input.trim().replace(/\s+/g, ' ').toLowerCase(); }
 function translateCacheGet(k) {
   try { return (JSON.parse(localStorage.getItem(TRANSLATE_CACHE_KEY) || '{}'))[k] || null; } catch (e) { return null; }
 }
@@ -57973,23 +58099,25 @@ async function doTranslate(fresh) {
   btn.disabled = true; btn.textContent = 'Translating…';
 
   const k2e = transDirection === 'k2e';
+  const dia = aiDialect(), DL = KR_DIALECTS[dia].label;
   const TL = isPT()
     ? 'European Portuguese (as spoken in Portugal and Cape Verde — never Brazilian forms)'
-    : 'Kriolu (Cape Verdean Creole, Santiago/Badiu variety)';
-  // Only English→Kriolu has a second dialect worth surfacing (São Vicente vs.
-  // Santiago) — every other direction leaves "variant" as an empty string.
+    : `Kriolu (Cape Verdean Creole, ${DL} variety)`;
+  // English→Kriolu also returns the sentence in a second dialect: São Vicente
+  // when the learner works in Santiago, otherwise Santiago (what the lessons teach).
   const wantVariant = !k2e && !isPT();
+  const variantDialect = dia === 'santiago' ? 'São Vicente Kriolu' : 'Santiago (Badiu) Kriolu, as taught in the lessons';
   const gloss = courseGlossary(input, k2e);
   const sysPrompt = `You are an expert translator between ${TL} and English for a language-learning course.
 Translate the user's text ${k2e ? `from ${TL} to natural English` : `from English to natural ${TL}`}.
 Consistency rules:
 - Give the single most standard, everyday translation — the one you would give every time for this text. Don't vary the wording between requests and don't put alternatives in the translation.
-- ${isPT() ? PT_SPELLING_GUIDE : KR_SPELLING_GUIDE}
+- ${isPT() ? PT_SPELLING_GUIDE : krSpellingGuide()}
 - Keep the meaning, tense and person exactly; don't add or drop information.${gloss.length ? `
-- The learner studies these course entries. When one of them fits the meaning in this text, use exactly that form so the translation matches the lessons:
+- The learner studies these course entries${!isPT() && dia !== 'santiago' ? ` (Santiago forms — use them only where they are also right in ${DL}, otherwise use the ${DL} form)` : ''}. When one of them fits the meaning in this text, use exactly that form so the translation matches the lessons:
 ${gloss.map(g => `${g.k} = ${g.e}`).join('\n')}` : ''}
 Respond with ONLY valid JSON, no markdown fences, in this exact format:
-{"translation":"the translated text","note":"a one-sentence note about word choice, grammar, or culture if helpful, else empty string"${wantVariant ? ',"variant":"the same sentence as it would actually be said in São Vicente Kriolu, if meaningfully different from the Santiago translation — else empty string"' : ''}}`;
+{"translation":"the translated text","note":"a one-sentence note about word choice, grammar, or culture if helpful, else empty string"${wantVariant ? `,"variant":"the same sentence as it would actually be said in ${variantDialect}, if meaningfully different from your translation — else empty string"` : ''}}`;
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -58033,7 +58161,8 @@ function showTranslation(text, note, variant, fromCache) {
   document.getElementById('translate-output').innerHTML = safe;
   document.getElementById('translate-note').textContent = note;
   const variantEl = document.getElementById('translate-variant');
-  if (variant) { variantEl.innerHTML = `🌊 <b>Also heard as</b> (São Vicente): ${escapeHTML(variant)}`; variantEl.style.display = 'block'; }
+  const vLabel = aiDialect() === 'santiago' ? 'São Vicente' : 'Santiago — as in your lessons';
+  if (variant) { variantEl.innerHTML = `🌊 <b>Also heard as</b> (${vLabel}): ${escapeHTML(variant)}`; variantEl.style.display = 'block'; }
   else { variantEl.style.display = 'none'; variantEl.innerHTML = ''; }
   const cacheEl = document.getElementById('translate-cache-note');
   if (cacheEl) cacheEl.innerHTML = fromCache
@@ -60935,6 +61064,7 @@ function init() {
   // Restore dialect & goal selectors
   const dsel = document.getElementById('dialect-select');
   if (dsel && state.dialect) dsel.value = state.dialect;
+  syncAiDialectUI();
   const gsel = document.getElementById('goal-select');
   if (gsel && state.learnerGoal) gsel.value = state.learnerGoal;
   // First-run onboarding (only for brand-new users with no progress)
