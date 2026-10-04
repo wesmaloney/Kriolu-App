@@ -1335,6 +1335,10 @@
         <option value="21">9:00 PM</option>
       </select>
     </div>
+    <div class="setting-row" data-kriolu-only>
+      <div><div class="setting-label">🗣️ Kriolu Pronunciation</div><div class="setting-sub">Helps the Portuguese voice sound Kriolu (behind the scenes — spelling on screen doesn't change)</div></div>
+      <label class="toggle-switch"><input type="checkbox" id="kr-phonetic-toggle" onchange="toggleKrPhonetic(this.checked)" checked><span class="toggle-slider"></span></label>
+    </div>
     <div class="setting-row">
       <div><div class="setting-label">🔊 Sound Effects</div><div class="setting-sub">Feedback sounds on answers</div></div>
       <label class="toggle-switch"><input type="checkbox" id="sfx-toggle" onchange="toggleSfx()" checked><span class="toggle-slider"></span></label>
@@ -51705,7 +51709,7 @@ function saveState() {
     communityFilter:state.communityFilter,
     notifEnabled:state.notifEnabled, reminderHour:state.reminderHour, lastReminderDate:state.lastReminderDate,
     checkpointsPassed:state.checkpointsPassed, grammarFocus:state.grammarFocus, lastWarmupDate:state.lastWarmupDate,
-    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, aiDialect:state.aiDialect, activeMission:state.activeMission, missionsDone:state.missionsDone, dailyReviewLimit:state.dailyReviewLimit, reviewLog:state.reviewLog, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
+    onboarded:state.onboarded, learnerGoal:state.learnerGoal, learnerLevel:state.learnerLevel, dialect:state.dialect, aiDialect:state.aiDialect, krPhonetic:state.krPhonetic, activeMission:state.activeMission, missionsDone:state.missionsDone, dailyReviewLimit:state.dailyReviewLimit, reviewLog:state.reviewLog, alupecSpelling:state.alupecSpelling, userName:state.userName, dialoguesDone:state.dialoguesDone,
     lastReviewDate:state.lastReviewDate, lastLessonDate:state.lastLessonDate, lastApplyDate:state.lastApplyDate,
     spotlightsDone:state.spotlightsDone, markerCorrect:state.markerCorrect, podcastRuns:state.podcastRuns, microfixDone:state.microfixDone, warmupDone:state.warmupDone, antonioAsks:state.antonioAsks, grammarSkillsDone:state.grammarSkillsDone, errorReports:state.errorReports, dailyStats:state.dailyStats, recentMiss:state.recentMiss, passagesDone:state.passagesDone,
     lang:state.lang, langData:state.langData,
@@ -52334,9 +52338,17 @@ function syncAiDialectUI() {
     if (!sel.options.length) sel.innerHTML = Object.entries(KR_DIALECTS).map(([k, d]) => `<option value="${k}">${escapeHTML(d.label)}</option>`).join('');
     sel.value = cur;
   });
-  document.querySelectorAll('[data-ai-dialect-wrap]').forEach(el => { el.style.display = isPT() ? 'none' : ''; });
+  document.querySelectorAll('[data-ai-dialect-wrap], [data-kriolu-only]').forEach(el => { el.style.display = isPT() ? 'none' : ''; });
+  const kp = document.getElementById('kr-phonetic-toggle');
+  if (kp) kp.checked = state.krPhonetic !== false;
   const rl = document.getElementById('review-limit-select');
   if (rl) rl.value = String(dailyReviewLimit());
+}
+function toggleKrPhonetic(on) {
+  state.krPhonetic = !!on;
+  saveState();
+  showToast(on ? '🗣️ Kriolu pronunciation on' : '🗣️ Plain Portuguese reading');
+  speakText('N sta dretu, obrigadu. Kuma bu sta?', null);
 }
 function setAiDialect(d) {
   if (!KR_DIALECTS[d]) return;
@@ -55681,7 +55693,7 @@ function antonioSpeak(text, statusEl, done) {
   const finish = () => { antonioStopTalking(); if (statusEl) statusEl.textContent = ''; if (done) done(); };
   // Use browser TTS events when available for accurate timing
   if (window.speechSynthesis) {
-    const clean = cleanForSpeech(text);
+    const clean = voiceForm(text);
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(clean);
     if (bestVoice) utter.voice = bestVoice;
@@ -57395,6 +57407,73 @@ function setVoice(name) {
   speakText('Bon dia! Kuma bu sta?', null);
 }
 
+// ── KRIOLU VOICE RESPELLING ──
+// Sôr António's voice is a European Portuguese one. Read as Portuguese, ALUPEC
+// spelling comes out wrong: "fidju" and "noti" get stressed on the last
+// syllable, intervocalic "s" turns into "z", "k" and "tx" are read as letter
+// names or oddly, "N" (I) is read "ene", "e" (is) is read "i". This rewrites
+// Kriolu text into Portuguese spelling that the voice reads the Kriolu way.
+// It is only ever passed to the voice — learners always see the real spelling.
+const PHON_VOWEL = 'aeiouáéíóúâêôãõày';
+const phonIsV = ch => PHON_VOWEL.includes(ch);
+// Stressed e / o in Santiago words are mostly closed (dretu, Verdi, otu)
+const PHON_ACUTE = { a: 'á', e: 'ê', i: 'í', o: 'ô', u: 'ú' };
+function krPhonWord(word) {
+  const lower = word.toLowerCase();
+  // Pronouns and one-letter words first
+  if (lower === 'n') return word === 'N' ? 'Im' : 'im';      // N = I, a syllabic nasal — not the letter "ene"
+  if (lower === 'e') return word === 'E' ? 'É' : 'é';        // e = is (open e), not Portuguese "e" (and)
+  let w = lower;
+  w = w.replace(/tx/g, 'tch')                 // tx = ch as in "church"
+       .replace(/x/g, 'ch')                   // x = sh
+       .replace(/y/g, 'i').replace(/w/g, 'u')
+       .replace(/k(?=[eiéíêî])/g, 'qu')       // k before e/i → qu
+       .replace(/k/g, 'c')                    // other k → c
+       .replace(/g(?=[eiéíêî])/g, 'gu')       // ALUPEC g is always hard
+       .replace(/n(?=[pb])/g, 'm');           // kanpu → campu
+  // Intervocalic s stays [s] in Kriolu (Portuguese would voice it to z)
+  w = w.replace(/([aeiouáéíóúâêô])s(?=[aeiouáéíóúâêô])/g, '$1ss');
+  // Nasal endings: an → ã, on → om, in → im, un → um, en → em
+  // (-en is stressed last in Kriolu — algen = alguém — so mark it when the word is longer)
+  w = w.replace(/an(s?)$/, 'ã$1').replace(/on(s?)$/, 'om$1').replace(/in(s?)$/, 'im$1').replace(/un(s?)$/, 'um$1')
+       .replace(/en(s?)$/, (m, s1, off) => (/[aeiouáéíóú]/.test(w.slice(0, off)) && !/[áéíóúâêôãõ]/.test(w) ? 'ém' : 'em') + s1);
+  // One-syllable words ending in e / o: Portuguese would swallow the vowel (que, do)
+  if (!/[áéíóúâêôãõ]/.test(w) && (w.match(/[aeiou]+/g) || []).length === 1) w = w.replace(/e$/, 'ê').replace(/o$/, 'ô');
+  // Stress: Kriolu words ending in a vowel are stressed on the next-to-last
+  // syllable unless marked. Portuguese stresses final -i / -u on the LAST
+  // syllable (aqui, urubu), so mark the right one explicitly.
+  if (!/[áéíóúâêôãõ]/.test(w) && /[iu]s?$/.test(w)) {
+    const groups = [];
+    for (let i = 0; i < w.length;) {
+      if (phonIsV(w[i]) && !(w[i] === 'u' && (w[i - 1] === 'q' || (w[i - 1] === 'g' && 'eiéí'.includes(w[i + 1] || ''))))) {
+        let j = i; while (j < w.length && phonIsV(w[j])) j++;
+        groups.push([i, j]); i = j;
+      } else i++;
+    }
+    if (groups.length >= 2) {
+      const [a, b] = groups[groups.length - 2];
+      // In a diphthong, stress the stronger vowel (a, e, o) — "kuártu", "sáuda"
+      let k = a; for (let i = a; i < b; i++) if ('aeo'.includes(w[i])) { k = i; break; }
+      w = w.slice(0, k) + (PHON_ACUTE[w[k]] || w[k]) + w.slice(k + 1);
+    }
+  }
+  // Keep the original capitalisation of the first letter
+  return /^\p{Lu}/u.test(word) ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+}
+// Attached pronouns: fla-m, da-l, ajuda-s — a lone consonant would be read as a letter name
+const PHON_CLITIC = { m: 'me', l: 'le', s: 'es', n: 'ne' };
+function krSpeechForm(text) {
+  return String(text || '').replace(/[\p{L}]+(?:-[\p{L}]+)*/gu, tok => tok.split('-').map((part, i) =>
+    i > 0 && PHON_CLITIC[part.toLowerCase()] ? PHON_CLITIC[part.toLowerCase()] : krPhonWord(part)).join('-'));
+}
+// Text for the target-language voice: cleaned, and respelled for Kriolu
+function voiceForm(text) {
+  const clean = cleanForSpeech(text);
+  if (isPT() || state.krPhonetic === false) return clean;
+  if (typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(String(text || '').trim())) return clean;
+  return krSpeechForm(clean);
+}
+
 function cleanForSpeech(text) {
   const raw = String(text || '').trim();
   let out = raw
@@ -57460,7 +57539,7 @@ function playTtsAudio(audioB64, btnEl, rate) {
 }
 
 async function speakText(text, btnEl, rate) {
-  const clean = cleanForSpeech(text);
+  const clean = voiceForm(text);   // Kriolu is respelled for the Portuguese voice (never shown)
   if (!clean) return;
 
   const endpoint = getTtsEndpoint();
@@ -61022,7 +61101,7 @@ function playListening(id) {
 
 // Speak one line and call back when it ends, falling back to a timed estimate
 function speakLine(text, done) {
-  const clean = (typeof cleanForSpeech === 'function') ? cleanForSpeech(text) : text;
+  const clean = (typeof voiceForm === 'function') ? voiceForm(text) : text;
   if (window.speechSynthesis) {
     const u = new SpeechSynthesisUtterance(clean);
     if (typeof bestVoice !== 'undefined' && bestVoice) u.voice = bestVoice;
@@ -61383,7 +61462,7 @@ function speakLineAwaitable(text, rate) {
   return new Promise(resolve => {
     if (!window.speechSynthesis) { resolve(); return; }
     window.speechSynthesis.cancel();
-    const clean = cleanForSpeech(text);
+    const clean = voiceForm(text);
     if (!clean) { resolve(); return; }
     const utter = new SpeechSynthesisUtterance(clean);
     if (bestVoice) utter.voice = bestVoice;
