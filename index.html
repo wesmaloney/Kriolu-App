@@ -55693,7 +55693,7 @@ function renderDictation(q, container) {
     <button class="listen-play-btn" id="dict-btn" onclick="playDictation(this)">🔊</button>
     <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px">
       <button class="hear-btn" onclick="playDictation(null)">🔊 Again</button>
-      <button class="hear-btn" onclick="playDictationSlow(this)">🐢 Slower</button>
+      <button class="hear-btn" onclick="playDictationSlow(this)" title="Word by word, with a pause after each word">🐢 Word by word</button>
     </div>
     <input type="text" class="type-input" id="type-input" placeholder="Type what you hear…" onkeydown="if(event.key==='Enter')submitDictation()" autocomplete="off" autocapitalize="off"/>
     <button class="submit-btn" onclick="submitDictation()">Check ✓</button>
@@ -55720,7 +55720,7 @@ function playDictationSlow(btn) {
   const q = state.session && state.session.questions[state.qIndex];
   if (!q || !q._dictation) return;
   userHasInteracted = true;
-  speakSlow(q._dictation, btn);
+  speakWordByWord(q._dictation, btn, () => isCurrentQuestion(q));
 }
 
 // Build a word-by-word comparison so the learner sees exactly what they missed
@@ -57802,57 +57802,48 @@ function playTtsAudio(audioB64, btnEl, rate) {
   return ttsAudio.play();
 }
 
+// Premium voice audio (base64) for already-cleaned text: cache first, then the
+// endpoint. null means "use the browser voice" (no endpoint, out of credits, error).
+async function fetchTtsAudio(clean) {
+  const endpoint = getTtsEndpoint();
+  if (!endpoint) return null;
+  // 1) Cached audio? Zero credits used.
+  const cached = await ttsCacheGet(clean);
+  if (cached) return cached;
+  // 2) Quota circuit-breaker: if ElevenLabs recently said we're out of credits,
+  //    don't waste a slow doomed request.
+  if (Date.now() < ttsQuotaBlockedUntil) return null;
+  // 3) Fetch fresh audio, cache it for all future plays.
+  try {
+    const resp = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: clean }),
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.audio) { ttsCachePut(clean, data.audio); return data.audio; } // cache: fire-and-forget
+    } else if (resp.status === 401 || resp.status === 402 || resp.status === 429) {
+      // Out of credits / rate limited — stop trying for an hour.
+      ttsQuotaBlockedUntil = Date.now() + 60 * 60 * 1000;
+    }
+  } catch (e) {}
+  return null;
+}
+
 async function speakText(text, btnEl, rate) {
+  wordByWordRun++;                 // a new sentence stops any word-by-word playback
   const clean = voiceForm(text);   // Kriolu is respelled for the Portuguese voice (never shown)
   if (!clean) return;
-
-  const endpoint = getTtsEndpoint();
-  if (endpoint) {
+  if (getTtsEndpoint()) {
     if (btnEl) btnEl.classList.add('speaking');
-
-    // 1) Cached audio? Play instantly — zero credits used.
-    const cached = await ttsCacheGet(clean);
-    if (cached) {
-      try { await playTtsAudio(cached, btnEl, rate); return; } catch (e) { /* fall through */ }
+    const audio = await fetchTtsAudio(clean);
+    if (audio) {
+      try { await playTtsAudio(audio, btnEl, rate); return; } catch (e) { /* fall through */ }
     }
-
-    // 2) Quota circuit-breaker: if ElevenLabs recently said we're out of credits,
-    //    don't waste a slow doomed request — use the browser voice immediately.
-    if (Date.now() < ttsQuotaBlockedUntil) {
-      if (btnEl) btnEl.classList.remove('speaking');
-      browserSpeak(clean, btnEl, rate);
-      return;
-    }
-
-    // 3) Fetch fresh audio, cache it for all future plays.
-    try {
-      const resp = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: clean }),
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data.audio) {
-          ttsCachePut(clean, data.audio); // fire-and-forget
-          await playTtsAudio(data.audio, btnEl, rate);
-          return;
-        }
-      } else if (resp.status === 401 || resp.status === 402 || resp.status === 429) {
-        // Out of credits / rate limited — stop trying for an hour.
-        ttsQuotaBlockedUntil = Date.now() + 60 * 60 * 1000;
-      }
-      // Any failure → fall back to browser voice
-      if (btnEl) btnEl.classList.remove('speaking');
-      browserSpeak(clean, btnEl, rate);
-    } catch (e) {
-      if (btnEl) btnEl.classList.remove('speaking');
-      browserSpeak(clean, btnEl, rate);
-    }
-    return;
+    if (btnEl) btnEl.classList.remove('speaking');
   }
-
-  // Default: free browser voice
+  // Default (and fallback): free browser voice
   browserSpeak(clean, btnEl, rate);
 }
 
@@ -57867,12 +57858,58 @@ function browserSpeak(clean, btnEl, rate) {
   window.speechSynthesis.speak(utter);
 }
 
-// Speak slowly for dictation (word-by-word clarity). Uses browser voice for the
-// rate control; premium endpoint also works but rate is fixed there.
+// Slower playback of a sentence: same voice, slowed down (pitch preserved).
 function speakSlow(text, btnEl) {
-  // Same premium ElevenLabs/cached audio as normal playback — just slowed down
-  // (pitch preserved). Falls back to a slow browser voice automatically.
   return speakText(text, btnEl, 0.65);
+}
+
+// Slow dictation: the sentence read one word at a time with a pause after each,
+// so every word can be heard clearly. Each word is its own (cached) clip, so
+// common words are fetched once and reused across sentences.
+let wordByWordRun = 0;
+const WORD_GAP_MS = 550;
+function playClipToEnd(audioB64, rate) {
+  return new Promise(resolve => {
+    if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+    ttsAudio = new Audio('data:audio/mpeg;base64,' + audioB64);
+    ttsAudio.playbackRate = rate;
+    try { ttsAudio.preservesPitch = true; ttsAudio.mozPreservesPitch = true; } catch (e) {}
+    ttsAudio.onended = ttsAudio.onerror = () => resolve();
+    ttsAudio.play().catch(() => resolve());
+  });
+}
+function browserSayToEnd(clean, rate) {
+  return new Promise(resolve => {
+    if (!window.speechSynthesis) return resolve();
+    const utter = new SpeechSynthesisUtterance(clean);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice?.lang || 'pt-PT';
+    utter.rate = Math.max(0.4, rate * 0.82);
+    utter.onend = utter.onerror = () => resolve();
+    window.speechSynthesis.speak(utter);
+    setTimeout(resolve, 4000);     // some browsers never fire onend
+  });
+}
+function dictationWords(text) {
+  return String(text || '').split(/\s+/).map(w => w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '')).filter(Boolean);
+}
+async function speakWordByWord(text, btnEl, stillWanted) {
+  const words = dictationWords(text);
+  if (words.length < 2) return speakSlow(text, btnEl);
+  const run = ++wordByWordRun;
+  const live = () => run === wordByWordRun && (!stillWanted || stillWanted());
+  if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (btnEl) btnEl.classList.add('speaking');
+  const clips = words.map(w => voiceForm(w));
+  // Fetch every word up front (in parallel) so the gaps stay even
+  const audio = getTtsEndpoint() ? await Promise.all(clips.map(c => fetchTtsAudio(c))) : clips.map(() => null);
+  for (let i = 0; i < clips.length && live(); i++) {
+    if (audio[i]) await playClipToEnd(audio[i], 0.85);
+    else await browserSayToEnd(clips[i], 0.85);
+    if (i < clips.length - 1 && live()) await new Promise(r => setTimeout(r, WORD_GAP_MS));
+  }
+  if (btnEl) btnEl.classList.remove('speaking', 'playing');
 }
 
 function toggleAutoSpeak() {
