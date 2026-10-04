@@ -1655,7 +1655,7 @@
       </div>
       <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin:11px 0;box-shadow:var(--shadow)">
         <div style="font-size:.85rem;opacity:.5">🔍</div>
-        <input type="text" id="dict-search" class="type-input" style="flex:1;min-width:0;border:none;outline:none;background:transparent;padding:0" placeholder="Search Kriolu or English…" oninput="renderPhrasebook()" />
+        <input type="text" id="dict-search" class="type-input" style="flex:1;min-width:0;border:none;outline:none;background:transparent;padding:0" placeholder="Search Kriolu or English…" oninput="onDictSearchInput()" />
       </div>
       <div style="display:flex;background:rgba(255,255,255,.7);border:1px solid var(--border);border-radius:12px;padding:3px;margin-bottom:9px">
         <div id="dict-dir-kr" class="dict-dir-tab active" onclick="setDictDirection(false)">Kriolu → English</div>
@@ -57401,43 +57401,78 @@ function setDictFilter(f, el) {
   renderPhrasebook();
 }
 
+// The dictionary holds ~16,000 entries. Building every row at once (on every
+// keystroke and every ❤️ tap) froze the Words page, so: categories render as
+// headers and fill their rows the first time they're opened, search waits
+// for a pause in typing and shows the first matches with "Show more", and
+// favouriting updates just the one row.
+const DICT_PAGE = 200;
+let dictLimit = DICT_PAGE, dictSearchTimer = null;
+function onDictSearchInput() {
+  clearTimeout(dictSearchTimer);
+  dictSearchTimer = setTimeout(() => { dictLimit = DICT_PAGE; renderPhrasebook(); }, 200);
+}
+function dictMoreResults() { dictLimit += DICT_PAGE; renderPhrasebook(); }
+function favKeySet() { return new Set((state.favourites || []).map(f => f.k)); }
+function dictLessons() {
+  // Santiago/São Vicente filters hide the OTHER dialect's dedicated lesson —
+  // the two dialects share everything else, since vocab isn't tagged per-word.
+  return LESSONS.filter(l =>
+    (dictFilter === 'santiago' && l.id === 'dialect_saovicente') ? false :
+    (dictFilter === 'saovicente' && l.id === 'dialect_santiago') ? false : true);
+}
+function dictCategoryHTML(lesson, rowsHTML, open, count) {
+  const li = LESSONS.indexOf(lesson);
+  return `<div class="phrase-category">
+      <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="background:${lesson.color || 'var(--ocean)'}">
+        ${lesson.icon} ${escapeHTML(lesson.title)} <span style="margin-left:auto;font-size:.75rem;opacity:.85">${count}</span><span style="margin-left:8px">▾</span>
+      </div>
+      <div class="phrase-cat-body${open ? ' open' : ''}" id="pc-${li}"${rowsHTML ? ' data-filled="1"' : ''}>${rowsHTML}</div>
+    </div>`;
+}
 function renderPhrasebook() {
   const container = document.getElementById('phrasebook-content');
+  if (!container) return;
   const search = (document.getElementById('dict-search')?.value || '').toLowerCase().trim();
+  const favs = favKeySet();
 
   if (dictFilter === 'saved') {
     const words = state.favourites.filter(v => matchesDictSearch(v, search));
     document.getElementById('dict-word-count').textContent = words.length + ' saved';
-    container.innerHTML = words.length ? words.map(v => renderDictRow(v, -1, -1)).join('')
+    container.innerHTML = words.length ? words.map(v => renderDictRow(v, -1, -1, favs)).join('')
       : `<div style="text-align:center;padding:30px;color:var(--muted)">🤍 No favourites yet. Tap the heart on any word to save it.</div>`;
     return;
   }
 
-  // Santiago/São Vicente filters hide the OTHER dialect's dedicated lesson —
-  // the two dialects share everything else, since vocab isn't tagged per-word.
-  const lessons = LESSONS.filter(l =>
-    (dictFilter === 'santiago' && l.id === 'dialect_saovicente') ? false :
-    (dictFilter === 'saovicente' && l.id === 'dialect_santiago') ? false : true);
+  const lessons = dictLessons();
+  if (!search) {
+    // Headers only — rows are built when a category is opened
+    let total = 0;
+    const html = lessons.map(l => { total += l.vocab.length; return dictCategoryHTML(l, '', false, l.vocab.length); }).join('');
+    document.getElementById('dict-word-count').textContent = total + ' entries';
+    container.innerHTML = html;
+    updateFavCount();
+    return;
+  }
 
-  let total = 0;
-  const html = lessons.map((lesson, li) => {
-    const realLi = LESSONS.indexOf(lesson);
-    const rows = lesson.vocab
-      .map((v, vi) => ({ v, vi }))
-      .filter(({ v }) => matchesDictSearch(v, search));
+  let total = 0, shown = 0;
+  const parts = [];
+  lessons.forEach(lesson => {
+    const li = LESSONS.indexOf(lesson);
+    const rows = [];
+    lesson.vocab.forEach((v, vi) => { if (matchesDictSearch(v, search)) rows.push(vi); });
+    if (!rows.length) return;
     total += rows.length;
-    if (!rows.length) return '';
-    return `<div class="phrase-category">
-      <div class="phrase-cat-header" onclick="togglePhraseCat(${realLi})" style="background:${lesson.color || 'var(--ocean)'}">
-        ${lesson.icon} ${lesson.title} <span style="margin-left:auto">▾</span>
-      </div>
-      <div class="phrase-cat-body" id="pc-${realLi}">
-        ${rows.map(({ v, vi }) => renderDictRow(v, realLi, vi)).join('')}
-      </div>
-    </div>`;
-  }).join('');
+    const room = dictLimit - shown;
+    if (room <= 0) return;
+    const take = rows.slice(0, room);
+    shown += take.length;
+    parts.push(dictCategoryHTML(lesson, take.map(vi => renderDictRow(lesson.vocab[vi], li, vi, favs)).join(''), true, rows.length));
+  });
   document.getElementById('dict-word-count').textContent = total + ' entries';
-  container.innerHTML = html || `<div style="text-align:center;padding:30px;color:var(--muted)">Nothing found. Try another search.</div>`;
+  container.innerHTML = parts.length
+    ? parts.join('') + (total > shown ? `<button class="due-btn" style="display:block;width:100%;margin:12px 0" onclick="dictMoreResults()">Show more (${total - shown} more)</button>` : '')
+    : `<div style="text-align:center;padding:30px;color:var(--muted)">Nothing found. Try another search.</div>`;
   updateFavCount();
 }
 
@@ -57449,12 +57484,12 @@ function matchesDictSearch(v, search) {
 // One dictionary row — direction-aware (Kriolu-first vs English-first) and
 // works for both the lesson-grouped list (li/vi set) and the Saved list
 // (li/vi = -1, since favourites aren't tied to a lesson index).
-function renderDictRow(v, li, vi) {
-  const isFav = state.favourites.some(f => f.k === v.k);
+function renderDictRow(v, li, vi, favs) {
+  const isFav = favs ? favs.has(v.k) : state.favourites.some(f => f.k === v.k);
   const head = dictReversed ? escapeHTML(v.e) : escapeHTML(v.k);
   const sub = dictReversed ? escapeHTML(v.k) : escapeHTML(v.e);
   const favBtn = li >= 0
-    ? `<button class="fav-btn" onclick="event.stopPropagation();toggleFavByIndex(${li},${vi})">${isFav ? '❤️' : '🤍'}</button>`
+    ? `<button class="fav-btn" onclick="event.stopPropagation();toggleFavByIndex(${li},${vi},this)">${isFav ? '❤️' : '🤍'}</button>`
     : `<button class="fav-btn" onclick="event.stopPropagation();removeFavByIndex(${state.favourites.indexOf(v)})">❤️</button>`;
   return `<div class="phrase-row" onclick="openDictWord('${escapeJS(v.k)}')" style="cursor:pointer">
     <div style="flex:1;min-width:0">
@@ -57507,15 +57542,28 @@ function shareDictWord(k, e) {
   else if (navigator.clipboard) { navigator.clipboard.writeText(text); showToast('Copied to clipboard ✓'); }
 }
 
-function togglePhraseCat(i) { document.getElementById('pc-'+i)?.classList.toggle('open'); }
+function togglePhraseCat(i) {
+  const body = document.getElementById('pc-' + i);
+  if (!body) return;
+  // Fill the rows the first time this category is opened
+  if (!body.dataset.filled && LESSONS[i]) {
+    const favs = favKeySet();
+    body.innerHTML = LESSONS[i].vocab.map((v, vi) => renderDictRow(v, i, vi, favs)).join('');
+    body.dataset.filled = '1';
+  }
+  body.classList.toggle('open');
+}
 
-function toggleFavByIndex(li, vi) {
+function toggleFavByIndex(li, vi, btn) {
   const v = LESSONS[li]?.vocab[vi];
   if (!v) return;
   const idx = state.favourites.findIndex(f => f.k === v.k);
   if (idx > -1) state.favourites.splice(idx, 1);
   else state.favourites.push({k:v.k, e:v.e, ex:v.ex, source:'Dictionary'});
-  saveState(); checkAchievements(); renderPhrasebook();
+  saveState(); checkAchievements();
+  // Update just this heart — rebuilding the whole dictionary made every tap lag
+  if (btn) { btn.textContent = idx > -1 ? '🤍' : '❤️'; updateFavCount(); }
+  else renderPhrasebook();
 }
 
 function removeFavByIndex(idx) {
@@ -58224,14 +58272,59 @@ function communityTimeAgo(iso) {
 }
 
 let communityChannel = null;
+// Live community updates. Phones drop the realtime socket when the app is
+// backgrounded or the network blips; without handling that, the feed stopped
+// updating until a full reload. Now the channel reconnects with backoff, the
+// feed catches up whenever the app comes back or the network returns, and a
+// light refresh runs while the Community tab is open in case live updates
+// are blocked.
+let communityRetry = 0, communityPoll = null;
+const communityVisible = () => !!document.getElementById('screen-community')?.classList.contains('active');
 function subscribeCommunityRealtime() {
   const sb = getSupabase();
   if (!sb || communityChannel) return;
-  const onChange = () => { if (document.getElementById('screen-community')?.classList.contains('active')) renderCommunity(); };
-  communityChannel = sb.channel('community-live')
+  const onChange = () => { if (communityVisible()) renderCommunity(); };
+  const ch = sb.channel('community-live')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'community_posts' }, onChange)
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_likes' }, onChange)
-    .subscribe();
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'community_likes' }, onChange);
+  communityChannel = ch;
+  ch.subscribe(status => {
+    if (communityChannel !== ch) return;
+    if (status === 'SUBSCRIBED') {
+      // Back after a drop: fetch anything posted while we were disconnected
+      if (communityRetry > 0 && communityVisible()) renderCommunity();
+      communityRetry = 0;
+    } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+      communityChannel = null;
+      try { sb.removeChannel(ch); } catch (e) {}
+      const wait = Math.min(30000, 2000 * Math.pow(2, communityRetry++));
+      setTimeout(subscribeCommunityRealtime, wait);
+    }
+  });
+}
+function startCommunityPoll() {
+  if (communityPoll) return;
+  communityPoll = setInterval(() => {
+    if (!communityVisible()) { clearInterval(communityPoll); communityPoll = null; return; }
+    if (document.visibilityState === 'visible' && navigator.onLine !== false) renderCommunity();
+  }, 30000);
+}
+// Coming back to the app, or getting the network back, refreshes the feed
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (communityVisible()) { subscribeCommunityRealtime(); renderCommunity(); }
+});
+window.addEventListener('online', () => { if (communityVisible()) { subscribeCommunityRealtime(); renderCommunity(); } });
+// Supabase's free plan pauses a project after about a week without requests —
+// which took the community and account sync offline. A tiny read once a day
+// from any open app counts as activity (see also the scheduled GitHub ping).
+function keepSupabaseAwake() {
+  const sb = getSupabase();
+  if (!sb) return;
+  const today = new Date().toDateString();
+  try { if (localStorage.getItem('kriolu_sb_ping') === today) return; localStorage.setItem('kriolu_sb_ping', today); } catch (e) {}
+  sb.from('community_posts').select('id', { head: true, count: 'estimated' }).limit(1)
+    .then(({ error }) => { if (error) { try { localStorage.removeItem('kriolu_sb_ping'); } catch (e) {} } });
 }
 
 async function renderCommunity() {
@@ -58241,12 +58334,19 @@ async function renderCommunity() {
   if (!sb) { el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Community is unavailable right now.</div>`; return; }
   if (!el.dataset.loaded) el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Loading community…</div>`;
 
-  const [{ data: posts, error }, { data: likeRows }, { data: myLikeRows }] = await Promise.all([
-    sb.from('community_posts').select('*').order('created_at', { ascending: false }).limit(100),
-    sb.from('community_likes').select('post_id'),
-    sb.from('community_likes').select('post_id').eq('device_id', deviceId()),
+  const { data: posts, error } = await sb.from('community_posts').select('*').order('created_at', { ascending: false }).limit(100);
+  // Likes only for the posts on screen (the whole likes table grows forever)
+  const ids = (posts || []).map(p => p.id);
+  const [{ data: likeRows }, { data: myLikeRows }] = error || !ids.length ? [{ data: [] }, { data: [] }] : await Promise.all([
+    sb.from('community_likes').select('post_id').in('post_id', ids),
+    sb.from('community_likes').select('post_id').in('post_id', ids).eq('device_id', deviceId()),
   ]);
-  if (error) { el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Couldn't load the community feed. Check your connection and try again.</div>`; return; }
+  if (error) {
+    // Keep the last feed on screen if we had one; otherwise say we're retrying
+    if (!el.dataset.loaded) el.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">📡 The community is offline right now — retrying automatically…<br><button class="due-btn" style="margin-top:12px" onclick="renderCommunity()">Try again</button></div>`;
+    startCommunityPoll();
+    return;
+  }
   el.dataset.loaded = '1';
 
   const likeCounts = {};
@@ -58297,6 +58397,7 @@ async function renderCommunity() {
     </div>
   `;
   subscribeCommunityRealtime();
+  startCommunityPoll();
 }
 
 function setCommunityFilter(id) { state.communityFilter = id; saveState(); renderCommunity(); }
@@ -62009,6 +62110,7 @@ function init() {
   initVoice();
   checkAchievements();
   step('initAccountSync', initAccountSync);
+  step('keepSupabaseAwake', keepSupabaseAwake);
 
   // Restore settings UI
   document.getElementById('dark-mode-toggle').checked = state.darkMode;
