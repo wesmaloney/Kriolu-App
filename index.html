@@ -367,6 +367,26 @@
     .lab-explain{font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.45}
     select.ai-dialect-select{max-width:min(240px,100%)}
     .ai-dialect-bar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:-4px 0 14px;font-size:.78rem;font-weight:700;color:var(--muted)}
+    .fix-tokens{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+    .fix-tok{border:2px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:7px 10px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit}
+    .fix-tok:hover:not(:disabled){border-color:var(--sky)}
+    .fix-tok.fix-err{border-color:var(--correct);background:rgba(20,184,166,.14)}
+    .fix-tok.fix-miss{border-color:var(--wrong);background:rgba(239,71,87,.12)}
+    .odd-reveal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:.85rem;line-height:1.6;text-align:left}
+    .odd-tag{font-size:.68rem;font-weight:800;text-transform:uppercase;color:var(--coral);margin-left:4px}
+    .dlg-lines{display:flex;flex-direction:column;gap:6px;text-align:left}
+    .dlg-line{background:var(--bg);border-radius:12px;padding:8px 11px;font-size:.92rem}
+    .dlg-e{font-size:.75rem;color:var(--muted);margin-top:2px}
+    .dlg-next{border:2px dashed var(--border);background:transparent}
+    .speed-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:12px}
+    .speed-fill{height:100%;width:100%;background:var(--grad-sun);transition:width .2s linear}
+    .ladder-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px}
+    .ladder-bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--border);gap:2px}
+    .ladder-seg.r4,.ladder-legend i.r4{background:#14B8A6}.ladder-seg.r3,.ladder-legend i.r3{background:#05BFDB}
+    .ladder-seg.r2,.ladder-legend i.r2{background:#FFC15E}.ladder-seg.r1,.ladder-seg.r0,.ladder-legend i.r1{background:#FF8C5A}
+    .ladder-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.74rem;color:var(--muted);margin-top:8px}
+    .ladder-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+    .ladder-note{font-size:.74rem;color:var(--muted);margin-top:6px}
     .lab-why{font-size:.84rem;line-height:1.5;color:var(--text);background:var(--bg);border-radius:12px;padding:10px 12px;margin:0 0 12px}
     .anat{margin-top:10px;text-align:left}
     .anat-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
@@ -51865,6 +51885,7 @@ function recordWordResult(item, correct) {
     if (!state.wrongItems.find(w => w.k === item.k)) state.wrongItems.push(item);
   }
   state.masteredWords = Object.values(state.wordScores).filter(s => s.correct >= MASTERY_THRESHOLD).length;
+  ladderRecord(item, correct);
 }
 
 // A word needs this many correct answers in a row (after a mistake) to leave the
@@ -53123,7 +53144,7 @@ function poolForLesson(lessonId) {
 // ═══════════════════════════════════════════
 //  EXERCISE ENGINE
 // ═══════════════════════════════════════════
-const EXERCISE_TYPES = ['flashcard','multiChoice','speaking','typeAnswer','typeKriolu','dictation','sentenceBuilder','multiChoiceKriolu','listening','fillBlank','matching'];
+const EXERCISE_TYPES = ['flashcard','multiChoice','speaking','typeAnswer','typeKriolu','dictation','sentenceBuilder','multiChoiceKriolu','listening','fillBlank','matching','fixSentence','oddOneOut','listenMeaning','completeDialogue'];
 
 function buildSession(lessonId) {
   const lesson = LESSONS.find(l => l.id === lessonId);
@@ -53382,6 +53403,13 @@ function beginStagedLesson(lessonId) {
   const keepIdx = i => !structureChanged || Number(i) < stableCount;
   const filterMap = obj => { const o = {}; Object.keys(obj || {}).forEach(k => { if (keepIdx(k)) o[k] = obj[k]; }); return o; };
   lessonPlan.done = new Set((saved && Array.isArray(saved.done) ? saved.done : []).filter(keepIdx));
+  // Word ladder (see ADAPTIVE LESSON LADDER): words known from earlier lessons
+  // start at the top and skip practice; the rest start at "recognise".
+  if (!isAlphabet) {
+    const savedLadder = (saved && saved.ladder) || {};
+    lessonPlan.ladder = {};
+    pool.forEach(v => { lessonPlan.ladder[v.k] = v.k in savedLadder ? savedLadder[v.k] : (knownBefore(v) ? LADDER_TOP : 0); });
+  }
   // Restore cumulative scoring so a lesson finished across multiple sessions still
   // shows the right correct-count, %, and XP. Per-stage scores let replays update
   // rather than double-count.
@@ -53412,6 +53440,7 @@ function saveLessonProgress() {
     stageTotals: lessonPlan.stageTotals || {},
     xpAwarded: lessonPlan.xpAwarded || {},
     stageCount: lessonPlan.stages.length,
+    ladder: lessonPlan.ladder || null,
   };
   saveState();
 }
@@ -53459,10 +53488,25 @@ function renderStageRoadmap() {
       <div class="roadmap-sub">${isStart ? 'Here\'s your lesson plan — each stage builds on the last. 🧗' : allDone ? 'You\'ve completed every stage! Tap any to revisit. 🎉' : 'Tap the next stage to continue — or revisit any completed one. ↻'}</div>
     </div>
     ${!allDone ? `<div class="hearts-note"><span class="hearts-note-icon">♥</span><span>Hearts are off through Mastery — this is for practice, not penalties. They turn on for the Mastery Challenge, and for mixed, daily and review sessions.</span></div>` : ''}
+    ${ladderSummaryHTML()}
     <div class="stage-list">${items}</div>
     ${!allDone ? `<button class="lab-continue sun" onclick="playStage(${nextIdx})">${isStart ? 'Start Stage 1 →' : 'Continue: ' + escapeHTML(nextStage.label) + ' →'}</button>`
                : `<button class="lab-continue" onclick="finishSession()">See your results →</button>`}
   `;
+}
+
+function ladderSummaryHTML() {
+  const L = lessonPlan && lessonPlan.ladder;
+  if (!L) return '';
+  const counts = [0, 0, 0, 0, 0];
+  Object.values(L).forEach(r => counts[Math.min(LADDER_TOP, r)]++);
+  const total = Object.keys(L).length;
+  const seg = (n, cls) => n ? `<div class="ladder-seg ${cls}" style="flex:${n}"></div>` : '';
+  return `<div class="ladder-card">
+    <div class="ladder-bar">${seg(counts[4], 'r4')}${seg(counts[3], 'r3')}${seg(counts[2], 'r2')}${seg(counts[1], 'r1')}${seg(counts[0], 'r0')}</div>
+    <div class="ladder-legend"><span><i class="r4"></i>${counts[4]} mastered</span><span><i class="r3"></i>${counts[3]} produce</span><span><i class="r2"></i>${counts[2]} use it</span><span><i class="r1"></i>${counts[1] + counts[0]} recognise / recall</span></div>
+    <div class="ladder-note">Each word gets a harder task every time it comes back. Words you already know (${counts[4]} of ${total}) skip ahead.</div>
+  </div>`;
 }
 
 // Run a specific stage by index (used for both progression and replay)
@@ -53482,7 +53526,11 @@ function advanceStage() {
 
 function runStage(stage) {
   if (stage.type === 'learn') {
-    studyState = { lessonId: lessonPlan.lessonId, idx: 0, words: stage.words, staged: true };
+    const L = lessonPlan.ladder;
+    const toLearn = L ? stage.words.filter(w => L[w.k] < LADDER_TOP) : stage.words;
+    if (!toLearn.length) { showToast('✓ You already know these words — skipping ahead'); completeStage(); return; }
+    if (toLearn.length < stage.words.length) showToast(`✓ Skipping ${stage.words.length - toLearn.length} word${stage.words.length - toLearn.length === 1 ? '' : 's'} you already know`);
+    studyState = { lessonId: lessonPlan.lessonId, idx: 0, words: toLearn, staged: true };
     showScreen('study');
     renderStudyCard();
   } else if (stage.type === 'practice' || stage.type === 'mastery' || stage.type === 'sentencepractice') {
@@ -53493,8 +53541,27 @@ function runStage(stage) {
     // - mastery: the final test stays RANDOM (spaced, weighted selection)
     const isMastery = stage.type === 'mastery';
     const isSentence = stage.type === 'sentencepractice';
-    let items = isMastery ? buildSpacedSession(stage.words) : shuffle([...stage.words]);
-    if (isSentence) items = items.slice(0, 10); // keep the construction drill focused
+    const L = lessonPlan.ladder;
+    const rungOf = it => (L && it.k in L) ? L[it.k] : globalRung(it);
+    let items;
+    if (!L) {
+      items = isMastery ? buildSpacedSession(stage.words) : shuffle([...stage.words]);
+      if (isSentence) items = items.slice(0, 10); // keep the construction drill focused
+    } else if (isMastery) {
+      // Every word not yet mastered, plus a few mastered ones as a spot check
+      const open = stage.words.filter(w => L[w.k] < LADDER_TOP), done = stage.words.filter(w => L[w.k] >= LADDER_TOP);
+      items = shuffle([...open, ...shuffle(done).slice(0, Math.max(2, 8 - open.length))]).slice(0, 12);
+    } else if (isSentence) {
+      const open = shuffle(stage.words.filter(w => L[w.k] < LADDER_TOP)), done = shuffle(stage.words.filter(w => L[w.k] >= LADDER_TOP));
+      items = [...open, ...done].slice(0, 8);
+    } else {
+      // Practice: this set's new words, plus earlier words only while they're
+      // still shaky (recognise / recall). Solid ones move on to Build Sentences.
+      const learnSt = lessonPlan.stages.find(st => st.type === 'learn' && st.set === stage.set);
+      const fresh = new Set((learnSt ? learnSt.words : stage.words).map(w => w.k));
+      items = shuffle(stage.words.filter(w => fresh.has(w.k) ? L[w.k] < 3 : L[w.k] < 2));
+    }
+    if (!items.length) { showToast('✓ You know these already — moving on'); completeStage(); return; }
     // A. INTERLEAVING: plain practice stages mix in ~25% words from OTHER
     // completed lessons. Blocked practice (only this lesson's words) feels
     // productive but fades fast — resurfacing old material is what makes it stick.
@@ -53507,12 +53574,15 @@ function runStage(stage) {
         items = shuffle([...items, ...shuffle(reviewPool).slice(0, extra)]);
       }
     }
-    const pool = isSentence ? (isPT() ? ['sentenceBuilder', 'fillBlank', 'structureDrill'] : ['sentenceBuilder', 'fillBlank', 'markerDrill', 'structureDrill']) : poolForLesson(lessonPlan.lessonId);
-    const types = assignExerciseTypes(items.length, pool);
-    state.session = {
-      questions: items.map((item, i) => ({ item, type: types[i], lessonId: lessonPlan.lessonId })),
-      lessonId: lessonPlan.lessonId, lessonTitle: lessonPlan.lesson.title, staged: true
-    };
+    const fixedPool = poolForLesson(lessonPlan.lessonId);
+    // Exercise type follows the word's rung: each return is a harder task
+    const types = fixedPool || !L
+      ? assignExerciseTypes(items.length, fixedPool || (isSentence ? (isPT() ? ['sentenceBuilder', 'fillBlank', 'structureDrill'] : ['sentenceBuilder', 'fillBlank', 'markerDrill', 'structureDrill']) : null))
+      : ladderTypesFor(items, it => isSentence ? 2 : isMastery ? Math.max(1, Math.min(3, rungOf(it) >= LADDER_TOP ? 3 : rungOf(it))) : rungOf(it));
+    const questions = items.map((item, i) => ({ item, type: types[i], lessonId: lessonPlan.lessonId }));
+    // A timed match game closes each practice stage
+    if (L && !isMastery && !isSentence) { const sr = speedRoundFor(stage.words); if (sr) questions.push(sr); }
+    state.session = { questions, lessonId: lessonPlan.lessonId, lessonTitle: lessonPlan.lesson.title, staged: true };
     state.qIndex = 0; state.awaitingNext = false;
     if (isMastery) state.lives = 3; // fresh hearts for the mastery challenge
     if (!lessonPlan.stageScores) lessonPlan.stageScores = {};
@@ -53523,7 +53593,7 @@ function runStage(stage) {
     lessonPlan.scoreBaseline = state.score - (lessonPlan.stageScores[idx] || 0);
     state.score = lessonPlan.scoreBaseline;            // remove old score for this stage
     lessonPlan.activeStageIdx = idx;
-    lessonPlan.activeStageTotal = items.length;
+    lessonPlan.activeStageTotal = questions.length;
     showScreen('exercise'); renderQuestion();
   } else if (stage.type === 'spotlight') {
     renderGrammarSpotlight(stage);
@@ -54134,6 +54204,323 @@ function sdAnswer(btn) {
   if (bar && topic) bar.insertAdjacentHTML('afterend', `<div class="skill-why ${ok ? 'correct' : 'wrong'}"><div class="skill-why-label">Why</div><div class="skill-why-text">${topic.why}</div></div>`);
 }
 
+// ── ADAPTIVE LESSON LADDER ──
+// Each word climbs four rungs: recognise → recall → use in context → produce.
+// A right answer moves it up (two rungs if it was right on first sight), a
+// wrong one moves it down, and a word at the top — or one the learner already
+// knew from earlier lessons — leaves the lesson's practice. So every time a
+// word comes back the task is harder, instead of the same drill again.
+const LADDER_TOP = 4;
+const LADDER_NAMES = ['Recognise', 'Recall', 'Use it', 'Produce'];
+const LADDER_TYPES = [
+  ['multiChoice', 'listening', 'oddOneOut'],
+  ['multiChoiceKriolu', 'typeAnswer', 'flashcard'],
+  ['fillBlank', 'sentenceBuilder', 'structureDrill', 'markerDrill', 'fixSentence', 'completeDialogue', 'listenMeaning'],
+  ['typeKriolu', 'dictation', 'speaking'],
+];
+const exWordCount = item => ((item && item.ex) || '').trim().split(/\s+/).filter(Boolean).length;
+const keyWordCount = item => ((item && item.k) || '').trim().split(/\s+/).filter(Boolean).length;
+function typeEligible(t, item) {
+  // Alphabet cards are only ever practised by listening and speaking
+  if (typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(item.k)) return t === 'listening' || t === 'speaking';
+  const exN = exWordCount(item), kN = keyWordCount(item);
+  switch (t) {
+    case 'fillBlank': case 'sentenceBuilder': return exN >= 3;
+    case 'structureDrill': return exN >= 3 && !!structureDrillFor(item.ex);
+    case 'markerDrill': return !isPT() && !!findMarker(item.ex);
+    case 'fixSentence': return !!makeFixSentence(item);
+    case 'completeDialogue': return !!findDialogueFor(item);
+    case 'listenMeaning': return exN >= 3 && exN <= 16 && !!sentenceMeaning(item);
+    case 'oddOneOut': {
+      if (kN > 4 || (typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(item.k))) return false;
+      const l = lessonOfItem(item);
+      return !!l && l.id !== 'alphabet' && l.vocab.filter(v => v.k !== item.k && keyWordCount(v) <= 4).length >= 2;
+    }
+    case 'typeKriolu': return kN <= 4;
+    case 'dictation': return exN <= 10;
+    case 'speaking': return kN <= 6 && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    default: return true;
+  }
+}
+// Pick an exercise for this rung, avoiding the type used just before
+function ladderType(item, rung, avoid) {
+  const r = Math.max(0, Math.min(3, rung));
+  let opts = LADDER_TYPES[r].filter(t => typeEligible(t, item));
+  // Long phrases can't be typed comfortably — produce them by building instead
+  if (!opts.length) opts = r >= 2 ? ['sentenceBuilder', 'multiChoiceKriolu'].filter(t => typeEligible(t, item)) : ['multiChoice'];
+  if (!opts.length) opts = ['multiChoice'];
+  const fresh = opts.filter(t => t !== avoid);
+  const list = fresh.length ? fresh : opts;
+  return list[Math.floor(Math.random() * list.length)];
+}
+function knownBefore(item) {
+  const s = state.wordScores && state.wordScores[item.k];
+  return !!(s && s.correct >= MASTERY_THRESHOLD && (s.streak || 0) >= 2);
+}
+// Rung for a word outside the current lesson (interleaved review words)
+function globalRung(item) {
+  const s = state.wordScores && state.wordScores[item.k];
+  if (!s) return 0;
+  return Math.max(0, Math.min(3, (s.streak || 0)));
+}
+function ladderTypesFor(items, rungOf) {
+  let prev = null;
+  return items.map(it => { const t = ladderType(it, rungOf(it), prev); prev = t; return t; });
+}
+function ladderRecord(item, correct) {
+  const L = lessonPlan && lessonPlan.ladder;
+  if (!L || !(item.k in L) || !(state.session && state.session.staged)) return;
+  if (!lessonPlan.seen) lessonPlan.seen = {};
+  const first = !lessonPlan.seen[item.k];
+  lessonPlan.seen[item.k] = true;
+  const r = L[item.k];
+  L[item.k] = correct ? Math.min(LADDER_TOP, r + (first && r === 0 ? 2 : 1)) : Math.max(0, r - 1);
+}
+
+// ── NEW EXERCISE TYPES ──
+// Shared answer handler for the choice-style new types: buttons carry
+// data-ok, and q.reveal (optional HTML) is shown after answering.
+function choiceAnswer(btn) {
+  if (state.awaitingNext) return;
+  state.awaitingNext = true;
+  const q = state.session.questions[state.qIndex];
+  const ok = btn.dataset.ok === '1';
+  lastUserAnswer = btn.textContent.trim();
+  document.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; if (b.dataset.ok === '1' && !ok) b.classList.add('reveal-correct'); });
+  btn.classList.add(ok ? 'selected-correct' : 'selected-wrong');
+  if (ok) { state.score++; recordWordResult(q.item, true); playSound('correct'); }
+  else { recordWordResult(q.item, false); playSound('wrong'); loseLife(); }
+  showFeedback(ok, ok ? '' : (q.correctText ? `Correct: <em>${escapeHTML(q.correctText)}</em>` : ''));
+  if (q.reveal) {
+    const bar = document.querySelector('#feedback-area .feedback-bar');
+    if (bar) bar.insertAdjacentHTML('afterend', q.reveal);
+  }
+}
+const choiceBtn = (text, ok) => `<button class="choice-btn" data-ok="${ok ? 1 : 0}" onclick="choiceAnswer(this)">${escapeHTML(text)}</button>`;
+
+// 1. FIX THE SENTENCE — one grammar mistake is planted; tap the wrong word.
+const KR_CONTENT_SKIP = new Set(['ta','sta','sa','dja','ka','di','na','pa','ku','i','ki','kel','un','si','nha','bu','nos','ses','tudu','kada','txeu','e','é','el','n']);
+const PT_SPLIT = { no:['em','o'], na:['em','a'], nos:['em','os'], nas:['em','as'], do:['de','o'], da:['de','a'], dos:['de','os'], das:['de','as'], ao:['a','o'], aos:['a','os'], pelo:['por','o'], pela:['por','a'], pelos:['por','os'], pelas:['por','as'] };
+const GENDER_SWAP = { o:'a', a:'o', os:'as', as:'os', um:'uma', uma:'um' };
+const clean = raw => raw.toLowerCase().normalize('NFC').replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+const hasPunct = raw => /[^\p{L}\p{N}]$/u.test(raw);
+const keepCase = (from, to) => /^\p{Lu}/u.test(from) ? to[0].toUpperCase() + to.slice(1) : to;
+function makeFixSentence(item) {
+  const ex = ((item && item.ex) || '').trim();
+  if (ex.split(/\s+/).length < 3) return null;
+  if (item._fix !== undefined) return item._fix;
+  const t = ex.split(/\s+/), w = t.map(clean), gens = [];
+  const out = (tokens, err, why) => ({ tokens, err, why });
+  if (!isPT()) {
+    const topic = id => (KR_TOPICS.find(x => x.id === id) || {}).why || '';
+    gens.push(() => { const i = w.findIndex((x, j) => x === 'ka' && w[j + 1] === 'ta'); if (i < 0) return null;
+      const n = t.slice(); n[i] = keepCase(t[i], 'ta'); n[i + 1] = 'ka'; return out(n, [i, i + 1], '<b>ka</b> always comes first, before every other marker: <i>ka ta</i>, never <i>ta ka</i>.'); });
+    gens.push(() => { const i = w.findIndex((x, j) => x === 'ta' && t[j + 1] && !hasPunct(t[j + 1]) && !KR_CONTENT_SKIP.has(w[j + 1]) && w[j - 1] !== 'sta' && w[j - 1] !== 'ka'); if (i < 0) return null;
+      const n = t.slice(); n[i] = keepCase(t[i], t[i + 1].toLowerCase()); n[i + 1] = 'ta'; return out(n, [i, i + 1], 'The marker goes <b>before</b> the verb: <i>ta ' + escapeHTML(w[i + 1]) + '</i>. ' + topic('markers')); });
+    gens.push(() => { const i = w.findIndex((x, j) => ['si','nha','ses'].includes(x) && t[j + 1] && !hasPunct(t[j + 1]) && !KR_CONTENT_SKIP.has(w[j + 1])); if (i < 0) return null;
+      const n = t.slice(); n[i] = keepCase(t[i], t[i + 1].toLowerCase()); n[i + 1] = w[i]; return out(n, [i, i + 1], 'Possessives go <b>before</b> the noun: <i>' + escapeHTML(w[i] + ' ' + w[i + 1]) + '</i>. ' + topic('possessive')); });
+    gens.push(() => { const i = w.findIndex((x, j) => (x === 'tudu' || KR_ANAT.num.has(x)) && t[j + 1] && !hasPunct(t[j + 1]) && !KR_CONTENT_SKIP.has(w[j + 1]) && !/s$/.test(w[j + 1]) && !KR_ANAT.timeNoun.has(w[j + 1])); if (i < 0) return null;
+      const n = t.slice(); n[i + 1] = t[i + 1] + 's'; return out(n, [i + 1], 'Kriolu nouns take no plural -s: <b>' + escapeHTML(w[i]) + '</b> already says how many — <i>' + escapeHTML(w[i] + ' ' + w[i + 1]) + '</i>.'); });
+    gens.push(() => { const i = w.indexOf('na'); if (i < 1) return null;
+      const n = t.slice(); n[i] = t[i].replace(/na/i, 'em'); return out(n, [i], '<b>em</b> is Portuguese. Kriolu uses <b>na</b> for in, at and on.'); });
+  } else {
+    const topic = id => (PT_TOPICS.find(x => x.id === id) || {}).why || '';
+    gens.push(() => { const i = w.findIndex((x, j) => j > 0 && PT_SPLIT[x] && t[j + 1]); if (i < 0) return null;
+      const [p, a] = PT_SPLIT[w[i]]; const n = t.slice(0, i).concat([p, a + (hasPunct(t[i]) ? t[i].slice(-1) : '')], t.slice(i + 1));
+      return out(n, [i, i + 1], `<b>${p} + ${a}</b> must fuse into <b>${escapeHTML(w[i])}</b>. ` + topic('contr')); });
+    gens.push(() => { const a = ptAnatomy(ex), i = a.toks.findIndex((x, j) => x.role === 'aspect' && a.toks[j + 1] && !hasPunct(a.toks[j + 1].raw) && !ANAT_CLITIC.test(a.toks[j + 1].w)); if (i < 0) return null;
+      const n = t.slice(0, i).concat([ptGerund(t[i + 1])], t.slice(i + 2));
+      return out(n, [i], `Portugal says <b>a ${escapeHTML(t[i + 1])}</b>, not the gerund. ` + topic('aspect')); });
+    gens.push(() => { const a = ptAnatomy(ex), i = a.toks.findIndex((x, j) => GENDER_SWAP[x.w] && !x.role && a.toks[j + 1] && !a.toks[j + 1].role && !PT_ANAT.det.has(a.toks[j + 1].w) && !ptIsInf(a.toks[j + 1].w) && !(a.toks[j - 1] && a.toks[j - 1].w === 'cada')); if (i < 0) return null;
+      const n = t.slice(); n[i] = keepCase(t[i], GENDER_SWAP[w[i]]); return out(n, [i], `<b>${escapeHTML(w[i + 1])}</b> takes <b>${escapeHTML(w[i])}</b> — the article matches the noun's gender and number. ` + topic('gender')); });
+  }
+  const start = anatHash(ex) % gens.length;
+  let res = null;
+  for (let k = 0; k < gens.length && !res; k++) { try { res = gens[(start + k) % gens.length](); } catch (e) { res = null; } }
+  if (res && res.tokens.join(' ') === ex) res = null;
+  item._fix = res;
+  return res;
+}
+function renderFixSentence(q, container) {
+  const f = makeFixSentence(q.item);
+  if (!f) { renderFillBlank(q, container); return; }
+  q.fix = f;
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🔎 Fix the Sentence</div>
+    <div style="font-size:.88rem;color:var(--muted);margin-bottom:10px">One word is wrong. Tap it.</div>
+    <div class="fix-tokens">${f.tokens.map((tk, i) => `<button class="fix-tok" data-i="${i}" onclick="fixAnswer(this)">${escapeHTML(tk)}</button>`).join('')}</div>
+    ${meaningLine(q.item, 'fx-meaning')}
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    </div><div id="feedback-area"></div>`;
+}
+function fixAnswer(btn) {
+  if (state.awaitingNext) return;
+  state.awaitingNext = true;
+  const q = state.session.questions[state.qIndex], f = q.fix, i = Number(btn.dataset.i);
+  const ok = f.err.includes(i);
+  lastUserAnswer = 'tapped "' + btn.textContent + '"';
+  document.querySelectorAll('.fix-tok').forEach(b => { b.disabled = true; if (f.err.includes(Number(b.dataset.i))) b.classList.add('fix-err'); });
+  if (!ok) btn.classList.add('fix-miss');
+  if (ok) { state.score++; recordWordResult(q.item, true); playSound('correct'); }
+  else { recordWordResult(q.item, false); playSound('wrong'); loseLife(); }
+  showFeedback(ok, `Correct sentence: <em>${escapeHTML(q.item.ex)}</em>`);
+  const bar = document.querySelector('#feedback-area .feedback-bar');
+  if (bar) bar.insertAdjacentHTML('afterend', `<div class="skill-why ${ok ? 'correct' : 'wrong'}"><div class="skill-why-label">Why</div><div class="skill-why-text">${f.why}</div></div>`);
+}
+
+// 2. ODD ONE OUT — three words from this lesson's scene, one from elsewhere.
+function lessonOfItem(item) {
+  const id = state.session && state.session.lessonId;
+  const cur = id && LESSONS.find(l => l.id === id);
+  if (cur && cur.vocab.some(v => v.k === item.k)) return cur;
+  return LESSONS.find(l => l.vocab.some(v => v.k === item.k)) || null;
+}
+function renderOddOneOut(q, container) {
+  const lesson = lessonOfItem(q.item);
+  if (!lesson) { renderMultiChoice(q, container, false); return; }
+  const short = v => v.k && keyWordCount(v) <= 4;
+  const mates = lesson ? shuffle(lesson.vocab.filter(v => v.k !== q.item.k && short(v))).slice(0, 2) : [];
+  const ids = new Set((lesson ? [lesson.id] : []));
+  const far = shuffle(LESSONS.filter(l => !ids.has(l.id) && l.icon !== (lesson && lesson.icon)).slice()).slice(0, 6).flatMap(l => l.vocab).filter(short);
+  const odd = far.find(v => !lesson.vocab.some(x => x.k === v.k || x.e === v.e));
+  if (mates.length < 2 || !odd) { renderMultiChoice(q, container, false); return; }
+  const opts = shuffle([q.item, ...mates, odd]);
+  q.reveal = `<div class="odd-reveal">${opts.map(v => `<div><b>${escapeHTML(v.k)}</b> — ${escapeHTML(v.e)}${v === odd ? ' <span class="odd-tag">odd one out</span>' : ''}</div>`).join('')}</div>`;
+  q.correctText = odd.k;
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🧺 Odd One Out</div>
+    <div style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Three of these belong to <b>${escapeHTML(lesson.title)}</b>. Which one doesn't?</div>
+    <div class="choices-grid">${opts.map(v => choiceBtn(v.k, v === odd)).join('')}</div>
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    </div><div id="feedback-area"></div>`;
+}
+
+// 3. COMPLETE THE CONVERSATION — a dialogue line that uses this word.
+const DIALOGUE_STOP = new Set(['txeu','kuma','kuze','pamodi','undi','kantu','tambe','também','kusa','mesmu','agora','ainda','muito','muita','para','como','quando','onde','isso','isto','esta','este','essa','esse','aqui','obrigadu','obrigado','obrigada','bon','boa','bom']);
+function findDialogueFor(item) {
+  if (item._dlg !== undefined) return item._dlg;
+  const toks = [...new Set((String(item.k || '').toLowerCase().normalize('NFC').match(/\p{L}{4,}/gu) || []))].filter(t => !DIALOGUE_STOP.has(t));
+  let found = null;
+  for (const d of (DIALOGUES || [])) {
+    for (let i = 1; i < (d.lines || []).length && !found; i++) {
+      const line = d.lines[i].k.toLowerCase().normalize('NFC');
+      if (toks.some(t => new RegExp('(^|[^\\p{L}])' + t + '($|[^\\p{L}])', 'u').test(line))) found = { d, i };
+    }
+    if (found) break;
+  }
+  item._dlg = found;
+  return found;
+}
+function renderCompleteDialogue(q, container) {
+  const f = findDialogueFor(q.item);
+  if (!f) { renderFillBlank(q, container); return; }
+  const { d, i } = f, line = d.lines[i];
+  const others = shuffle((DIALOGUES || []).filter(x => x !== d).flatMap(x => x.lines)).filter(l => l.k !== line.k).slice(0, 2);
+  const prev = d.lines.slice(Math.max(0, i - 2), i);
+  const opts = shuffle([line, ...others]);
+  q.correctText = line.k;
+  q.reveal = `<div class="odd-reveal"><div><b>${escapeHTML(line.sp)}:</b> ${escapeHTML(line.k)}</div><div style="color:var(--muted)">${escapeHTML(line.e)}</div></div>`;
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">💬 Complete the Conversation</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">${escapeHTML(d.icon || '')} ${escapeHTML(d.titleE || d.title)}</div>
+    <div class="dlg-lines">${prev.map(l => `<div class="dlg-line"><b>${escapeHTML(l.sp)}:</b> ${escapeHTML(l.k)}<div class="dlg-e">${escapeHTML(l.e)}</div></div>`).join('')}
+      <div class="dlg-line dlg-next"><b>${escapeHTML(line.sp)}:</b> …</div></div>
+    <div style="font-size:.85rem;font-weight:700;margin:10px 0 6px">What does ${escapeHTML(line.sp)} say next?</div>
+    <div class="choices-grid" style="grid-template-columns:1fr">${opts.map(l => choiceBtn(l.k, l === line)).join('')}</div>
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    </div><div id="feedback-area"></div>`;
+}
+
+// 4. LISTENING: WHAT HAPPENED? — hear a whole sentence, pick its meaning
+// against other sentences from the same lesson (so you must really listen).
+function sentenceMeaning(item) {
+  const t = exTranslation(item);
+  if (t) return t;
+  const norm = x => String(x || '').toLowerCase().replace(/[.,!?;:]/g, '').trim();
+  const k = norm(item.k), ex = norm(item.ex);
+  // Caption-style items: the example is the item plus a few words, so the gloss fits
+  // (Portuguese examples often add an article in front: "O fotógrafo a montar…")
+  return keyWordCount(item) >= 3 && ex.includes(k.slice(0, Math.max(12, Math.floor(k.length * 0.8)))) && ex.length <= k.length + 40 ? item.e : '';
+}
+function renderListenMeaning(q, container) {
+  const meaning = sentenceMeaning(q.item);
+  const lesson = lessonOfItem(q.item);
+  const pool = (lesson ? lesson.vocab : []).filter(v => v.k !== q.item.k).map(sentenceMeaning).filter(m => m && m !== meaning);
+  const extra = shuffle(LESSONS.flatMap(l => l.vocab).slice(0, 4000)).map(v => v.e).filter(e => e && e !== meaning);
+  const wrong = [...new Set(shuffle(pool).concat(extra))].slice(0, 3);
+  if (!meaning || wrong.length < 2 || exWordCount(q.item) < 3) { renderListening(q, container); return; }
+  q.correctText = meaning;
+  q.reveal = `<div class="odd-reveal"><div><b>${escapeHTML(q.item.ex)}</b></div></div>`;
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🎧 What Happened?</div>
+    <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">Listen to the sentence, then choose what it means.</div>
+    <button class="listen-play-btn" id="listen-btn" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(q.item.ex)}">🔊</button>
+    <button class="skip-btn" style="margin:0 0 10px" onclick="speakSlow(this.dataset.s,this)" data-s="${escapeHTML(q.item.ex)}">🐢 Slower</button>
+    <div class="choices-grid" style="grid-template-columns:1fr">${shuffle([meaning, ...wrong]).map(m => choiceBtn(m, m === meaning)).join('')}</div>
+    <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
+    </div><div id="feedback-area"></div>`;
+  setTimeout(() => { const b = document.getElementById('listen-btn'); if (b && isCurrentQuestion(q)) speakText(q.item.ex, b); }, 500);
+}
+
+// 5. SPEED ROUND — match this stage's words before the timer runs out.
+// A game round at the end of a practice stage: bonus XP if you beat the clock,
+// no hearts or schedule changes either way.
+const SPEED_SECONDS = 30;
+let speedTimer = null;
+function speedRoundFor(words) {
+  const short = words.filter(v => v.k && v.e && keyWordCount(v) <= 4 && !(typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(v.k)));
+  const uniq = []; const seenE = new Set();
+  short.forEach(v => { if (!seenE.has(v.e)) { seenE.add(v.e); uniq.push(v); } });
+  return uniq.length >= 4 ? { item: uniq[0], type: 'speedMatch', words: shuffle(uniq).slice(0, 5), lessonId: lessonPlan && lessonPlan.lessonId } : null;
+}
+function renderSpeedMatch(q, container) {
+  const pairs = q.words || [];
+  if (pairs.length < 4) { renderMatching(q, container); return; }
+  const left = shuffle(pairs.map((_, i) => i)), right = shuffle(pairs.map((_, i) => i));
+  matchState = { selected: null, matched: new Set(), pairs, speed: true, start: Date.now() };
+  container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">⚡ Speed Round</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">Match all ${pairs.length} pairs in ${SPEED_SECONDS} seconds for bonus XP.</div>
+    <div class="speed-bar"><div class="speed-fill" id="speed-fill"></div></div>
+    <div class="match-grid"><div class="match-col">${left.map(i => `<button class="match-btn" id="ml-${i}" onclick="speedSelect(${i},'left',this)">${escapeHTML(pairs[i].k)}</button>`).join('')}</div>
+      <div class="match-col">${right.map(i => `<button class="match-btn" id="mr-${i}" onclick="speedSelect(${i},'right',this)">${escapeHTML(pairs[i].e)}</button>`).join('')}</div></div>
+    </div><div id="feedback-area"></div>`;
+  clearInterval(speedTimer);
+  speedTimer = setInterval(() => {
+    const fill = document.getElementById('speed-fill');
+    if (!fill || !isCurrentQuestion(q) || state.awaitingNext) { clearInterval(speedTimer); return; }
+    const left = 1 - (Date.now() - matchState.start) / (SPEED_SECONDS * 1000);
+    fill.style.width = Math.max(0, left * 100) + '%';
+    if (left <= 0) { clearInterval(speedTimer); speedFinish(false); }
+  }, 200);
+}
+function speedSelect(idx, side, btn) {
+  if (state.awaitingNext || matchState.matched.has(idx)) return;
+  if (side === 'left') {
+    document.querySelectorAll('.match-btn.selected').forEach(b => b.classList.remove('selected'));
+    matchState.selected = idx; btn.classList.add('selected'); return;
+  }
+  if (matchState.selected === null) return;
+  const leftBtn = document.getElementById('ml-' + matchState.selected);
+  if (matchState.selected === idx) {
+    [btn, leftBtn].forEach(b => { if (b) { b.classList.add('matched-correct'); b.disabled = true; } });
+    matchState.matched.add(idx); playSound('correct');
+    if (matchState.matched.size === matchState.pairs.length) speedFinish(true);
+  } else {
+    [btn, leftBtn].forEach(b => b && b.classList.add('matched-wrong')); playSound('wrong');
+    setTimeout(() => [btn, leftBtn].forEach(b => b && b.classList.remove('matched-wrong', 'selected')), 500);
+  }
+  matchState.selected = null;
+  document.querySelectorAll('.match-btn.selected').forEach(b => b.classList.remove('selected'));
+}
+function speedFinish(won) {
+  if (state.awaitingNext) return;
+  state.awaitingNext = true;
+  clearInterval(speedTimer);
+  const secs = Math.round((Date.now() - matchState.start) / 1000);
+  document.querySelectorAll('.match-btn').forEach(b => b.disabled = true);
+  if (won) { state.score++; addXP(5); playSound('complete'); }
+  showFeedback(won, won ? `⚡ All matched in ${secs}s — +5 bonus XP` : `Time's up — ${matchState.matched.size}/${matchState.pairs.length} matched. No penalty; try to beat it next time.`);
+  // A missed clock isn't a mistake — keep the headline neutral
+  const head = document.querySelector('#feedback-area .feedback-bar');
+  if (!won && head) { head.classList.remove('wrong'); head.firstElementChild.textContent = '⏱️'; }
+}
+
 const KR_GRAMMAR_SPOTLIGHTS = {
   greetings:      { title:'sta = "to be" (how you are)', explain:'Use <b>sta</b> for states and feelings — how someone IS right now. Pattern: person + sta + state.', examples:[['N sta dretu.','I am fine.'],['Kuma bu sta?','How are you?'],['El sta kansadu.','He is tired.']], mistake:'Don\'t reach for <b>e</b> here — that one is for identity. "N e dretu" would mean <i>I am a fine person</i>.' },
   introductions:  { title:'e = "to be" (who you are)', explain:'Use <b>e</b> for identity — names, origins, professions. <b>sta</b> is for states; <b>e</b> is for who/what something IS.', examples:[['Nha nomi e Maria.','My name is Maria.'],['N e di Kabu Verdi.','I am from Cape Verde.'],['El e nha mai.','She is my mother.']], mistake:'Don\'t reach for <b>sta</b> here — that one is for states and feelings, not identity.' },
@@ -54504,6 +54891,11 @@ function renderQuestion() {
   else if (q.type === 'sentenceBuilder') renderSentenceBuilder(q, content);
   else if (q.type === 'markerDrill') renderMarkerDrill(q, content);
   else if (q.type === 'structureDrill') renderStructureDrill(q, content);
+  else if (q.type === 'fixSentence') renderFixSentence(q, content);
+  else if (q.type === 'oddOneOut') renderOddOneOut(q, content);
+  else if (q.type === 'completeDialogue') renderCompleteDialogue(q, content);
+  else if (q.type === 'listenMeaning') renderListenMeaning(q, content);
+  else if (q.type === 'speedMatch') renderSpeedMatch(q, content);
   else if (q.type === 'grammarChoice') renderGrammarChoice(q, content);
   else renderFlashcard(q, content);
 }
@@ -55561,6 +55953,10 @@ const TYPE_TASK = {
   matching: 'matching word pairs', speaking: 'saying it aloud (their speech was transcribed)',
   markerDrill: 'choosing the correct tense marker', flashcard: 'recalling the word',
   structureDrill: 'choosing the grammatically correct form for a gap in the example sentence',
+  fixSentence: 'tapping the one wrong word in a sentence with a planted grammar mistake',
+  oddOneOut: 'picking which of four words does not belong to the lesson',
+  completeDialogue: 'choosing the next line of a conversation',
+  listenMeaning: 'listening to a whole sentence and choosing what it means',
 };
 function askAntonioWhy() {
   const q = state.session && state.session.questions[state.qIndex];
@@ -55588,13 +55984,13 @@ function antonioStudy(kind) {
 function showFeedback(correct, extra) {
   const area = document.getElementById('feedback-area');
   if (!area) return;
-  const whyBtn = (!correct && getApiKey() && state.session && state.session.questions[state.qIndex] && state.session.questions[state.qIndex].type !== 'grammarChoice')
+  const whyBtn = (!correct && getApiKey() && state.session && state.session.questions[state.qIndex] && !['grammarChoice', 'speedMatch'].includes(state.session.questions[state.qIndex].type))
     ? `<button class="reveal-btn" id="antonio-why-btn" style="margin-top:8px" onclick="askAntonioWhy()">${tutorAvatar()} ${tutorName()} — why?</button><div id="antonio-why-result"></div>`
     : '';
   // Sentence exercises close with the structure behind the sentence — open
   // after building one (that's where word order is the whole task).
   const fq = state.session && state.session.questions[state.qIndex];
-  const anat = fq && ['sentenceBuilder','fillBlank','markerDrill','structureDrill','dictation'].includes(fq.type) ? anatomyDetails(fq.item, fq.type === 'sentenceBuilder', false) : '';
+  const anat = fq && ['sentenceBuilder','fillBlank','markerDrill','structureDrill','dictation','listenMeaning','completeDialogue'].includes(fq.type) ? anatomyDetails(fq.item, fq.type === 'sentenceBuilder', false) : '';
   area.innerHTML = `<div class="feedback-bar ${correct?'correct':'wrong'}">
     <span>${correct ? '✅ Correct!' : '❌ Not quite'}</span>${extra ? `<span>${extra}</span>` : ''}
   </div>${anat}${whyBtn}<button class="next-btn" onclick="advanceQuestion()">Continue →</button>
