@@ -52801,6 +52801,7 @@ function mainTabFor(screenId) {
 // nav-chrome bookkeeping, so both entry points stay in sync automatically.
 function activateScreen(id) {
   const current = document.querySelector('#main .screen.active')?.id?.replace(/^screen-/, '');
+  if (current !== id && typeof wordByWordRun !== 'undefined') wordByWordRun++;   // leaving a screen stops word-by-word playback
   if (current && !PUSHED_SCREENS.includes(current) && PUSHED_SCREENS.includes(id)) {
     navReturn = { screen: current };
   }
@@ -54086,6 +54087,7 @@ function renderStudyCard() {
       <div class="study-k">${escapeHTML(w.k)}</div>
       <div class="study-pron">🗣️ ${escapeHTML(pronounceWord(w.k))}</div>
       <button class="study-speak" onclick="userHasInteracted=true;speakText('${escapeJS(w.k)}',this)">🔊 Hear it</button>
+      ${wordByWordBtn(w.k, 'study-speak', '', '🐢 Word by word')}
       <div class="study-divider"></div>
       <div class="study-e">${escapeHTML(w.e)}</div>
       <div class="study-ex-label">Example</div>
@@ -54093,6 +54095,7 @@ function renderStudyCard() {
       ${w._key ? `<div class="study-caption">🎬 ${escapeHTML(w.captionE || '')}</div>` : meaningLine(w, 'study-meaning')}
       ${anatomyDetails(w, false, false)}
       <button class="study-speak small" onclick="userHasInteracted=true;speakText('${escapeJS(w.ex)}',this)">🔊 Hear example</button>
+      ${wordByWordBtn(w.ex, 'study-speak small', '', '🐢 Word by word')}
       <button class="study-speak small" style="opacity:.7" onclick="flagContentIssue('study')">🚩 Flag</button>
       ${getApiKey() ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:12px">
@@ -54834,6 +54837,7 @@ function renderUnclip(q, container) {
     <div style="text-align:center;font-size:1.4rem;font-weight:800;color:var(--ocean);margin-bottom:8px">${shown}</div>
     <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:.9rem;color:var(--muted);margin-bottom:14px">
       <button class="speak-btn" style="margin:0;flex:none" title="Listen" aria-label="Listen" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(isLine ? item.k : (item.ex || item.k))}">🔊</button>
+      ${wordByWordBtn(isLine ? item.k : (item.ex || item.k), 'speak-btn', 'margin:0;flex:none')}
       ${ex ? `<span>${escapeHTML(ex)}</span>` : '<span>Listen to it sung</span>'}
     </div>
     <div class="choices-grid"${isLine ? ' style="grid-template-columns:1fr"' : ''}>${shuffle([item.full, ...wrong]).map(f => choiceBtn(f, f === item.full)).join('')}</div>
@@ -54900,7 +54904,7 @@ function renderListenMeaning(q, container) {
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🎧 What Happened?</div>
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">Listen to the sentence, then choose what it means.</div>
     <button class="listen-play-btn" id="listen-btn" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(q.item.ex)}">🔊</button>
-    <button class="skip-btn" style="margin:0 0 10px" onclick="speakSlow(this.dataset.s,this)" data-s="${escapeHTML(q.item.ex)}">🐢 Slower</button>
+    <button class="skip-btn" style="margin:0 0 10px" onclick="userHasInteracted=true;speakWordByWord(this.dataset.s,this)" data-s="${escapeHTML(q.item.ex)}">🐢 Word by word</button>
     <div class="choices-grid" style="grid-template-columns:1fr">${shuffle([meaning, ...wrong]).map(m => choiceBtn(m, m === meaning)).join('')}</div>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
     </div><div id="feedback-area"></div>`;
@@ -55010,7 +55014,7 @@ function renderStory() {
           <div class="sm-k">${escapeHTML(line)}</div>
           <div class="sm-e"${storyState.english ? '' : ' hidden'}>${escapeHTML(storyMeaning(v[i]))}</div>
         </div>
-        <button class="lab-speak" aria-label="Play" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(line)}">🔊</button>
+        <button class="lab-speak" aria-label="Play" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(line)}">🔊</button>${wordByWordBtn(line, 'lab-speak', '')}
       </div>`;
     }
   });
@@ -55434,7 +55438,7 @@ function renderGrammarSpotlight(stage) {
       <div style="font-size:.92rem;line-height:1.5;color:var(--text);margin:10px 0">${sp.explain}</div>
       ${sp.examples.map(([k, e]) => `
         <div class="lab-example" style="display:flex;align-items:center;gap:8px;margin-top:8px">
-          <button class="speak-btn" style="margin:0;font-size:.95rem" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>
+          <button class="speak-btn" style="margin:0;font-size:.95rem" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>${wordByWordBtn(k, 'speak-btn', 'margin:0;font-size:.95rem')}
           <div><div style="font-weight:700">${linkifyVerbs(k)}</div><div style="font-size:.8rem;color:var(--muted)">${escapeHTML(e)}</div></div>
         </div>`).join('')}
       ${sp.why ? `<div class="lab-why"><b>Why is it like this?</b> ${sp.why}</div>` : ''}
@@ -55668,7 +55672,7 @@ function renderLabPatterns(lesson, patterns, container) {
       <div class="lab-pattern">🔬 Anatomy of a sentence</div>
       <div class="lab-explain">Each colour is one job in the sentence. Read the notes to see why the words sit where they do.</div>
       <div class="lab-example">
-        <button class="lab-speak" onclick="userHasInteracted=true;speakText('${escapeJS(sample.ex)}',this)">🔊</button>
+        <button class="lab-speak" onclick="userHasInteracted=true;speakText('${escapeJS(sample.ex)}',this)">🔊</button>${wordByWordBtn(sample.ex, 'lab-speak', '')}
         <div><div class="lab-ex-k">${escapeHTML(sample.ex)}</div></div>
       </div>
       ${anatomyHTML(sample.ex, exTranslation(sample) || '')}
@@ -55676,7 +55680,7 @@ function renderLabPatterns(lesson, patterns, container) {
   const cards = patterns.map((p, i) => {
     const exHTML = (p.examples || []).map(([k, e]) => `
       <div class="lab-example">
-        <button class="lab-speak" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>
+        <button class="lab-speak" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>${wordByWordBtn(k, 'lab-speak', '')}
         <div><div class="lab-ex-k">${escapeHTML(k)}</div><div class="lab-ex-e">${escapeHTML(e)}</div></div>
       </div>`).join('');
     return `<div class="lab-card" style="animation-delay:${i*0.06}s">
@@ -55800,6 +55804,8 @@ function renderFlashcard(q, container) {
   hearBtn.className = 'hear-btn';
   hearBtn.textContent = '🔊 Hear it';
   hearBtn.onclick = () => { userHasInteracted = true; speakText(q.item.k, hearBtn); };
+  const wbw = document.createElement('div');
+  wbw.innerHTML = wordByWordBtn(q.item.k || '', 'hear-btn', '', '🐢 Word by word');
   const ex = document.createElement('div');
   ex.className = 'exercise-example';
   ex.textContent = '"' + (q.item.ex||'') + '"';
@@ -55807,7 +55813,7 @@ function renderFlashcard(q, container) {
   btn.className = 'reveal-btn';
   btn.textContent = '👆 Reveal Translation';
   btn.onclick = flipCard;
-  front.appendChild(word); front.appendChild(pron); front.appendChild(hearBtn); front.appendChild(ex); front.appendChild(btn);
+  front.appendChild(word); front.appendChild(pron); front.appendChild(hearBtn); if (wbw.firstChild) front.appendChild(wbw.firstChild); front.appendChild(ex); front.appendChild(btn);
   card.appendChild(front);
 
   const back = document.createElement('div');
@@ -55921,6 +55927,7 @@ function renderTypeAnswer(q, container) {
     <div class="exercise-word">${escapeHTML(q.item.k)}</div>
     <div class="pronunciation-guide">🗣️ ${escapeHTML(pronounceWord(q.item.k))}</div>
     <button class="hear-btn" onclick="userHasInteracted=true;speakText('${escapeJS(q.item.k)}',this)">🔊 Hear it</button>
+    ${wordByWordBtn(q.item.k, 'hear-btn', '', '🐢 Word by word')}
     <div class="exercise-example">"${escapeHTML(q.item.ex)}"</div>
     <div style="font-size:.82rem;color:var(--muted);margin-bottom:12px">Type the English translation</div>
     <input type="text" class="type-input" id="type-input" placeholder="Your answer…" onkeydown="if(event.key==='Enter')submitType()" autocomplete="off"/>
@@ -56015,6 +56022,7 @@ function renderMarkerDrill(q, container) {
     ${meaningLine(q.item, 'md-meaning')}
     <div class="choices-grid" style="grid-template-columns:1fr">${choiceHTML}</div>
     <button class="reveal-btn" onclick="userHasInteracted=true;speakText('${escapeJS(ex)}',this)">🔊 Hear the full sentence</button>
+    ${wordByWordBtn(ex, 'reveal-btn', 'margin-top:8px', '🐢 Word by word')}
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
     </div><div id="feedback-area"></div>`;
 }
@@ -56033,6 +56041,7 @@ function renderListening(q, container) {
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">👂 Listening</div>
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">${isAlpha ? 'Listen and choose the letter you heard:' : 'Listen and choose the correct meaning:'}</div>
     <button class="listen-play-btn" id="listen-btn" onclick="playListenWord('${escapeHTML(escapeJS(q.item.k))}',this)">🔊</button>
+    ${wordByWordBtn(q.item.k, 'skip-btn', 'margin:0 0 10px', '🐢 Word by word')}
     <div class="choices-grid">${choiceHTML}</div>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
     </div><div id="feedback-area"></div>`;
@@ -56315,6 +56324,7 @@ function renderSpeaking(q, container) {
     <div class="pronunciation-guide">🗣️ ${escapeHTML(pronounceWord(q.speakTarget || q.item.k))}</div>
     <div class="exercise-example">${q.speakTarget ? 'Featuring: <b>'+escapeHTML(q.item.k)+'</b> ('+escapeHTML(q.item.e)+')' : escapeHTML(q.item.e) + ' • "' + escapeHTML(q.item.ex) + '"'}</div>
     <button class="reveal-btn" style="margin-top:4px" onclick="antonioSayPrompt(this.dataset.w)" data-w="${escapeJS(q.speakTarget || q.item.k)}">🔊 Hear António say it</button>
+    ${wordByWordBtn(q.speakTarget || q.item.k, 'reveal-btn', 'margin-top:6px;background:var(--muted)', '🐢 Word by word')}
     ${hasSR
       ? `<button class="speak-mic-btn" id="speak-mic" onclick="startSpeakCheck()">🎤</button>
          <div style="font-size:.78rem;color:var(--muted)">Tap the mic, then say it back to him</div>
@@ -56628,6 +56638,7 @@ function renderSentenceBuilder(q, container) {
     <div class="sb-bank" id="sb-bank"></div>
     <button class="submit-btn" id="sb-check" onclick="checkSentence()" disabled>Check ✓</button>
     <button class="reveal-btn" style="margin-top:8px;background:var(--muted)" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(sentence)}">🔊 Hear the sentence</button>
+    ${wordByWordBtn(sentence, 'reveal-btn', 'margin-top:8px;background:var(--muted)', '🐢 Word by word')}
   </div><div id="feedback-area"></div>`;
 
   renderSbChips();
@@ -57645,7 +57656,7 @@ function startGrammarSkill(id) {
       <div style="font-size:.92rem;line-height:1.55;margin:10px 0">${sk.explain}</div>
       ${sk.examples.map(([k, e]) => `
         <div class="lab-example" style="display:flex;align-items:center;gap:8px;margin-top:8px">
-          <button class="speak-btn" style="margin:0;font-size:.95rem" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>
+          <button class="speak-btn" style="margin:0;font-size:.95rem" onclick="userHasInteracted=true;speakText('${escapeJS(k)}',this)">🔊</button>${wordByWordBtn(k, 'speak-btn', 'margin:0;font-size:.95rem')}
           <div><div style="font-weight:700">${linkifyVerbs(k)}</div><div style="font-size:.8rem;color:var(--muted)">${escapeHTML(e)}</div></div>
         </div>`).join('')}
     </div>
@@ -58249,15 +58260,23 @@ function browserSpeak(clean, btnEl, rate) {
   window.speechSynthesis.speak(utter);
 }
 
-// Slower playback of a sentence: same voice, slowed down (pitch preserved).
+// Slow playback: a phrase or sentence is read word by word; a single word is
+// played slowed down (same voice, pitch preserved).
 function speakSlow(text, btnEl) {
+  if (dictationWords(text).length >= 2) return speakWordByWord(text, btnEl);
   return speakText(text, btnEl, 0.65);
 }
+// A 🐢 button that reads a phrase or sentence word by word (none for a single word)
+function wordByWordBtn(text, cls = 'speak-btn', style = 'margin:0', label = '🐢') {
+  if (dictationWords(text).length < 2) return '';
+  return `<button class="${cls} wbw-btn" style="${style}" title="Word by word" aria-label="Play word by word" onclick="event.stopPropagation();userHasInteracted=true;speakWordByWord(this.dataset.s,this)" data-s="${escapeHTML(text)}">${label}</button>`;
+}
 
-// Slow dictation: the sentence read one word at a time with a pause after each,
-// so every word can be heard clearly. Each word is its own (cached) clip, so
-// common words are fetched once and reused across sentences.
-let wordByWordRun = 0;
+// Word by word: a sentence read one word at a time with a pause after each, so
+// every word can be heard clearly. Each word is its own (cached) clip, so common
+// words are fetched once and reused across sentences. Tapping the same button
+// again stops it, and so does any other playback or leaving the screen.
+let wordByWordRun = 0, wordByWordBtnEl = null;
 const WORD_GAP_MS = 550;
 function playClipToEnd(audioB64, rate) {
   return new Promise(resolve => {
@@ -58286,20 +58305,34 @@ function dictationWords(text) {
 }
 async function speakWordByWord(text, btnEl, stillWanted) {
   const words = dictationWords(text);
-  if (words.length < 2) return speakSlow(text, btnEl);
+  if (words.length < 2) return speakText(text, btnEl, 0.65);
+  if (btnEl && btnEl === wordByWordBtnEl && btnEl.classList.contains('speaking')) {   // second tap = stop
+    wordByWordRun++; btnEl.classList.remove('speaking', 'playing'); wordByWordBtnEl = null;
+    if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    return;
+  }
   const run = ++wordByWordRun;
+  if (wordByWordBtnEl && wordByWordBtnEl !== btnEl) wordByWordBtnEl.classList.remove('speaking', 'playing');
+  wordByWordBtnEl = btnEl || null;
   const live = () => run === wordByWordRun && (!stillWanted || stillWanted());
   if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   if (btnEl) btnEl.classList.add('speaking');
   const clips = words.map(w => voiceForm(w));
-  // Fetch every word up front (in parallel) so the gaps stay even
-  const audio = getTtsEndpoint() ? await Promise.all(clips.map(c => fetchTtsAudio(c))) : clips.map(() => null);
+  // Fetch a few words ahead rather than all at once, so long passages don't
+  // flood the voice service (which would switch the premium voice off)
+  const useTts = !!getTtsEndpoint(), pending = [];
+  const clipAt = i => pending[i] || (pending[i] = useTts ? fetchTtsAudio(clips[i]) : Promise.resolve(null));
   for (let i = 0; i < clips.length && live(); i++) {
-    if (audio[i]) await playClipToEnd(audio[i], 0.85);
+    for (let j = i; j < Math.min(clips.length, i + 4); j++) clipAt(j);
+    const audio = await clipAt(i);
+    if (!live()) break;
+    if (audio) await playClipToEnd(audio, 0.85);
     else await browserSayToEnd(clips[i], 0.85);
     if (i < clips.length - 1 && live()) await new Promise(r => setTimeout(r, WORD_GAP_MS));
   }
+  if (run === wordByWordRun) wordByWordBtnEl = null;
   if (btnEl) btnEl.classList.remove('speaking', 'playing');
 }
 
@@ -60000,7 +60033,7 @@ function openGrammar(id) {
       <div class="g-intro">${escapeHTML(g.intro)}</div>
       ${g.points.map(p => `<div class="g-point">
         <div class="g-point-head"><span class="g-point-k">${escapeHTML(p.k)}</span><span class="g-point-e">${escapeHTML(p.e)}</span>
-          <button class="speak-btn" style="margin:0" onclick="userHasInteracted=true;speakText('${escapeJS(p.ex)}',this)">🔊</button></div>
+          <button class="speak-btn" style="margin:0" onclick="userHasInteracted=true;speakText('${escapeJS(p.ex)}',this)">🔊</button>${wordByWordBtn(p.ex)}</div>
         <div class="g-point-pron">🗣️ ${escapeHTML(pronounceWord(p.ex))}</div>
         <div class="g-point-ex">${escapeHTML(p.ex)}</div>
         <div class="g-point-exE">${escapeHTML(p.exE)}</div>
@@ -61143,7 +61176,7 @@ function openPassage(id) {
       ${pz.paras.map((para, i) => `
         <div class="story-line" id="pz-line-${i}">
           <div style="display:flex;gap:8px;align-items:flex-start">
-            <button class="speak-btn" style="margin:0;font-size:.9rem;flex-shrink:0" onclick="pzSpeak('${pz.id}',${i},this)">🔊</button>
+            <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0"><button class="speak-btn" style="margin:0;font-size:.9rem" onclick="pzSpeak('${pz.id}',${i},this)">🔊</button>${wordByWordBtn(para.k, 'speak-btn', 'margin:0;font-size:.9rem')}</div>
             <div style="font-size:.95rem;line-height:1.75">${linkifyReadingWords(para.k, vocabMap)}</div>
           </div>
           <div class="pz-en" style="display:none;font-size:.82rem;color:var(--muted);margin-top:8px;padding-left:34px;line-height:1.6">${escapeHTML(para.e)}</div>
@@ -61553,7 +61586,7 @@ function lfRenderRecap(d, meta) {
     <div class="checkpoint-topics-label" style="margin:16px 0 8px">Phrases that did the work</div>
     ${r.phrases.map(p => `<div style="display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin-bottom:8px">
       <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.85rem;color:var(--ocean)">${escapeHTML(p.k)}</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px">${escapeHTML(p.e)}</div></div>
-      <button class="speak-btn" style="margin:0" onclick="speakText('${escapeJS(p.k)}',this)">🔊</button>
+      <button class="speak-btn" style="margin:0" onclick="speakText('${escapeJS(p.k)}',this)">🔊</button>${wordByWordBtn(p.k)}
     </div>`).join('')}
     <button class="due-btn" style="width:100%;margin-top:8px" onclick="lfSetView('reader');setTimeout(()=>document.getElementById('dlg-quiz-heading')?.scrollIntoView({behavior:'smooth'}),50)">❓ ${d.quiz.length} questions</button>`;
 }
@@ -61591,7 +61624,7 @@ function openDialogue(id, from) {
     <div style="margin-top:14px">
       ${d.lines.map((L, i) => `
         <div class="dlg-row${L.sp === d.lines[0].sp ? '' : ' reverse'}">
-          <button class="speak-btn" style="margin:0;font-size:.9rem;flex-shrink:0" onclick="dlgSpeak('${d.id}',${i},this)">🔊</button>
+          <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0"><button class="speak-btn" style="margin:0;font-size:.9rem" onclick="dlgSpeak('${d.id}',${i},this)">🔊</button>${wordByWordBtn(L.k, 'speak-btn', 'margin:0;font-size:.9rem')}</div>
           <div class="dlg-bubble">
             <div class="dlg-speaker">${L.sp}</div>
             <div class="dlg-text">${escapeHTML(L.k)}</div>
@@ -61959,7 +61992,7 @@ function openShadow(id) {
         <div class="shadow-e">${escapeHTML(p.e)}</div>
         <div class="shadow-controls">
           <button class="shadow-btn listen" onclick="userHasInteracted=true;speakText('${escapeJS(p.k)}',this)">▶ Listen</button>
-          <button class="shadow-btn slow" onclick="userHasInteracted=true;speakSlow('${escapeJS(p.k)}',this)">🐢 Slow</button>
+          <button class="shadow-btn slow" onclick="userHasInteracted=true;speakSlow('${escapeJS(p.k)}',this)">🐢 Word by word</button>
           <button class="shadow-btn rec" id="shadow-rec-${i}" onclick="shadowRepeat(${i},'${escapeJS(p.k)}')">🎤 Repeat</button>
         </div>
         <div class="shadow-result" id="shadow-result-${i}"></div>
@@ -62098,7 +62131,7 @@ function openStory(id) {
       return `<span>${escapeHTML(token)}</span>`;
     }).join('');
     return `<div class="story-line" id="sl-${li}" onclick="toggleLineTrans(${li})">
-      <div class="story-k">${wordsHTML} <button class="speak-btn" style="margin:0" onclick="event.stopPropagation();userHasInteracted=true;speakText('${escapeJS(line.k)}',this)">🔊</button></div>
+      <div class="story-k">${wordsHTML} <button class="speak-btn" style="margin:0" onclick="event.stopPropagation();userHasInteracted=true;speakText('${escapeJS(line.k)}',this)">🔊</button>${wordByWordBtn(line.k)}</div>
       <div class="story-e">${escapeHTML(line.e)}</div>
     </div>`;
   }).join('');
