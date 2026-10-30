@@ -51477,14 +51477,47 @@ function exTranslation(item) {
 }
 // Renders the meaning line under a sentence exercise — falls back to an
 // on-demand lookup when we don't have a stored translation yet.
-function meaningLine(item, id) {
+function meaningLine(item, id, exclude) {
   // Alphabet cards already carry their gloss inline — e.g. "agu (water)"
   if (item && typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(item.k)) return '';
-  const t = exTranslation(item);
+  const t = exTranslation(item) || (typeof sentenceMeaning === 'function' ? sentenceMeaning(item) : '');
   if (t) return `<div class="ex-meaning">🇬🇧 ${escapeHTML(t)}</div>`;
-  if (!getApiKey()) return '';
-  return `<div id="${id}"><button class="reveal-btn" style="margin:6px 0 0;font-size:.75rem;padding:6px 12px"
+  // No stored translation: never leave the sentence without a meaning — show the
+  // course's own glosses for its words (leaving out the word being tested)
+  const hints = sentenceHints(item && item.ex, exclude || []);
+  const hintsHTML = hints.length ? `<div class="ex-meaning ex-hints">🧩 Word hints: ${hints.slice(0, 8).map(([w, g]) => `<b>${escapeHTML(w)}</b> = ${escapeHTML(g)}`).join(' · ')}</div>` : '';
+  if (!getApiKey()) return hintsHTML;
+  return `${hintsHTML}<div id="${id}"><button class="reveal-btn" style="margin:6px 0 0;font-size:.75rem;padding:6px 12px"
     onclick="translateExample('${escapeJS(item.ex || '')}','${id}',this)">🔍 What does it mean?</button></div>`;
+}
+// Word hints: what each word of a sentence means, from the course's own one-word entries
+let _hintIdx = null, _hintLang = null;
+function hintIndex() {
+  const lang = currentLang();
+  if (_hintIdx && _hintLang === lang) return _hintIdx;
+  const m = new Map();
+  LESSONS.forEach(l => (l.vocab || []).forEach(v => {
+    if (!v.k || !v.e || (typeof ALPHABET_KEYS !== 'undefined' && ALPHABET_KEYS.has(v.k)) || /\s/.test(v.k.trim())) return;
+    const key = foldF(v.k).replace(/[^\p{L}\p{N}'-]/gu, '');
+    const gloss = v.e.replace(/\s*\([^)]*\)/g, '').split(/[\/;]/)[0].trim();
+    if (key && gloss && !m.has(key)) m.set(key, gloss);
+  }));
+  _hintIdx = m; _hintLang = lang;
+  return m;
+}
+function sentenceHints(sentence, exclude) {
+  const idx = hintIndex(), skip = new Set((exclude || []).flatMap(x => String(x).split(/\s+/)).map(x => foldF(x).replace(/[^\p{L}\p{N}'-]/gu, '')).filter(Boolean));
+  const seen = new Set(), out = [];
+  String(sentence || '').split(/\s+/).forEach(raw => {
+    const w = raw.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}']+$/gu, ''), key = foldF(w);
+    if (!key || seen.has(key) || skip.has(key)) return;
+    seen.add(key);
+    // plural / other-gender forms find their entry too (mãos → mão, cansados → cansado)
+    const v = idx.has(key) ? key : (typeof focusVariants === 'function' ? focusVariants(key).find(x => idx.has(x)) : null);
+    if (v && !skip.has(v)) out.push([w, idx.get(v)]);
+  });
+  // A–Z, not sentence order — in Build the Sentence the order is the answer
+  return out.sort((a, b) => foldF(a[0]).localeCompare(foldF(b[0])));
 }
 async function translateExample(sentence, targetId, btn) {
   const L = langInfo();
@@ -54574,7 +54607,7 @@ function renderStructureDrill(q, container) {
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🧩 Structure Check</div>
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">${escapeHTML(topic ? topic.title : 'Which form fits?')}</div>
     <div class="exercise-word" style="font-size:1.2rem">${escapeHTML(d.blanked)}</div>
-    ${meaningLine(q.item, 'sd-meaning')}
+    ${meaningLine(q.item, 'sd-meaning', opts.map(o => o.t).join(' ').split(/\s+/))}
     <div class="choices-grid" style="grid-template-columns:1fr">${opts.map(o =>
       `<button class="choice-btn" data-t="${escapeHTML(o.t)}" onclick="sdAnswer(this)"><b>${escapeHTML(o.t)}</b>${o.note ? ' — ' + escapeHTML(o.note) : ''}</button>`).join('')}</div>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
@@ -56019,7 +56052,7 @@ function renderMarkerDrill(q, container) {
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">Which marker completes the sentence?</div>
     <div class="exercise-word" style="font-size:1.25rem">${escapeHTML(blanked)}</div>
     <div class="exercise-example">"${escapeHTML(q.item.e)}" — the markers set the tense</div>
-    ${meaningLine(q.item, 'md-meaning')}
+    ${meaningLine(q.item, 'md-meaning', opts.join(' ').split(/\s+/))}
     <div class="choices-grid" style="grid-template-columns:1fr">${choiceHTML}</div>
     <button class="reveal-btn" onclick="userHasInteracted=true;speakText('${escapeJS(ex)}',this)">🔊 Hear the full sentence</button>
     ${wordByWordBtn(ex, 'reveal-btn', 'margin-top:8px', '🐢 Word by word')}
@@ -56144,31 +56177,53 @@ function submitDictation() {
 }
 
 // — Fill in the Blank —
-function renderFillBlank(q, container) {
-  // (meaning line injected below via meaningLine)
-  const sentence = q.item.ex || '';
-  // Try the full key, then each gendered/spelling variant (e.g. "Braba/u" or "Mai / Mamã"), case-insensitively
-  const variants = rawFormVariants(q.item.k);
-  let blanked = null, answer = q.item.k;
+// Where an item's word sits in its example sentence, as { start, end }: the
+// exact form first (also each gendered/spelling variant, ignoring case, accents
+// and "..." placeholders), then the closest inflected form of its longest word
+// (famazu → famaza, acordar → acordo, novo → nova). null when it isn't there.
+function findBlank(sentence, key) {
+  const fs = foldF(sentence);
+  const clean = v => v.replace(/\.\.\.|…/g, ' | ').replace(/[?!¿¡.,:;"“”]/g, ' ').split('|').map(x => x.replace(/\s{2,}/g, ' ').trim()).filter(Boolean)
+    .sort((a, b) => b.length - a.length)[0] || '';
+  const variants = [...new Set(rawFormVariants(key).map(clean).filter(v => v.length >= 2))];
   for (const v of variants) {
-    const idx = sentence.toLowerCase().indexOf(v.toLowerCase());
-    if (idx > -1) {
-      blanked = sentence.slice(0, idx) + '______' + sentence.slice(idx + v.length);
-      answer = sentence.slice(idx, idx + v.length); // actual casing from sentence
-      break;
+    const fv = foldF(v);
+    let i = -1;
+    while ((i = fs.indexOf(fv, i + 1)) > -1) {
+      const before = fs[i - 1], after = fs[i + fv.length];
+      if ((!before || !/\p{L}/u.test(before)) && (!after || !/\p{L}/u.test(after))) return { start: i, end: i + fv.length };
     }
   }
-  if (!blanked) {
-    // Fallback: translate-to-Kriolu prompt (never reveal the answer)
-    blanked = null;
+  // Closest inflected form of the longest word in the key
+  const kw = variants.flatMap(v => v.split(/\s+/)).filter(w => w.length >= 4).sort((a, b) => b.length - a.length);
+  if (!kw.length) return null;
+  const re = /\p{L}[\p{L}'-]*/gu; let m, best = null;
+  while ((m = re.exec(sentence))) {
+    const t = foldF(m[0]);
+    for (const w of kw) {
+      const fw = foldF(w);
+      let pre = 0; while (pre < t.length && pre < fw.length && t[pre] === fw[pre]) pre++;
+      const close = (pre >= Math.max(3, Math.min(t.length, fw.length) - 2) && Math.abs(t.length - fw.length) <= 3)
+        || levenshtein(t, fw) <= Math.floor(fw.length * 0.3);
+      if (close && (!best || levenshtein(t, fw) < best.d)) best = { start: m.index, end: m.index + m[0].length, d: levenshtein(t, fw) };
+    }
   }
+  return best && { start: best.start, end: best.end };
+}
+function renderFillBlank(q, container) {
+  const sentence = q.item.ex || '';
+  const spot = findBlank(sentence, q.item.k);
+  const blanked = spot ? sentence.slice(0, spot.start) + '______' + sentence.slice(spot.end) : null;
+  const answer = spot ? sentence.slice(spot.start, spot.end) : q.item.k;   // the form the sentence uses
+  const hide = [answer, ...rawFormVariants(q.item.k)];
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">Fill in the Blank</div>
     ${blanked !== null
       ? `<div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Complete the sentence in ${escapeHTML(langInfo().label)}:</div>
          <div class="blank-sentence">${escapeHTML(blanked)}</div>
-         ${meaningLine(q.item, 'fb-meaning')}`
+         ${meaningLine(q.item, 'fb-meaning', hide)}`
       : `<div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">How do you say this in ${escapeHTML(langInfo().label)}?</div>
-         <div class="blank-sentence">"${escapeHTML(q.item.e)}"</div>`}
+         <div class="blank-sentence">"${escapeHTML(q.item.e)}"</div>
+         ${sentence ? `<div style="font-size:.8rem;color:var(--muted);margin-top:8px">Used like this: <i>${escapeHTML(sentence)}</i></div>${meaningLine(q.item, 'fb-meaning', hide)}` : ''}`}
     <div style="font-size:.8rem;color:var(--muted);margin:10px 0 14px">${blanked !== null ? 'Hint: ' + escapeHTML(q.item.e) : ''}</div>
     <input type="text" class="type-input" id="type-input" placeholder="Type the missing word…" onkeydown="if(event.key==='Enter')submitFill()" autocomplete="off"/>
     <button class="submit-btn" onclick="submitFill()">Check ✓</button></div><div id="feedback-area"></div>`;
@@ -56187,7 +56242,8 @@ function submitFill() {
   const val = normalizeText(input.value);
   // Accept any gendered/spelling variant of the target word (e.g. "Braba/u" → "braba" or "brabu"),
   // since the sentence itself doesn't pin down which form is required.
-  const variants = answerVariants(q.item.k);
+  // The form the sentence itself uses is right too (famaza for famazu)
+  const variants = [...answerVariants(q.item.k), normalizeText(state.fillAnswer || '')].filter(Boolean);
   const isCorrect = variants.some(v => levenshtein(val, v) <= Math.max(1, Math.floor(v.length * 0.2)));
   input.classList.add(isCorrect ? 'correct-ans' : 'wrong-ans');
   input.disabled = true;
