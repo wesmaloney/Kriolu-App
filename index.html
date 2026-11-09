@@ -1444,6 +1444,16 @@
     .api-key-panel,.autospeak-row,.convo-tips,
     [data-theme="dark"] .api-key-panel,[data-theme="dark"] .autospeak-row,[data-theme="dark"] .convo-tips,
     html[data-lang="portuguese"][data-theme="dark"] .convo-tips{background:var(--card)}
+
+    /* Contemporary details on every page: text-only tabs and titles,
+       quiet category rows, one action colour */
+    .readtab-btn{border-radius:99px}
+    .phrase-category{border:1px solid var(--border);box-shadow:none}
+    .phrase-cat-header{background:var(--card);color:var(--text);font-weight:700}
+    .phrase-cat-header::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--cat,var(--ocean));flex:none}
+    .phrase-cat-header:hover{background:var(--sand)}
+    .lesson-card::before{height:3px;opacity:.9}
+    .settings-title{font-family:'Fraunces',Georgia,serif;font-weight:600}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1472,7 +1482,7 @@
 <!-- SETTINGS PANEL -->
 <div id="settings-panel" onclick="closeSettings(event)">
   <div class="settings-sheet">
-    <div class="settings-title">⚙️ Settings</div>
+    <div class="settings-title">Settings</div>
     <div class="profile-header">
       <div class="profile-avatar" id="profile-avatar">L</div>
       <div class="profile-info">
@@ -1486,41 +1496,41 @@
       <button class="start-btn" style="margin-top:8px" onclick="saveProfileName()">Save</button>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🌙 Dark Mode</div><div class="setting-sub">Easier on the eyes at night</div></div>
+      <div><div class="setting-label">Dark Mode</div><div class="setting-sub">Easier on the eyes at night</div></div>
       <label class="toggle-switch"><input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()"><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🔔 Daily Reminder</div><div class="setting-sub">Phone notification to keep your streak</div></div>
+      <div><div class="setting-label">Daily Reminder</div><div class="setting-sub">Phone notification to keep your streak</div></div>
       <label class="toggle-switch"><input type="checkbox" id="notif-toggle" onchange="toggleNotification()"><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🌍 Language Course</div><div class="setting-sub" id="lang-subtitle">Switch course — progress is kept separately for each</div></div>
+      <div><div class="setting-label">Language Course</div><div class="setting-sub" id="lang-subtitle">Switch course — progress is kept separately for each</div></div>
       <select id="language-select" class="voice-select" onchange="switchLanguage(this.value)">
         <option value="kriolu">🇨🇻 Kriolu</option>
         <option value="portuguese">🇵🇹 Português</option>
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🗺️ Language Tracks</div><div class="setting-sub">Compare progress and switch with more detail</div></div>
+      <div><div class="setting-label">Language Tracks</div><div class="setting-sub">Compare progress and switch with more detail</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="closeSettings();showScreen('track');renderLanguageTrack()">View ›</button>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🤖 AI Tutor Setup</div><div class="setting-sub">Connection status, what it powers, your API key</div></div>
+      <div><div class="setting-label">AI Tutor Setup</div><div class="setting-sub">Connection status, what it powers, your API key</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="closeSettings();showScreen('ai');renderAiSetup()">View ›</button>
     </div>
     <div class="setting-row" id="dialect-row">
-      <div><div class="setting-label">🏝️ Dialect Focus</div><div class="setting-sub">Base content is Santiago; São Vicente adds variant tips</div></div>
+      <div><div class="setting-label">Dialect Focus</div><div class="setting-sub">Base content is Santiago; São Vicente adds variant tips</div></div>
       <select id="dialect-select" class="voice-select" onchange="setDialect(this.value)">
         <option value="santiago" selected>Santiago (Badiu)</option>
         <option value="saovicente">São Vicente</option>
       </select>
     </div>
     <div class="setting-row" data-ai-dialect-wrap>
-      <div><div class="setting-label">🗣️ AI Reply Dialect</div><div class="setting-sub">Which Kriolu Sôr António and the translator use</div></div>
+      <div><div class="setting-label">AI Reply Dialect</div><div class="setting-sub">Which Kriolu Sôr António and the translator use</div></div>
       <select class="voice-select ai-dialect-select" aria-label="AI reply dialect" onchange="setAiDialect(this.value)"></select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">📚 Daily Review Limit</div><div class="setting-sub">Most words due for review in one day; the rest wait for later days</div></div>
+      <div><div class="setting-label">Daily Review Limit</div><div class="setting-sub">Most words due for review in one day; the rest wait for later days</div></div>
       <select id="review-limit-select" class="voice-select" onchange="setDailyReviewLimit(this.value)">
         <option value="15">15 words</option>
         <option value="30">30 words</option>
@@ -1530,7 +1540,7 @@
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🎯 My Goal</div><div class="setting-sub">Tailors recommendations & the tutor</div></div>
+      <div><div class="setting-label">My Goal</div><div class="setting-sub">Tailors recommendations & the tutor</div></div>
       <select id="goal-select" class="voice-select" onchange="state.learnerGoal=this.value;saveState();showToast('Goal updated ✓')">
         <option value="family">Talk with family</option>
         <option value="visit">Visit Cape Verde / Portugal</option>
@@ -1539,11 +1549,11 @@
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🚩 Reported Errors</div><div class="setting-sub">Words you've flagged for native-speaker review</div></div>
+      <div><div class="setting-label">Reported Errors</div><div class="setting-sub">Words you've flagged for native-speaker review</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="showErrorReports()">Review</button>
     </div>
     <div class="setting-row" id="reminder-time-row">
-      <div><div class="setting-label">⏰ Reminder Time</div><div class="setting-sub">When to remind you each day</div></div>
+      <div><div class="setting-label">Reminder Time</div><div class="setting-sub">When to remind you each day</div></div>
       <select id="reminder-time-select" class="voice-select" onchange="setReminderTime(this.value)">
         <option value="7">7:00 AM</option>
         <option value="9">9:00 AM</option>
@@ -1556,15 +1566,15 @@
       </select>
     </div>
     <div class="setting-row" data-kriolu-only>
-      <div><div class="setting-label">🗣️ Kriolu Pronunciation</div><div class="setting-sub">Helps the Portuguese voice sound Kriolu (behind the scenes — spelling on screen doesn't change)</div></div>
+      <div><div class="setting-label">Kriolu Pronunciation</div><div class="setting-sub">Helps the Portuguese voice sound Kriolu (behind the scenes — spelling on screen doesn't change)</div></div>
       <label class="toggle-switch"><input type="checkbox" id="kr-phonetic-toggle" onchange="toggleKrPhonetic(this.checked)" checked><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🔊 Sound Effects</div><div class="setting-sub">Feedback sounds on answers</div></div>
+      <div><div class="setting-label">Sound Effects</div><div class="setting-sub">Feedback sounds on answers</div></div>
       <label class="toggle-switch"><input type="checkbox" id="sfx-toggle" onchange="toggleSfx()" checked><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">📝 Font Size</div><div class="setting-sub">Adjust text size</div></div>
+      <div><div class="setting-label">Font Size</div><div class="setting-sub">Adjust text size</div></div>
       <div class="font-btns">
         <button class="font-btn" onclick="setFont('0.9rem','S')">S</button>
         <button class="font-btn active" id="font-M" onclick="setFont('1rem','M')">M</button>
@@ -1578,7 +1588,7 @@
       <div style="font-style:italic;color:var(--muted);margin-top:8px;font-size:calc(var(--fs, 1rem) * .78)">N ten sodadi di nha mãi.</div>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🎯 Weekly XP Goal</div><div class="setting-sub">XP target per week</div></div>
+      <div><div class="setting-label">Weekly XP Goal</div><div class="setting-sub">XP target per week</div></div>
       <select id="weekly-goal-select" onchange="setWeeklyGoal(this.value)" style="padding:6px 10px;border:2px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;background:var(--card);color:var(--text)">
         <option value="50">50 XP</option>
         <option value="100" selected>100 XP</option>
@@ -1587,30 +1597,30 @@
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🗣️ Reading Voice</div><div class="setting-sub">Pick which voice reads Kriolu aloud</div></div>
+      <div><div class="setting-label">Reading Voice</div><div class="setting-sub">Pick which voice reads Kriolu aloud</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="goToVoicePicker()">Choose ›</button>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🔁 Auto-speak</div><div class="setting-sub">Read the tutor's replies aloud automatically in Talk</div></div>
+      <div><div class="setting-label">Auto-speak</div><div class="setting-sub">Read the tutor's replies aloud automatically in Talk</div></div>
       <label class="toggle-switch"><input type="checkbox" id="settings-autospeak-toggle" onchange="settingsToggleAutoSpeak()"><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row" style="cursor:pointer" onclick="showToast('👨‍👩‍👧 Multiple learner profiles aren\'t available yet.')">
-      <div style="flex:1"><div class="setting-label">👨‍👩‍👧 Add a Child Profile</div><div class="setting-sub">Shorter lessons, no chat, no purchases</div></div>
+      <div style="flex:1"><div class="setting-label">Add a Child Profile</div><div class="setting-sub">Shorter lessons, no chat, no purchases</div></div>
       <div style="font-size:1rem;color:var(--ocean-2)">+</div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
-      <div><div class="setting-label">🎙️ Premium Voice (ElevenLabs)</div><div class="setting-sub">Paste your Netlify TTS URL for natural voices. Leave blank for the free browser voice.</div></div>
+      <div><div class="setting-label">Premium Voice (ElevenLabs)</div><div class="setting-sub">Paste your Netlify TTS URL for natural voices. Leave blank for the free browser voice.</div></div>
       <div style="display:flex;gap:8px">
         <input type="text" id="tts-endpoint-input" class="api-input" placeholder="https://your-site.netlify.app/api/tts" style="flex:1" />
         <button class="api-save-btn" onclick="saveTtsEndpoint()">Save</button>
       </div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
-      <div><div class="setting-label">☁️ Account & Sync</div><div class="setting-sub">Sign in with just your email to keep your progress across devices — no password needed.</div></div>
+      <div><div class="setting-label">Account & Sync</div><div class="setting-sub">Sign in with just your email to keep your progress across devices — no password needed.</div></div>
       <div id="account-panel"></div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
-      <div><div class="setting-label">💾 Backup Your Progress</div><div class="setting-sub">Your data lives only in this browser. Export a backup file to keep it safe, then import it on any device or after clearing data.</div></div>
+      <div><div class="setting-label">Backup Your Progress</div><div class="setting-sub">Your data lives only in this browser. Export a backup file to keep it safe, then import it on any device or after clearing data.</div></div>
       <div style="display:flex;gap:8px">
         <button class="api-save-btn" style="flex:1;background:var(--ocean)" onclick="exportProgress()">⬇️ Export Backup</button>
         <button class="api-save-btn" style="flex:1;background:var(--green)" onclick="document.getElementById('import-file').click()">⬆️ Import Backup</button>
@@ -1618,7 +1628,7 @@
       </div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:2px">
-      <div class="setting-label" style="margin-bottom:8px">💾 On This Device</div>
+      <div class="setting-label" style="margin-bottom:8px">On This Device</div>
       <div id="storage-usage" class="storage-card"></div>
     </div>
     <div class="setting-row" style="justify-content:center">
@@ -1691,7 +1701,7 @@
     <div id="level-slot"></div>
     <div id="placement-slot"></div>
     <div id="insights-slot"></div>
-    <h2 class="section-heading">🏆 Recent Badges<span style="margin-left:auto;font-size:.7rem;font-weight:800;color:var(--ocean-2);cursor:pointer" onclick="showScreen('achievements')">See all →</span></h2>
+    <h2 class="section-heading">Recent Badges<span style="margin-left:auto;font-size:.7rem;font-weight:800;color:var(--ocean-2);cursor:pointer" onclick="showScreen('achievements')">See all →</span></h2>
     <div class="achievements-strip" id="home-badges" onclick="showScreen('achievements')" style="cursor:pointer"></div>
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
@@ -1703,7 +1713,7 @@
 
   <!-- PATH -->
   <div id="screen-path" class="screen">
-    <h2 class="section-heading">🧭 Your Learning Path</h2>
+    <h2 class="section-heading">Your Learning Path</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Follow this path for a structured, step-by-step journey. Each lesson unlocks the next. You can also practice any lesson freely from the 📚 Lessons tab anytime.</p>
     <div id="path-content"></div>
   </div>
@@ -1752,7 +1762,7 @@
 
   <!-- REVIEW MISTAKES -->
   <div id="screen-review" class="screen">
-    <h2 class="section-heading">📋 Words to Review</h2>
+    <h2 class="section-heading">Words to Review</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Words you've struggled with. Practice these to master them!</p>
     <div id="review-content"></div>
   </div>
@@ -1760,9 +1770,9 @@
   <!-- GRAMMAR / LEARN -->
   <div id="screen-grammar" class="screen">
     <div style="display:flex;gap:8px;margin-bottom:16px;min-width:0">
-      <button class="readtab-btn active" id="learntab-grammar" onclick="showLearnTab('grammar')">📐 Grammar</button>
-      <button class="readtab-btn" id="learntab-verbs" onclick="showLearnTab('verbs')">🔤 Verbs</button>
-      <button class="readtab-btn" id="learntab-write" onclick="showLearnTab('write')">✍️ Write</button>
+      <button class="readtab-btn active" id="learntab-grammar" onclick="showLearnTab('grammar')">Grammar</button>
+      <button class="readtab-btn" id="learntab-verbs" onclick="showLearnTab('verbs')">Verbs</button>
+      <button class="readtab-btn" id="learntab-write" onclick="showLearnTab('write')">Write</button>
     </div>
     <div id="learntab-grammar-content">
       <div id="grammar-lang-note"></div>
@@ -1793,10 +1803,10 @@
   <!-- READING -->
   <div id="screen-reading" class="screen">
     <div style="display:flex;gap:8px;margin-bottom:16px;min-width:0">
-      <button class="readtab-btn active" id="readtab-stories" onclick="showReadTab('stories')">📖 Stories</button>
-      <button class="readtab-btn" id="readtab-shadow" onclick="showReadTab('shadow')">🎙️ Shadow</button>
-      <button class="readtab-btn" id="readtab-listening" onclick="showReadTab('listening')">🎧 Listening</button>
-      <button class="readtab-btn" id="readtab-music" onclick="showReadTab('music')">🎵 Music</button>
+      <button class="readtab-btn active" id="readtab-stories" onclick="showReadTab('stories')">Stories</button>
+      <button class="readtab-btn" id="readtab-shadow" onclick="showReadTab('shadow')">Shadow</button>
+      <button class="readtab-btn" id="readtab-listening" onclick="showReadTab('listening')">Listening</button>
+      <button class="readtab-btn" id="readtab-music" onclick="showReadTab('music')">Music</button>
     </div>
     <div id="readtab-stories-content">
       <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px"><span id="reading-intro">Read short stories. Tap any word to see its meaning.</span></p>
@@ -1820,7 +1830,7 @@
 
   <!-- TRANSLATE -->
   <div id="screen-translate" class="screen">
-    <h2 class="section-heading">🔄 Translator</h2>
+    <h2 class="section-heading">Translator</h2>
 
     <div class="api-key-panel" id="translate-key-panel" style="display:none">
       <label>API Key:</label>
@@ -1870,7 +1880,7 @@
   <!-- ACHIEVEMENTS -->
   <div id="screen-achievements" class="screen">
     <button class="back-btn" style="margin-bottom:10px" onclick="exitExercise()">←</button>
-    <h2 class="section-heading">🏆 Achievements</h2>
+    <h2 class="section-heading">Achievements</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Earn badges by completing challenges</p>
     <div class="achievements-grid" id="achievements-grid"></div>
   </div>
@@ -1879,7 +1889,7 @@
   <div id="screen-phrasebook" class="screen">
     <div id="dict-list-controls">
       <div style="display:flex;align-items:flex-end;justify-content:space-between">
-        <h2 class="section-heading" style="margin-bottom:4px">📔 Dictionary</h2>
+        <h2 class="section-heading" style="margin-bottom:4px">Dictionary</h2>
         <div style="font-size:.72rem;color:var(--muted);font-weight:700;padding-bottom:6px" id="dict-word-count"></div>
       </div>
       <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin:11px 0;box-shadow:var(--shadow)">
@@ -1904,7 +1914,7 @@
   <!-- COMMUNITY -->
   <div id="screen-community" class="screen">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <h2 class="section-heading" style="margin:0;flex:1">🌐 Community</h2>
+      <h2 class="section-heading" style="margin:0;flex:1">Community</h2>
       <button onclick="toggleComposeBox()" title="Write a post" style="width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--grad-sun);color:#fff;border:none;box-shadow:var(--shadow-coral);cursor:pointer;font-size:.95rem">✎</button>
     </div>
     <div id="community-compose" style="display:none;margin-bottom:14px">
@@ -1983,7 +1993,7 @@
       <button class="api-save-btn" onclick="saveApiKey()">Save</button>
     </div>
     <div class="autospeak-row">
-      <span>🔊 Auto-speak</span>
+      <span>Auto-speak</span>
       <label class="toggle-switch"><input type="checkbox" id="autospeak-toggle" onchange="toggleAutoSpeak()"><span class="toggle-slider"></span></label>
       <span id="autospeak-label" style="color:var(--muted);font-weight:600">Off</span>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
@@ -1993,7 +2003,7 @@
     </div>
     <div class="chat-tools-row">
       <div class="difficulty-dial">
-        <span style="font-size:.75rem;color:var(--muted);font-weight:700">📊 Difficulty:</span>
+        <span style="font-size:.75rem;color:var(--muted);font-weight:700">Difficulty</span>
         <select id="difficulty-select" class="voice-select" onchange="setChatDifficulty(this.value)">
           <option value="auto">Auto (my level)</option>
           <option value="easy">Beginner</option>
@@ -2003,13 +2013,13 @@
         </select>
       </div>
       <div class="difficulty-dial" data-ai-dialect-wrap>
-        <span style="font-size:.75rem;color:var(--muted);font-weight:700">🗣️ Dialect:</span>
+        <span style="font-size:.75rem;color:var(--muted);font-weight:700">Dialect</span>
         <select class="voice-select ai-dialect-select" aria-label="Sôr António's dialect" onchange="setAiDialect(this.value)"></select>
       </div>
       <button class="challenge-btn" onclick="renderDailyChallengeScreen()">🎯 Daily Challenge</button>
     </div>
     <div class="chat-section-row">
-      <span class="chat-label">🎭 Scenarios:</span>
+      <span class="chat-label">Scenarios</span>
       <div class="chat-mini-row">
         <button class="chat-mini-btn" onclick="suggestTopics()">💡 Suggest topics</button>
         <button class="chat-mini-btn" onclick="clearChatHistory()">🧹 Clear chat</button>
@@ -53128,9 +53138,9 @@ const MAIN_TABS = [
   { id:'community', screens:['community'] },
 ];
 const SUB_NAV_LABELS = { // reuses the old top-bar's exact icon/label text
-  path:'🧭 Path', lessons:'📚 Lessons', grammar:'📐 Grammar', review:'📋 Review', dialogues:'🗨️ Dialogues',
-  conversation:'💬 Chat', translate:'🔄 Translate',
-  phrasebook:'📔 Dictionary', reading:'📖 Read',
+  path:'Path', lessons:'Lessons', grammar:'Grammar', review:'Review', dialogues:'Dialogues',
+  conversation:'Chat', translate:'Translate',
+  phrasebook:'Dictionary', reading:'Read',
 };
 let navReturn = null;        // { screen } to restore when leaving a pushed screen
 let mainTabSubScreen = {};   // remembers the last sub-screen visited per multi-screen tab
@@ -53337,7 +53347,7 @@ function renderLessonCard(lesson) {
     <div class="lesson-title">${lesson.title}</div>
     <div class="lesson-sub">${lesson.titleKriolu}</div>
     <div class="mastery-bar"><div class="mastery-fill" style="width:${masteryPct}%"></div></div>
-    <button class="start-btn" style="background:${lesson.color || 'var(--ocean)'}">Practice →</button>
+    <button class="start-btn">Practice →</button>
   </div>`;
 }
 
@@ -58291,7 +58301,7 @@ function dictLessons() {
 function dictCategoryHTML(lesson, rowsHTML, open, count) {
   const li = LESSONS.indexOf(lesson);
   return `<div class="phrase-category">
-      <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="background:${lesson.color || 'var(--ocean)'}">
+      <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="--cat:${lesson.color || 'var(--ocean)'}">
         ${lesson.icon} ${escapeHTML(lesson.title)} <span style="margin-left:auto;font-size:.75rem;opacity:.85">${count}</span><span style="margin-left:8px">▾</span>
       </div>
       <div class="phrase-cat-body${open ? ' open' : ''}" id="pc-${li}"${rowsHTML ? ' data-filled="1"' : ''}>${rowsHTML}</div>
@@ -61524,7 +61534,7 @@ KR_READING_PASSAGES.push(
 
 let dlgPlaying = false;
 function renderDialogueCards() {
-  return `<div style="font-weight:800;color:var(--ocean);margin:4px 0 10px">🎧 Dialogues — listen & answer</div>`
+  return `<div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.1rem;color:var(--text);margin:4px 0 10px">Dialogues — listen and answer</div>`
     + DIALOGUES.map(d => {
       const done = (state.dialoguesDone || []).includes(d.id);
       const opener = DLG_LONGFORM_IDS.includes(d.id) ? `openLongform('${d.id}')` : `openDialogue('${d.id}')`;
