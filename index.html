@@ -855,9 +855,20 @@
     .music-tag{font-size:.74rem;color:var(--coral);font-weight:700;text-transform:uppercase;letter-spacing:.03em}
     .music-blurb{font-size:.86rem;color:var(--text);line-height:1.5;margin-bottom:8px}
     .music-why{font-size:.8rem;color:var(--muted);font-style:italic;background:var(--bg);padding:8px 12px;border-radius:8px;border-left:3px solid var(--sky);margin-bottom:12px}
-    .song-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+    .song-row{padding:8px 0;border-bottom:1px solid var(--border)}
+    .song-main{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .song-row:last-child{border-bottom:none}
-    .song-info{flex:1}
+    .song-info{flex:1;min-width:0}
+    .song-body{margin-top:2px}
+    .song-embed:not(:empty){margin:8px 0 6px}
+    .song-embed iframe{display:block;border:0;border-radius:12px}
+    .song-embed-note{font-size:.68rem;color:var(--muted);margin-top:4px}
+    .play-link{background:var(--ocean);color:#fff;border:none;cursor:pointer;font-family:inherit}
+    .play-link.on{background:var(--coral)}
+    .artist-sp{flex-shrink:0;background:#1DB954;color:#fff;text-decoration:none;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;padding:7px 10px;border-radius:99px;white-space:nowrap}
+    .sl-line{display:flex;gap:6px;align-items:flex-start}
+    .sl-say{flex:none;background:none;border:none;cursor:pointer;font-size:.8rem;padding:1px 0;line-height:1.2;opacity:.75}
+    .sl-say:hover{opacity:1}
     .song-title{font-weight:700;color:var(--ocean);font-size:.9rem}
     .song-note{font-size:.74rem;color:var(--muted)}
     .song-links{display:flex;gap:6px;flex-shrink:0}
@@ -24661,21 +24672,22 @@ const KR_STORIES = [
   },
 ];
 // ═══════════════════════════════════════════
-// Links use YouTube/Spotify SEARCH urls (never break, always current). No lyrics reproduced.
+// sp / spAlbum are Spotify track / album ids (checked on Spotify); songs without one fall back to a search link.
+// sp on an artist is the Spotify artist id. Lyric excerpts are a few short lines only, for study.
 const ARTISTS = [
   {
-    name:'Cesária Évora', icon:'👑', tag:'The Barefoot Diva • Morna',
+    name:'Cesária Évora', sp:'0Nks3cFWU2a7rooAlFQYgn', icon:'👑', tag:'The Barefoot Diva • Morna',
     blurb:'Cape Verde\'s most famous voice. Grammy-winning queen of morna, singing almost entirely in clear, slow Kriolu — ideal for learners.',
     why:'Her slow morna pace and crisp diction make individual words easy to catch. Start here.',
     songs:[
-      { title:'Sodade', note:'Her signature song about longing — the heart of the word "sodadi". Written in the 1950s about the one-way passage to the São Tomé plantations. (São Vicente/Barlavento spelling.)', focus:['emotions','diaspora','kr_abstract'],
+      { title:'Sodade', sp:'7smlUb2mNCifTct24UeSsA', note:'Her signature song about longing — the heart of the word "sodadi". Written in the 1950s about the one-way passage to the São Tomé plantations. (São Vicente/Barlavento spelling.)', focus:['emotions','diaspora','kr_abstract'],
         lyric:[
           ["Quem mostró-b' ess caminh' longe?", 'Who showed you this long road?'],
           ["Ess caminh' pa Sã Tomé", 'That road to São Tomé'],
           ["Sodade, sodade, sodade", 'Longing, longing, longing'],
           ["D'ess nha terra di Sã Nic'lau", 'For this my land of São Nicolau'],
         ] },
-      { title:'Petit Pays', note:'Her love letter to Cape Verde — and a checklist of the music itself.', focus:['culture','arts_music','environment'],
+      { title:'Petit Pays', sp:'3TPr2Em1i454nDS8UJbaFW', note:'Her love letter to Cape Verde — and a checklist of the music itself.', focus:['culture','arts_music','environment'],
         lyric:[
           ['La na séu bo é um strela ki ka ta brilha', 'Up in the sky you are a star that does not shine'],
           ['Li na mar bo é um areia ki ka ta moia', 'Here in the sea you are a grain of sand that never gets wet'],
@@ -24683,25 +24695,26 @@ const ARTISTS = [
           ['Terra pobre chei d\'amor: tem morna, tem coladera', 'Poor land full of love: it has morna, it has coladera'],
           ['Terra sabi chei di amor: tem batuk, tem funaná', 'Sweet land full of love: it has batuku, it has funaná'],
         ] },
-      { title:'Partida', note:'A departure song — the vocabulary of leaving that the diaspora lesson teaches.', focus:['diaspora','emotions'],
+      { title:'Partida', sp:'3E29Fw8nf9Oi71yDUMIPxh', note:'A departure song — the vocabulary of leaving that the diaspora lesson teaches.', focus:['diaspora','emotions'],
         lyric:[
           ['Nha cretcheu, djâm sta ta parti', 'My beloved, I am leaving now'],
           ['Oi partida, sô bô podia sépara-no', 'Oh departure, only you could separate us'],
           ['Caminho longe, séparação', 'A long road, separation'],
           ['Oi partida, bô é um dor profundo', 'Oh departure, you are a deep pain'],
         ] },
-      { title:'Angola', note:'A beloved classic from Miss Perfumado (1992).', focus:['diaspora','culture'] },
-      { title:'Besame Mucho', note:'Slower ballad, very clear vocals.', focus:['emotions'] },
+      { title:'Angola', sp:'4VV9LwQKBDUEVdWfTbHsW9', note:'A beloved classic from Miss Perfumado (1992).', focus:['diaspora','culture'] },
+      { title:'Besame Mucho', sp:'28hJLJrfLEa7vCvlqGGJXF', note:'Slower ballad, very clear vocals.', focus:['emotions'] },
+      { title:'Nha Cancera Ka Tem Medida', sp:'6gQP8PWTYnh4ScPj116VFx', note:'"My weariness has no measure" — a morna standard. Kansera (weariness, heartache) is a course word.', focus:['emotions','kr_abstract'] },
     ]
   },
   {
-    name:'Mayra Andrade', icon:'🌟', tag:'Modern • Morna meets pop/jazz',
+    name:'Mayra Andrade', sp:'7uriYlc9ETgOg8VPFbdnbE', icon:'🌟', tag:'Modern • Morna meets pop/jazz',
     blurb:'Named by Cesária as her likely successor. Modern, multilingual, and known for exceptionally clear diction.',
     why:'The clearest pronunciation of the modern artists — great for hearing contemporary Kriolu.',
     songs:[
-      { title:'Lua', note:'Gentle, clear, and melodic.', focus:['weather','environment'] },
-      { title:'Stória, Stória', note:'Storytelling style with clear enunciation.', focus:['storytelling_past','proverbs'] },
-      { title:'Juána', note:'Santiago Badiu — the variety this course teaches. A woman is told she may speak too, while the world changes around her and her daily struggle does not.', focus:['kr_media','work','kr_abstract'],
+      { title:'Lua', sp:'1lSXGx6lv6QAQMyXpuXX44', note:'Gentle, clear, and melodic.', focus:['weather','environment'] },
+      { title:'Stória, Stória', sp:'6YM1OcTvtUe0bVuO9Bqzxb', note:'Storytelling style with clear enunciation.', focus:['storytelling_past','proverbs'] },
+      { title:'Juána', sp:'2STjPH9uGyNGmxcFqbtwdI', note:'Santiago Badiu — the variety this course teaches. A woman is told she may speak too, while the world changes around her and her daily struggle does not.', focus:['kr_media','work','kr_abstract'],
         lyric:[
           ['Juána, bu podi papia tanbê', 'Juána, you can speak too'],
           ['Dizabri un bokadu ku mi', 'Open up a little with me'],
@@ -24713,7 +24726,7 @@ const ARTISTS = [
           ["Un diâ-l trabadju ta faze-u falta", "A day's work is what you are short of"],
           ['Nos tudu sta pa ti manhan', 'We are all here for your tomorrow'],
         ] },
-      { title:'Téra Lonji', note:'Written in near-perfect ALUPEC — what you read here is exactly how the app spells it.', focus:['diaspora','environment','kr_abstract'],
+      { title:'Téra Lonji', sp:'7sqAulwJgL0aMrvAbW0o8Z', note:'Written in near-perfect ALUPEC — what you read here is exactly how the app spells it.', focus:['diaspora','environment','kr_abstract'],
         lyric:[
           ['N ben dun téra lonji', 'I come from a faraway land'],
           ["Dja N ten andadu mundu, ma N k'atxa un lugar sábi si", 'I have walked the world, but never found a place as sweet as this'],
@@ -24722,14 +24735,15 @@ const ARTISTS = [
           ['Ku kada anu ta nasi speransa di odja azágua', 'Each year hope is born of seeing the rains come'],
           ['Es vida é sima maré', 'This life is like the tide'],
         ] },
+      { title:'Vapor di Imigrason', sp:'2I83WO5f7DUR5S87DLmuS7', note:'From Manga — "the emigration steamer", the ships that carried Cape Verdeans abroad.', focus:['diaspora','travel'] },
     ]
   },
   {
-    name:'Tldreamz & Djeff', icon:'🎧', tag:'Modern • Afro house & Kriolu',
+    name:'Tldreamz & Djeff', sp:'6Cb7ARkzFqGuglQle0Irxv', icon:'🎧', tag:'Modern • Afro house & Kriolu',
     blurb:'Contemporary club sound with Kriolu vocals — the same "sabura" vocabulary Julinho uses, sung rather than rapped.',
     why:'Short repeated lines make it easy to catch whole phrases at speed.',
     songs:[
-      { title:'Undi Da Ki Panha', note:'The hook repeats the pleasure vocabulary — good for hearing sabi and sabura in the wild.', focus:['casual_talk','emotions'],
+      { title:'Undi Da Ki Panha', sp:'3kx1YPd2KDpOWQ5Vv8OrGH', note:'The hook repeats the pleasure vocabulary — good for hearing sabi and sabura in the wild.', focus:['casual_talk','emotions'],
         lyric:[
           ['Nkre passa sabi, sabi, sabi', 'I want to have a good time'],
           ['Nkre xinti sabura', 'I want to feel that bliss'],
@@ -24737,11 +24751,11 @@ const ARTISTS = [
     ]
   },
   {
-    name:'Julinho KSD', icon:'🎤', tag:'Modern • Kriolu rap & Afrobeats',
+    name:'Julinho KSD', sp:'7kR1Yw4RqYhhDD3a8QRyG6', icon:'🎤', tag:'Modern • Kriolu rap & Afrobeats',
     blurb:'Cape Verdean rapper who mixes Kriolu, Portuguese and English in the same verse — how a lot of young people actually speak.',
     why:'Hear everyday slang at speed, and the code-switching between Kriolu and Portuguese.',
     songs:[
-      { title:'Sabi na Sabura', note:'The hook is pure Kriolu, over an Afrobeats beat.', focus:['casual_talk','food','family'],
+      { title:'Sabi na Sabura', sp:'09QjDdZltuDWgdJsdm3Dcq', note:'The hook is pure Kriolu, over an Afrobeats beat.', focus:['casual_talk','food','family'],
         lyric:[
           ['Dôs kopu di grogu pa faze mistura', 'Two glasses of grogue to make a mix'],
           ['Vivi nha vida sabi na sabura', 'Living my life sweet and easy'],
@@ -24750,27 +24764,27 @@ const ARTISTS = [
     ]
   },
   {
-    name:'Elida Almeida', icon:'🔥', tag:'New generation • Funaná & Batuku',
+    name:'Elida Almeida', sp:'4QMgntJ821xE1UtdWtJWbd', icon:'🔥', tag:'New generation • Funaná & Batuku',
     blurb:'Award-winning younger artist blending traditional Santiago rhythms (funaná, batuku) with modern pop.',
     why:'Hear the faster, rhythmic Badiu (Santiago) style of Kriolu.',
     songs:[
-      { title:'Nta Konsigui', note:'Upbeat and modern.', focus:['advanced_verbs','kr_abstract'] },
-      { title:'Benfeitor', note:'Strong Santiago/Badiu flavor.', focus:['dialect_santiago','work'] },
+      { title:'Nta Konsigui', sp:'5u3ARAjAjiY3s8ABZobH3T', note:'Upbeat and modern.', focus:['advanced_verbs','kr_abstract'] },
+      { title:'Nhu Santiagu', sp:'4sZ2xRdtCKgLxk8m2AbWP0', note:'Her home island named the respectful way — nhu (sir) Santiagu. Strong Badiu flavour.', focus:['dialect_santiago','culture'] },
     ]
   },
   {
-    name:'June Freedom', icon:'🌊', tag:'Diaspora • Afrobeats & kizomba',
+    name:'June Freedom', sp:'7dYb5EKtRnRaWM0GQ12cKC', icon:'🌊', tag:'Diaspora • Afrobeats & kizomba',
     blurb:'Cape Verdean-American artist working between the diaspora and the islands, singing in Kriolu, English and Portuguese.',
     why:'Modern diaspora Kriolu — hear how the language travels and mixes outside Cape Verde.',
     songs:[
-      { title:"Dor d'um Kriolu (with Nelson Freitas)", note:'Released in 2020 with the borders shut — the pain of a Kriolu who cannot get home.', focus:['diaspora','emotions','kr_abstract'],
+      { title:"Dor d'um Kriolu (with Nelson Freitas)", sp:'77ow8vP6ooFrNzZWcYZGY2', note:'Released in 2020 with the borders shut — the pain of a Kriolu who cannot get home.', focus:['diaspora','emotions','kr_abstract'],
         lyric:[
           ['Ai mundo, aí djaz fitja fronteira', 'Oh world, now they have closed the border'],
           ['Aí nfika sen manera', 'Now I am left with no way out'],
           ["Fran kuze k'um ta fazi", 'Tell me what am I to do'],
           ["És que dor d'um Kriolu", 'This is the pain of a Cape Verdean'],
         ] },
-      { title:'Preta', note:'From Anchor Baby (2021) — a praise song to a Black woman, and one of the most quotable choruses in modern Kriolu.', focus:['emotions','body_health','clothing'],
+      { title:'Preta', sp:'0M4k6CnUgTubErRQtaPxFU', note:'From Anchor Baby (2021) — a praise song to a Black woman, and one of the most quotable choruses in modern Kriolu.', focus:['emotions','body_health','clothing'],
         lyric:[
           ['Manera ke bo ta anda, bo ten un elegánsia', 'The way you walk — you have such elegance'],
           ['Préta, so bo dansa, univérsu ta para', 'Preta, the moment you dance, the universe stops'],
@@ -24780,15 +24794,15 @@ const ARTISTS = [
           ['Préta N ka meste de sol, ke so bo prizénsa ta ilumina-m', 'Preta, I need no sun — your presence alone lights me up'],
           ['Protejê bo enerjia, el é maior patrimóniu ke bo ten', 'Protect your energy — it is the greatest heritage you have'],
         ] },
-      { title:'7 Seas', note:'His 2023 album — diaspora sounds across several languages.', focus:['diaspora_modern','casual_talk'] },
+      { title:'7 Seas', spAlbum:'3iOGCPhPYsNTpgtfjFnhOc', note:'His 2023 album — diaspora sounds across several languages.', focus:['diaspora_modern','casual_talk'] },
     ]
   },
   {
-    name:'Nelson Freitas', icon:'🎶', tag:'Diaspora • Cabo-zouk & R&B',
+    name:'Nelson Freitas', sp:'6yWyIM8jA96kl3jlCXpabB', icon:'🎶', tag:'Diaspora • Cabo-zouk & R&B',
     blurb:'Hugely popular in the diaspora. Smooth cabo-zouk and R&B mixing Kriolu and Portuguese.',
     why:'Hear casual, modern, conversational Kriolu in a pop context.',
     songs:[
-      { title:'Bo Tem Mel', note:'Kizomba with C4 Pedro — Kriolu, Portuguese and English in one song, the way the diaspora actually speaks.', focus:['casual_talk','emotions','food'],
+      { title:'Bo Tem Mel', sp:'4pbueJavIM6ocInNUD90B4', note:'Kizomba with C4 Pedro — Kriolu, Portuguese and English in one song, the way the diaspora actually speaks.', focus:['casual_talk','emotions','food'],
         lyric:[
           ['Bo tê-me dode, skuá de kabésa pa bo', 'You have me crazy, out of my head over you'],
           ['N krê sabê se bo ten un tenpin pa mi', 'I want to know if you have a little time for me'],
@@ -24796,30 +24810,30 @@ const ARTISTS = [
           ['Bo é dose, bo é dose, tãu dose', 'You are sweet, so sweet'],
           ['Bo tem mel', 'You have honey in you'],
         ] },
-      { title:'Mundu', note:'Smooth and melodic.', focus:['kr_media','kr_abstract'] },
+      { title:'Miúda Linda', sp:'0ekgdkhtSRrulobfo6kMMY', note:'One of his most-played songs. The title is Portuguese ("pretty girl") — a good test of telling Kriolu and Portuguese apart.', focus:['casual_talk','emotions'] },
     ]
   },
   {
-    name:'Lura', icon:'🎤', tag:'Lisbon-born • Modern morna & funaná',
+    name:'Lura', sp:'0zNTRuF4PDWOt7IGHpGyNc', icon:'🎤', tag:'Lisbon-born • Modern morna & funaná',
     blurb:'A leading voice of the new generation, credited to Cesária\'s legacy, blending tradition with contemporary sound.',
     why:'Clear modern vocals bridging traditional and contemporary styles.',
     songs:[
-      { title:'Moda Bô', note:'Her duet with Cesária — a young singer telling her idol she grew up wanting to be like her.', focus:['family','arts_music','kr_abstract'],
+      { title:'Moda Bô', sp:'7iLn8VFQimM3KN99CIZphQ', note:'Her duet with Cesária — a young singer telling her idol she grew up wanting to be like her.', focus:['family','arts_music','kr_abstract'],
         lyric:[
           ['Na nha infância, um sonhá ser moda bô', 'In my childhood, I dreamed of being like you'],
           ['Cantá Cabo Verde, cantá nha terra', 'To sing Cape Verde, to sing my land'],
           ['Stória dum povo, stória dum vida', 'The story of a people, the story of a life'],
         ] },
-      { title:'Na Ri Na', note:'One of her best-known tracks.', focus:['arts_music','culture'] },
-      { title:'Vazulina', note:'Upbeat funaná.', focus:['casual_talk','clothing'] },
+      { title:'Na Ri Na', sp:'7h2XODFTIeYbfqGkSqcpt2', note:'One of her best-known tracks.', focus:['arts_music','culture'] },
+      { title:'Vazulina', sp:'3fgckS7qQruNUK3CtmQd7R', note:'Upbeat funaná.', focus:['casual_talk','clothing'] },
     ]
   },
   {
-    name:'Tito Paris', icon:'🎸', tag:'Mindelo legend • Morna & Coladeira',
+    name:'Tito Paris', sp:'3OIgKH8RzR8arwa82yt1hw', icon:'🎸', tag:'Mindelo legend • Morna & Coladeira',
     blurb:'Born in Mindelo, São Vicente, a master guitarist and singer based in Lisbon who wrote songs for Bana and Cesária Évora.',
     why:'Hear the São Vicente (Mindelo) style of Kriolu, slightly closer to European Portuguese.',
     songs:[
-      { title:'Dança Ma Mi Criola', note:'A coladeira invitation to dance — and sabura again, here meaning the sweetness of home.', focus:['arts_music','casual_talk','culture'],
+      { title:'Dança Ma Mi Criola', sp:'2PBCNw9XvQbeQZ6CBMLPfy', note:'A coladeira invitation to dance — and sabura again, here meaning the sweetness of home.', focus:['arts_music','casual_talk','culture'],
         lyric:[
           ['Dansa ma mi, krióla, kola na mi', 'Dance with me, krioula, come close to me'],
           ['Pensa na pasá sábi nun koladera', 'Think of having a good time in a coladeira'],
@@ -24827,52 +24841,52 @@ const ARTISTS = [
           ['Lá no ta sintí na mei de nos tradison', 'There we feel it, in the middle of our tradition'],
           ['Txiga na mi, bo perta-m forte', 'Come to me, hold me tight'],
         ] },
-      { title:'Bo Voz', note:'A warm morna ballad.', focus:['emotions','body_health'] },
+      { title:'Mim Ê Bô', sp:'57fD3fesZTHbwadXXqjezw', note:'São Vicente for "I am you" — compare the Santiago spelling "Ami é bo".', focus:['emotions','dialect_saovicente'] },
     ]
   },
   {
-    name:'Sara Tavares', icon:'✨', tag:'Lisbon-born • Soul, pop & morna',
+    name:'Sara Tavares', sp:'57zZoaRDFEjqRwq6FlT0va', icon:'✨', tag:'Lisbon-born • Soul, pop & morna',
     blurb:'A Lisbon-born Cape Verdean blending soul, pop, and acoustic morna with an exuberant, modern feel. June Freedom calls her "the Bob Marley of Cape Verde".',
     why:'Gentle, clear, contemporary diction — easy and pleasant for the ear.',
     songs:[
-      { title:'Balancê', note:'Her signature upbeat hit.', focus:['emotions','sports'] },
-      { title:'Novidade', note:'Warm and melodic.', focus:['kr_media','conversation_flow'] },
+      { title:'Balancê', sp:'1EmGt31vq6F91Jtr4ktD5T', note:'Her signature upbeat hit.', focus:['emotions','sports'] },
+      { title:'Coisas Bunitas', sp:'5BUlVE3tKCELme4ixaBUo1', note:'From Fitxadu — "beautiful things". Warm and melodic.', focus:['emotions','conversation_flow'] },
     ]
   },
   {
-    name:'Ildo Lobo', icon:'🎩', tag:'Classic • Morna & Coladeira',
+    name:'Ildo Lobo', sp:'3U6nOd5wFE21UdYMIGBVvv', icon:'🎩', tag:'Classic • Morna & Coladeira',
     blurb:'One of Cape Verde\'s most recognizable voices, from the island of Sal, former lead of the legendary band Os Tubarões.',
     why:'A soul-stirring classic morna voice — clear, deliberate, and rich.',
     songs:[
-      { title:'Nôs Morna', note:'His acclaimed solo work.', focus:['arts_music','culture'] },
-      { title:'Mort-Cego', note:'A powerful, emotive performance.', focus:['proverbs','kr_abstract'] },
+      { title:'Caminho di Mar', sp:'69UANMhjyldKnaSwzROh8d', note:'From his album Nôs Morna — "the road of the sea", the emigrant\'s route.', focus:['diaspora','environment'] },
+      { title:'Cusas di Coraçon', sp:'1CgCucHVBLoPot6UoQxgJJ', note:'"Matters of the heart" — the São Vicente spelling of kuzas di korason.', focus:['emotions','dialect_saovicente'] },
     ]
   },
   {
     name:'Bana', icon:'👴', tag:'Foundational • Morna',
     blurb:'One of the grand old voices of morna, a towering figure who helped carry Cape Verdean music to the world for decades.',
-    why:'A foundational classic voice — slow, rich, and historically essential.',
+    why:'A foundational classic voice — slow, rich, and historically essential. Few of his recordings are on Spotify, so try the YouTube search.',
     songs:[
       { title:'Bia', note:'A beloved morna standard.', focus:['family','emotions'] },
-      { title:'Nha Cancera Ka Ten Fim', note:'A classic of the repertoire.', focus:['work','kr_abstract'] },
     ]
   },
   {
-    name:'Lucibela', icon:'🌙', tag:'New traditional • Morna & Coladeira',
+    name:'Lucibela', sp:'0G2k9uKCZ5wxtzdWc3bzpS', icon:'🌙', tag:'New traditional • Morna & Coladeira',
     blurb:'A celebrated newer voice returning to classic morna and coladeira roots with a pure, clear tone.',
     why:'Traditional style with very clean modern recording — excellent for the ear.',
     songs:[
-      { title:'Laço Umbilical', note:'The title track of her debut album.', focus:['family','diaspora'] },
-      { title:'Chega de Sodade', note:'A tender, classic-style morna.', focus:['emotions','diaspora'] },
+      { title:'Mal Amadu', sp:'1DddC3JOZS1m20zkskQxt3', note:'Her most-played song, from the album Laço Umbilical — "badly loved".', focus:['emotions','family'] },
+      { title:'Mi E Dode Na Bô Cabo Verde', sp:'4UrYLbf8ahM4YsFjUkKgIw', note:'"I\'m crazy about you, Cape Verde" — the same dode Nelson Freitas sings in "Bo tê-me dode".', focus:['emotions','culture'] },
     ]
   },
   {
-    name:'Dino d\'Santiago', icon:'🎹', tag:'Modern • Funaná meets electronic',
+    name:'Dino d\'Santiago', sp:'7qb2GMJaX4HeXqqPPyYdlr', icon:'🎹', tag:'Modern • Funaná meets electronic',
     blurb:'A Lisbon-based innovator blending funaná, soul, and electronic music, bringing Kriolu to a new global audience.',
     why:'Hear how Kriolu lives in modern electronic and urban music.',
     songs:[
-      { title:'Nova Lisboa', note:'A modern Kriolu anthem.', focus:['diaspora_modern','kr_media'] },
-      { title:'Mundu Nôbu', note:'Funaná reimagined with electronics.', focus:['kr_media','environment'] },
+      { title:'Nova Lisboa', sp:'1WJMwaZfKFEJbHQsxEl8uE', note:'A modern Kriolu anthem.', focus:['diaspora_modern','kr_media'] },
+      { title:'Mundu Nôbu', sp:'2Iy1DdW54ds0XLTMNuuJFS', note:'Funaná reimagined with electronics.', focus:['kr_media','environment'] },
+      { title:'Kriolu (feat. Julinho KSD)', sp:'0YLFjsPcB0ZoGh6hmS1eNV', note:'From KRIOLA — a song named after the language itself, with Julinho KSD.', focus:['culture','diaspora_modern'] },
     ]
   },
 ];
@@ -62194,30 +62208,82 @@ function renderMusic() {
     <div class="music-card">
       <div class="music-head">
         <div class="music-icon">${a.icon}</div>
-        <div><div class="music-name">${escapeHTML(a.name)}</div><div class="music-tag">${escapeHTML(a.tag)}</div></div>
+        <div style="flex:1;min-width:0"><div class="music-name">${escapeHTML(a.name)}</div><div class="music-tag">${escapeHTML(a.tag)}</div></div>
+        ${a.sp ? `<a class="artist-sp" href="https://open.spotify.com/artist/${a.sp}" target="_blank" rel="noopener" title="${escapeHTML(a.name)} on Spotify">♫ Spotify</a>` : ''}
       </div>
       <div class="music-blurb">${escapeHTML(a.blurb)}</div>
       <div class="music-why">🎯 ${escapeHTML(a.why)}</div>
       <div id="music-songs-${ai}" style="display:none;margin-top:11px">
-      ${a.songs.map(s => {
+      ${a.songs.map((s, si) => {
         const q = encodeURIComponent(a.name + ' ' + s.title);
+        const sp = songSpotify(s);
+        const words = s.lyric ? lyricCourseWords(s.lyric) : [];
         return `<div class="song-row">
-          <div class="song-info"><div class="song-title">${escapeHTML(s.title)}</div><div class="song-note">${escapeHTML(s.note)}</div>
-            ${s.lyric ? `<div class="song-lyric">${s.lyric.map(L => `<div><span class="sl-k">${escapeHTML(L[0])}</span><span class="sl-e">${escapeHTML(L[1])}</span></div>`).join('')}</div>` : ''}
+          <div class="song-main">
+            <div class="song-info"><div class="song-title">${escapeHTML(s.title)}</div></div>
+            <div class="song-links">
+              ${sp ? `<button class="song-link play-link" id="song-play-${ai}-${si}" onclick="toggleSongPlayer(${ai},${si})" title="Listen here" aria-label="Listen to ${escapeHTML(s.title)} here">▶</button>` : ''}
+              <a class="song-link sp-link" href="${sp ? sp.url : 'https://open.spotify.com/search/' + q}" target="_blank" rel="noopener" title="${sp ? 'Open on Spotify' : 'Search on Spotify'}" aria-label="${sp ? 'Open on Spotify' : 'Search on Spotify'}">♫</a>
+              <a class="song-link yt-link" href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener" title="Search on YouTube" aria-label="Search on YouTube">▷</a>
+            </div>
+          </div>
+          <div class="song-embed" id="song-embed-${ai}-${si}"></div>
+          <div class="song-body"><div class="song-note">${escapeHTML(s.note)}</div>
+            ${s.lyric ? `<div class="song-lyric">${s.lyric.map(L => `<div class="sl-line"><button class="sl-say" aria-label="Hear this line" onclick="event.stopPropagation();userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(L[0])}">🔊</button><div><span class="sl-k">${escapeHTML(L[0])}</span><span class="sl-e">${escapeHTML(L[1])}</span></div></div>`).join('')}</div>` : ''}
+            ${words.length ? `<div class="song-focus"><span class="sf-label">🔑 Course words in these lines:</span>${
+              words.map(w => `<button class="sf-chip lw-chip" onclick="event.stopPropagation();showWordPopup(this.dataset.k,this.dataset.e)" data-k="${escapeHTML(w.k)}" data-e="${escapeHTML(w.e)}">${escapeHTML(w.k)}</button>`).join('')
+            }</div>` : ''}
             ${(s.focus || []).length ? `<div class="song-focus"><span class="sf-label">📚 Study first:</span>${
               s.focus.map(id => { const L = LESSONS.find(x => x.id === id); return L
                 ? `<button class="sf-chip" onclick="event.stopPropagation();startLesson('${L.id}')">${L.icon} ${escapeHTML(L.title)}</button>` : ''; }).join('')
             }</div>` : ''}
-          </div>
-          <div class="song-links">
-            <a class="song-link yt-link" href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener" title="Search on YouTube">▶</a>
-            <a class="song-link sp-link" href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener" title="Search on Spotify">♫</a>
           </div>
         </div>`;
       }).join('')}
       </div>
       <div class="music-more" onclick="toggleMusicSongs(${ai})" style="margin-top:9px;text-align:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;color:var(--ocean-2);cursor:pointer">Show ${a.songs.length} song${a.songs.length === 1 ? '' : 's'} ▾</div>
     </div>`).join('');
+}
+// Direct Spotify link + embed URL for a song with a checked track or album id
+function songSpotify(s) {
+  const kind = s.sp ? 'track' : s.spAlbum ? 'album' : '';
+  if (!kind) return null;
+  const id = s.sp || s.spAlbum;
+  return { kind, url: `https://open.spotify.com/${kind}/${id}`, embed: `https://open.spotify.com/embed/${kind}/${id}?utm_source=generator` };
+}
+// Course vocabulary that appears in a song's lyric excerpt (Kriolu course only)
+function lyricCourseWords(lines) {
+  if (isPT()) return [];
+  const text = lines.map(L => L[0]).join(' ');
+  const tokens = new Set((text.toLowerCase().normalize('NFC').match(/\p{L}+(?:['’-]\p{L}+)*/gu) || []));
+  const seen = new Set();
+  // only whole course words that appear as written (no compounds matched on one part)
+  return courseGlossary(text, true, 40)
+    .filter(w => { const k = w.k.toLowerCase().normalize('NFC'); return w.n === 1 && tokens.has(k) && !seen.has(k) && seen.add(k); })
+    .map(w => { const sense = LYRIC_SENSES[w.k.toLowerCase()]; return sense ? { ...w, e: sense } : w; })
+    .slice(0, 8);
+}
+// Where a lyric uses a course word in another sense, show the sense the song means
+const LYRIC_SENSES = {
+  sen: 'without (sen manera = with no way out)',
+  manera: 'way / manner',
+  kola: 'to hold close (kola na mi = come close to me)',
+  partida: 'departure',
+  fidju: 'child (son or daughter)',
+  mistura: 'a mix (faze mistura = make a mix)',
+};
+// The Spotify player loads only when asked, one song at a time
+function toggleSongPlayer(ai, si) {
+  const s = ARTISTS[ai]?.songs[si], sp = s && songSpotify(s);
+  const box = document.getElementById(`song-embed-${ai}-${si}`), btn = document.getElementById(`song-play-${ai}-${si}`);
+  if (!sp || !box) return;
+  const open = !box.innerHTML;
+  document.querySelectorAll('.song-embed').forEach(b => { b.innerHTML = ''; });
+  document.querySelectorAll('.play-link').forEach(b => { b.textContent = '▶'; b.classList.remove('on'); });
+  if (!open) return;
+  box.innerHTML = `<iframe title="${escapeHTML(s.title)} on Spotify" src="${sp.embed}" width="100%" height="${sp.kind === 'album' ? 152 : 80}" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <div class="song-embed-note">Spotify plays a preview here; log in to Spotify in this browser for the full song.</div>`;
+  if (btn) { btn.textContent = '■'; btn.classList.add('on'); }
 }
 function toggleMusicSongs(i) {
   const el = document.getElementById('music-songs-' + i);
