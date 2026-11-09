@@ -771,6 +771,13 @@
     .antonio-chat-avatar{width:120px;height:120px;flex-shrink:0;border-radius:50%;background:var(--grad-glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:var(--shadow)}
     .antonio-chat-avatar .antonio{width:112px;height:112px}
     .antonio-chat-avatar .antonio-emoji{font-size:70px;filter:none}
+    .antonio-face{width:86%;height:86%;border-radius:50%;overflow:hidden;position:relative;background:#22c3dd;box-shadow:0 4px 14px rgba(10,77,104,.22)}
+    .antonio-chat-avatar .antonio-face{width:100%;height:100%;box-shadow:none}
+    .antonio-face img,.antonio-face video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+    .antonio-face video{opacity:0;transition:opacity .14s}
+    .antonio.talking.voicing .antonio-face video.on{opacity:1}
+    @media (prefers-reduced-motion:reduce){.antonio-face video{display:none}}
+    .msg-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
     .antonio-hero{display:flex;flex-direction:column;align-items:center;padding:6px 0 14px}
     .antonio-hero-avatar{position:relative;cursor:pointer}
     .antonio-hero-avatar .antonio-listening-ring{display:block}
@@ -49187,6 +49194,7 @@ function currentLang() { return (state && state.lang) === 'portuguese' ? 'portug
 function isPT() { return currentLang() === 'portuguese'; }
 function langInfo() { return LANGS[currentLang()]; }
 function tutorName()   { return langInfo().tutor; }
+function antonioAvatarImg() { return `<img src="img/antonio-64.webp" alt="${escapeHTML(tutorName())}" width="32" height="32" decoding="async">`; }
 function tutorAvatar() { return langInfo().avatar || '🧔🏾'; }
 
 // ── One place that decides how the AI is told which language it is teaching. ──
@@ -52994,7 +53002,7 @@ function showTab(id) {
 // Inject the animated António into the chat header (once) and start him blinking
 function initChatAntonio() {
   const slot = document.querySelector('.antonio-chat-avatar');
-  if (slot && !slot.querySelector('.antonio-emoji')) {
+  if (slot && !slot.querySelector('.antonio-face')) {
     slot.innerHTML = antonioSVG().replace('id="antonio"', 'id="antonio-chat" data-chat="1"');
   }
   const wave = document.getElementById('antonio-wave');
@@ -53040,7 +53048,7 @@ function renderBotBubble(kriolu, english) {
   const div = document.createElement('div');
   div.className = 'chat-msg bot';
   const tHTML = english ? `<div class="msg-translation">${escapeHTML(english)}</div>` : '';
-  div.innerHTML = `<div class="msg-avatar">🧔🏾</div>
+  div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div>
     <div><div class="msg-bubble">${kriolu}${tHTML}</div>
     <button class="speak-btn" onclick="userHasInteracted=true;antonioChatSpeak(this.dataset.text,this)" data-text="${kriolu.replace(/"/g,'&quot;')}">🔊</button></div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
@@ -56364,11 +56372,17 @@ let speakRecognition = null;
 // Original friendly Cape Verdean tutor drawn in SVG. He blinks, lip-syncs while
 // speaking, leans in while listening, and reacts to how you do.
 function antonioSVG() {
-  // Emoji-based António — a bearded man (medium-dark skin), closest to the user's likeness.
-  // The emoji can't lip-sync, so the container animates: bob, talk-bounce, listening ring, happy hop.
+  // Illustrated António: a still portrait plus four short silent talking loops, one per
+  // mood (img/antonio-<mood>.*). While he speaks, each sentence picks its mood and the
+  // loop shows only while his voice is sounding (see antonioTalkTick).
   return `<div class="antonio idle" id="antonio">
     <div class="antonio-listening-ring"></div>
-    <div class="antonio-emoji" id="antonio-mouth" aria-label="tutor" id="antonio-face">🧔🏾</div>
+    <div class="antonio-face" role="img" aria-label="${escapeHTML(tutorName())}">
+      <img class="antonio-still" src="img/antonio.webp" alt="" width="320" height="320" decoding="async">
+      ${ANTONIO_MOODS.map(m => `<video class="antonio-talk" data-mood="${m}" muted playsinline loop preload="auto" aria-hidden="true">
+        <source src="img/antonio-${m}.webm" type="video/webm"><source src="img/antonio-${m}.mp4" type="video/mp4">
+      </video>`).join('')}
+    </div>
   </div>`;
 }
 
@@ -56414,9 +56428,74 @@ function antonioMouth(shape) {
   const m = root ? root.querySelector('.antonio-emoji') : document.getElementById('antonio-mouth');
   if (m) m.style.transform = ANTONIO_MOUTH[shape] || ANTONIO_MOUTH.rest;
 }
-function antonioStartTalking() {
+// ── Talking that follows what he says ──
+// talk = ordinary speech, happy = praise, ask = a question, explain = a correction.
+const ANTONIO_MOODS = ['talk', 'happy', 'ask', 'explain'];
+const ANTONIO_PRAISE = /\b(mutu bon|bon trabadju|perfeitu|ezatu|isatu|parabens|parabéns|muito bem|excelente|exatamente|perfeito|well done|great job|good job|excellent|perfect|exactly|nicely done|bravo)\b|sabi!|[👏🎉🌟🏆🥳]/i;
+const ANTONIO_CORRECT = /\b(kuaze|almost|not quite|instead|we say|you'd say|you would say|should be|the correct|careful|atenson|atenção|em vez de|dizemos|deve ser|ka faz mal|actually|remember|lembra|note that|the rule|small mistake|mistake)\b/i;
+function antonioMoodOf(sentence) {
+  const t = sentence.trim();
+  if (/\?["'»”)]*$/.test(t)) return 'ask';
+  if (ANTONIO_PRAISE.test(t)) return 'happy';
+  if (ANTONIO_CORRECT.test(t)) return 'explain';
+  return 'talk';
+}
+// Sentences with their character spans in the spoken text, so speech position → mood.
+// The voice speaks a respelled form (voiceForm), so moods are read from the original
+// sentences when the two split the same way.
+function antonioSplit(text) {
+  const out = []; const re = /[^.!?…]+[.!?…]*["'»”)]*\s*/g; let m;
+  while ((m = re.exec(text))) { if (m[0].trim()) out.push({ start: m.index, end: m.index + m[0].trimEnd().length, text: m[0].trim() }); }
+  return out;
+}
+function antonioSentences(spoken, original) {
+  const sp = antonioSplit(spoken), og = original ? antonioSplit(original) : [];
+  const same = og.length === sp.length;
+  const out = sp.map((x, i) => ({ start: x.start, end: x.end, text: same ? og[i].text : x.text, mood: antonioMoodOf(same ? og[i].text : x.text) }));
+  return out.length ? out : [{ start: 0, end: spoken.length, text: original || spoken, mood: 'talk' }];
+}
+let antonioTalkCtl = null;
+function antonioShowMood(mood) {
+  const el = antonioEl(); if (!el) return;
+  el.querySelectorAll('.antonio-talk').forEach(v => {
+    const on = v.dataset.mood === mood;
+    v.classList.toggle('on', on);
+    if (on && v.paused) { try { v.currentTime = 0; } catch (e) {} const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    else if (!on && !v.paused) v.pause();
+  });
+}
+function antonioVoicing(on) { const el = antonioEl(); if (el) el.classList.toggle('voicing', !!on); }
+// Every 80ms: where in the text is he, which mood is that, and is he between sentences?
+function antonioTalkTick() {
+  const c = antonioTalkCtl; if (!c) return;
+  const now = performance.now();
+  let pos, voiced;
+  if (c.mode === 'boundary') {                       // browser voice reports each word as it is spoken
+    pos = c.lastChar; voiced = now - c.lastWord < 420;
+  } else {
+    const a = c.audio;
+    pos = a && a.duration && isFinite(a.duration) ? (a.currentTime / a.duration) * c.len   // premium voice: real progress
+                                                   : (now - c.t0) / c.msPerChar;          // otherwise an estimate
+    const s = c.sents.find(x => pos >= x.end && pos < x.end + 4);                         // a short pause after each sentence
+    voiced = !s && pos < c.len;
+  }
+  const cur = c.sents.find(x => pos < x.end + 4) || c.sents[c.sents.length - 1];
+  if (cur && cur.mood !== c.mood) { c.mood = cur.mood; antonioShowMood(cur.mood); }
+  antonioVoicing(voiced);
+}
+function antonioOnBoundary(charIndex) {
+  const c = antonioTalkCtl; if (!c) return;
+  c.mode = 'boundary'; c.lastWord = performance.now(); c.lastChar = charIndex;
+}
+function antonioStartTalking(clean, original) {
   antonioStopTalking(); // clear any previous mouth-timer before starting a fresh one
   antonioSetState('talking');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const text = clean || '';
+  const sents = antonioSentences(text, original);
+  antonioTalkCtl = { sents, len: text.length, t0: performance.now(), msPerChar: 70, mode: 'estimate', lastWord: 0, lastChar: 0, audio: null, mood: sents[0].mood };
+  antonioShowMood(sents[0].mood); antonioVoicing(true);
+  antonioTalkCtl.timer = setInterval(antonioTalkTick, 80);
   const shapes = ['open','small','wide','open','small'];
   let i = 0;
   antonioMouthTimer = setInterval(() => {
@@ -56427,6 +56506,10 @@ function antonioStartTalking() {
 function antonioStopTalking() {
   if (antonioMouthTimer) { clearInterval(antonioMouthTimer); antonioMouthTimer = null; }
   antonioMouth('rest');
+  if (antonioTalkCtl) { clearInterval(antonioTalkCtl.timer); antonioTalkCtl = null; }
+  antonioVoicing(false);
+  const face = antonioEl();
+  if (face) face.querySelectorAll('.antonio-talk').forEach(v => { v.pause(); v.classList.remove('on'); });
   const el = antonioEl();
   if (el && el.classList.contains('talking')) antonioSetState('idle');
 }
@@ -56434,27 +56517,35 @@ function antonioStopTalking() {
 // Make António speak (TTS) with lip-sync, then a callback when done
 function antonioSpeak(text, statusEl, done) {
   if (statusEl) statusEl.textContent = `🗣️ ${tutorName()} is speaking…`;
-  antonioStartTalking();
+  const clean = voiceForm(text);
+  antonioStartTalking(clean, text);
   userHasInteracted = true;
-  // Drive lip-sync off the speech; stop when it ends
-  const finish = () => { antonioStopTalking(); if (statusEl) statusEl.textContent = ''; if (done) done(); };
-  // Use browser TTS events when available for accurate timing
-  if (window.speechSynthesis) {
-    const clean = voiceForm(text);
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(clean);
-    if (bestVoice) utter.voice = bestVoice;
-    utter.lang = bestVoice?.lang || 'pt-PT';
-    utter.rate = 0.82;
-    utter.onend = finish; utter.onerror = finish;
-    // If a premium endpoint is set, speakText handles audio; approximate timing
-    const ep = getTtsEndpoint && getTtsEndpoint();
-    if (ep) { speakText(text, null); setTimeout(finish, Math.min(6000, 800 + clean.length * 70)); }
-    else window.speechSynthesis.speak(utter);
-  } else {
-    speakText(text, null);
-    setTimeout(finish, 1500);
+  let finished = false, fallback = null;
+  const finish = () => { if (finished) return; finished = true; clearTimeout(fallback); antonioStopTalking(); if (statusEl) statusEl.textContent = ''; if (done) done(); };
+  const ep = getTtsEndpoint && getTtsEndpoint();
+  if (ep || !window.speechSynthesis) {
+    // Premium voice: follow the real audio — its progress picks the mood, its end stops him
+    fallback = setTimeout(finish, Math.min(20000, 1500 + clean.length * 80));
+    Promise.resolve(speakText(text, null)).then(() => {
+      const a = typeof ttsAudio !== 'undefined' ? ttsAudio : null;
+      if (a && !a.paused && !a.ended && antonioTalkCtl) {
+        antonioTalkCtl.audio = a;
+        a.addEventListener('ended', finish, { once: true });
+        a.addEventListener('pause', finish, { once: true });
+      }
+    }).catch(() => {});
+    return;
   }
+  // Browser voice: word-boundary events say exactly where he is
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(clean);
+  if (bestVoice) utter.voice = bestVoice;
+  utter.lang = bestVoice?.lang || 'pt-PT';
+  utter.rate = 0.82;
+  utter.onboundary = e => { if (e.name !== 'sentence') antonioOnBoundary(e.charIndex); };
+  utter.onend = finish; utter.onerror = finish;
+  fallback = setTimeout(finish, Math.min(30000, 2500 + clean.length * 110));
+  window.speechSynthesis.speak(utter);
 }
 
 function antonioReact(success, statusEl) {
@@ -58590,7 +58681,7 @@ async function endChatRecap() {
     const win = document.getElementById('chat-window');
     const div = document.createElement('div');
     div.className = 'chat-msg bot';
-    div.innerHTML = `<div class="msg-avatar">🧔🏾</div><div style="flex:1"><div class="recap-card">${formatBotText(escapeHTML(text))}</div></div>`;
+    div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div><div style="flex:1"><div class="recap-card">${formatBotText(escapeHTML(text))}</div></div>`;
     win.appendChild(div); win.scrollTop = win.scrollHeight;
     // Recap is a good moment to update long-term memory too
     updateTutorMemory(key);
@@ -58627,7 +58718,7 @@ async function suggestTopics() {
     const chips = topics.map(t => `<button class="topic-chip" onclick="startTopic('${escapeJS(t)}')">${escapeHTML(t)}</button>`).join('');
     const div = document.createElement('div');
     div.className = 'chat-msg bot';
-    div.innerHTML = `<div class="msg-avatar">🧔🏾</div><div><div class="msg-bubble">Here are some things we could talk about — pick one! 👇<div class="topic-chips">${chips}</div></div></div>`;
+    div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div><div><div class="msg-bubble">Here are some things we could talk about — pick one! 👇<div class="topic-chips">${chips}</div></div></div>`;
     win.appendChild(div); win.scrollTop = win.scrollHeight;
   } catch(e) { hideTyping(); appendBotMessage('⚠️ Connection error.', ''); }
 }
@@ -58723,7 +58814,7 @@ function startDailyChallenge() {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg bot';
-  div.innerHTML = `<div class="msg-avatar">🧔🏾</div><div><div class="msg-bubble">🎯 <b>Today's Challenge</b><br>${escapeHTML(challenge)}<br><span style="font-size:.8rem;color:var(--muted)">Try it in ${courseName()} — I'll help!</span></div></div>`;
+  div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div><div><div class="msg-bubble">🎯 <b>Today's Challenge</b><br>${escapeHTML(challenge)}<br><span style="font-size:.8rem;color:var(--muted)">Try it in ${courseName()} — I'll help!</span></div></div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
   callClaude('Give me the daily challenge.');
 }
@@ -59433,7 +59524,7 @@ function appendBotMessage(kriolu, english) {
   const msgId = 'msg-' + (++chatMsgSeq) + '-' + Date.now();
   const plain = kriolu.replace(/<[^>]+>/g, ''); // strip formatting for TTS/word actions
   chatMsgStore[msgId] = { kriolu: plain, english: english || '' };
-  div.innerHTML = `<div class="msg-avatar">🧔🏾</div>
+  div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div>
     <div style="flex:1">
       <div class="msg-bubble">${kriolu}${tHTML}</div>
       <div class="msg-actions">
@@ -59560,7 +59651,7 @@ function showTyping() {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg bot'; div.id = 'typing-indicator';
-  div.innerHTML = `<div class="msg-avatar">🧔🏾</div><div class="msg-bubble"><div class="typing-indicator">
+  div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div><div class="msg-bubble"><div class="typing-indicator">
     <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
   // António looks like he's listening/thinking about your message
