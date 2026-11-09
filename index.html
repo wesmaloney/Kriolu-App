@@ -5,66 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kriolu &amp; Português — Cape Verdean Creole and Portuguese</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0A4D68" />
+  <meta name="theme-color" content="#FBF4EA" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Kriolu" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet" />
   <style>
     /* ── THEME VARIABLES ── */
     :root {
-      /* Deep Atlantic palette — volcanic islands, ocean, sun */
+      /* Warm island palette (Morabeza) — sand, ocean blue, terracotta, island sun */
       --ocean:   #0A4D68;   /* deep sea */
-      --ocean-2: #088395;   /* mid teal */
-      --sky:     #05BFDB;   /* bright lagoon */
-      --coral:   #FF6B35;   /* sunset accent */
-      --gold:    #FFC15E;   /* warm sun */
-      --green:   #2EC4B6;   /* sea-glass */
-      --sand:    #F5F0E6;
-      --cream:   #FFFFFF;
-      --green-c: #14B8A6;
+      --ocean-2: #2C6E8A;   /* harbour blue */
+      --sky:     #3E8FAE;   /* lighter sea */
+      --coral:   #C8553D;   /* terracotta */
+      --gold:    #F2B33D;   /* island sun */
+      --green:   #2F8F6B;
+      --sand:    #F3EADD;
+      --cream:   #FFFDF8;
+      --green-c: #2F8F6B;
 
-      --text:    #0F2A38;   /* near-black teal ink */
-      --muted:   #5E7C8B;
-      --border:  #E4ECF1;
-      --white:   #FFFFFF;
-      --correct: #14B8A6; --wrong:#EF4757;
+      --text:    #1E2A33;
+      --muted:   #6A5F55;
+      --border:  #EADFCF;
+      --white:   #FFFDF8;
+      --correct: #237A57; --wrong:#C42F3B;
 
-      --bg:      #F0F7F8;   /* soft cool mist */
-      --card:    #FFFFFF;
-      --nav:     rgba(255,255,255,.85);
+      --bg:      #FBF4EA;   /* sand */
+      --card:    #FFFDF8;   /* cream */
+      --nav:     rgba(255,253,248,.94);
       --radius:  22px;
       --radius-sm: 16px;
-      --shadow:  0 2px 8px rgba(10,77,104,.04), 0 8px 24px rgba(10,77,104,.08);
-      --shadow-lg:0 8px 24px rgba(10,77,104,.10), 0 20px 48px rgba(10,77,104,.14);
-      --shadow-coral: 0 6px 20px rgba(255,107,53,.32);
-      --grad-ocean: linear-gradient(135deg, #06283D 0%, #0A5C74 48%, #05BFDB 115%);
-      --wave-bg: %23F0F7F8;
-      --grad-sun: linear-gradient(135deg, #FF6B35 0%, #FFC15E 100%);
-      --grad-glass: linear-gradient(135deg, rgba(255,255,255,.7), rgba(255,255,255,.4));
+      --shadow:  0 1px 2px rgba(60,40,20,.04), 0 4px 14px rgba(60,40,20,.05);
+      --shadow-lg:0 2px 6px rgba(60,40,20,.06), 0 16px 36px rgba(60,40,20,.10);
+      --shadow-coral: 0 6px 18px rgba(200,85,61,.26);
+      --grad-ocean: linear-gradient(135deg, #0A4D68 0%, #0A4D68 100%);
+      --wave-bg: %23FBF4EA;
+      --grad-sun: linear-gradient(135deg, #C8553D 0%, #C8553D 100%);
+      --grad-glass: linear-gradient(135deg, rgba(255,253,248,.92), rgba(255,253,248,.92));
       --fs: 1rem;
     }
     [data-theme="dark"] {
-      --ocean:#0A4D68; --ocean-2:#0E7490; --sky:#22D3EE;
-      --sand:#0C1620; --bg:#0A1119; --card:#141F2E; --nav:rgba(20,31,46,.85);
-      --text:#E9F2F8; --muted:#7E9DB0; --border:#22344A;
-      --white:#141F2E; --cream:#141F2E;
-      --shadow:  0 2px 8px rgba(0,0,0,.20), 0 8px 24px rgba(0,0,0,.28);
-      --shadow-lg:0 12px 40px rgba(0,0,0,.45);
-      --grad-glass: linear-gradient(135deg, rgba(36,48,68,.7), rgba(36,48,68,.4));
-      --wave-bg: %230A1119;
+      --ocean:#0E5878; --ocean-2:#5FA3C0; --sky:#8CC3D6;
+      --coral:#E07A5F; --gold:#F2B33D;
+      --sand:#1A1612; --bg:#15120F; --card:#1F1B17; --nav:rgba(31,27,23,.94);
+      --text:#F3ECE2; --muted:#B0A596; --border:#352E27;
+      --white:#1F1B17; --cream:#1F1B17;
+      --correct:#5CC497; --wrong:#F07A7F;
+      --shadow:  0 1px 2px rgba(0,0,0,.30), 0 4px 14px rgba(0,0,0,.30);
+      --shadow-lg:0 2px 8px rgba(0,0,0,.40), 0 20px 48px rgba(0,0,0,.50);
+      --grad-ocean: linear-gradient(135deg, #0E5878 0%, #0E5878 100%);
+      --grad-sun: linear-gradient(135deg, #C8553D 0%, #C8553D 100%);
+      --grad-glass: linear-gradient(135deg, rgba(31,27,23,.92), rgba(31,27,23,.92));
+      --wave-bg: %2315120F;
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :focus-visible{outline:3px solid rgba(5,191,219,.55);outline-offset:2px;border-radius:6px}
+    :focus-visible{outline:3px solid rgba(10,77,104,.45);outline-offset:2px;border-radius:6px}
     html,body{max-width:100%;overflow-x:hidden}
     /* Long Portuguese words (and Kriolu ones) wrap rather than push the layout */
     .exercise-word,.blank-sentence,.study-word,.choice-btn,.path-name,.lesson-title,
     .phrase-kriolu,.phrase-english,.s-title,.hb-title{overflow-wrap:anywhere}
     html{font-size:var(--fs)}
-    body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;transition:color .3s;-webkit-font-smoothing:antialiased}
+    body{font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;transition:color .3s;-webkit-font-smoothing:antialiased}
     /* Page background — the original island glow artwork, painted on a FIXED
        pseudo-element so body never needs background-attachment:fixed (which
        breaks composited scrolling on Android Chrome). */
@@ -104,7 +108,7 @@
     [data-theme="dark"] #app-header::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M0 10 Q 15 0 30 6 T 60 6 T 90 6 T 120 6 L 120 10 Z' fill='%230A1119'/%3E%3C/svg%3E")}
     @keyframes wave-drift{from{background-position-x:0}to{background-position-x:240px}}
     @media (prefers-reduced-motion: reduce){#app-header::after{animation:none}}
-    .logo{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(.95rem,4.5vw,1.5rem);font-weight:600;display:flex;align-items:center;gap:7px;cursor:pointer;letter-spacing:-.01em;
+    .logo{font-family:'Fraunces',Georgia,serif;font-size:clamp(.95rem,4.5vw,1.5rem);font-weight:600;display:flex;align-items:center;gap:7px;cursor:pointer;letter-spacing:-.01em;
       min-width:0;flex:0 1 auto;overflow:hidden;white-space:nowrap}
     .logo .logo-text{flex:0 0 auto;overflow:hidden;text-overflow:ellipsis}
     .logo .logo-mark{flex-shrink:0}
@@ -128,9 +132,9 @@
     /* ── BOTTOM NAV ── */
     #bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:150;display:flex;background:rgba(255,255,255,.92);border-top:1px solid var(--border);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding-bottom:env(safe-area-inset-bottom)}
     [data-theme="dark"] #bottom-nav{background:rgba(20,30,38,.92)}
-    .bottom-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 7px;background:none;border:none;cursor:pointer;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif}
+    .bottom-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 7px;background:none;border:none;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif}
     .bnav-icon{font-size:1.15rem;line-height:1;opacity:.5}
-    .bnav-label{font:800 .62rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.05em;text-transform:uppercase}
+    .bnav-label{font:800 .62rem/1 'DM Sans',sans-serif;letter-spacing:.05em;text-transform:uppercase}
     .bottom-nav-btn.active{color:var(--ocean)}
     .bottom-nav-btn.active .bnav-icon{opacity:1}
     [data-theme="dark"] .bottom-nav-btn.active{color:var(--sky)}
@@ -148,13 +152,13 @@
     #settings-panel.open{display:flex;align-items:flex-end}
     .settings-sheet{background:var(--card);border-radius:24px 24px 0 0;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));width:100%;max-width:780px;margin:0 auto;animation:slideUp .25s ease;max-height:88vh;max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
     @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
-    .settings-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1.3rem;color:var(--ocean);margin-bottom:20px}
+    .settings-title{font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--ocean);margin-bottom:20px}
     .profile-header{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
-    .profile-avatar{width:50px;height:50px;flex:none;border-radius:50%;background:var(--grad-ocean);color:#fff;display:flex;align-items:center;justify-content:center;font:800 1.1rem/1 'Plus Jakarta Sans',sans-serif}
+    .profile-avatar{width:50px;height:50px;flex:none;border-radius:50%;background:var(--grad-ocean);color:#fff;display:flex;align-items:center;justify-content:center;font:800 1.1rem/1 'DM Sans',sans-serif}
     .profile-info{flex:1;min-width:0}
-    .profile-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.05rem;color:var(--text)}
+    .profile-name{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.05rem;color:var(--text)}
     .profile-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
-    .profile-edit-btn{flex:none;background:var(--bg);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:7px 13px;font:800 .7rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+    .profile-edit-btn{flex:none;background:var(--bg);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:7px 13px;font:800 .7rem/1 'DM Sans',sans-serif;cursor:pointer}
     .setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
     .setting-row:last-child{border-bottom:none}
     .setting-label{font-weight:700;font-size:.9rem}
@@ -166,15 +170,15 @@
     .toggle-switch input:checked+.toggle-slider{background:var(--ocean)}
     .toggle-switch input:checked+.toggle-slider::before{transform:translateX(18px)}
     .font-btns{display:flex;gap:8px}
-    .font-btn{padding:6px 14px;border:2px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;cursor:pointer;transition:all .15s}
+    .font-btn{padding:6px 14px;border:2px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;transition:all .15s}
     .font-btn.active,.font-btn:hover{border-color:var(--ocean);color:var(--ocean)}
-    .close-settings{width:100%;padding:12px;margin-top:16px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1rem;cursor:pointer}
+    .close-settings{width:100%;padding:12px;margin-top:16px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:1rem;cursor:pointer}
 
     /* ── HOME ── */
     .welcome-banner{background:var(--grad-ocean);border-radius:var(--radius);padding:24px 26px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
     .welcome-banner::before{content:'';position:absolute;top:-40%;right:-10%;width:60%;height:160%;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);pointer-events:none}
     .welcome-banner::after{content:'🌊';position:absolute;right:18px;bottom:-8px;font-size:4.4rem;opacity:.16}
-    .welcome-banner h2{font-family:'Bricolage Grotesque',sans-serif;font-size:1.55rem;margin-bottom:3px;font-weight:600;letter-spacing:-.01em;position:relative}
+    .welcome-banner h2{font-family:'Fraunces',Georgia,serif;font-size:1.55rem;margin-bottom:3px;font-weight:600;letter-spacing:-.01em;position:relative}
     .welcome-banner p{opacity:.88;font-size:.9rem;margin-bottom:16px;position:relative}
     .xp-bar-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:9px;overflow:hidden}
     .xp-bar{height:100%;background:var(--gold);border-radius:99px;transition:width .6s ease}
@@ -186,13 +190,13 @@
     .wds-cell{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
     .wds-bar{width:100%;height:6px;border-radius:99px;background:rgba(255,255,255,.22)}
     .wds-cell.active .wds-bar{background:var(--gold)}
-    .wds-label{font:800 .56rem/1 'Plus Jakarta Sans',sans-serif;opacity:.7}
+    .wds-label{font:800 .56rem/1 'DM Sans',sans-serif;opacity:.7}
     .wds-cell.today .wds-label{opacity:1}
     .wotd-card{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.72);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 15px;margin-bottom:16px}
     [data-theme="dark"] .wotd-card{background:var(--card)}
     .wotd-info{flex:1;min-width:0}
-    .wotd-label{font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
-    .wotd-word{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.3rem;color:var(--ocean);margin-top:4px}
+    .wotd-label{font:800 .68rem/1 'DM Sans',sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+    .wotd-word{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.3rem;color:var(--ocean);margin-top:4px}
     [data-theme="dark"] .wotd-word{color:var(--sky)}
     .wotd-gloss{font-size:.78rem;color:var(--muted);line-height:1.4;margin-top:2px}
     .wotd-play{width:38px;height:38px;flex:none;border-radius:50%;background:var(--bg);border:1.5px solid var(--sky);color:var(--ocean);display:flex;align-items:center;justify-content:center;font-size:.8rem;cursor:pointer}
@@ -203,13 +207,13 @@
     .bento-hero{grid-row:span 2;background:var(--grad-ocean);border-radius:var(--radius);padding:20px;color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);min-height:188px}
     .bento-hero::before{content:'🔥';position:absolute;right:-12px;bottom:-18px;font-size:6rem;opacity:.12}
     .bento-hero-icon{font-size:2rem;margin-bottom:6px}
-    .bento-hero-val{font-family:'Bricolage Grotesque',sans-serif;font-size:3.2rem;font-weight:600;line-height:1;letter-spacing:-.03em}
+    .bento-hero-val{font-family:'Fraunces',Georgia,serif;font-size:3.2rem;font-weight:600;line-height:1;letter-spacing:-.03em}
     .bento-hero-label{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.92;margin-top:2px}
     .bento-hero-sub{font-size:.74rem;opacity:.78;margin-top:8px;position:relative}
     .bento-tile{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
     .bento-tile:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
     .bento-tile .bt-icon{font-size:1.3rem;margin-bottom:3px}
-    .bento-tile .bt-val{font-family:'Bricolage Grotesque',sans-serif;font-size:1.7rem;font-weight:600;color:var(--ocean);line-height:1}
+    .bento-tile .bt-val{font-family:'Fraunces',Georgia,serif;font-size:1.7rem;font-weight:600;color:var(--ocean);line-height:1}
     .bento-tile .bt-label{font-size:.66rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
     [data-theme="dark"] .bento-tile .bt-val{color:var(--sky)}
     .bento-wide{grid-column:1 / -1;flex-direction:row;align-items:center;gap:14px}
@@ -219,10 +223,10 @@
     .stat-card{background:var(--card);border-radius:var(--radius-sm);padding:16px 8px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--border);transition:transform .2s,box-shadow .2s}
     .stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
     .stat-card .icon{font-size:1.6rem;margin-bottom:5px}
-    .stat-card .value{font-family:'Bricolage Grotesque',sans-serif;font-size:1.5rem;font-weight:600;color:var(--ocean);line-height:1}
+    .stat-card .value{font-family:'Fraunces',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--ocean);line-height:1}
     .stat-card .label{font-size:.66rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
 
-    .section-heading{font-family:'Bricolage Grotesque',sans-serif;font-size:1.35rem;color:var(--ocean);margin-bottom:14px;margin-top:4px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+    .section-heading{font-family:'Fraunces',Georgia,serif;font-size:1.35rem;color:var(--ocean);margin-bottom:14px;margin-top:4px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
     .section-heading::before{content:'';width:4px;height:1.1em;background:var(--grad-sun);border-radius:99px;flex-shrink:0}
     [data-theme="dark"] .section-heading{color:var(--sky)}
     /* Tasteful entrance for the home bento + cards */
@@ -258,7 +262,7 @@
     .done-badge{position:absolute;top:12px;right:12px;background:var(--correct);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.75rem}
     .mastery-bar{height:4px;background:var(--border);border-radius:99px;margin-top:8px;overflow:hidden}
     .mastery-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--sky),var(--ocean));transition:width .4s}
-    .start-btn{display:inline-flex;align-items:center;gap:4px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;box-shadow:0 2px 8px rgba(10,77,104,.25)}
+    .start-btn{display:inline-flex;align-items:center;gap:4px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'DM Sans',sans-serif;margin-top:8px;box-shadow:0 2px 8px rgba(10,77,104,.25)}
     .start-btn:hover{background:var(--sky)}
 
     /* ── EXERCISE ── */
@@ -271,16 +275,16 @@
 
     .exercise-card{background:var(--card);border-radius:var(--radius);padding:30px 24px;box-shadow:var(--shadow);margin-bottom:16px;text-align:center;border:1px solid var(--border)}
     /* ── IN-LESSON WRITING CHALLENGE ── */
-    .wc-task{font-family:'Bricolage Grotesque',sans-serif;font-size:1.3rem;font-weight:600;color:var(--ocean);line-height:1.3;margin-bottom:8px}
+    .wc-task{font-family:'Fraunces',Georgia,serif;font-size:1.3rem;font-weight:600;color:var(--ocean);line-height:1.3;margin-bottom:8px}
     [data-theme="dark"] .wc-task{color:var(--sky)}
     .wc-hint{font-size:.82rem;color:var(--muted);margin-bottom:10px}
     .wc-words{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
     .wc-word{background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:5px 11px;font-size:.82rem;font-weight:700;color:var(--ocean);cursor:pointer;transition:all .15s}
     .wc-word:hover{background:var(--ocean);color:#fff}
     [data-theme="dark"] .wc-word{color:var(--sky)}
-    .dict-dir-tab{flex:1;text-align:center;padding:9px 4px;border-radius:9px;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;color:var(--muted);cursor:pointer}
+    .dict-dir-tab{flex:1;text-align:center;padding:9px 4px;border-radius:9px;font:800 .72rem/1 'DM Sans',sans-serif;color:var(--muted);cursor:pointer}
     .dict-dir-tab.active{background:var(--ocean);color:#fff}
-    .dict-chip{flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:7px 13px;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+    .dict-chip{flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:7px 13px;font:800 .68rem/1 'DM Sans',sans-serif;cursor:pointer}
     .dict-chip.active{background:var(--ocean-2);color:#fff;border-color:transparent}
     .verb-chips{display:flex;gap:7px;overflow-x:auto;margin-bottom:11px;padding-bottom:2px}
     .verb-chip{flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:8px 14px;font-weight:800;font-size:.72rem;color:var(--ocean);cursor:pointer;transition:all .15s}
@@ -291,11 +295,11 @@
     .dlg-row.dlg-role-active .dlg-bubble{background:var(--bg);border-color:var(--ocean-2)}
     .lf-line{padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
     .lf-line:last-child{border-bottom:none}
-    .lf-speaker{font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+    .lf-speaker{font:800 .68rem/1 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
     .lf-text{font-size:.9rem;line-height:1.6;color:var(--muted);font-weight:500}
     .lf-text-current{font-weight:700;font-size:1rem;color:var(--text)}
     .lf-en{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.5}
-    .lf-turn-badge{display:flex;align-items:center;gap:7px;margin-top:9px;background:#FFF4E0;border-radius:9px;padding:8px 11px;font:800 .68rem/1.4 'Plus Jakarta Sans',sans-serif;letter-spacing:.03em;text-transform:uppercase;color:#8A5A0B}
+    .lf-turn-badge{display:flex;align-items:center;gap:7px;margin-top:9px;background:#FFF4E0;border-radius:9px;padding:8px 11px;font:800 .68rem/1.4 'DM Sans',sans-serif;letter-spacing:.03em;text-transform:uppercase;color:#8A5A0B}
     [data-theme="dark"] .lf-turn-badge{background:rgba(255,193,94,.12);color:var(--gold)}
     .lf-insight{background:#E2EDDC;color:#33552F}
     [data-theme="dark"] .lf-insight{background:rgba(46,196,182,.12);color:var(--sky)}
@@ -309,11 +313,11 @@
     .track-card-kr.active{box-shadow:0 0 0 3px var(--sky),0 8px 24px rgba(10,77,104,.2)}
     .track-card-pt{background:linear-gradient(135deg,#E76F51,#FFC15E)}
     .track-card-pt.active{box-shadow:0 0 0 3px #FF6B35,0 8px 24px rgba(255,107,53,.22)}
-    .track-card-eyebrow{font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
-    .track-card-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.6rem;margin-top:8px}
+    .track-card-eyebrow{font:800 .68rem/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+    .track-card-title{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.6rem;margin-top:8px}
     .track-card-sub{font-size:.78rem;opacity:.9;margin-top:3px}
     .track-card-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-    .track-card-chips span{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:6px 11px;font:800 .66rem/1 'Plus Jakarta Sans',sans-serif}
+    .track-card-chips span{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:6px 11px;font:800 .66rem/1 'DM Sans',sans-serif}
     .track-card-tick{position:absolute;top:20px;right:20px;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--ocean);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800}
     .storage-card{display:flex;flex-direction:column}
     .storage-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
@@ -331,17 +335,17 @@
     .update-banner-sub{font-size:.68rem;opacity:.85;margin-top:1px}
     .update-banner-btn{background:#fff;color:var(--ocean);border:none;border-radius:99px;padding:8px 13px;font-weight:800;font-size:.7rem;cursor:pointer;flex-shrink:0}
     @keyframes slideDownBanner{0%{transform:translateY(-100%)}100%{transform:none}}
-    .wc-textarea{width:100%;border:1.5px solid var(--border);border-radius:14px;padding:13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;color:var(--text);background:var(--card);resize:vertical;margin-bottom:10px}
+    .wc-textarea{width:100%;border:1.5px solid var(--border);border-radius:14px;padding:13px;font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--text);background:var(--card);resize:vertical;margin-bottom:10px}
     .wc-textarea:focus{outline:none;border-color:var(--ocean-2)}
     .wc-result{background:var(--bg);border-radius:12px;padding:15px;border-left:3px solid var(--gold);font-size:.88rem;line-height:1.6;margin-top:12px;text-align:left}
     /* ── WORD STUDY ── */
     #study-content{padding:8px 2px 30px}
     .study-intro{font-size:.9rem;line-height:1.55;color:var(--text);margin-bottom:16px;min-height:1px}
     .study-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px;box-shadow:var(--shadow-lg);text-align:center;animation:pop-in .3s ease}
-    .study-k{font-family:'Bricolage Grotesque',sans-serif;font-size:2.3rem;font-weight:600;color:var(--ocean);letter-spacing:-.02em;line-height:1.15}
+    .study-k{font-family:'Fraunces',Georgia,serif;font-size:2.3rem;font-weight:600;color:var(--ocean);letter-spacing:-.02em;line-height:1.15}
     [data-theme="dark"] .study-k{color:var(--sky)}
     .study-pron{font-size:.95rem;color:var(--coral);font-weight:700;margin-top:6px}
-    .study-speak{margin-top:14px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:10px 22px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;box-shadow:0 3px 12px rgba(10,77,104,.25);transition:transform .15s}
+    .study-speak{margin-top:14px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;box-shadow:0 3px 12px rgba(10,77,104,.25);transition:transform .15s}
     .study-speak:hover{transform:translateY(-2px)}
     .study-speak.small{padding:7px 16px;font-size:.78rem;background:var(--card);color:var(--ocean);border:1.5px solid var(--ocean-2);box-shadow:none;margin-top:8px}
     [data-theme="dark"] .study-speak.small{color:var(--sky)}
@@ -350,7 +354,7 @@
     .study-ex-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-top:18px}
     .study-ex{font-size:1.05rem;color:var(--text);font-style:italic;margin-top:5px;line-height:1.45}
     .study-nav{display:flex;gap:10px;margin-top:18px}
-    .study-btn{flex:1;padding:14px;border-radius:14px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;border:none;transition:transform .15s,box-shadow .2s}
+    .study-btn{flex:1;padding:14px;border-radius:14px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;border:none;transition:transform .15s,box-shadow .2s}
     .study-btn.ghost{background:var(--card);border:1.5px solid var(--border);color:var(--muted)}
     .study-btn.ghost:disabled{opacity:.4;cursor:default}
     .study-btn.primary{background:var(--grad-sun);color:#fff;box-shadow:var(--shadow-coral)}
@@ -362,14 +366,14 @@
     .lab-intro{background:var(--grad-glass);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;font-size:.92rem;line-height:1.55;color:var(--text);margin-bottom:16px}
     .lab-cards{display:flex;flex-direction:column;gap:12px}
     .lab-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);animation:riseIn .5s cubic-bezier(.2,.8,.2,1) both}
-    .lab-pattern{font-family:'Bricolage Grotesque',sans-serif;font-size:1.25rem;font-weight:600;color:var(--ocean);margin-bottom:5px;letter-spacing:-.01em}
+    .lab-pattern{font-family:'Fraunces',Georgia,serif;font-size:1.25rem;font-weight:600;color:var(--ocean);margin-bottom:5px;letter-spacing:-.01em}
     [data-theme="dark"] .lab-pattern{color:var(--sky)}
     .lab-explain{font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.45}
     select.ai-dialect-select{max-width:min(240px,100%)}
     .ai-dialect-bar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:-4px 0 14px;font-size:.78rem;font-weight:700;color:var(--muted)}
     .story-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
     .story-icon{font-size:2.2rem}
-    .story-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.15rem;color:var(--ocean)}
+    .story-title{font-family:'Fraunces',Georgia,serif;font-weight:800;font-size:1.15rem;color:var(--ocean)}
     [data-theme="dark"] .story-title{color:var(--sky)}
     .story-sub{font-size:.8rem;color:var(--muted)}
     .story-toggle{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:10px;cursor:pointer}
@@ -460,10 +464,10 @@
     .lab-ex-k{font-weight:700;color:var(--text);font-size:.95rem}
     .lab-ex-e{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:1px}
     .lab-tip{font-size:.8rem;color:var(--muted);text-align:center;margin:16px 0;line-height:1.5}
-    .lab-continue{width:100%;background:var(--grad-ocean);color:#fff;border:none;border-radius:14px;padding:15px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;box-shadow:0 4px 14px rgba(10,77,104,.28);transition:transform .2s,box-shadow .2s}
+    .lab-continue{width:100%;background:var(--grad-ocean);color:#fff;border:none;border-radius:14px;padding:15px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;box-shadow:0 4px 14px rgba(10,77,104,.28);transition:transform .2s,box-shadow .2s}
     /* ── STAGE ROADMAP ── */
     .roadmap-head{text-align:center;margin-bottom:18px}
-    .roadmap-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1.6rem;font-weight:600;color:var(--ocean);letter-spacing:-.01em}
+    .roadmap-title{font-family:'Fraunces',Georgia,serif;font-size:1.6rem;font-weight:600;color:var(--ocean);letter-spacing:-.01em}
     [data-theme="dark"] .roadmap-title{color:var(--sky)}
     .roadmap-sub{font-size:.86rem;color:var(--muted);margin-top:4px}
     .stage-list{display:flex;flex-direction:column;gap:2px;margin-bottom:18px;position:relative}
@@ -488,30 +492,30 @@
     .hearts-note{display:flex;align-items:center;gap:11px;background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:13px 15px;margin-bottom:14px;font-size:.86rem;line-height:1.5}
     .hearts-note-icon{font-size:1.1rem;flex-shrink:0}
     .exercise-type-badge{display:inline-block;background:var(--bg);color:var(--muted);border-radius:99px;padding:4px 13px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:18px}
-    .exercise-word{font-family:'Bricolage Grotesque',sans-serif;font-size:2.4rem;color:var(--ocean);font-weight:600;margin-bottom:6px;line-height:1.15;letter-spacing:-.02em}
+    .exercise-word{font-family:'Fraunces',Georgia,serif;font-size:2.4rem;color:var(--ocean);font-weight:600;margin-bottom:6px;line-height:1.15;letter-spacing:-.02em}
     .exercise-example{font-size:.85rem;color:var(--muted);font-style:italic;margin-bottom:20px}
     .pronunciation-guide{font-size:1rem;font-weight:800;color:var(--coral);letter-spacing:.04em;margin-bottom:10px}
-    .hear-btn{background:var(--bg);border:2px solid var(--sky);color:var(--ocean);border-radius:99px;padding:7px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;margin-bottom:14px;transition:all .15s}
+    .hear-btn{background:var(--bg);border:2px solid var(--sky);color:var(--ocean);border-radius:99px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;margin-bottom:14px;transition:all .15s}
     .hear-btn:hover{background:var(--sky);color:#fff}
     .g-point-pron{font-size:.82rem;font-weight:800;color:var(--coral);letter-spacing:.03em;margin-bottom:3px}
     .wp-pron{font-size:.78rem;color:#A8EDEA;font-weight:700;letter-spacing:.03em;margin:1px 0}
-    .translation-reveal{font-family:'Bricolage Grotesque',sans-serif;font-size:1.8rem;color:var(--correct);font-weight:700;margin-bottom:10px}
-    .reveal-btn{margin-top:14px;padding:11px 28px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(10,77,104,.28)}
+    .translation-reveal{font-family:'Fraunces',Georgia,serif;font-size:1.8rem;color:var(--correct);font-weight:700;margin-bottom:10px}
+    .reveal-btn{margin-top:14px;padding:11px 28px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(10,77,104,.28)}
     .reveal-btn:hover{background:var(--sky)}
     .fc-actions{display:flex;gap:10px;justify-content:center;margin-top:16px}
-    .fc-btn{flex:1;max-width:160px;padding:12px;border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:transform .15s}
+    .fc-btn{flex:1;max-width:160px;padding:12px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:transform .15s}
     .fc-btn:hover{transform:scale(1.04)}
     .fc-btn.wrong{background:#FFE0E3;color:var(--wrong)}
-    .fc-btn.correct{background:#D4F5F1;color:var(--correct)}
+    .fc-btn.correct{background:#DDF0E6;color:var(--correct)}
 
     /* Multiple choice */
     .choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .choice-btn{padding:15px 10px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;color:var(--text)}
+    .choice-btn{padding:15px 10px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;color:var(--text)}
     .choice-btn:not(:disabled):active{transform:scale(.97);border-color:var(--ocean-2)}
-    .choice-btn:hover:not(:disabled){border-color:var(--sky);background:#EEF8FC}
-    .choice-btn.selected-correct{background:#D4F5F1;border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
+    .choice-btn:hover:not(:disabled){border-color:var(--ocean-2);background:color-mix(in srgb,var(--ocean) 6%,var(--card))}
+    .choice-btn.selected-correct{background:#DDF0E6;border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
     .choice-btn.selected-wrong{background:#FFE0E3;border-color:var(--wrong);color:var(--wrong);animation:shake-x .4s ease}
-    .choice-btn.reveal-correct{background:#D4F5F1;border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
+    .choice-btn.reveal-correct{background:#DDF0E6;border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
     .choice-btn:disabled{cursor:default;opacity:.62}
     /* Dark mode: pale pastel chips read poorly on a dark screen, so answered
        choices use a tinted fill with bright text instead. */
@@ -524,20 +528,20 @@
     .choice-btn:disabled.reveal-correct{opacity:1;font-weight:800}
 
     /* Type answer */
-    .type-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:600;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
+    .type-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
     .type-input:focus{border-color:var(--sky)}
-    .type-input.correct-ans{border-color:var(--correct);background:#D4F5F1}
+    .type-input.correct-ans{border-color:var(--correct);background:#DDF0E6}
     .type-input.wrong-ans{border-color:var(--wrong);background:#FFE0E3}
-    .submit-btn{margin-top:10px;width:100%;padding:14px;background:var(--grad-ocean);color:#fff;border:none;border-radius:14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(10,77,104,.28)}
+    .submit-btn{margin-top:10px;width:100%;padding:14px;background:var(--grad-ocean);color:#fff;border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(10,77,104,.28)}
     .submit-btn:hover{background:var(--sky)}
     .submit-btn:disabled{background:var(--border);color:var(--muted);cursor:default}
 
     /* Word matching */
     .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .match-col{display:flex;flex-direction:column;gap:8px}
-    .match-btn{padding:12px 10px;border:2px solid var(--border);border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;text-align:center;background:var(--bg);color:var(--text);transition:all .15s}
+    .match-btn{padding:12px 10px;border:2px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;text-align:center;background:var(--bg);color:var(--text);transition:all .15s}
     .match-btn.selected{border-color:var(--ocean);background:#EEF8FC;color:var(--ocean)}
-    .match-btn.matched-correct{border-color:var(--correct);background:#D4F5F1;color:var(--correct);cursor:default}
+    .match-btn.matched-correct{border-color:var(--correct);background:#DDF0E6;color:var(--correct);cursor:default}
     .match-btn.matched-wrong{border-color:var(--wrong);background:#FFE0E3;color:var(--wrong)}
     .match-btn:disabled{cursor:default}
 
@@ -548,18 +552,18 @@
     @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
     /* Fill in the blank */
-    .blank-sentence{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.6;font-family:'Bricolage Grotesque',sans-serif}
-    .blank-input{border-bottom:3px solid var(--ocean);border-top:none;border-left:none;border-right:none;border-radius:0;background:transparent;font-family:'Bricolage Grotesque',sans-serif;font-size:1.2rem;color:var(--ocean);font-weight:700;width:120px;text-align:center;outline:none;padding:4px 6px}
+    .blank-sentence{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.6;font-family:'Fraunces',Georgia,serif}
+    .blank-input{border-bottom:3px solid var(--ocean);border-top:none;border-left:none;border-right:none;border-radius:0;background:transparent;font-family:'Fraunces',Georgia,serif;font-size:1.2rem;color:var(--ocean);font-weight:700;width:120px;text-align:center;outline:none;padding:4px 6px}
 
     /* Speaking exercise */
     .speak-mic-btn{background:var(--coral);color:#fff;border:none;border-radius:50%;width:80px;height:80px;font-size:2rem;cursor:pointer;margin:14px auto;display:block;transition:all .2s;box-shadow:var(--shadow)}
     .speak-mic-btn:hover{transform:scale(1.05)}
     .speak-mic-btn.listening{background:var(--wrong);animation:pulse .8s infinite}
     .speak-transcript{min-height:32px;font-size:1rem;font-weight:700;color:var(--ocean);font-style:italic;margin:10px 0}
-    .skip-btn{display:block;margin:14px auto 0;background:none;border:none;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;text-decoration:underline;padding:6px 12px}
+    .skip-btn{display:block;margin:14px auto 0;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;text-decoration:underline;padding:6px 12px}
     .skip-btn:hover{color:var(--ocean)}
     .speak-result{padding:10px 16px;border-radius:12px;font-weight:700;font-size:.9rem;margin-top:8px}
-    .speak-result.good{background:#D4F5F1;color:#1A7A6E}
+    .speak-result.good{background:#DDF0E6;color:#1A7A6E}
     .speak-result.bad{background:#FFE0E3;color:#A0222C}
     .self-assess-row{display:flex;gap:10px;justify-content:center;margin-top:14px}
 
@@ -567,7 +571,7 @@
     .sb-target-area{min-height:54px;background:var(--bg);border:2px dashed var(--border);border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-bottom:16px;transition:border-color .2s}
     .sb-target-area.has-words{border-style:solid;border-color:var(--sky)}
     .sb-bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
-    .sb-chip{padding:9px 16px;background:var(--card);border:2px solid var(--border);border-radius:99px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+    .sb-chip{padding:9px 16px;background:var(--card);border:2px solid var(--border);border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
     .sb-chip:hover{border-color:var(--sky);transform:translateY(-2px)}
     .sb-chip.in-answer{background:var(--ocean);color:#fff;border-color:var(--ocean)}
     .sb-chip.used{opacity:.25;pointer-events:none}
@@ -575,16 +579,16 @@
     /* Feedback */
     .feedback-bar{padding:14px 20px;border-radius:12px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px;margin-bottom:10px;animation:slideUp .2s ease}
     @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-    .feedback-bar.correct{background:#D4F5F1;color:#1A7A6E}
+    .feedback-bar.correct{background:#DDF0E6;color:#1A7A6E}
     .feedback-bar.wrong{background:#FFE0E3;color:#A0222C}
     .skill-why{border-radius:12px;padding:13px 15px;margin-top:10px;font-size:.85rem;line-height:1.55}
     .skill-why-label{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
     .skill-why-text{margin-top:6px}
-    .skill-why.correct{background:#D4F5F1;color:#1A7A6E}
+    .skill-why.correct{background:#DDF0E6;color:#1A7A6E}
     .skill-why.wrong{background:#FFF4E0;color:#4A3208}
     .marker-key{display:flex;flex-direction:column;gap:6px;margin-top:10px}
     .marker-key-row{display:flex;align-items:baseline;gap:10px;background:var(--bg);border-radius:10px;padding:9px 12px;font-size:.82rem}
-    .marker-key-row.active{background:#D4F5F1;color:#1A7A6E}
+    .marker-key-row.active{background:#DDF0E6;color:#1A7A6E}
     .marker-key-m{font-weight:800;font-size:.82rem;width:56px;flex-shrink:0}
     .checkpoint-topics-label{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
     .checkpoint-topics{display:flex;flex-direction:column;gap:9px;margin-top:11px}
@@ -596,7 +600,7 @@
     .checkpoint-review-link{display:block;width:100%;text-align:center;margin-top:10px;background:none;border:none;font-weight:700;font-size:.78rem;color:var(--muted);text-decoration:underline;cursor:pointer}
     .dc-hero{position:relative;overflow:hidden;border-radius:var(--radius);padding:22px 20px;color:#fff;background:var(--grad-sun);box-shadow:var(--shadow-coral)}
     .dc-hero-date{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.92}
-    .dc-hero-prompt{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.35rem;line-height:1.3;margin-top:10px}
+    .dc-hero-prompt{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.35rem;line-height:1.3;margin-top:10px}
     .dc-hero-sub{font-size:.75rem;opacity:.92;margin-top:8px}
     .dc-record-btn{width:78px;height:78px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;color:#fff;background:var(--coral);box-shadow:0 8px 22px rgba(194,69,26,.34);transition:transform .15s}
     .dc-record-btn:hover{transform:scale(1.05)}
@@ -608,20 +612,20 @@
     .dc-history-status{width:26px;height:26px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;background:var(--bg);border:1.5px solid var(--border);color:var(--muted)}
     .dc-history-row.done .dc-history-status{background:var(--green);border-color:var(--green);color:#fff}
     .dc-history-text{flex:1;font-size:.8rem;font-weight:700}
-    .next-btn{width:100%;padding:15px;background:var(--grad-sun);color:#fff;border:none;border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:var(--shadow-coral)}
+    .next-btn{width:100%;padding:15px;background:var(--grad-sun);color:#fff;border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:var(--shadow-coral)}
     .next-btn:active{transform:scale(.97)}
     .next-btn:hover{background:#E85A25}
 
     /* ── RESULTS ── */
     .results-card{background:var(--card);border-radius:var(--radius);padding:32px 24px;box-shadow:var(--shadow);text-align:center}
     .results-emoji{font-size:3.5rem;margin-bottom:12px}
-    .results-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1.8rem;color:var(--ocean);margin-bottom:6px}
+    .results-title{font-family:'Fraunces',Georgia,serif;font-size:1.8rem;color:var(--ocean);margin-bottom:6px}
     .results-sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
     .results-stats{display:flex;justify-content:center;gap:24px;margin-bottom:20px}
     .results-stat .val{font-size:2rem;font-weight:900;color:var(--ocean)}
     .results-stat .lbl{font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase}
     .results-xp{background:linear-gradient(135deg,var(--ocean),var(--sky));color:#fff;border-radius:12px;padding:14px;font-size:1rem;font-weight:800;margin-bottom:18px}
-    .results-btn{display:block;width:100%;padding:14px;border:none;border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:8px;transition:transform .15s,box-shadow .2s}
+    .results-btn{display:block;width:100%;padding:14px;border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:8px;transition:transform .15s,box-shadow .2s}
     .results-btn:active{transform:scale(.97)}
     .results-btn.primary{background:var(--grad-sun);color:#fff;box-shadow:var(--shadow-coral)}
     .results-btn.primary:hover{background:#E85A25}
@@ -675,15 +679,15 @@
     /* ── CONVERSATION ── */
     .convo-header{background:var(--ocean);border-radius:var(--radius);padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px;margin-bottom:12px}
     .avatar{width:46px;height:46px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
-    .convo-header h3{font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;margin-bottom:1px}
+    .convo-header h3{font-family:'Fraunces',Georgia,serif;font-size:1.1rem;margin-bottom:1px}
     .convo-header p{font-size:.75rem;opacity:.8}
     .api-key-panel{background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;gap:8px;align-items:center}
     .api-key-panel label{font-size:.78rem;font-weight:700;color:var(--muted);white-space:nowrap}
-    .api-input{flex:1 1 120px;min-width:0;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.82rem;outline:none;background:var(--bg);color:var(--text)}
+    .api-input{flex:1 1 120px;min-width:0;padding:7px 10px;border:2px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;background:var(--bg);color:var(--text)}
     .api-input:focus{border-color:var(--sky)}
-    .api-save-btn{padding:7px 14px;background:var(--ocean);color:#fff;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+    .api-save-btn{padding:7px 14px;background:var(--ocean);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
     .autospeak-row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:var(--radius);padding:10px 16px;box-shadow:var(--shadow);margin-bottom:10px;font-size:.85rem;font-weight:700;color:var(--ocean);flex-wrap:wrap}
-    .voice-select{padding:5px 8px;border:2px solid var(--border);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.78rem;font-weight:600;color:var(--ocean);background:var(--card);cursor:pointer;outline:none;max-width:160px}
+    .voice-select{padding:5px 8px;border:2px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;color:var(--ocean);background:var(--card);cursor:pointer;outline:none;max-width:160px}
     /* Styling a <select> doesn't reach its native <option> popup in most
        browsers unless the options are styled directly — without this the
        dropdown list renders with a light system background while still
@@ -693,7 +697,7 @@
     select option{background-color:var(--card) !important;color:var(--text) !important}
     .scenario-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
     .scenario-chips::-webkit-scrollbar{display:none}
-    .scenario-chip{flex-shrink:0;padding:7px 14px;background:var(--ocean);color:#fff;border:none;border-radius:99px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:background .2s}
+    .scenario-chip{flex-shrink:0;padding:7px 14px;background:var(--ocean);color:#fff;border:none;border-radius:99px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:background .2s}
     .scenario-chip:hover{background:var(--sky)}
     .chat-window{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);height:380px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:10px;scroll-behavior:smooth}
     .chat-msg{display:flex;gap:8px;align-items:flex-start;animation:fadeIn .2s ease}
@@ -714,13 +718,13 @@
     [data-theme="dark"] .msg-note{background:rgba(255,255,255,.04)}
     .chat-tools-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
     .difficulty-dial{display:flex;align-items:center;gap:6px}
-    .challenge-btn{margin-left:auto;background:var(--grad-sun);color:#fff;border:none;border-radius:99px;padding:7px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.76rem;cursor:pointer;box-shadow:var(--shadow-coral);transition:transform .15s}
+    .challenge-btn{margin-left:auto;background:var(--grad-sun);color:#fff;border:none;border-radius:99px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.76rem;cursor:pointer;box-shadow:var(--shadow-coral);transition:transform .15s}
     .challenge-btn:hover{transform:translateY(-1px)}
     .topic-chips{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-    .topic-chip{text-align:left;background:var(--card);border:1.5px solid var(--ocean-2);color:var(--ocean);border-radius:12px;padding:8px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .15s}
+    .topic-chip{text-align:left;background:var(--card);border:1.5px solid var(--ocean-2);color:var(--ocean);border-radius:12px;padding:8px 12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .15s}
     .topic-chip:hover{background:var(--ocean);color:#fff}
     [data-theme="dark"] .topic-chip{color:var(--sky)}
-    .recap-btn{width:100%;margin-top:8px;background:var(--card);border:1.5px dashed var(--ocean-2);color:var(--ocean);border-radius:12px;padding:10px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;transition:all .15s}
+    .recap-btn{width:100%;margin-top:8px;background:var(--card);border:1.5px dashed var(--ocean-2);color:var(--ocean);border-radius:12px;padding:10px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;transition:all .15s}
     .recap-btn:hover{background:var(--ocean);color:#fff;border-style:solid}
     [data-theme="dark"] .recap-btn{color:var(--sky)}
     .recap-card{background:var(--grad-glass);border:1px solid var(--border);border-radius:14px;padding:13px 15px;font-size:.84rem;line-height:1.55;color:var(--text)}
@@ -788,7 +792,7 @@
     .wave-bar:nth-child(odd){animation-delay:.15s}
     .wave-bar:nth-child(3n){animation-delay:.3s}
     @keyframes wave-bounce{0%,100%{height:5px}50%{height:22px}}
-    .antonio-hero-hint{font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;color:var(--ocean);margin-top:9px}
+    .antonio-hero-hint{font:800 .72rem/1 'DM Sans',sans-serif;color:var(--ocean);margin-top:9px}
     [data-theme="dark"] .antonio-hero-hint{color:var(--sky)}
 
     /* Apply to feedback */
@@ -800,7 +804,7 @@
     .choice-btn.wrong{animation:shake-x .4s ease}
 
     /* Floating +XP indicator */
-    .xp-float{position:fixed;left:50%;top:50%;transform:translateX(-50%);font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.6rem;color:var(--gold);pointer-events:none;z-index:9999;animation:xp-float 1s cubic-bezier(.2,.8,.2,1) forwards;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+    .xp-float{position:fixed;left:50%;top:50%;transform:translateX(-50%);font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:1.6rem;color:var(--gold);pointer-events:none;z-index:9999;animation:xp-float 1s cubic-bezier(.2,.8,.2,1) forwards;text-shadow:0 2px 8px rgba(0,0,0,.2)}
 
     /* Confetti pieces */
     .confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden}
@@ -820,7 +824,7 @@
     .chat-input-row{display:flex;gap:8px;align-items:center;min-width:0}
     .mic-btn{width:44px;height:44px;background:var(--bg);border:2px solid var(--border);border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;color:var(--text)}
     .mic-btn.listening{background:#FFE0E3;border-color:var(--wrong);animation:pulse 0.8s infinite}
-    .chat-input{flex:1 1 0;min-width:0;padding:11px 16px;border:2px solid var(--border);border-radius:99px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
+    .chat-input{flex:1 1 0;min-width:0;padding:11px 16px;border:2px solid var(--border);border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
     .chat-input:focus{border-color:var(--sky)}
     .send-btn{width:44px;height:44px;background:var(--ocean);color:#fff;border:none;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
     .send-btn:hover{background:var(--sky)}
@@ -841,21 +845,21 @@
     .swap-btn:hover{background:var(--sky);transform:rotate(180deg)}
     .translate-card{background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:12px}
     .translate-label{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
-    .translate-input{width:100%;border:2px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:600;color:var(--text);background:var(--bg);outline:none;resize:vertical;transition:border-color .2s}
+    .translate-input{width:100%;border:2px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;color:var(--text);background:var(--bg);outline:none;resize:vertical;transition:border-color .2s}
     .translate-input:focus{border-color:var(--sky)}
     .translate-controls{display:flex;gap:10px;align-items:center;margin-top:10px}
-    .trans-btn{flex:1;padding:11px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:background .2s}
+    .trans-btn{flex:1;padding:11px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:background .2s}
     .trans-btn:hover{background:var(--sky)}
     .trans-btn:disabled{background:var(--border);color:var(--muted);cursor:default}
-    .translate-output{font-family:'Bricolage Grotesque',sans-serif;font-size:1.3rem;font-weight:700;color:var(--ocean);line-height:1.5;min-height:36px}
+    .translate-output{font-family:'Fraunces',Georgia,serif;font-size:1.3rem;font-weight:700;color:var(--ocean);line-height:1.5;min-height:36px}
     .translate-note{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:8px}
 
     /* ── READING ── */
-    .readtab-btn{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 6px;border:2px solid var(--border);border-radius:12px;background:var(--card);color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:all .15s}
+    .readtab-btn{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 6px;border:2px solid var(--border);border-radius:12px;background:var(--card);color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:all .15s}
     .readtab-btn.active{border-color:var(--ocean);color:var(--ocean);background:var(--bg)}
     .music-card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px;border-left:4px solid var(--coral)}
     .music-lesson-cta{background:linear-gradient(135deg,var(--ocean),var(--sky));color:#fff;border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
-    .music-lesson-cta .ml-btn{background:#fff;color:var(--ocean);border:none;border-radius:99px;padding:9px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;white-space:nowrap}
+    .music-lesson-cta .ml-btn{background:#fff;color:var(--ocean);border:none;border-radius:99px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;white-space:nowrap}
     .music-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
     .music-icon{font-size:2rem}
     .music-name{font-weight:800;font-size:1.1rem;color:var(--text)}
@@ -872,7 +876,7 @@
     .song-embed-note{font-size:.68rem;color:var(--muted);margin-top:4px}
     .play-link{background:var(--ocean);color:#fff;border:none;cursor:pointer;font-family:inherit}
     .play-link.on{background:var(--coral)}
-    .artist-sp{flex-shrink:0;background:#1DB954;color:#fff;text-decoration:none;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;padding:7px 10px;border-radius:99px;white-space:nowrap}
+    .artist-sp{flex-shrink:0;background:#1DB954;color:#fff;text-decoration:none;font:800 .68rem/1 'DM Sans',sans-serif;padding:7px 10px;border-radius:99px;white-space:nowrap}
     .sl-line{display:flex;gap:6px;align-items:flex-start}
     .sl-say{flex:none;background:none;border:none;cursor:pointer;font-size:.8rem;padding:1px 0;line-height:1.2;opacity:.75}
     .sl-say:hover{opacity:1}
@@ -895,7 +899,7 @@
     .g-intro{font-size:.95rem;line-height:1.6;color:var(--text);margin-bottom:18px;background:var(--bg);padding:14px;border-radius:12px;border-left:3px solid var(--sky)}
     .g-point{padding:12px 0;border-bottom:1px solid var(--border)}
     .g-point-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
-    .g-point-k{font-family:'Bricolage Grotesque',sans-serif;font-size:1.2rem;font-weight:700;color:var(--ocean)}
+    .g-point-k{font-family:'Fraunces',Georgia,serif;font-size:1.2rem;font-weight:700;color:var(--ocean)}
     .g-point-e{font-size:.82rem;color:var(--muted);font-weight:700}
     .g-point-ex{font-size:.9rem;color:var(--text);font-weight:600}
     .g-point-exE{font-size:.8rem;color:var(--muted);font-style:italic}
@@ -909,11 +913,11 @@
     .story-card .s-title{font-weight:800;font-size:1rem;color:var(--text)}
     .story-card .s-titleE{font-size:.78rem;color:var(--muted);font-style:italic}
     .story-card .s-level{font-size:.68rem;font-weight:800;text-transform:uppercase;padding:2px 8px;border-radius:99px;margin-top:4px;display:inline-block}
-    .level-A1{background:#D4F5F1;color:#1A7A6E}
+    .level-A1{background:#DDF0E6;color:#1A7A6E}
     .level-A2{background:#D8F0E4;color:#1F7A57}
     .level-B1{background:#FFF0D9;color:#A66A1E}
     .level-B2{background:#FFE0E3;color:#A0222C}
-    .level-Beginner{background:#D4F5F1;color:#1A7A6E}
+    .level-Beginner{background:#DDF0E6;color:#1A7A6E}
     .level-Intermediate{background:#FFF0D9;color:#A66A1E}
     .level-Advanced{background:#FFE0E3;color:#A0222C}
 .level-C1{background:#FFE0E3;color:#A0222C}
@@ -922,7 +926,7 @@
     .story-detail-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
     .story-line{margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)}
     .story-line:last-child{border-bottom:none}
-    .story-k{font-family:'Bricolage Grotesque',sans-serif;font-size:1.15rem;line-height:1.7;color:var(--text);margin-bottom:6px}
+    .story-k{font-family:'Fraunces',Georgia,serif;font-size:1.15rem;line-height:1.7;color:var(--text);margin-bottom:6px}
     .story-word{cursor:pointer;border-radius:4px;padding:1px 2px;transition:background .15s;border-bottom:1.5px dotted var(--sky)}
     .story-word:hover,.story-word:active{background:var(--sky);color:#fff}
     .story-e{font-size:.82rem;color:var(--muted);font-style:italic;display:none}
@@ -934,7 +938,7 @@
     .story-progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--ocean));border-radius:99px;transition:width .3s}
     .story-player-btn{background:none;border:none;font-size:.85rem;font-weight:800;color:var(--muted);cursor:pointer}
     .story-play-btn{width:52px;height:52px;border-radius:50%;background:var(--grad-ocean);color:#fff;font-size:1.1rem;box-shadow:0 6px 18px rgba(10,77,104,.3)}
-    .story-rate-chip{background:var(--card);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:6px 12px;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+    .story-rate-chip{background:var(--card);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:6px 12px;font:800 .68rem/1 'DM Sans',sans-serif;cursor:pointer}
     .story-rate-chip.active{background:var(--ocean);color:#fff;border-color:transparent}
     .word-popup{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ocean);color:#fff;border-radius:14px;padding:12px 20px;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;max-width:90vw;animation:fadeIn .2s}
     .word-popup .wp-k{font-weight:800;font-size:1rem}
@@ -946,7 +950,7 @@
     .ex-meaning{font-size:.82rem;color:var(--muted);font-style:italic;margin-top:6px;line-height:1.45}
     .song-focus{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px}
     .song-focus .sf-label{font-size:.7rem;font-weight:800;color:var(--muted)}
-    .sf-chip{background:rgba(8,131,149,.10);border:1px solid var(--border);color:var(--ocean);font-family:'Plus Jakarta Sans',sans-serif;
+    .sf-chip{background:rgba(8,131,149,.10);border:1px solid var(--border);color:var(--ocean);font-family:'DM Sans',sans-serif;
       font-size:.7rem;font-weight:700;padding:4px 9px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:transform .15s}
     .sf-chip:active{transform:scale(.95)}
     [data-theme="dark"] .sf-chip{color:var(--sky);background:rgba(34,211,238,.12);border-color:rgba(34,211,238,.22)}
@@ -965,14 +969,14 @@
     /* ── DAILY / DUE CARDS ── */
     .due-today-card{background:linear-gradient(135deg,var(--ocean),var(--sky));color:#fff;border-radius:var(--radius);padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
     /* Base themed button — gradient sea pill used across plans, toolkit & settings */
-    .due-btn{background:var(--grad-ocean);color:#fff;border:none;border-radius:999px;padding:10px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;box-shadow:0 4px 14px rgba(10,77,104,.26);transition:transform .15s,box-shadow .2s,filter .2s}
+    .due-btn{background:var(--grad-ocean);color:#fff;border:none;border-radius:999px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer;box-shadow:0 4px 14px rgba(10,77,104,.26);transition:transform .15s,box-shadow .2s,filter .2s}
     .due-btn:not(:disabled):active{transform:scale(.97)}
     .due-btn:not(:disabled):hover{filter:brightness(1.07)}
-    .due-today-card .due-btn{background:#fff;color:var(--ocean);border:none;border-radius:99px;padding:9px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;white-space:nowrap;box-shadow:none}
+    .due-today-card .due-btn{background:#fff;color:var(--ocean);border:none;border-radius:99px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;white-space:nowrap;box-shadow:none}
     .daily-card{background:linear-gradient(135deg,var(--coral),#E76F51);color:#fff;border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow)}
     .daily-card .d-title{font-weight:800;font-size:1.05rem;margin-bottom:2px}
     .daily-card .d-sub{font-size:.82rem;opacity:.9}
-    .daily-card .d-btn{background:#fff;color:var(--coral);border:none;border-radius:99px;padding:9px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;white-space:nowrap}
+    .daily-card .d-btn{background:#fff;color:var(--coral);border:none;border-radius:99px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;white-space:nowrap}
     .due-badge-count{background:var(--coral);color:#fff;border-radius:99px;padding:1px 7px;font-size:.7rem;font-weight:800;margin-left:4px}
 
     /* ── PLACEMENT TEST ── */
@@ -1010,10 +1014,10 @@
 
     /* ── SHADOWING ── */
     .shadow-card{background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:12px;border-left:4px solid var(--coral)}
-    .shadow-k{font-family:'Bricolage Grotesque',sans-serif;font-size:1.2rem;font-weight:700;color:var(--ocean);margin-bottom:4px}
+    .shadow-k{font-family:'Fraunces',Georgia,serif;font-size:1.2rem;font-weight:700;color:var(--ocean);margin-bottom:4px}
     .shadow-e{font-size:.82rem;color:var(--muted);font-style:italic;margin-bottom:12px}
     .shadow-controls{display:flex;gap:8px;flex-wrap:wrap}
-    .shadow-btn{padding:8px 14px;border:2px solid var(--border);border-radius:99px;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .15s}
+    .shadow-btn{padding:8px 14px;border:2px solid var(--border);border-radius:99px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;transition:all .15s}
     .shadow-btn.listen{border-color:var(--sky);color:var(--ocean)}
     .shadow-btn.rec{border-color:var(--coral);color:var(--coral)}
     .shadow-btn.listening{background:var(--wrong);color:#fff;border-color:var(--wrong);animation:pulse .8s infinite}
@@ -1022,7 +1026,7 @@
     /* ── VERB CONJUGATION ── */
     .verb-card{background:var(--card);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);margin-bottom:8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-left:4px solid var(--sky);transition:transform .15s}
     .verb-card:hover{transform:translateX(3px)}
-    .verb-inf{font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;font-weight:700;color:var(--ocean)}
+    .verb-inf{font-family:'Fraunces',Georgia,serif;font-size:1.1rem;font-weight:700;color:var(--ocean)}
     .verb-meaning{font-size:.85rem;color:var(--muted);margin-left:6px}
     .conj-block{margin-bottom:16px}
     .conj-tense{font-weight:800;font-size:.82rem;color:var(--coral);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;padding-bottom:4px;border-bottom:2px solid var(--border)}
@@ -1061,7 +1065,7 @@
     .chat-label{font-size:.78rem;font-weight:800;color:var(--ocean)}
     [data-theme="dark"] .chat-label{color:var(--sky)}
     .chat-mini-row{display:flex;gap:6px;flex-wrap:wrap}
-    .chat-mini-btn{background:var(--card);border:1px solid var(--border);color:var(--ocean-2);font-family:'Plus Jakarta Sans',sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;padding:6px 11px;border-radius:999px;white-space:nowrap;transition:transform .15s,filter .2s}
+    .chat-mini-btn{background:var(--card);border:1px solid var(--border);color:var(--ocean-2);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;padding:6px 11px;border-radius:999px;white-space:nowrap;transition:transform .15s,filter .2s}
     .chat-mini-btn:active{transform:scale(.95)}
     .chat-mini-btn:hover{filter:brightness(1.05)}
     [data-theme="dark"] .chat-mini-btn{color:var(--sky);background:rgba(34,211,238,.10);border-color:rgba(34,211,238,.22)}
@@ -1173,15 +1177,15 @@
     :root{
       /* Elevation reads cleaner as a hairline plus a short tinted shadow
          than as a large blur, which muddies on light backgrounds. */
-      --line:      rgba(10,77,104,.09);
-      --shadow:    0 1px 2px rgba(10,77,104,.05), 0 4px 12px rgba(10,77,104,.06);
-      --shadow-lg: 0 2px 6px rgba(10,77,104,.07), 0 16px 40px rgba(10,77,104,.13);
-      --radius:    18px;
-      --radius-sm: 12px;
+      --line:      #EADFCF;
+      --shadow:    0 1px 2px rgba(60,40,20,.04), 0 4px 14px rgba(60,40,20,.05);
+      --shadow-lg: 0 2px 6px rgba(60,40,20,.06), 0 16px 36px rgba(60,40,20,.10);
+      --radius:    22px;
+      --radius-sm: 16px;
       --ease:      cubic-bezier(.22,.61,.36,1);
     }
     [data-theme="dark"]{
-      --line: rgba(255,255,255,.07);
+      --line: #352E27;
       --shadow:    0 1px 2px rgba(0,0,0,.30), 0 4px 14px rgba(0,0,0,.30);
       --shadow-lg: 0 2px 8px rgba(0,0,0,.40), 0 20px 48px rgba(0,0,0,.50);
     }
@@ -1192,10 +1196,10 @@
       border:1px solid var(--line);
     }
 
-    /* Display type: Bricolage is characterful, so give it tighter tracking
+    /* Display type: Fraunces is characterful, so give it tighter tracking
        and let size do the work rather than weight alone. */
     h1,h2,h3,.hb-title,.s-title,.path-name,.lesson-title{
-      font-family:'Bricolage Grotesque',sans-serif;
+      font-family:'Fraunces',Georgia,serif;
       letter-spacing:-.021em;
       font-optical-sizing:auto;
     }
@@ -1232,7 +1236,7 @@
     @keyframes tide-swell{0%{background-position:-70% 0}100%{background-position:170% 0}}
 
     /* Level badge: squarer than the cards so it reads as a marker, not a button. */
-    .level-mark{border-radius:14px;font-family:'Bricolage Grotesque',sans-serif;
+    .level-mark{border-radius:14px;font-family:'Fraunces',Georgia,serif;
       letter-spacing:-.03em;box-shadow:0 4px 14px color-mix(in srgb, var(--ocean) 22%, transparent)}
 
     /* Anyone who has asked their system to calm down gets a calm interface. */
@@ -1261,6 +1265,195 @@
     @media (max-width:360px){
       .readtab-btn{padding:10px 4px;letter-spacing:-.02em}
     }
+
+    /* ══════════════════════════════════════════════════════════════════
+       WARM ISLAND THEME (2026 redesign, "Morabeza")
+       Sand ground, cream surfaces with hairline borders, ocean blue for
+       action, terracotta for warmth, Fraunces headings over DM Sans.
+       Flat colour instead of glows and gradients. Both courses share the
+       layout; Portuguese keeps its azulejo blue as the action colour.
+       ══════════════════════════════════════════════════════════════════ */
+    html[data-lang="portuguese"]{
+      --bg:#F8F2E7; --card:#FFFDF8; --cream:#FFFDF8; --white:#FFFDF8; --border:#E8DCC8; --line:#E8DCC8;
+      --grad-ocean:linear-gradient(135deg,#1B3A6B 0%,#1B3A6B 100%);
+      --grad-sun:linear-gradient(135deg,#C1573C 0%,#C1573C 100%);
+      --nav:rgba(255,253,248,.94);
+    }
+    html[data-lang="portuguese"][data-theme="dark"]{
+      --line:#333A4D;
+      --grad-ocean:linear-gradient(135deg,#1E4E7C 0%,#1E4E7C 100%);
+      --grad-sun:linear-gradient(135deg,#A8452F 0%,#A8452F 100%);
+    }
+    /* Ground: flat sand, no glow artwork */
+    body::before,[data-theme="dark"] body::before,
+    html[data-lang="portuguese"] body::before,html[data-lang="portuguese"][data-theme="dark"] body::before{background:var(--bg)}
+    body{letter-spacing:0}
+
+    /* Header: sits on the sand, ink text, cream chips */
+    #app-header,html[data-lang="portuguese"] #app-header{background:var(--bg);background-image:none;color:var(--text);box-shadow:none;border-bottom:1px solid var(--border)}
+    #app-header::after,html[data-lang="portuguese"] #app-header::after,
+    html[data-lang="portuguese"][data-theme="dark"] #app-header::after{display:none}
+    .logo{font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--text);letter-spacing:-.01em}
+    .stat-chip{background:var(--card);border:1px solid var(--border);color:var(--text);backdrop-filter:none;-webkit-backdrop-filter:none}
+    .icon-btn{background:var(--card);border:1px solid var(--border);color:var(--text)}
+    .icon-btn:hover{background:var(--sand)}
+
+    /* Section tabs: sentence case pills */
+    #nav-tabs{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}
+    .nav-tab{text-transform:none;letter-spacing:0;font-size:.8rem;font-weight:700}
+    .nav-tab.active,html[data-lang="portuguese"] .nav-tab.active,
+    [data-theme="dark"] .nav-tab.active,html[data-lang="portuguese"][data-theme="dark"] .nav-tab.active{
+      color:var(--ocean);background:color-mix(in srgb,var(--ocean) 10%,var(--card));
+      box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ocean) 24%,transparent)}
+    [data-theme="dark"] .nav-tab.active{color:var(--sky)}
+
+    /* Bottom bar: cream, rounded top, line icons */
+    #bottom-nav,[data-theme="dark"] #bottom-nav{background:var(--card);border-top:1px solid var(--border);border-radius:24px 24px 0 0;
+      box-shadow:0 -6px 24px rgba(60,40,20,.06);backdrop-filter:none;-webkit-backdrop-filter:none}
+    .bnav-icon{opacity:1;display:flex}
+    .bnav-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .bnav-label{font:600 .68rem/1 'DM Sans',sans-serif;letter-spacing:0;text-transform:none}
+    .bottom-nav-btn.active .bnav-label{font-weight:700}
+
+    /* Type: Fraunces for headings and big numbers */
+    h1,h2,h3,.hb-title,.s-title,.path-name,.lesson-title,.section-heading{font-family:'Fraunces',Georgia,serif;letter-spacing:-.01em;font-weight:600}
+    .section-heading{color:var(--text)}
+    .section-heading::before{display:none}
+    [data-theme="dark"] .section-heading{color:var(--text)}
+
+    /* Surfaces: flat cream with a hairline, no sea-glass sheen */
+    .home-block,[data-theme="dark"] .home-block,
+    html[data-lang="portuguese"] .home-block,html[data-lang="portuguese"][data-theme="dark"] .home-block,
+    html[data-lang="portuguese"] .api-key-panel,html[data-lang="portuguese"] .autospeak-row,html[data-lang="portuguese"] .convo-tips{background:var(--card)}
+    .home-block::after{opacity:.06}
+
+    /* ── HOME ── greeting on the sand */
+    .welcome-banner{background:none;box-shadow:none;color:var(--text);padding:4px 2px 2px;margin-bottom:16px;overflow:visible;border-radius:0}
+    .welcome-banner::before,.welcome-banner::after{display:none}
+    .welcome-banner h2{font-size:1.95rem;font-weight:600;margin-bottom:2px}
+    .welcome-banner p{color:var(--muted);opacity:1;margin-bottom:12px}
+    .xp-bar-wrap{background:color-mix(in srgb,var(--ocean) 12%,transparent)}
+    .xp-bar{background:var(--ocean)}
+    [data-theme="dark"] .xp-bar{background:var(--sky)}
+    .xp-label{color:var(--muted);opacity:1;font-weight:600}
+    .weekly-goal-label{font-size:.75rem;color:var(--muted);font-weight:600;margin-top:8px}
+    .weekly-goal-wrap{background:color-mix(in srgb,var(--coral) 14%,transparent)}
+    .weekly-goal-fill{background:var(--coral)}
+    .wds-bar{background:color-mix(in srgb,var(--text) 10%,transparent)}
+    .wds-cell.active .wds-bar{background:var(--gold)}
+    .wds-label{color:var(--muted);opacity:1}
+    .wds-cell.today .wds-label{color:var(--text)}
+
+    /* Stats: streak on a terracotta tint, the rest on cream */
+    .bento-hero{background:color-mix(in srgb,var(--coral) 13%,var(--card));color:var(--text);
+      border:1px solid color-mix(in srgb,var(--coral) 26%,var(--border));box-shadow:none}
+    .bento-hero::before{opacity:.07}
+    .bento-hero-val{font-family:'Fraunces',Georgia,serif;font-weight:700;color:var(--coral)}
+    .bento-hero-label{color:var(--text);opacity:1}
+    .bento-hero-sub{color:var(--muted);opacity:1}
+    .bento-tile{box-shadow:none}
+    .bento-tile:hover{box-shadow:var(--shadow)}
+    .bento-tile .bt-val{font-family:'Fraunces',Georgia,serif;font-weight:700}
+    [data-theme="dark"] .bento-tile .bt-val{color:var(--sky)}
+
+    /* Continue card: ocean, with the asymmetric island corner */
+    .daily-card{background:var(--card);color:var(--text);border:1px solid var(--border);box-shadow:none}
+    .daily-card .d-sub{color:var(--muted);opacity:1}
+    .daily-card .d-btn{background:var(--ocean);color:#FFFFFF;font-weight:700}
+    .daily-card.path-card{background:var(--ocean);color:#FFFFFF;border:none;border-radius:28px 28px 28px 8px;padding:20px;
+      flex-direction:column;align-items:stretch;gap:14px}
+    .daily-card.path-card .d-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+    .daily-card.path-card .d-title{font-family:'Fraunces',Georgia,serif;font-size:1.4rem;font-weight:600;line-height:1.2}
+    .daily-card.path-card .d-sub{color:rgba(255,255,255,.78);margin-top:2px}
+    .daily-card.path-card .d-track{height:8px;border-radius:4px;background:rgba(255,255,255,.22);overflow:hidden;margin-top:14px}
+    .daily-card.path-card .d-fill{height:8px;border-radius:4px;background:var(--gold)}
+    .daily-card.path-card .d-btn{background:#FFFDF8;color:var(--ocean);border-radius:16px;padding:14px 18px;font-size:.95rem}
+
+    /* Quick actions (Review, Talk, Listening, Music / Grammar) */
+    .quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+    .qa-tile{display:flex;flex-direction:column;align-items:flex-start;gap:9px;text-align:left;background:var(--card);border:1px solid var(--border);
+      border-radius:20px;padding:14px 15px;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;min-height:44px;
+      transition:transform .16s var(--ease,ease),box-shadow .16s var(--ease,ease)}
+    .qa-tile:hover{box-shadow:var(--shadow)}
+    .qa-tile:active{transform:scale(.985)}
+    .qa-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+      background:color-mix(in srgb,var(--ocean) 10%,var(--card));color:var(--ocean)}
+    [data-theme="dark"] .qa-icon{color:var(--sky)}
+    .qa-icon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .qa-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+    .qa-text{display:flex;flex-direction:column;gap:2px}
+    .qa-title{font-size:.95rem;font-weight:700}
+    .qa-sub{font-size:.76rem;color:var(--muted);font-weight:600}
+    .qa-warm{background:color-mix(in srgb,var(--coral) 12%,var(--card));border-color:color-mix(in srgb,var(--coral) 24%,var(--border))}
+    .qa-warm .qa-icon{background:var(--card);color:var(--coral)}
+
+    /* Word of the day */
+    .wotd-card{background:var(--card)}
+    .wotd-label{color:var(--coral)}
+    .wotd-word{font-family:'Fraunces',Georgia,serif;color:var(--text);font-size:1.35rem}
+    .wotd-play{background:var(--ocean);border:none;color:#FFFFFF}
+
+    /* Buttons: solid ocean for action, terracotta for "next" */
+    .start-btn,.reveal-btn,.submit-btn{background:var(--ocean)}
+    .start-btn:hover,.reveal-btn:hover,.submit-btn:hover{background:var(--ocean-2)}
+    .submit-btn{border-radius:16px}
+    .next-btn{background:var(--coral);box-shadow:none}
+    .next-btn:hover{background:color-mix(in srgb,var(--coral) 85%,#000);box-shadow:var(--shadow-coral)}
+    .submit-btn:disabled{background:var(--border);color:var(--muted)}
+
+    /* Lessons and exercises */
+    .lesson-card{box-shadow:none}
+    .lesson-card:hover{box-shadow:var(--shadow)}
+    .progress-track{background:color-mix(in srgb,var(--ocean) 12%,var(--border))}
+    .progress-fill{background:var(--ocean)}
+    [data-theme="dark"] .progress-fill{background:var(--sky)}
+    .back-btn{border:1px solid var(--border);box-shadow:none}
+    .choice-btn{border-radius:16px}
+    .badge-chip{box-shadow:none}
+    .tide-fill{background:var(--ocean)}
+    [data-theme="dark"] .tide-fill{background:var(--sky)}
+    .results-card{border:1px solid var(--border);box-shadow:none}
+
+    /* Compact stats: streak | XP over lessons | words mastered, so the
+       Continue card sits near the top as in the chosen design */
+    .bento{gap:10px;margin-bottom:16px}
+    .bento-hero{grid-row:auto;min-height:0;padding:14px 16px;border-radius:20px;justify-content:flex-start}
+    .bento-hero::before{display:none}
+    .bento-hero-icon{font-size:1.3rem;margin-bottom:3px}
+    .bento-hero-val{font-size:1.75rem;letter-spacing:-.02em}
+    .bento-hero-label{font-size:.66rem;letter-spacing:.05em}
+    .bento-hero-sub{font-size:.7rem;margin-top:3px}
+    .bento-tile{border-radius:20px;justify-content:flex-start}
+    .bento-wide{grid-column:auto;flex-direction:column;align-items:flex-start;gap:0}
+    .bento-wide .bt-icon{font-size:1.3rem;margin-bottom:3px}
+    .bento-wide .bt-val{font-size:1.75rem;margin-right:0}
+    .bento-wide .bt-label{font-size:.66rem;margin-top:2px;align-self:flex-start}
+    .music-lesson-cta{background:var(--ocean)}
+
+    /* Calm everywhere: one flat colour per surface, no decorative
+       watermarks or shimmer behind the content */
+    .home-block::after,.convo-header::after,html[data-lang="portuguese"] .convo-header::after,
+    .welcome-banner::after,.bento-hero::before{display:none}
+    .tide-fill::after{display:none}
+    .mastery-fill,.story-progress-fill{background:var(--ocean)}
+    [data-theme="dark"] .mastery-fill,[data-theme="dark"] .story-progress-fill{background:var(--sky)}
+    .results-xp,.due-today-card{background:var(--ocean)}
+    .track-card-pt,.new-badge-pop,.badge-toast{background:var(--coral)}
+    .ach-card.earned,.g-tip{background:color-mix(in srgb,var(--gold) 12%,var(--card))}
+    .path-next{background:color-mix(in srgb,var(--coral) 7%,var(--card))}
+    .api-key-panel,.autospeak-row,.convo-tips,
+    [data-theme="dark"] .api-key-panel,[data-theme="dark"] .autospeak-row,[data-theme="dark"] .convo-tips,
+    html[data-lang="portuguese"][data-theme="dark"] .convo-tips{background:var(--card)}
+
+    /* Contemporary details on every page: text-only tabs and titles,
+       quiet category rows, one action colour */
+    .readtab-btn{border-radius:99px}
+    .phrase-category{border:1px solid var(--border);box-shadow:none}
+    .phrase-cat-header{background:var(--card);color:var(--text);font-weight:700}
+    .phrase-cat-header::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--cat,var(--ocean));flex:none}
+    .phrase-cat-header:hover{background:var(--sand)}
+    .lesson-card::before{height:3px;opacity:.9}
+    .settings-title{font-family:'Fraunces',Georgia,serif;font-weight:600}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1279,17 +1472,17 @@
 <nav id="nav-tabs"></nav>
 
 <nav id="bottom-nav">
-  <button class="bottom-nav-btn active" data-tab="home" onclick="showMainTab('home')"><span class="bnav-icon">🏝️</span><span class="bnav-label">Home</span></button>
-  <button class="bottom-nav-btn" data-tab="learn" onclick="showMainTab('learn')"><span class="bnav-icon">🎓</span><span class="bnav-label">Learn</span></button>
-  <button class="bottom-nav-btn" data-tab="talk" onclick="showMainTab('talk')"><span class="bnav-icon">💬</span><span class="bnav-label">Talk</span></button>
-  <button class="bottom-nav-btn" data-tab="words" onclick="showMainTab('words')"><span class="bnav-icon">📖</span><span class="bnav-label">Words</span></button>
-  <button class="bottom-nav-btn" data-tab="community" onclick="showMainTab('community')"><span class="bnav-icon">🌐</span><span class="bnav-label">Community</span></button>
+  <button class="bottom-nav-btn active" data-tab="home" onclick="showMainTab('home')"><span class="bnav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg></span><span class="bnav-label">Home</span></button>
+  <button class="bottom-nav-btn" data-tab="learn" onclick="showMainTab('learn')"><span class="bnav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg></span><span class="bnav-label">Learn</span></button>
+  <button class="bottom-nav-btn" data-tab="talk" onclick="showMainTab('talk')"><span class="bnav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.4A8 8 0 1 1 21 12z"/></svg></span><span class="bnav-label">Talk</span></button>
+  <button class="bottom-nav-btn" data-tab="words" onclick="showMainTab('words')"><span class="bnav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg></span><span class="bnav-label">Words</span></button>
+  <button class="bottom-nav-btn" data-tab="community" onclick="showMainTab('community')"><span class="bnav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14a6.5 6.5 0 0 1 3.5 6"/></svg></span><span class="bnav-label">Community</span></button>
 </nav>
 
 <!-- SETTINGS PANEL -->
 <div id="settings-panel" onclick="closeSettings(event)">
   <div class="settings-sheet">
-    <div class="settings-title">⚙️ Settings</div>
+    <div class="settings-title">Settings</div>
     <div class="profile-header">
       <div class="profile-avatar" id="profile-avatar">L</div>
       <div class="profile-info">
@@ -1303,41 +1496,41 @@
       <button class="start-btn" style="margin-top:8px" onclick="saveProfileName()">Save</button>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🌙 Dark Mode</div><div class="setting-sub">Easier on the eyes at night</div></div>
+      <div><div class="setting-label">Dark Mode</div><div class="setting-sub">Easier on the eyes at night</div></div>
       <label class="toggle-switch"><input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()"><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🔔 Daily Reminder</div><div class="setting-sub">Phone notification to keep your streak</div></div>
+      <div><div class="setting-label">Daily Reminder</div><div class="setting-sub">Phone notification to keep your streak</div></div>
       <label class="toggle-switch"><input type="checkbox" id="notif-toggle" onchange="toggleNotification()"><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🌍 Language Course</div><div class="setting-sub" id="lang-subtitle">Switch course — progress is kept separately for each</div></div>
+      <div><div class="setting-label">Language Course</div><div class="setting-sub" id="lang-subtitle">Switch course — progress is kept separately for each</div></div>
       <select id="language-select" class="voice-select" onchange="switchLanguage(this.value)">
         <option value="kriolu">🇨🇻 Kriolu</option>
         <option value="portuguese">🇵🇹 Português</option>
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🗺️ Language Tracks</div><div class="setting-sub">Compare progress and switch with more detail</div></div>
+      <div><div class="setting-label">Language Tracks</div><div class="setting-sub">Compare progress and switch with more detail</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="closeSettings();showScreen('track');renderLanguageTrack()">View ›</button>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🤖 AI Tutor Setup</div><div class="setting-sub">Connection status, what it powers, your API key</div></div>
+      <div><div class="setting-label">AI Tutor Setup</div><div class="setting-sub">Connection status, what it powers, your API key</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="closeSettings();showScreen('ai');renderAiSetup()">View ›</button>
     </div>
     <div class="setting-row" id="dialect-row">
-      <div><div class="setting-label">🏝️ Dialect Focus</div><div class="setting-sub">Base content is Santiago; São Vicente adds variant tips</div></div>
+      <div><div class="setting-label">Dialect Focus</div><div class="setting-sub">Base content is Santiago; São Vicente adds variant tips</div></div>
       <select id="dialect-select" class="voice-select" onchange="setDialect(this.value)">
         <option value="santiago" selected>Santiago (Badiu)</option>
         <option value="saovicente">São Vicente</option>
       </select>
     </div>
     <div class="setting-row" data-ai-dialect-wrap>
-      <div><div class="setting-label">🗣️ AI Reply Dialect</div><div class="setting-sub">Which Kriolu Sôr António and the translator use</div></div>
+      <div><div class="setting-label">AI Reply Dialect</div><div class="setting-sub">Which Kriolu Sôr António and the translator use</div></div>
       <select class="voice-select ai-dialect-select" aria-label="AI reply dialect" onchange="setAiDialect(this.value)"></select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">📚 Daily Review Limit</div><div class="setting-sub">Most words due for review in one day; the rest wait for later days</div></div>
+      <div><div class="setting-label">Daily Review Limit</div><div class="setting-sub">Most words due for review in one day; the rest wait for later days</div></div>
       <select id="review-limit-select" class="voice-select" onchange="setDailyReviewLimit(this.value)">
         <option value="15">15 words</option>
         <option value="30">30 words</option>
@@ -1347,7 +1540,7 @@
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🎯 My Goal</div><div class="setting-sub">Tailors recommendations & the tutor</div></div>
+      <div><div class="setting-label">My Goal</div><div class="setting-sub">Tailors recommendations & the tutor</div></div>
       <select id="goal-select" class="voice-select" onchange="state.learnerGoal=this.value;saveState();showToast('Goal updated ✓')">
         <option value="family">Talk with family</option>
         <option value="visit">Visit Cape Verde / Portugal</option>
@@ -1356,11 +1549,11 @@
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🚩 Reported Errors</div><div class="setting-sub">Words you've flagged for native-speaker review</div></div>
+      <div><div class="setting-label">Reported Errors</div><div class="setting-sub">Words you've flagged for native-speaker review</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="showErrorReports()">Review</button>
     </div>
     <div class="setting-row" id="reminder-time-row">
-      <div><div class="setting-label">⏰ Reminder Time</div><div class="setting-sub">When to remind you each day</div></div>
+      <div><div class="setting-label">Reminder Time</div><div class="setting-sub">When to remind you each day</div></div>
       <select id="reminder-time-select" class="voice-select" onchange="setReminderTime(this.value)">
         <option value="7">7:00 AM</option>
         <option value="9">9:00 AM</option>
@@ -1373,15 +1566,15 @@
       </select>
     </div>
     <div class="setting-row" data-kriolu-only>
-      <div><div class="setting-label">🗣️ Kriolu Pronunciation</div><div class="setting-sub">Helps the Portuguese voice sound Kriolu (behind the scenes — spelling on screen doesn't change)</div></div>
+      <div><div class="setting-label">Kriolu Pronunciation</div><div class="setting-sub">Helps the Portuguese voice sound Kriolu (behind the scenes — spelling on screen doesn't change)</div></div>
       <label class="toggle-switch"><input type="checkbox" id="kr-phonetic-toggle" onchange="toggleKrPhonetic(this.checked)" checked><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🔊 Sound Effects</div><div class="setting-sub">Feedback sounds on answers</div></div>
+      <div><div class="setting-label">Sound Effects</div><div class="setting-sub">Feedback sounds on answers</div></div>
       <label class="toggle-switch"><input type="checkbox" id="sfx-toggle" onchange="toggleSfx()" checked><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">📝 Font Size</div><div class="setting-sub">Adjust text size</div></div>
+      <div><div class="setting-label">Font Size</div><div class="setting-sub">Adjust text size</div></div>
       <div class="font-btns">
         <button class="font-btn" onclick="setFont('0.9rem','S')">S</button>
         <button class="font-btn active" id="font-M" onclick="setFont('1rem','M')">M</button>
@@ -1389,14 +1582,14 @@
       </div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;text-align:center">
-      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;color:var(--ocean);font-size:calc(var(--fs, 1rem) * 1.7)">sodadi</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--ocean);font-size:calc(var(--fs, 1rem) * 1.7)">sodadi</div>
       <div style="font-weight:800;letter-spacing:.05em;color:var(--coral);margin-top:6px;font-size:calc(var(--fs, 1rem) * .68)">/so·DA·di/</div>
       <div style="font-weight:700;margin-top:12px;font-size:calc(var(--fs, 1rem) * .9)">a deep longing for someone absent</div>
       <div style="font-style:italic;color:var(--muted);margin-top:8px;font-size:calc(var(--fs, 1rem) * .78)">N ten sodadi di nha mãi.</div>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🎯 Weekly XP Goal</div><div class="setting-sub">XP target per week</div></div>
-      <select id="weekly-goal-select" onchange="setWeeklyGoal(this.value)" style="padding:6px 10px;border:2px solid var(--border);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;background:var(--card);color:var(--text)">
+      <div><div class="setting-label">Weekly XP Goal</div><div class="setting-sub">XP target per week</div></div>
+      <select id="weekly-goal-select" onchange="setWeeklyGoal(this.value)" style="padding:6px 10px;border:2px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;background:var(--card);color:var(--text)">
         <option value="50">50 XP</option>
         <option value="100" selected>100 XP</option>
         <option value="200">200 XP</option>
@@ -1404,30 +1597,30 @@
       </select>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🗣️ Reading Voice</div><div class="setting-sub">Pick which voice reads Kriolu aloud</div></div>
+      <div><div class="setting-label">Reading Voice</div><div class="setting-sub">Pick which voice reads Kriolu aloud</div></div>
       <button class="due-btn" style="padding:8px 14px;font-size:.8rem" onclick="goToVoicePicker()">Choose ›</button>
     </div>
     <div class="setting-row">
-      <div><div class="setting-label">🔁 Auto-speak</div><div class="setting-sub">Read the tutor's replies aloud automatically in Talk</div></div>
+      <div><div class="setting-label">Auto-speak</div><div class="setting-sub">Read the tutor's replies aloud automatically in Talk</div></div>
       <label class="toggle-switch"><input type="checkbox" id="settings-autospeak-toggle" onchange="settingsToggleAutoSpeak()"><span class="toggle-slider"></span></label>
     </div>
     <div class="setting-row" style="cursor:pointer" onclick="showToast('👨‍👩‍👧 Multiple learner profiles aren\'t available yet.')">
-      <div style="flex:1"><div class="setting-label">👨‍👩‍👧 Add a Child Profile</div><div class="setting-sub">Shorter lessons, no chat, no purchases</div></div>
+      <div style="flex:1"><div class="setting-label">Add a Child Profile</div><div class="setting-sub">Shorter lessons, no chat, no purchases</div></div>
       <div style="font-size:1rem;color:var(--ocean-2)">+</div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
-      <div><div class="setting-label">🎙️ Premium Voice (ElevenLabs)</div><div class="setting-sub">Paste your Netlify TTS URL for natural voices. Leave blank for the free browser voice.</div></div>
+      <div><div class="setting-label">Premium Voice (ElevenLabs)</div><div class="setting-sub">Paste your Netlify TTS URL for natural voices. Leave blank for the free browser voice.</div></div>
       <div style="display:flex;gap:8px">
         <input type="text" id="tts-endpoint-input" class="api-input" placeholder="https://your-site.netlify.app/api/tts" style="flex:1" />
         <button class="api-save-btn" onclick="saveTtsEndpoint()">Save</button>
       </div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
-      <div><div class="setting-label">☁️ Account & Sync</div><div class="setting-sub">Sign in with just your email to keep your progress across devices — no password needed.</div></div>
+      <div><div class="setting-label">Account & Sync</div><div class="setting-sub">Sign in with just your email to keep your progress across devices — no password needed.</div></div>
       <div id="account-panel"></div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:8px">
-      <div><div class="setting-label">💾 Backup Your Progress</div><div class="setting-sub">Your data lives only in this browser. Export a backup file to keep it safe, then import it on any device or after clearing data.</div></div>
+      <div><div class="setting-label">Backup Your Progress</div><div class="setting-sub">Your data lives only in this browser. Export a backup file to keep it safe, then import it on any device or after clearing data.</div></div>
       <div style="display:flex;gap:8px">
         <button class="api-save-btn" style="flex:1;background:var(--ocean)" onclick="exportProgress()">⬇️ Export Backup</button>
         <button class="api-save-btn" style="flex:1;background:var(--green)" onclick="document.getElementById('import-file').click()">⬆️ Import Backup</button>
@@ -1435,7 +1628,7 @@
       </div>
     </div>
     <div class="setting-row" style="flex-direction:column;align-items:stretch;gap:2px">
-      <div class="setting-label" style="margin-bottom:8px">💾 On This Device</div>
+      <div class="setting-label" style="margin-bottom:8px">On This Device</div>
       <div id="storage-usage" class="storage-card"></div>
     </div>
     <div class="setting-row" style="justify-content:center">
@@ -1469,7 +1662,7 @@
       <div class="xp-bar-wrap"><div class="xp-bar" id="xp-bar" style="width:0%"></div></div>
       <div class="xp-label" id="xp-label">0 / 100 XP to level 1</div>
       <div class="weekly-goal-bar">
-        <div style="font-size:.72rem;opacity:.8;margin-top:6px">Weekly goal: <span id="weekly-progress-label">0 / 100 XP</span></div>
+        <div class="weekly-goal-label">Weekly goal: <span id="weekly-progress-label">0 / 100 XP</span></div>
         <div class="weekly-goal-wrap"><div class="weekly-goal-fill" id="weekly-goal-fill" style="width:0%"></div></div>
         <div class="weekly-day-strip" id="weekly-day-strip"></div>
       </div>
@@ -1485,12 +1678,30 @@
       <div class="bento-tile tile-lessons"><div class="bt-icon">✅</div><div class="bt-val" id="stat-lessons">0</div><div class="bt-label">Lessons Done</div></div>
       <div class="bento-tile bento-wide tile-link" id="tile-mastered" role="button" tabindex="0" onclick="showMasteredWords()" onkeydown="if(event.key==='Enter')showMasteredWords()"><div class="bt-icon">🧠</div><div class="bt-val" id="stat-words">0</div><div class="bt-label">Words Mastered</div><div class="bt-link">See the list →</div></div>
     </div>
-    <div id="level-slot"></div>
     <div id="daily-card-slot"></div>
+    <div class="quick-actions" id="quick-actions">
+      <button class="qa-tile" onclick="showTab('review')">
+        <span class="qa-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg></span>
+        <span class="qa-text"><span class="qa-title">Review</span><span class="qa-sub" id="qa-review-sub">Keep words fresh</span></span>
+      </button>
+      <button class="qa-tile" onclick="showMainTab('talk')">
+        <img class="qa-avatar" src="img/antonio-64.webp" alt="" width="40" height="40">
+        <span class="qa-text"><span class="qa-title">Talk</span><span class="qa-sub">with Sôr António</span></span>
+      </button>
+      <button class="qa-tile" onclick="showTab('reading');showReadTab('listening')">
+        <span class="qa-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><rect x="3" y="14" width="4" height="7" rx="1.5"/><rect x="17" y="14" width="4" height="7" rx="1.5"/></svg></span>
+        <span class="qa-text"><span class="qa-title">Listening</span><span class="qa-sub">Stories and dialogues</span></span>
+      </button>
+      <button class="qa-tile qa-warm" id="qa-fourth" onclick="quickActionFourth()">
+        <span class="qa-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+        <span class="qa-text"><span class="qa-title" id="qa-fourth-title">Music</span><span class="qa-sub" id="qa-fourth-sub">Learn with morna</span></span>
+      </button>
+    </div>
     <div id="wotd-slot"></div>
+    <div id="level-slot"></div>
     <div id="placement-slot"></div>
     <div id="insights-slot"></div>
-    <h2 class="section-heading">🏆 Recent Badges<span style="margin-left:auto;font-size:.7rem;font-weight:800;color:var(--ocean-2);cursor:pointer" onclick="showScreen('achievements')">See all →</span></h2>
+    <h2 class="section-heading">Recent Badges<span style="margin-left:auto;font-size:.7rem;font-weight:800;color:var(--ocean-2);cursor:pointer" onclick="showScreen('achievements')">See all →</span></h2>
     <div class="achievements-strip" id="home-badges" onclick="showScreen('achievements')" style="cursor:pointer"></div>
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
@@ -1502,7 +1713,7 @@
 
   <!-- PATH -->
   <div id="screen-path" class="screen">
-    <h2 class="section-heading">🧭 Your Learning Path</h2>
+    <h2 class="section-heading">Your Learning Path</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Follow this path for a structured, step-by-step journey. Each lesson unlocks the next. You can also practice any lesson freely from the 📚 Lessons tab anytime.</p>
     <div id="path-content"></div>
   </div>
@@ -1529,7 +1740,7 @@
   <div id="screen-sentencelab" class="screen">
     <div class="exercise-header">
       <button class="back-btn" onclick="exitExercise()">←</button>
-      <div style="font-weight:800;color:var(--ocean);font-family:'Bricolage Grotesque',sans-serif" id="lab-title">Sentence Lab</div>
+      <div style="font-weight:800;color:var(--ocean);font-family:'Fraunces',Georgia,serif" id="lab-title">Sentence Lab</div>
     </div>
     <div id="sentencelab-content"></div>
   </div>
@@ -1551,7 +1762,7 @@
 
   <!-- REVIEW MISTAKES -->
   <div id="screen-review" class="screen">
-    <h2 class="section-heading">📋 Words to Review</h2>
+    <h2 class="section-heading">Words to Review</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Words you've struggled with. Practice these to master them!</p>
     <div id="review-content"></div>
   </div>
@@ -1559,9 +1770,9 @@
   <!-- GRAMMAR / LEARN -->
   <div id="screen-grammar" class="screen">
     <div style="display:flex;gap:8px;margin-bottom:16px;min-width:0">
-      <button class="readtab-btn active" id="learntab-grammar" onclick="showLearnTab('grammar')">📐 Grammar</button>
-      <button class="readtab-btn" id="learntab-verbs" onclick="showLearnTab('verbs')">🔤 Verbs</button>
-      <button class="readtab-btn" id="learntab-write" onclick="showLearnTab('write')">✍️ Write</button>
+      <button class="readtab-btn active" id="learntab-grammar" onclick="showLearnTab('grammar')">Grammar</button>
+      <button class="readtab-btn" id="learntab-verbs" onclick="showLearnTab('verbs')">Verbs</button>
+      <button class="readtab-btn" id="learntab-write" onclick="showLearnTab('write')">Write</button>
     </div>
     <div id="learntab-grammar-content">
       <div id="grammar-lang-note"></div>
@@ -1592,10 +1803,10 @@
   <!-- READING -->
   <div id="screen-reading" class="screen">
     <div style="display:flex;gap:8px;margin-bottom:16px;min-width:0">
-      <button class="readtab-btn active" id="readtab-stories" onclick="showReadTab('stories')">📖 Stories</button>
-      <button class="readtab-btn" id="readtab-shadow" onclick="showReadTab('shadow')">🎙️ Shadow</button>
-      <button class="readtab-btn" id="readtab-listening" onclick="showReadTab('listening')">🎧 Listening</button>
-      <button class="readtab-btn" id="readtab-music" onclick="showReadTab('music')">🎵 Music</button>
+      <button class="readtab-btn active" id="readtab-stories" onclick="showReadTab('stories')">Stories</button>
+      <button class="readtab-btn" id="readtab-shadow" onclick="showReadTab('shadow')">Shadow</button>
+      <button class="readtab-btn" id="readtab-listening" onclick="showReadTab('listening')">Listening</button>
+      <button class="readtab-btn" id="readtab-music" onclick="showReadTab('music')">Music</button>
     </div>
     <div id="readtab-stories-content">
       <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px"><span id="reading-intro">Read short stories. Tap any word to see its meaning.</span></p>
@@ -1619,7 +1830,7 @@
 
   <!-- TRANSLATE -->
   <div id="screen-translate" class="screen">
-    <h2 class="section-heading">🔄 Translator</h2>
+    <h2 class="section-heading">Translator</h2>
 
     <div class="api-key-panel" id="translate-key-panel" style="display:none">
       <label>API Key:</label>
@@ -1669,7 +1880,7 @@
   <!-- ACHIEVEMENTS -->
   <div id="screen-achievements" class="screen">
     <button class="back-btn" style="margin-bottom:10px" onclick="exitExercise()">←</button>
-    <h2 class="section-heading">🏆 Achievements</h2>
+    <h2 class="section-heading">Achievements</h2>
     <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Earn badges by completing challenges</p>
     <div class="achievements-grid" id="achievements-grid"></div>
   </div>
@@ -1678,7 +1889,7 @@
   <div id="screen-phrasebook" class="screen">
     <div id="dict-list-controls">
       <div style="display:flex;align-items:flex-end;justify-content:space-between">
-        <h2 class="section-heading" style="margin-bottom:4px">📔 Dictionary</h2>
+        <h2 class="section-heading" style="margin-bottom:4px">Dictionary</h2>
         <div style="font-size:.72rem;color:var(--muted);font-weight:700;padding-bottom:6px" id="dict-word-count"></div>
       </div>
       <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin:11px 0;box-shadow:var(--shadow)">
@@ -1703,7 +1914,7 @@
   <!-- COMMUNITY -->
   <div id="screen-community" class="screen">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <h2 class="section-heading" style="margin:0;flex:1">🌐 Community</h2>
+      <h2 class="section-heading" style="margin:0;flex:1">Community</h2>
       <button onclick="toggleComposeBox()" title="Write a post" style="width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--grad-sun);color:#fff;border:none;box-shadow:var(--shadow-coral);cursor:pointer;font-size:.95rem">✎</button>
     </div>
     <div id="community-compose" style="display:none;margin-bottom:14px">
@@ -1752,11 +1963,11 @@
       <div style="font-size:.78rem;line-height:1.55">Leave this blank and the app uses the shared connection. Add your own key for higher limits — it is stored on this device only and never sent anywhere but the model.</div>
       <div style="display:flex;align-items:center;gap:9px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:12px">
         <input type="password" id="ai-setup-key-input" style="flex:1;border:none;outline:none;background:transparent;font:600 .8rem/1 ui-monospace,Menlo,monospace;color:var(--text)" placeholder="sk-ant-..." />
-        <span onclick="toggleAiKeyVisibility(this)" style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;color:var(--ocean-2);cursor:pointer;flex-shrink:0">SHOW</span>
+        <span onclick="toggleAiKeyVisibility(this)" style="font:800 .68rem/1 'DM Sans',sans-serif;color:var(--ocean-2);cursor:pointer;flex-shrink:0">SHOW</span>
       </div>
       <div style="display:flex;gap:9px;margin-top:11px">
-        <button style="flex:1;background:var(--ocean-fill,var(--ocean));color:#fff;border:none;border-radius:12px;padding:13px;font:800 .78rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer" onclick="saveApiKeyFromAiSetup()">Save key</button>
-        <button style="flex:none;background:var(--bg);border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:13px 16px;font:800 .78rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer" onclick="clearApiKeyFromAiSetup()">Clear</button>
+        <button style="flex:1;background:var(--ocean-fill,var(--ocean));color:#fff;border:none;border-radius:12px;padding:13px;font:800 .78rem/1 'DM Sans',sans-serif;cursor:pointer" onclick="saveApiKeyFromAiSetup()">Save key</button>
+        <button style="flex:none;background:var(--bg);border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:13px 16px;font:800 .78rem/1 'DM Sans',sans-serif;cursor:pointer" onclick="clearApiKeyFromAiSetup()">Clear</button>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)">
@@ -1782,7 +1993,7 @@
       <button class="api-save-btn" onclick="saveApiKey()">Save</button>
     </div>
     <div class="autospeak-row">
-      <span>🔊 Auto-speak</span>
+      <span>Auto-speak</span>
       <label class="toggle-switch"><input type="checkbox" id="autospeak-toggle" onchange="toggleAutoSpeak()"><span class="toggle-slider"></span></label>
       <span id="autospeak-label" style="color:var(--muted);font-weight:600">Off</span>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
@@ -1792,7 +2003,7 @@
     </div>
     <div class="chat-tools-row">
       <div class="difficulty-dial">
-        <span style="font-size:.75rem;color:var(--muted);font-weight:700">📊 Difficulty:</span>
+        <span style="font-size:.75rem;color:var(--muted);font-weight:700">Difficulty</span>
         <select id="difficulty-select" class="voice-select" onchange="setChatDifficulty(this.value)">
           <option value="auto">Auto (my level)</option>
           <option value="easy">Beginner</option>
@@ -1802,13 +2013,13 @@
         </select>
       </div>
       <div class="difficulty-dial" data-ai-dialect-wrap>
-        <span style="font-size:.75rem;color:var(--muted);font-weight:700">🗣️ Dialect:</span>
+        <span style="font-size:.75rem;color:var(--muted);font-weight:700">Dialect</span>
         <select class="voice-select ai-dialect-select" aria-label="Sôr António's dialect" onchange="setAiDialect(this.value)"></select>
       </div>
       <button class="challenge-btn" onclick="renderDailyChallengeScreen()">🎯 Daily Challenge</button>
     </div>
     <div class="chat-section-row">
-      <span class="chat-label">🎭 Scenarios:</span>
+      <span class="chat-label">Scenarios</span>
       <div class="chat-mini-row">
         <button class="chat-mini-btn" onclick="suggestTopics()">💡 Suggest topics</button>
         <button class="chat-mini-btn" onclick="clearChatHistory()">🧹 Clear chat</button>
@@ -49517,7 +49728,7 @@ function renderLanguageTrack() {
   if (preview) {
     preview.innerHTML = `
       <div class="checkpoint-topics-label">Preview</div>
-      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.4rem;color:var(--ocean);margin-top:8px">sodadi</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.4rem;color:var(--ocean);margin-top:8px">sodadi</div>
       <div style="font-size:.85rem;margin-top:6px">a deep longing for someone absent</div>
       ${both ? `<div style="font-size:.85rem;color:var(--ocean-2);margin-top:3px">saudade · <span style="color:var(--muted)">substantivo feminino</span></div>` : ''}
     `;
@@ -52124,7 +52335,7 @@ function floatXP(amount) {
 
 function celebrate() {
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const colors = ['#FF6B35', '#FFC15E', '#05BFDB', '#2EC4B6', '#0A4D68', '#fff'];
+  const colors = ['#C8553D', '#F2B33D', '#0A4D68', '#3E8FAE', '#E9C9A8'];
   const wrap = document.createElement('div');
   wrap.className = 'confetti-wrap';
   for (let i = 0; i < 60; i++) {
@@ -52927,9 +53138,9 @@ const MAIN_TABS = [
   { id:'community', screens:['community'] },
 ];
 const SUB_NAV_LABELS = { // reuses the old top-bar's exact icon/label text
-  path:'🧭 Path', lessons:'📚 Lessons', grammar:'📐 Grammar', review:'📋 Review', dialogues:'🗨️ Dialogues',
-  conversation:'💬 Chat', translate:'🔄 Translate',
-  phrasebook:'📔 Dictionary', reading:'📖 Read',
+  path:'Path', lessons:'Lessons', grammar:'Grammar', review:'Review', dialogues:'Dialogues',
+  conversation:'Chat', translate:'Translate',
+  phrasebook:'Dictionary', reading:'Read',
 };
 let navReturn = null;        // { screen } to restore when leaving a pushed screen
 let mainTabSubScreen = {};   // remembers the last sub-screen visited per multi-screen tab
@@ -53136,7 +53347,7 @@ function renderLessonCard(lesson) {
     <div class="lesson-title">${lesson.title}</div>
     <div class="lesson-sub">${lesson.titleKriolu}</div>
     <div class="mastery-bar"><div class="mastery-fill" style="width:${masteryPct}%"></div></div>
-    <button class="start-btn" style="background:${lesson.color || 'var(--ocean)'}">Practice →</button>
+    <button class="start-btn">Practice →</button>
   </div>`;
 }
 
@@ -53310,6 +53521,10 @@ function renderWeeklyDayStrip() {
   return html;
 }
 
+function quickActionFourth() {
+  if (isPT()) showTab('grammar');
+  else { showTab('reading'); showReadTab('music'); }
+}
 function renderHomeExtras() {
   // CEFR level card
   const levelSlot = document.getElementById('level-slot');
@@ -53337,16 +53552,17 @@ function renderHomeExtras() {
     if (nextId) {
       const lesson = LESSONS.find(l => l.id === nextId);
       const idx = PATH_ORDER.indexOf(nextId) + 1;
-      cards += `<div class="daily-card" style="background:linear-gradient(135deg,var(--ocean),var(--sky))">
-        <div><div class="d-title">🧭 Continue Your Path</div>
-          <div class="d-sub">Lesson ${idx} of ${PATH_ORDER.length}: ${lesson.icon} ${lesson.title}</div></div>
-        <button class="d-btn" style="color:var(--ocean)" onclick="startLesson('${nextId}')">Continue →</button>
+      cards += `<div class="daily-card path-card">
+        <div><div class="d-eyebrow">Continue</div><div class="d-title">${lesson.title}</div>
+          <div class="d-sub">Lesson ${idx} of ${PATH_ORDER.length} on your path</div>
+          <div class="d-track"><div class="d-fill" style="width:${Math.max(3, Math.round(idx / PATH_ORDER.length * 100))}%"></div></div></div>
+        <button class="d-btn" onclick="startLesson('${nextId}')">Continue lesson →</button>
       </div>`;
     } else {
-      cards += `<div class="daily-card" style="background:linear-gradient(135deg,var(--green),var(--sky))">
+      cards += `<div class="daily-card path-card">
         <div><div class="d-title">🎉 Path Complete!</div>
           <div class="d-sub">You've finished the structured path. Keep practicing to master everything.</div></div>
-        <button class="d-btn" style="color:var(--green)" onclick="showTab('path')">View Path</button>
+        <button class="d-btn" onclick="showTab('path')">View Path</button>
       </div>`;
     }
     // Daily lesson card
@@ -53357,6 +53573,12 @@ function renderHomeExtras() {
     </div>`;
     pathSlot.innerHTML = cards;
   }
+  // Quick actions: due count on Review; the Portuguese course has no music, so its
+  // fourth tile opens the grammar notes instead
+  const qaSub = document.getElementById('qa-review-sub');
+  if (qaSub) { const due = countDueWords(); qaSub.textContent = due > 0 ? `${due} word${due === 1 ? '' : 's'} due` : 'Keep words fresh'; }
+  const qaT = document.getElementById('qa-fourth-title'), qaS = document.getElementById('qa-fourth-sub');
+  if (qaT && qaS) { if (isPT()) { qaT.textContent = 'Grammar'; qaS.textContent = 'Short, clear notes'; } else { qaT.textContent = 'Music'; qaS.textContent = 'Learn with morna'; } }
   // Placement prompt (only if not done)
   const placeSlot = document.getElementById('placement-slot');
   if (placeSlot) {
@@ -53497,7 +53719,7 @@ function renderProgressChart() {
     const h = Math.round((d.xp / max) * 60);
     return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
       <div style="font-size:.6rem;color:var(--muted);font-weight:700">${d.xp || ''}</div>
-      <div style="width:70%;height:${Math.max(3, h)}px;background:linear-gradient(180deg,var(--sky),var(--ocean));border-radius:4px 4px 0 0;${d.isToday ? 'box-shadow:0 0 0 2px var(--coral)' : ''}"></div>
+      <div style="width:70%;height:${Math.max(3, h)}px;background:var(--ocean);border-radius:4px 4px 0 0;${d.isToday ? 'box-shadow:0 0 0 2px var(--coral)' : ''}"></div>
       <div style="font-size:.62rem;color:${d.isToday ? 'var(--coral)' : 'var(--muted)'};font-weight:${d.isToday ? '800' : '700'}">${d.label}</div>
     </div>`;
   }).join('');
@@ -53708,7 +53930,7 @@ function renderPath() {
 
   const dueCount = countDueWords();
   if (dueCount > 0) {
-    html += `<button onclick="showTab('review')" style="display:block;width:100%;margin-bottom:16px;background:rgba(255,255,255,.85);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:14px;text-align:center;font:800 .82rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer">Jump to review · ${dueCount} due</button>`;
+    html += `<button onclick="showTab('review')" style="display:block;width:100%;margin-bottom:16px;background:rgba(255,255,255,.85);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:14px;text-align:center;font:800 .82rem/1 'DM Sans',sans-serif;cursor:pointer">Jump to review · ${dueCount} due</button>`;
   }
 
   // Levels: each is a collapsible section, and only open ones are rendered —
@@ -57471,7 +57693,7 @@ function renderReview() {
   }
 
   content.innerHTML = dueBanner + `
-    <button onclick="startReviewSession()" style="width:100%;padding:13px;background:var(--coral);color:#fff;border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:14px">
+    <button onclick="startReviewSession()" style="width:100%;padding:13px;background:var(--coral);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:14px">
       🎯 Practice These ${struggling.length} Word${struggling.length===1?'':'s'}
     </button>
     <div style="font-size:.75rem;color:var(--muted);margin-bottom:12px">Get a word right ${REVIEW_CLEAR_STREAK} times in a row and it drops off this list. Dots show your progress.</div>` +
@@ -58079,7 +58301,7 @@ function dictLessons() {
 function dictCategoryHTML(lesson, rowsHTML, open, count) {
   const li = LESSONS.indexOf(lesson);
   return `<div class="phrase-category">
-      <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="background:${lesson.color || 'var(--ocean)'}">
+      <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="--cat:${lesson.color || 'var(--ocean)'}">
         ${lesson.icon} ${escapeHTML(lesson.title)} <span style="margin-left:auto;font-size:.75rem;opacity:.85">${count}</span><span style="margin-left:8px">▾</span>
       </div>
       <div class="phrase-cat-body${open ? ' open' : ''}" id="pc-${li}"${rowsHTML ? ' data-filled="1"' : ''}>${rowsHTML}</div>
@@ -58172,9 +58394,9 @@ function openDictWord(k) {
   detail.innerHTML = `
     <button class="back-btn" style="margin-bottom:14px" onclick="closeDictWord()">←</button>
     <div class="grammar-detail-card" style="text-align:center">
-      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:2.2rem;color:var(--ocean)">${escapeHTML(v.k)}</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:2.2rem;color:var(--ocean)">${escapeHTML(v.k)}</div>
       <div style="font-size:.95rem;color:var(--muted);margin-top:6px">${escapeHTML(v.e)}</div>
-      <button style="display:inline-flex;align-items:center;gap:8px;margin-top:15px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:12px 22px;font:800 .8rem/1 'Plus Jakarta Sans',sans-serif;box-shadow:0 4px 14px rgba(10,77,104,.28);cursor:pointer" onclick="userHasInteracted=true;speakText('${escapeJS(v.k)}',this)">🔊 Play</button>
+      <button style="display:inline-flex;align-items:center;gap:8px;margin-top:15px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:12px 22px;font:800 .8rem/1 'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(10,77,104,.28);cursor:pointer" onclick="userHasInteracted=true;speakText('${escapeJS(v.k)}',this)">🔊 Play</button>
       ${v.ex ? `<div style="background:var(--bg);border-radius:14px;padding:14px;margin-top:18px;text-align:left">
         <div style="font-weight:700;font-size:.95rem">${escapeHTML(v.ex)}</div>
         ${v.exE ? `<div style="font-size:.8rem;color:var(--muted);font-style:italic;margin-top:4px">${escapeHTML(v.exE)}</div>` : ''}
@@ -58182,7 +58404,7 @@ function openDictWord(k) {
       ${v.note ? `<div style="font-size:.8rem;color:var(--muted);line-height:1.5;margin-top:12px;text-align:left">${escapeHTML(v.note)}</div>` : ''}
     </div>
     <div style="display:flex;gap:9px;margin-top:14px">
-      <button style="flex:1;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:14px;font:800 .82rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer" onclick="addStoryWordToDeck('${escapeJS(v.k)}','${escapeJS(v.e)}');showToast('Added to review ✓')">Add to review</button>
+      <button style="flex:1;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:14px;font:800 .82rem/1 'DM Sans',sans-serif;cursor:pointer" onclick="addStoryWordToDeck('${escapeJS(v.k)}','${escapeJS(v.e)}');showToast('Added to review ✓')">Add to review</button>
       <button style="flex:none;width:52px;background:var(--card);border:1px solid var(--border);border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer" onclick="shareDictWord('${escapeJS(v.k)}','${escapeJS(v.e)}')">⤴</button>
     </div>
   `;
@@ -58266,7 +58488,7 @@ function showFavourites() {
         <div class="review-word-ex">"${escapeHTML(v.ex)}"</div></div>
       <button class="fav-btn" onclick="removeFavByIndex(${i})">❤️</button>
     </div>`).join('') +
-    `<button onclick="renderPhrasebook()" style="margin-top:12px;width:100%;padding:10px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;cursor:pointer">← Back to all phrases</button>`;
+    `<button onclick="renderPhrasebook()" style="margin-top:12px;width:100%;padding:10px;background:var(--ocean);color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer">← Back to all phrases</button>`;
 }
 
 // ═══════════════════════════════════════════
@@ -58942,7 +59164,7 @@ function showSyncConflictDialog(cloudStateJson, updatedAt) {
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
   overlay.innerHTML = `
     <div style="background:var(--card);border-radius:var(--radius);padding:22px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
-      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.1rem;color:var(--ocean)">Two versions of your progress</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.1rem;color:var(--ocean)">Two versions of your progress</div>
       <div style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.5">This device has progress, and your account already has different progress (last synced ${escapeHTML(new Date(updatedAt).toLocaleDateString())}). Pick which one to keep — the other will be replaced.</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
         <button class="due-btn" onclick="resolveSyncConflict('device')">Keep this device — ${state.xp || 0} XP · ${state.streak || 0} day streak</button>
@@ -59088,14 +59310,14 @@ async function renderCommunity() {
 
   el.innerHTML = `
     <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:13px;padding-bottom:2px">
-      ${cats.map(([id, label]) => `<div onclick="setCommunityFilter('${id}')" style="flex:none;border-radius:99px;padding:7px 13px;font:800 .66rem/1 'Plus Jakarta Sans',sans-serif;cursor:pointer;${filter === id ? 'background:var(--ocean-2);color:#fff' : 'background:var(--card);border:1px solid var(--border);color:var(--ocean)'}">${label}</div>`).join('')}
+      ${cats.map(([id, label]) => `<div onclick="setCommunityFilter('${id}')" style="flex:none;border-radius:99px;padding:7px 13px;font:800 .66rem/1 'DM Sans',sans-serif;cursor:pointer;${filter === id ? 'background:var(--ocean-2);color:#fff' : 'background:var(--card);border:1px solid var(--border);color:var(--ocean)'}">${label}</div>`).join('')}
     </div>
     ${filter === 'all' || filter === 'proverbs' ? `
     <div style="position:relative;overflow:hidden;border-radius:var(--radius);padding:18px;color:#fff;background:var(--grad-sun);box-shadow:var(--shadow-coral);margin-bottom:13px">
-      <div style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.9">Proverb of the day</div>
-      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:1.15rem;line-height:1.3;margin-top:9px">${escapeHTML(pv.k)}</div>
+      <div style="font:800 .68rem/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.9">Proverb of the day</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.15rem;line-height:1.3;margin-top:9px">${escapeHTML(pv.k)}</div>
       <div style="font-size:.75rem;opacity:.92;font-style:italic;margin-top:5px">${escapeHTML(pv.e)}</div>
-      <button style="margin-top:12px;background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:8px 13px;font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;color:#fff;cursor:pointer" onclick="userHasInteracted=true;speakText('${escapeJS(pv.k)}',this)">▶ Play</button>
+      <button style="margin-top:12px;background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:8px 13px;font:800 .68rem/1 'DM Sans',sans-serif;color:#fff;cursor:pointer" onclick="userHasInteracted=true;speakText('${escapeJS(pv.k)}',this)">▶ Play</button>
     </div>` : ''}
     <div style="display:flex;flex-direction:column;gap:11px">
       ${shown.map(p => {
@@ -59103,7 +59325,7 @@ async function renderCommunity() {
         const likeCount = likeCounts[p.id] || 0;
         return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${communityAvatarColor(p.author)};color:#fff;display:flex;align-items:center;justify-content:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif">${communityInitials(p.author)}</div>
+            <div style="width:34px;height:34px;flex:none;border-radius:50%;background:${communityAvatarColor(p.author)};color:#fff;display:flex;align-items:center;justify-content:center;font:800 .72rem/1 'DM Sans',sans-serif">${communityInitials(p.author)}</div>
             <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.8rem">${escapeHTML(p.author)}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${communityTimeAgo(p.created_at)}</div></div>
           </div>
           <div style="font-size:.85rem;line-height:1.55;margin-top:10px">${escapeHTML(p.body)}</div>
@@ -59117,8 +59339,8 @@ async function renderCommunity() {
     <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;box-shadow:var(--shadow);margin-top:13px;cursor:pointer" onclick="showTab('reading');showReadTab('music')">
       <div style="width:52px;height:52px;flex:none;border-radius:14px;background:repeating-linear-gradient(135deg,var(--bg) 0 7px,var(--card) 7px 14px);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem">🎵</div>
       <div style="flex:1;min-width:0">
-        <div style="font:800 .66rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">This week's playlist</div>
-        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:.95rem;color:var(--ocean);margin-top:3px">Learn songs & lyrics</div>
+        <div style="font:800 .66rem/1 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">This week's playlist</div>
+        <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:.95rem;color:var(--ocean);margin-top:3px">Learn songs & lyrics</div>
         <div style="font-size:.7rem;color:var(--muted);margin-top:1px">${MUSIC_VOCAB.length} key words from Cape Verdean music</div>
       </div>
       <div style="font-size:1rem;color:var(--ocean-2)">›</div>
@@ -60124,7 +60346,7 @@ function openVerb(inf) {
     <button class="back-btn" style="margin-bottom:14px" onclick="renderVerbList()">←</button>
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.6rem;color:var(--ocean);font-weight:700">${escapeHTML(verb.inf)}</div>
+        <div style="font-family:'Fraunces',Georgia,serif;font-size:1.6rem;color:var(--ocean);font-weight:700">${escapeHTML(verb.inf)}</div>
         <button class="speak-btn" style="margin:0;font-size:1.1rem" onclick="userHasInteracted=true;speakText('${escapeJS(verb.inf)}',this)">🔊</button>
       </div>
       <div style="font-size:.9rem;color:var(--muted);font-style:italic;margin-bottom:18px">${escapeHTML(verb.e)}</div>
@@ -60165,7 +60387,7 @@ function openWritingPrompt(i) {
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="font-size:2rem">${p.icon}</div>
-        <div><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.3rem;color:var(--ocean);font-weight:700">${p.title}</div>
+        <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--ocean);font-weight:700">${p.title}</div>
         <span class="s-level level-${p.level}">${p.level}</span></div>
       </div>
       <div class="g-intro">📝 ${escapeHTML(p.task)}</div>
@@ -60276,7 +60498,7 @@ function openGrammar(id) {
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
         <div style="font-size:2.2rem">${g.icon}</div>
-        <div><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${g.title}</div>
+        <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${g.title}</div>
         <div style="font-size:.82rem;color:var(--muted)">${g.sub}</div></div>
       </div>
       <div class="g-intro">${escapeHTML(g.intro)}</div>
@@ -61312,7 +61534,7 @@ KR_READING_PASSAGES.push(
 
 let dlgPlaying = false;
 function renderDialogueCards() {
-  return `<div style="font-weight:800;color:var(--ocean);margin:4px 0 10px">🎧 Dialogues — listen & answer</div>`
+  return `<div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.1rem;color:var(--text);margin:4px 0 10px">Dialogues — listen and answer</div>`
     + DIALOGUES.map(d => {
       const done = (state.dialoguesDone || []).includes(d.id);
       const opener = DLG_LONGFORM_IDS.includes(d.id) ? `openLongform('${d.id}')` : `openDialogue('${d.id}')`;
@@ -61781,7 +62003,7 @@ function lfRenderReader(d, meta) {
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:10px">${d.titleE} · ${d.level}</div>
     <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
       <div style="flex:1;height:5px;border-radius:99px;background:var(--border);overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--grad-ocean);width:${pct}%"></div></div>
-      <div style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;color:var(--muted);flex:none">${st.at + 1} / ${n}</div>
+      <div style="font:800 .68rem/1 'DM Sans',sans-serif;color:var(--muted);flex:none">${st.at + 1} / ${n}</div>
       <div class="dict-chip${st.showEn ? ' active' : ''}" style="flex:none" onclick="lfToggleEn()">EN</div>
     </div>
     <div class="lab-card">
@@ -61822,7 +62044,7 @@ function lfRenderRecap(d, meta) {
       ${r.beats.map(b => `<div style="display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)">
         <div style="width:10px;height:10px;flex:none;border-radius:50%;margin-top:5px;background:${b.tone}"></div>
         <div style="min-width:0">
-          <div style="font:800 .68rem/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:${b.tone}">${escapeHTML(b.sp)}</div>
+          <div style="font:800 .68rem/1 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:${b.tone}">${escapeHTML(b.sp)}</div>
           <div style="font-size:.85rem;margin-top:3px">${escapeHTML(b.t)}</div>
           <div style="font-size:.72rem;color:var(--muted);font-style:italic;margin-top:3px">${escapeHTML(b.move)}</div>
         </div>
@@ -62099,7 +62321,7 @@ function openListening(id) {
   det.style.display = 'block';
   det.innerHTML = `
     <button class="back-btn" style="margin-bottom:14px" onclick="stopListeningExercise();renderListeningList()">←</button>
-    <h2 style="font-family:'Bricolage Grotesque',sans-serif;margin:0 0 4px">${l.icon || '🎧'} ${l.title}</h2>
+    <h2 style="font-family:'Fraunces',Georgia,serif;margin:0 0 4px">${l.icon || '🎧'} ${l.title}</h2>
     <div style="font-size:.82rem;color:var(--muted);margin-bottom:4px">${l.titleE} · ${l.level}</div>
     <div style="font-size:.85rem;margin-bottom:14px">${l.intro || ''}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
@@ -62230,7 +62452,7 @@ function openShadow(id) {
     <button class="back-btn" style="margin-bottom:14px" onclick="renderShadowList()">←</button>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
       <div style="font-size:2rem">${set.icon}</div>
-      <div><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.3rem;color:var(--ocean);font-weight:700">${set.title}</div>
+      <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--ocean);font-weight:700">${set.title}</div>
       <span class="s-level level-${set.level}">${set.level}</span></div>
     </div>
     <div style="font-size:.78rem;color:var(--muted);margin-bottom:16px">For each phrase: tap ▶ to listen, then tap 🎤 and repeat it out loud. Match the rhythm and speed you hear.</div>
@@ -62332,7 +62554,7 @@ function renderMusic() {
         </div>`;
       }).join('')}
       </div>
-      <div class="music-more" onclick="toggleMusicSongs(${ai})" style="margin-top:9px;text-align:center;font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;color:var(--ocean-2);cursor:pointer">Show ${a.songs.length} song${a.songs.length === 1 ? '' : 's'} ▾</div>
+      <div class="music-more" onclick="toggleMusicSongs(${ai})" style="margin-top:9px;text-align:center;font:800 .72rem/1 'DM Sans',sans-serif;color:var(--ocean-2);cursor:pointer">Show ${a.songs.length} song${a.songs.length === 1 ? '' : 's'} ▾</div>
     </div>`).join('');
 }
 // Direct Spotify link + embed URL for a song with a checked track or album id
@@ -62443,12 +62665,12 @@ function openStory(id) {
     <div class="story-detail-card">
       <div class="story-cover">${story.icon}</div>
       <div style="text-align:center;margin-top:10px">
-        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${story.title}</div>
+        <div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${story.title}</div>
         <div style="font-size:.82rem;color:var(--muted);font-style:italic">${story.titleE}</div>
       </div>
       <div class="story-player">
         <div class="story-progress-wrap"><div class="story-progress-fill" id="story-progress-fill" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;font:700 .68rem/1 'Plus Jakarta Sans',sans-serif;color:var(--muted);margin-top:5px">
+        <div style="display:flex;justify-content:space-between;font:700 .68rem/1 'DM Sans',sans-serif;color:var(--muted);margin-top:5px">
           <span id="story-progress-label">Line 1 / ${story.lines.length}</span>
           <span id="story-rate-label">1×</span>
         </div>
