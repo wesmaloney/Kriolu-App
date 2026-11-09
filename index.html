@@ -32,6 +32,8 @@
       --border:  #EADFCF;
       --white:   #FFFDF8;
       --correct: #237A57; --wrong:#C42F3B;
+      --accent-text:#0A4D68;
+      --ok-bg:#DDF0E6; --ok-fg:#1B6B4C; --bad-bg:#FBE3DF; --bad-fg:#A3262F;
 
       --bg:      #FBF4EA;   /* sand */
       --card:    #FFFDF8;   /* cream */
@@ -49,11 +51,14 @@
     }
     [data-theme="dark"] {
       --ocean:#0E5878; --ocean-2:#5FA3C0; --sky:#8CC3D6;
-      --coral:#E07A5F; --gold:#F2B33D;
+      --gold:#F2B33D;
       --sand:#1A1612; --bg:#15120F; --card:#1F1B17; --nav:rgba(31,27,23,.94);
       --text:#F3ECE2; --muted:#B0A596; --border:#352E27;
       --white:#1F1B17; --cream:#1F1B17;
       --correct:#5CC497; --wrong:#F07A7F;
+      --accent-text:#8CC3D6;
+      --ok-bg:#183A2C; --ok-fg:#8FDDB8; --bad-bg:#43211F; --bad-fg:#F6A9A5;
+      --coral:#CF5B43;
       --shadow:  0 1px 2px rgba(0,0,0,.30), 0 4px 14px rgba(0,0,0,.30);
       --shadow-lg:0 2px 8px rgba(0,0,0,.40), 0 20px 48px rgba(0,0,0,.50);
       --grad-ocean: linear-gradient(135deg, #0E5878 0%, #0E5878 100%);
@@ -74,18 +79,18 @@
        breaks composited scrolling on Android Chrome). */
     body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
       background:
-        radial-gradient(ellipse 70% 40% at 10% 0%, rgba(255,193,94,.28), transparent 55%),
-        radial-gradient(ellipse 95% 55% at 92% 6%, rgba(5,191,219,.32), transparent 60%),
-        radial-gradient(ellipse 85% 50% at 50% 45%, rgba(8,131,149,.18), transparent 65%),
-        radial-gradient(ellipse 100% 55% at 100% 100%, rgba(255,107,53,.20), transparent 60%),
+        radial-gradient(ellipse 70% 40% at 10% 0%, rgba(242,179,61,.28), transparent 55%),
+        radial-gradient(ellipse 95% 55% at 92% 6%, rgba(10,77,104,.32), transparent 60%),
+        radial-gradient(ellipse 85% 50% at 50% 45%, rgba(10,77,104,.18), transparent 65%),
+        radial-gradient(ellipse 100% 55% at 100% 100%, rgba(200,85,61,.20), transparent 60%),
         radial-gradient(ellipse 95% 55% at 0% 96%, rgba(10,77,104,.26), transparent 62%),
         linear-gradient(180deg, #E3F1F7 0%, #EAF3F6 45%, #DFEEF4 100%)}
     [data-theme="dark"] body::before{
       background:
-        radial-gradient(ellipse 70% 40% at 10% 0%, rgba(255,193,94,.10), transparent 55%),
-        radial-gradient(ellipse 95% 55% at 92% 6%, rgba(34,211,238,.16), transparent 60%),
-        radial-gradient(ellipse 85% 50% at 50% 45%, rgba(14,116,144,.20), transparent 65%),
-        radial-gradient(ellipse 100% 55% at 100% 100%, rgba(255,107,53,.10), transparent 60%),
+        radial-gradient(ellipse 70% 40% at 10% 0%, rgba(242,179,61,.10), transparent 55%),
+        radial-gradient(ellipse 95% 55% at 92% 6%, rgba(140,195,214,.16), transparent 60%),
+        radial-gradient(ellipse 85% 50% at 50% 45%, rgba(10,77,104,.20), transparent 65%),
+        radial-gradient(ellipse 100% 55% at 100% 100%, rgba(200,85,61,.10), transparent 60%),
         radial-gradient(ellipse 95% 55% at 0% 96%, rgba(5,40,60,.6), transparent 62%),
         linear-gradient(180deg, #0A1119 0%, #0C141E 50%, #090F16 100%)}
     /* Ambient background texture — subtle ocean depth */
@@ -124,10 +129,10 @@
     [data-theme="dark"] .stat-card .value{color:var(--sky)}
     .nav-tab:hover{color:var(--ocean-2)}
     .reveal-btn:hover,.submit-btn:hover,.start-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
-    .next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(255,107,53,.42)}
+    .next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(200,85,61,.42)}
     .reveal-btn:active,.submit-btn:active,.next-btn:active,.start-btn:active{transform:translateY(0)}
-    .nav-tab.active{color:var(--ocean);background:rgba(8,131,149,.12);box-shadow:inset 0 0 0 1px rgba(8,131,149,.18)}
-    [data-theme="dark"] .nav-tab.active{color:var(--sky);background:rgba(34,211,238,.13);box-shadow:inset 0 0 0 1px rgba(34,211,238,.22)}
+    .nav-tab.active{color:var(--ocean);background:rgba(10,77,104,.12);box-shadow:inset 0 0 0 1px rgba(10,77,104,.18)}
+    [data-theme="dark"] .nav-tab.active{color:var(--sky);background:rgba(140,195,214,.13);box-shadow:inset 0 0 0 1px rgba(140,195,214,.22)}
 
     /* ── BOTTOM NAV ── */
     #bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:150;display:flex;background:rgba(255,255,255,.92);border-top:1px solid var(--border);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);padding-bottom:env(safe-area-inset-bottom)}
@@ -185,7 +190,7 @@
     .xp-label{font-size:.75rem;margin-top:5px;opacity:.85}
     .weekly-goal-bar{margin-top:10px}
     .weekly-goal-wrap{background:rgba(255,255,255,.2);border-radius:99px;height:7px;overflow:hidden;margin-top:4px}
-    .weekly-goal-fill{height:100%;background:#A8EDEA;border-radius:99px;transition:width .6s ease}
+    .weekly-goal-fill{height:100%;background:var(--sky);border-radius:99px;transition:width .6s ease}
     .weekly-day-strip{display:flex;gap:5px;margin-top:10px}
     .wds-cell{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
     .wds-bar{width:100%;height:6px;border-radius:99px;background:rgba(255,255,255,.22)}
@@ -300,9 +305,9 @@
     .lf-text-current{font-weight:700;font-size:1rem;color:var(--text)}
     .lf-en{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.5}
     .lf-turn-badge{display:flex;align-items:center;gap:7px;margin-top:9px;background:#FFF4E0;border-radius:9px;padding:8px 11px;font:800 .68rem/1.4 'DM Sans',sans-serif;letter-spacing:.03em;text-transform:uppercase;color:#8A5A0B}
-    [data-theme="dark"] .lf-turn-badge{background:rgba(255,193,94,.12);color:var(--gold)}
+    [data-theme="dark"] .lf-turn-badge{background:rgba(242,179,61,.12);color:var(--gold)}
     .lf-insight{background:#E2EDDC;color:#33552F}
-    [data-theme="dark"] .lf-insight{background:rgba(46,196,182,.12);color:var(--sky)}
+    [data-theme="dark"] .lf-insight{background:rgba(47,143,107,.12);color:var(--sky)}
     .dlg-bubble{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 13px;max-width:80%}
     .dlg-speaker{font-size:.68rem;font-weight:800;color:var(--ocean)}
     .dlg-text{font-weight:700}
@@ -311,8 +316,8 @@
     .track-card.active{opacity:1}
     .track-card-kr{background:var(--grad-ocean)}
     .track-card-kr.active{box-shadow:0 0 0 3px var(--sky),0 8px 24px rgba(10,77,104,.2)}
-    .track-card-pt{background:linear-gradient(135deg,#E76F51,#FFC15E)}
-    .track-card-pt.active{box-shadow:0 0 0 3px #FF6B35,0 8px 24px rgba(255,107,53,.22)}
+    .track-card-pt{background:linear-gradient(135deg,var(--coral),var(--gold))}
+    .track-card-pt.active{box-shadow:0 0 0 3px var(--coral),0 8px 24px rgba(200,85,61,.22)}
     .track-card-eyebrow{font:800 .68rem/1 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
     .track-card-title{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.6rem;margin-top:8px}
     .track-card-sub{font-size:.78rem;opacity:.9;margin-top:3px}
@@ -396,7 +401,7 @@
     .mission-words{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
     .mission-chip{display:inline-flex;flex-direction:column;border:1.5px dashed var(--border);border-radius:10px;padding:4px 9px;font-size:.82rem;font-weight:700;color:var(--text)}
     .mission-chip small{font-size:.66rem;font-weight:600;color:var(--muted)}
-    .mission-chip.used{border-style:solid;border-color:var(--correct);background:rgba(20,184,166,.12)}
+    .mission-chip.used{border-style:solid;border-color:var(--correct);background:rgba(47,143,107,.12)}
     .about-row{display:flex;gap:8px;align-items:flex-start}
     .about-row .wc-textarea{flex:1}
     .mic-btn.listening{background:var(--coral);color:#fff}
@@ -409,7 +414,7 @@
     .fix-tokens{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
     .fix-tok{border:2px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:7px 10px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit}
     .fix-tok:hover:not(:disabled){border-color:var(--sky)}
-    .fix-tok.fix-err{border-color:var(--correct);background:rgba(20,184,166,.14)}
+    .fix-tok.fix-err{border-color:var(--correct);background:rgba(47,143,107,.14)}
     .fix-tok.fix-miss{border-color:var(--wrong);background:rgba(239,71,87,.12)}
     .odd-reveal{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:.85rem;line-height:1.6;text-align:left}
     .odd-tag{font-size:.68rem;font-weight:800;text-transform:uppercase;color:var(--coral);margin-left:4px}
@@ -421,8 +426,8 @@
     .speed-fill{height:100%;width:100%;background:var(--grad-sun);transition:width .2s linear}
     .ladder-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px}
     .ladder-bar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--border);gap:2px}
-    .ladder-seg.r4,.ladder-legend i.r4{background:#14B8A6}.ladder-seg.r3,.ladder-legend i.r3{background:#05BFDB}
-    .ladder-seg.r2,.ladder-legend i.r2{background:#FFC15E}.ladder-seg.r1,.ladder-seg.r0,.ladder-legend i.r1{background:#FF8C5A}
+    .ladder-seg.r4,.ladder-legend i.r4{background:var(--green)}.ladder-seg.r3,.ladder-legend i.r3{background:var(--sky)}
+    .ladder-seg.r2,.ladder-legend i.r2{background:var(--gold)}.ladder-seg.r1,.ladder-seg.r0,.ladder-legend i.r1{background:#FF8C5A}
     .ladder-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.74rem;color:var(--muted);margin-top:8px}
     .ladder-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
     .ladder-note{font-size:.74rem;color:var(--muted);margin-top:6px}
@@ -446,7 +451,7 @@
     .anat-what{--ac:#5B3E96}.anat-where,.anat-to{--ac:#8A5A0B}.anat-how{--ac:#0E7490}.anat-when{--ac:#087083}.anat-joins{--ac:#5E6B78}
     [data-theme="dark"] .anat-who{--ac:#6CC4F0}[data-theme="dark"] .anat-tense,[data-theme="dark"] .anat-aspect{--ac:#FF9466}
     [data-theme="dark"] .anat-not{--ac:#FF7A7A}[data-theme="dark"] .anat-action{--ac:#3DDBB9}[data-theme="dark"] .anat-what{--ac:#C0AEFF}
-    [data-theme="dark"] .anat-where,[data-theme="dark"] .anat-to{--ac:#F5C063}[data-theme="dark"] .anat-how{--ac:#22D3EE}
+    [data-theme="dark"] .anat-where,[data-theme="dark"] .anat-to{--ac:#F5C063}[data-theme="dark"] .anat-how{--ac:var(--sky)}
     [data-theme="dark"] .anat-when{--ac:#6EE7D7}[data-theme="dark"] .anat-joins{--ac:#A4B1BE}
     .anat-en{font-size:.8rem;color:var(--muted);margin-top:8px;font-style:italic}
     .anat-why{margin:10px 0 0;padding-left:18px;font-size:.83rem;line-height:1.5;color:var(--text)}
@@ -458,7 +463,7 @@
     .lab-example{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--bg);border-radius:12px;margin-top:7px}
     .lab-mistake{display:flex;align-items:flex-start;gap:10px;border-left:3px solid var(--gold);background:#FFF8E7;border-radius:0 12px 12px 0;padding:12px 14px;margin-top:14px;font-size:.82rem;line-height:1.55;color:var(--text)}
     .lab-mistake-icon{font-size:.95rem;flex-shrink:0}
-    [data-theme="dark"] .lab-mistake{background:rgba(255,193,94,.12);color:var(--text)}
+    [data-theme="dark"] .lab-mistake{background:rgba(242,179,61,.12);color:var(--text)}
     .lab-speak{background:none;border:none;cursor:pointer;font-size:1.1rem;flex-shrink:0;opacity:.7;transition:opacity .15s,transform .15s}
     .lab-speak:hover{opacity:1;transform:scale(1.15)}
     .lab-ex-k{font-weight:700;color:var(--text);font-size:.95rem}
@@ -481,7 +486,7 @@
     .stage-item:last-child::before{bottom:50%}
     .stage-dot{width:36px;height:36px;border-radius:50%;background:var(--bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;position:relative;z-index:1;transition:all .2s}
     .stage-item.done .stage-dot{background:var(--green);border-color:var(--green);color:#fff;font-weight:800}
-    .stage-item.active .stage-dot{background:var(--grad-sun);border-color:transparent;color:#fff;box-shadow:0 0 0 4px rgba(255,107,53,.18);animation:pulse 1.6s ease-in-out infinite}
+    .stage-item.active .stage-dot{background:var(--grad-sun);border-color:transparent;color:#fff;box-shadow:0 0 0 4px rgba(200,85,61,.18);animation:pulse 1.6s ease-in-out infinite}
     .stage-label{font-weight:700;font-size:.92rem;color:var(--text);flex:1}
     .stage-item.done .stage-label{color:var(--muted)}
     .stage-item.active .stage-label{color:var(--ocean)}
@@ -498,29 +503,29 @@
     .hear-btn{background:var(--bg);border:2px solid var(--sky);color:var(--ocean);border-radius:99px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;margin-bottom:14px;transition:all .15s}
     .hear-btn:hover{background:var(--sky);color:#fff}
     .g-point-pron{font-size:.82rem;font-weight:800;color:var(--coral);letter-spacing:.03em;margin-bottom:3px}
-    .wp-pron{font-size:.78rem;color:#A8EDEA;font-weight:700;letter-spacing:.03em;margin:1px 0}
+    .wp-pron{font-size:.78rem;color:var(--sky);font-weight:700;letter-spacing:.03em;margin:1px 0}
     .translation-reveal{font-family:'Fraunces',Georgia,serif;font-size:1.8rem;color:var(--correct);font-weight:700;margin-bottom:10px}
     .reveal-btn{margin-top:14px;padding:11px 28px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(10,77,104,.28)}
     .reveal-btn:hover{background:var(--sky)}
     .fc-actions{display:flex;gap:10px;justify-content:center;margin-top:16px}
     .fc-btn{flex:1;max-width:160px;padding:12px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;transition:transform .15s}
     .fc-btn:hover{transform:scale(1.04)}
-    .fc-btn.wrong{background:#FFE0E3;color:var(--wrong)}
-    .fc-btn.correct{background:#DDF0E6;color:var(--correct)}
+    .fc-btn.wrong{background:var(--bad-bg);color:var(--wrong)}
+    .fc-btn.correct{background:var(--ok-bg);color:var(--correct)}
 
     /* Multiple choice */
     .choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .choice-btn{padding:15px 10px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;color:var(--text)}
     .choice-btn:not(:disabled):active{transform:scale(.97);border-color:var(--ocean-2)}
     .choice-btn:hover:not(:disabled){border-color:var(--ocean-2);background:color-mix(in srgb,var(--ocean) 6%,var(--card))}
-    .choice-btn.selected-correct{background:#DDF0E6;border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
-    .choice-btn.selected-wrong{background:#FFE0E3;border-color:var(--wrong);color:var(--wrong);animation:shake-x .4s ease}
-    .choice-btn.reveal-correct{background:#DDF0E6;border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
+    .choice-btn.selected-correct{background:var(--ok-bg);border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
+    .choice-btn.selected-wrong{background:var(--bad-bg);border-color:var(--wrong);color:var(--wrong);animation:shake-x .4s ease}
+    .choice-btn.reveal-correct{background:var(--ok-bg);border-color:var(--correct);color:var(--correct);animation:pop-in .35s ease}
     .choice-btn:disabled{cursor:default;opacity:.62}
     /* Dark mode: pale pastel chips read poorly on a dark screen, so answered
        choices use a tinted fill with bright text instead. */
     [data-theme="dark"] .choice-btn.selected-correct,
-    [data-theme="dark"] .choice-btn.reveal-correct{background:rgba(20,184,166,.20);border-color:var(--correct);color:#5EEAD4}
+    [data-theme="dark"] .choice-btn.reveal-correct{background:rgba(47,143,107,.20);border-color:var(--correct);color:#5EEAD4}
     [data-theme="dark"] .choice-btn.selected-wrong{background:rgba(239,71,87,.20);border-color:var(--wrong);color:#FF9AA8}
     /* an answered question keeps the learner's choice fully visible */
     .choice-btn:disabled.selected-correct,
@@ -530,8 +535,8 @@
     /* Type answer */
     .type-input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
     .type-input:focus{border-color:var(--sky)}
-    .type-input.correct-ans{border-color:var(--correct);background:#DDF0E6}
-    .type-input.wrong-ans{border-color:var(--wrong);background:#FFE0E3}
+    .type-input.correct-ans{border-color:var(--correct);background:var(--ok-bg)}
+    .type-input.wrong-ans{border-color:var(--wrong);background:var(--bad-bg)}
     .submit-btn{margin-top:10px;width:100%;padding:14px;background:var(--grad-ocean);color:#fff;border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(10,77,104,.28)}
     .submit-btn:hover{background:var(--sky)}
     .submit-btn:disabled{background:var(--border);color:var(--muted);cursor:default}
@@ -540,9 +545,9 @@
     .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .match-col{display:flex;flex-direction:column;gap:8px}
     .match-btn{padding:12px 10px;border:2px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;text-align:center;background:var(--bg);color:var(--text);transition:all .15s}
-    .match-btn.selected{border-color:var(--ocean);background:#EEF8FC;color:var(--ocean)}
-    .match-btn.matched-correct{border-color:var(--correct);background:#DDF0E6;color:var(--correct);cursor:default}
-    .match-btn.matched-wrong{border-color:var(--wrong);background:#FFE0E3;color:var(--wrong)}
+    .match-btn.selected{border-color:var(--ocean);background:color-mix(in srgb,var(--ocean) 7%,var(--card));color:var(--ocean)}
+    .match-btn.matched-correct{border-color:var(--correct);background:var(--ok-bg);color:var(--correct);cursor:default}
+    .match-btn.matched-wrong{border-color:var(--wrong);background:var(--bad-bg);color:var(--wrong)}
     .match-btn:disabled{cursor:default}
 
     /* Listening */
@@ -563,8 +568,8 @@
     .skip-btn{display:block;margin:14px auto 0;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;text-decoration:underline;padding:6px 12px}
     .skip-btn:hover{color:var(--ocean)}
     .speak-result{padding:10px 16px;border-radius:12px;font-weight:700;font-size:.9rem;margin-top:8px}
-    .speak-result.good{background:#DDF0E6;color:#1A7A6E}
-    .speak-result.bad{background:#FFE0E3;color:#A0222C}
+    .speak-result.good{background:var(--ok-bg);color:var(--ok-fg)}
+    .speak-result.bad{background:var(--bad-bg);color:var(--bad-fg)}
     .self-assess-row{display:flex;gap:10px;justify-content:center;margin-top:14px}
 
     /* Sentence builder */
@@ -579,16 +584,16 @@
     /* Feedback */
     .feedback-bar{padding:14px 20px;border-radius:12px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px;margin-bottom:10px;animation:slideUp .2s ease}
     @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-    .feedback-bar.correct{background:#DDF0E6;color:#1A7A6E}
-    .feedback-bar.wrong{background:#FFE0E3;color:#A0222C}
+    .feedback-bar.correct{background:var(--ok-bg);color:var(--ok-fg)}
+    .feedback-bar.wrong{background:var(--bad-bg);color:var(--bad-fg)}
     .skill-why{border-radius:12px;padding:13px 15px;margin-top:10px;font-size:.85rem;line-height:1.55}
     .skill-why-label{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
     .skill-why-text{margin-top:6px}
-    .skill-why.correct{background:#DDF0E6;color:#1A7A6E}
+    .skill-why.correct{background:var(--ok-bg);color:var(--ok-fg)}
     .skill-why.wrong{background:#FFF4E0;color:#4A3208}
     .marker-key{display:flex;flex-direction:column;gap:6px;margin-top:10px}
     .marker-key-row{display:flex;align-items:baseline;gap:10px;background:var(--bg);border-radius:10px;padding:9px 12px;font-size:.82rem}
-    .marker-key-row.active{background:#DDF0E6;color:#1A7A6E}
+    .marker-key-row.active{background:var(--ok-bg);color:var(--ok-fg)}
     .marker-key-m{font-weight:800;font-size:.82rem;width:56px;flex-shrink:0}
     .checkpoint-topics-label{font-weight:800;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
     .checkpoint-topics{display:flex;flex-direction:column;gap:9px;margin-top:11px}
@@ -614,7 +619,7 @@
     .dc-history-text{flex:1;font-size:.8rem;font-weight:700}
     .next-btn{width:100%;padding:15px;background:var(--grad-sun);color:#fff;border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:var(--shadow-coral)}
     .next-btn:active{transform:scale(.97)}
-    .next-btn:hover{background:#E85A25}
+    .next-btn:hover{background:#B44A34}
 
     /* ── RESULTS ── */
     .results-card{background:var(--card);border-radius:var(--radius);padding:32px 24px;box-shadow:var(--shadow);text-align:center}
@@ -628,16 +633,16 @@
     .results-btn{display:block;width:100%;padding:14px;border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:8px;transition:transform .15s,box-shadow .2s}
     .results-btn:active{transform:scale(.97)}
     .results-btn.primary{background:var(--grad-sun);color:#fff;box-shadow:var(--shadow-coral)}
-    .results-btn.primary:hover{background:#E85A25}
+    .results-btn.primary:hover{background:#B44A34}
     .results-btn.secondary{background:var(--bg);color:var(--ocean)}
-    .new-badge-pop{background:linear-gradient(135deg,#F4A261,#E76F51);color:#fff;border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;animation:fadeIn .4s ease}
+    .new-badge-pop{background:linear-gradient(135deg,var(--gold),var(--coral));color:#fff;border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;animation:fadeIn .4s ease}
     .new-badge-pop .badge-icon-lg{font-size:2rem}
     .new-badge-pop .badge-text{text-align:left}
     .new-badge-pop .badge-text b{font-size:1rem;display:block}
     .new-badge-pop .badge-text span{font-size:.8rem;opacity:.9}
 
     /* Floating badge toast */
-    .badge-toast{position:fixed;top:auto;bottom:96px;left:50%;transform:translate(-50%,14px);background:linear-gradient(135deg,#F4A261,#E76F51);color:#fff;border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:12px;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,.3);opacity:0;transition:all .35s ease;max-width:90vw}
+    .badge-toast{position:fixed;top:auto;bottom:96px;left:50%;transform:translate(-50%,14px);background:linear-gradient(135deg,var(--gold),var(--coral));color:#fff;border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:12px;z-index:500;box-shadow:0 8px 32px rgba(0,0,0,.3);opacity:0;transition:all .35s ease;max-width:90vw}
     .badge-toast.show{opacity:1;transform:translate(-50%,0)}
     .xp-toast{position:fixed;top:auto;bottom:96px;left:50%;transform:translate(-50%,10px);background:var(--grad-sun);color:#fff;font-weight:750;font-size:.92rem;line-height:1.35;text-align:center;border-radius:14px;padding:10px 18px;max-width:min(86vw,400px);z-index:550;box-shadow:0 8px 28px rgba(231,111,81,.34);opacity:0;transition:opacity .3s var(--ease),transform .3s var(--ease);pointer-events:none}
     .xp-toast.show{opacity:1;transform:translate(-50%,0)}
@@ -740,7 +745,7 @@
     /* ── PURPOSEFUL ANIMATIONS ── */
     @keyframes pop-in{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
     @keyframes shake-x{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
-    @keyframes correct-glow{0%{box-shadow:0 0 0 0 rgba(20,184,166,.5)}100%{box-shadow:0 0 0 14px rgba(20,184,166,0)}}
+    @keyframes correct-glow{0%{box-shadow:0 0 0 0 rgba(47,143,107,.5)}100%{box-shadow:0 0 0 14px rgba(47,143,107,0)}}
     @keyframes flame-flicker{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.12) rotate(2deg)}}
     @keyframes count-up{0%{transform:translateY(8px) scale(.9);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
     @keyframes xp-float{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-44px) scale(1.25);opacity:0}}
@@ -786,7 +791,7 @@
     .antonio-hero-avatar{position:relative;cursor:pointer}
     .antonio-hero-avatar .antonio-listening-ring{display:block}
     .antonio-wave{display:flex;align-items:flex-end;justify-content:center;gap:3px;height:26px;margin-top:12px}
-    .wave-bar{width:3px;height:5px;border-radius:99px;background:rgba(8,131,149,.3);transition:height .15s}
+    .wave-bar{width:3px;height:5px;border-radius:99px;background:rgba(10,77,104,.3);transition:height .15s}
     .antonio-hero:has(.antonio.talking) .wave-bar,
     .antonio-hero:has(.antonio.listening) .wave-bar{background:var(--coral);animation:wave-bounce .8s ease-in-out infinite}
     .wave-bar:nth-child(odd){animation-delay:.15s}
@@ -823,7 +828,7 @@
     }
     .chat-input-row{display:flex;gap:8px;align-items:center;min-width:0}
     .mic-btn{width:44px;height:44px;background:var(--bg);border:2px solid var(--border);border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;color:var(--text)}
-    .mic-btn.listening{background:#FFE0E3;border-color:var(--wrong);animation:pulse 0.8s infinite}
+    .mic-btn.listening{background:var(--bad-bg);border-color:var(--wrong);animation:pulse 0.8s infinite}
     .chat-input{flex:1 1 0;min-width:0;padding:11px 16px;border:2px solid var(--border);border-radius:99px;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;background:var(--bg);color:var(--text)}
     .chat-input:focus{border-color:var(--sky)}
     .send-btn{width:44px;height:44px;background:var(--ocean);color:#fff;border:none;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
@@ -913,14 +918,14 @@
     .story-card .s-title{font-weight:800;font-size:1rem;color:var(--text)}
     .story-card .s-titleE{font-size:.78rem;color:var(--muted);font-style:italic}
     .story-card .s-level{font-size:.68rem;font-weight:800;text-transform:uppercase;padding:2px 8px;border-radius:99px;margin-top:4px;display:inline-block}
-    .level-A1{background:#DDF0E6;color:#1A7A6E}
+    .level-A1{background:var(--ok-bg);color:var(--ok-fg)}
     .level-A2{background:#D8F0E4;color:#1F7A57}
     .level-B1{background:#FFF0D9;color:#A66A1E}
-    .level-B2{background:#FFE0E3;color:#A0222C}
-    .level-Beginner{background:#DDF0E6;color:#1A7A6E}
+    .level-B2{background:var(--bad-bg);color:var(--bad-fg)}
+    .level-Beginner{background:var(--ok-bg);color:var(--ok-fg)}
     .level-Intermediate{background:#FFF0D9;color:#A66A1E}
-    .level-Advanced{background:#FFE0E3;color:#A0222C}
-.level-C1{background:#FFE0E3;color:#A0222C}
+    .level-Advanced{background:var(--bad-bg);color:var(--bad-fg)}
+.level-C1{background:var(--bad-bg);color:var(--bad-fg)}
     .level-chip{display:inline-block;font-size:.7rem;font-weight:800;padding:1px 6px;border-radius:99px;
       background:var(--border);color:var(--muted);vertical-align:middle;margin-left:4px}
     .story-detail-card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
@@ -950,18 +955,18 @@
     .ex-meaning{font-size:.82rem;color:var(--muted);font-style:italic;margin-top:6px;line-height:1.45}
     .song-focus{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px}
     .song-focus .sf-label{font-size:.7rem;font-weight:800;color:var(--muted)}
-    .sf-chip{background:rgba(8,131,149,.10);border:1px solid var(--border);color:var(--ocean);font-family:'DM Sans',sans-serif;
+    .sf-chip{background:rgba(10,77,104,.10);border:1px solid var(--border);color:var(--ocean);font-family:'DM Sans',sans-serif;
       font-size:.7rem;font-weight:700;padding:4px 9px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:transform .15s}
     .sf-chip:active{transform:scale(.95)}
-    [data-theme="dark"] .sf-chip{color:var(--sky);background:rgba(34,211,238,.12);border-color:rgba(34,211,238,.22)}
+    [data-theme="dark"] .sf-chip{color:var(--sky);background:rgba(140,195,214,.12);border-color:rgba(140,195,214,.22)}
     .verb-tap{text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
     /* Home "designed" blocks — sea-glass gradient sheen + faint watermark, matching
        the hero & streak cards' visual language */
-    .home-block{position:relative;overflow:hidden;background:linear-gradient(150deg,rgba(8,131,149,.13),rgba(5,191,219,.05) 55%,rgba(0,0,0,0) 80%),var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px 18px;box-shadow:var(--shadow);margin-bottom:16px}
+    .home-block{position:relative;overflow:hidden;background:linear-gradient(150deg,rgba(10,77,104,.13),rgba(10,77,104,.05) 55%,rgba(0,0,0,0) 80%),var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px 18px;box-shadow:var(--shadow);margin-bottom:16px}
     .home-block::after{content:attr(data-wm);position:absolute;right:-10px;bottom:-20px;font-size:4.8rem;opacity:.09;pointer-events:none;line-height:1}
     .home-block>*{position:relative;z-index:1}
     .hb-title{font-weight:800;font-size:.88rem;color:var(--ocean)}
-    [data-theme="dark"] .home-block{background:linear-gradient(150deg,rgba(34,211,238,.10),rgba(14,116,144,.05) 55%,rgba(0,0,0,0) 80%),var(--card)}
+    [data-theme="dark"] .home-block{background:linear-gradient(150deg,rgba(140,195,214,.10),rgba(10,77,104,.05) 55%,rgba(0,0,0,0) 80%),var(--card)}
     [data-theme="dark"] .hb-title{color:var(--sky)}
     .word-popup .wp-e{font-size:.88rem;opacity:.9}
     .word-popup .wp-speak{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:.9rem}
@@ -973,7 +978,7 @@
     .due-btn:not(:disabled):active{transform:scale(.97)}
     .due-btn:not(:disabled):hover{filter:brightness(1.07)}
     .due-today-card .due-btn{background:#fff;color:var(--ocean);border:none;border-radius:99px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;white-space:nowrap;box-shadow:none}
-    .daily-card{background:linear-gradient(135deg,var(--coral),#E76F51);color:#fff;border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow)}
+    .daily-card{background:linear-gradient(135deg,var(--coral),var(--coral));color:#fff;border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow)}
     .daily-card .d-title{font-weight:800;font-size:1.05rem;margin-bottom:2px}
     .daily-card .d-sub{font-size:.82rem;opacity:.9}
     .daily-card .d-btn{background:#fff;color:var(--coral);border:none;border-radius:99px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;white-space:nowrap}
@@ -1009,7 +1014,7 @@
     .path-next-tag{background:var(--coral);color:#fff;font-size:.66rem;font-weight:800;padding:3px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em}
     .path-locked{opacity:.5;cursor:not-allowed}
     .path-locked:hover{background:none}
-    .path-next{background:linear-gradient(90deg,rgba(255,107,53,.08),transparent)}
+    .path-next{background:linear-gradient(90deg,rgba(200,85,61,.08),transparent)}
     .path-done .path-name{color:var(--muted)}
 
     /* ── SHADOWING ── */
@@ -1048,8 +1053,8 @@
     .convo-header::after{content:'💬';position:absolute;right:-4px;bottom:-20px;font-size:4.4rem;opacity:.10;pointer-events:none;line-height:1}
     .convo-header>*{position:relative;z-index:1}
     /* Control panels pick up the sea-glass sheen used by .home-block */
-    .api-key-panel,.autospeak-row,.convo-tips{background:linear-gradient(150deg,rgba(8,131,149,.13),rgba(5,191,219,.05) 55%,rgba(0,0,0,0) 80%),var(--card);border:1px solid var(--border)}
-    [data-theme="dark"] .api-key-panel,[data-theme="dark"] .autospeak-row,[data-theme="dark"] .convo-tips{background:linear-gradient(150deg,rgba(34,211,238,.10),rgba(14,116,144,.05) 55%,rgba(0,0,0,0) 80%),var(--card)}
+    .api-key-panel,.autospeak-row,.convo-tips{background:linear-gradient(150deg,rgba(10,77,104,.13),rgba(10,77,104,.05) 55%,rgba(0,0,0,0) 80%),var(--card);border:1px solid var(--border)}
+    [data-theme="dark"] .api-key-panel,[data-theme="dark"] .autospeak-row,[data-theme="dark"] .convo-tips{background:linear-gradient(150deg,rgba(140,195,214,.10),rgba(10,77,104,.05) 55%,rgba(0,0,0,0) 80%),var(--card)}
     .chat-window{border:1px solid var(--border)}
     /* Save button → themed pill */
     .api-save-btn{background:var(--grad-ocean);border-radius:999px;padding:9px 16px;box-shadow:0 4px 14px rgba(10,77,104,.26);transition:transform .15s,filter .2s}
@@ -1068,7 +1073,7 @@
     .chat-mini-btn{background:var(--card);border:1px solid var(--border);color:var(--ocean-2);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;padding:6px 11px;border-radius:999px;white-space:nowrap;transition:transform .15s,filter .2s}
     .chat-mini-btn:active{transform:scale(.95)}
     .chat-mini-btn:hover{filter:brightness(1.05)}
-    [data-theme="dark"] .chat-mini-btn{color:var(--sky);background:rgba(34,211,238,.10);border-color:rgba(34,211,238,.22)}
+    [data-theme="dark"] .chat-mini-btn{color:var(--sky);background:rgba(140,195,214,.10);border-color:rgba(140,195,214,.22)}
     /* Scenario chips → gradient sea pills with press feedback */
     .scenario-chip{background:var(--grad-ocean);box-shadow:0 3px 10px rgba(10,77,104,.22);transition:transform .15s,filter .2s}
     .scenario-chip:hover{background:var(--grad-ocean);filter:brightness(1.08)}
@@ -1274,12 +1279,14 @@
        layout; Portuguese keeps its azulejo blue as the action colour.
        ══════════════════════════════════════════════════════════════════ */
     html[data-lang="portuguese"]{
+      --accent-text:#1B3A6B;
       --bg:#F8F2E7; --card:#FFFDF8; --cream:#FFFDF8; --white:#FFFDF8; --border:#E8DCC8; --line:#E8DCC8;
       --grad-ocean:linear-gradient(135deg,#1B3A6B 0%,#1B3A6B 100%);
       --grad-sun:linear-gradient(135deg,#C1573C 0%,#C1573C 100%);
       --nav:rgba(255,253,248,.94);
     }
     html[data-lang="portuguese"][data-theme="dark"]{
+      --accent-text:#7FB2E0;
       --line:#333A4D;
       --grad-ocean:linear-gradient(135deg,#1E4E7C 0%,#1E4E7C 100%);
       --grad-sun:linear-gradient(135deg,#A8452F 0%,#A8452F 100%);
@@ -1454,6 +1461,60 @@
     .phrase-cat-header:hover{background:var(--sand)}
     .lesson-card::before{height:3px;opacity:.9}
     .settings-title{font-family:'Fraunces',Georgia,serif;font-weight:600}
+
+    /* ── CONTROLS: one system across every screen ──
+       primary   = solid ocean, white text, 14px corners
+       go on     = solid terracotta (next, results, challenge, record)
+       secondary = cream with a hairline border
+       chips     = cream pills; selected = solid ocean
+       tabs      = text pills; active = ocean tint with a fine ring       */
+    .start-btn,.reveal-btn,.submit-btn,.due-btn,.api-save-btn,.send-btn,.swap-btn,.trans-btn,
+    .story-play-btn,.listen-play-btn{background:var(--ocean);color:#FFFFFF;border:none;box-shadow:none}
+    .start-btn:hover,.reveal-btn:hover,.submit-btn:hover,.due-btn:hover,.api-save-btn:hover,.send-btn:hover,
+    .swap-btn:hover,.trans-btn:hover,.listen-play-btn:hover,.story-play-btn:hover,
+    .send-btn:hover:not(:disabled){background:color-mix(in srgb,var(--ocean) 86%,#FFFFFF);transform:none;box-shadow:none}
+    .send-btn:disabled,.trans-btn:disabled,.submit-btn:disabled{background:var(--border);color:var(--muted)}
+    .start-btn,.reveal-btn,.due-btn,.api-save-btn,.trans-btn,.next-btn,.results-btn,.study-btn,.challenge-btn{border-radius:14px}
+    .next-btn,.results-btn.primary,.study-btn.primary,.challenge-btn,.dc-record-btn,.speak-mic-btn{background:var(--coral);color:#FFFFFF;border:none;box-shadow:none}
+    .next-btn:hover,.results-btn.primary:hover,.study-btn.primary:hover,.challenge-btn:hover{background:color-mix(in srgb,var(--coral) 86%,#000000);box-shadow:none;transform:none}
+    .listen-play-btn.playing,.mic-btn.listening{background:var(--coral);color:#FFFFFF}
+    .speak-mic-btn.listening,.shadow-btn.listening{background:var(--wrong);color:#FFFFFF}
+    .results-btn.secondary,.study-btn.ghost,.hear-btn,.shadow-btn,.mic-btn,.profile-edit-btn,.recap-btn,.chat-mini-btn{
+      background:var(--card);color:var(--text);border:1px solid var(--border);box-shadow:none}
+    .hear-btn:hover,.shadow-btn:hover,.mic-btn:hover,.recap-btn:hover,.chat-mini-btn:hover,.results-btn.secondary:hover,.study-btn.ghost:hover{
+      background:color-mix(in srgb,var(--ocean) 8%,var(--card));color:var(--ocean);border-color:color-mix(in srgb,var(--ocean) 30%,var(--border))}
+    [data-theme="dark"] .hear-btn:hover,[data-theme="dark"] .recap-btn:hover,[data-theme="dark"] .chat-mini-btn:hover{color:var(--sky)}
+    .update-banner-btn,.music-lesson-cta .ml-btn,.due-today-card .due-btn{background:#FFFDF8;color:var(--ocean)}
+
+    .scenario-chip,.topic-chip,.tip-chip,.story-rate-chip,.dict-chip,.verb-chip,.font-btn,.sf-chip,.level-chip{
+      background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:99px;box-shadow:none;font-weight:600}
+    .scenario-chip:hover,.topic-chip:hover,.tip-chip:hover,.story-rate-chip:hover,.dict-chip:hover,.verb-chip:hover,.font-btn:hover,.sf-chip:hover{
+      background:color-mix(in srgb,var(--ocean) 8%,var(--card));color:var(--ocean);border-color:color-mix(in srgb,var(--ocean) 30%,var(--border))}
+    [data-theme="dark"] .scenario-chip,[data-theme="dark"] .topic-chip,[data-theme="dark"] .tip-chip,[data-theme="dark"] .sf-chip{color:var(--text);background:var(--card)}
+    [data-theme="dark"] .scenario-chip:hover,[data-theme="dark"] .topic-chip:hover,[data-theme="dark"] .tip-chip:hover,[data-theme="dark"] .sf-chip:hover{color:var(--sky)}
+    .story-rate-chip.active,.dict-chip.active,.font-btn.active,.dict-dir-tab.active{background:var(--ocean);color:#FFFFFF;border-color:var(--ocean)}
+    .sb-chip{background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 3px 0 var(--border);color:var(--text)}
+    .sb-chip.in-answer{background:var(--ocean);color:#FFFFFF;border-color:var(--ocean);box-shadow:0 3px 0 color-mix(in srgb,var(--ocean) 70%,#000)}
+    .match-btn{background:var(--card);border-color:var(--border)}
+
+    .readtab-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-weight:700;box-shadow:none}
+    .readtab-btn:hover{color:var(--ocean)}
+    .readtab-btn.active{background:color-mix(in srgb,var(--ocean) 10%,var(--card));color:var(--ocean);
+      border-color:color-mix(in srgb,var(--ocean) 30%,var(--border));box-shadow:none}
+    [data-theme="dark"] .readtab-btn.active,[data-theme="dark"] .readtab-btn:hover{color:var(--sky)}
+    .dict-dir-tab{border-radius:12px}
+    .toggle-slider{background:color-mix(in srgb,var(--text) 18%,var(--border))}
+    .toggle-switch input:checked+.toggle-slider{background:var(--ocean)}
+    [data-theme="dark"] .toggle-switch input:checked+.toggle-slider{background:var(--sky)}
+    input[type="text"],input[type="search"],input[type="email"],textarea,select,.api-input{
+      background:var(--card);border-color:var(--border);color:var(--text);font-family:'DM Sans',sans-serif}
+    input[type="text"]:focus,input[type="search"]:focus,input[type="email"]:focus,textarea:focus,select:focus,.api-input:focus{
+      border-color:var(--ocean);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--ocean) 18%,transparent)}
+    .badge-chip.earned{background:var(--coral)}
+    .reveal-btn.reveal-ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+    .reveal-btn.reveal-ghost:hover{background:color-mix(in srgb,var(--ocean) 8%,var(--card));color:var(--ocean)}
+    /* Dark mode: ocean-blue text becomes the lighter sea blue so it stays readable */
+    [data-theme="dark"] .antonio-hero-hint,[data-theme="dark"] .antonio-status,[data-theme="dark"] .autospeak-row,[data-theme="dark"] .bento-tile .bt-val,[data-theme="dark"] .blank-input,[data-theme="dark"] .bottom-nav-btn.active,[data-theme="dark"] .chat-label,[data-theme="dark"] .chat-mini-btn:hover,[data-theme="dark"] .convo-tips h4,[data-theme="dark"] .dc-record-label,[data-theme="dark"] .dict-chip,[data-theme="dark"] .dict-chip:hover,[data-theme="dark"] .dlg-speaker,[data-theme="dark"] .exercise-word,[data-theme="dark"] .font-btn.active,[data-theme="dark"] .font-btn:hover,[data-theme="dark"] .g-point-k,[data-theme="dark"] .hb-title,[data-theme="dark"] .hear-btn,[data-theme="dark"] .hear-btn:hover,[data-theme="dark"] .lab-pattern,[data-theme="dark"] .ladder-legend button.on,[data-theme="dark"] .lang-pill,[data-theme="dark"] .match-btn.selected,[data-theme="dark"] .mic-btn:hover,[data-theme="dark"] .nav-tab.active,[data-theme="dark"] .path-level-name,[data-theme="dark"] .path-unit-title,[data-theme="dark"] .phrase-kriolu,[data-theme="dark"] .profile-edit-btn,[data-theme="dark"] .qa-icon,[data-theme="dark"] .readtab-btn.active,[data-theme="dark"] .readtab-btn:hover,[data-theme="dark"] .recap-btn,[data-theme="dark"] .recap-btn:hover,[data-theme="dark"] .recap-card strong,[data-theme="dark"] .results-btn.secondary,[data-theme="dark"] .results-btn.secondary:hover,[data-theme="dark"] .results-stat .val,[data-theme="dark"] .results-title,[data-theme="dark"] .reveal-btn.reveal-ghost:hover,[data-theme="dark"] .review-word-k,[data-theme="dark"] .roadmap-title,[data-theme="dark"] .scenario-chip:hover,[data-theme="dark"] .section-heading,[data-theme="dark"] .settings-title,[data-theme="dark"] .sf-chip,[data-theme="dark"] .sf-chip:hover,[data-theme="dark"] .shadow-btn.listen,[data-theme="dark"] .shadow-btn:hover,[data-theme="dark"] .shadow-k,[data-theme="dark"] .skip-btn:hover,[data-theme="dark"] .song-title,[data-theme="dark"] .speak-transcript,[data-theme="dark"] .stage-item.active .stage-label,[data-theme="dark"] .stat-card .value,[data-theme="dark"] .story-rate-chip,[data-theme="dark"] .story-rate-chip:hover,[data-theme="dark"] .story-title,[data-theme="dark"] .study-btn.ghost:hover,[data-theme="dark"] .study-k,[data-theme="dark"] .study-speak.small,[data-theme="dark"] .tip-chip,[data-theme="dark"] .tip-chip:hover,[data-theme="dark"] .topic-chip,[data-theme="dark"] .topic-chip:hover,[data-theme="dark"] .track-card-tick,[data-theme="dark"] .translate-output,[data-theme="dark"] .verb-chip,[data-theme="dark"] .verb-chip:hover,[data-theme="dark"] .verb-inf,[data-theme="dark"] .voice-select,[data-theme="dark"] .wc-task,[data-theme="dark"] .wc-word,[data-theme="dark"] .wl-k,[data-theme="dark"] .wotd-play,[data-theme="dark"] .wotd-word{color:var(--sky)}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1582,7 +1643,7 @@
       </div>
     </div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;text-align:center">
-      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--ocean);font-size:calc(var(--fs, 1rem) * 1.7)">sodadi</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;color:var(--accent-text);font-size:calc(var(--fs, 1rem) * 1.7)">sodadi</div>
       <div style="font-weight:800;letter-spacing:.05em;color:var(--coral);margin-top:6px;font-size:calc(var(--fs, 1rem) * .68)">/so·DA·di/</div>
       <div style="font-weight:700;margin-top:12px;font-size:calc(var(--fs, 1rem) * .9)">a deep longing for someone absent</div>
       <div style="font-style:italic;color:var(--muted);margin-top:8px;font-size:calc(var(--fs, 1rem) * .78)">N ten sodadi di nha mãi.</div>
@@ -1706,7 +1767,7 @@
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
     <div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <div><div style="font-weight:800;font-size:.95rem;color:var(--ocean);margin-bottom:2px">🎯 Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from all lessons</div></div>
+      <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text);margin-bottom:2px">🎯 Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from all lessons</div></div>
       <button class="start-btn" onclick="startMixedSession()">Start →</button>
     </div>
   </div>
@@ -1740,7 +1801,7 @@
   <div id="screen-sentencelab" class="screen">
     <div class="exercise-header">
       <button class="back-btn" onclick="exitExercise()">←</button>
-      <div style="font-weight:800;color:var(--ocean);font-family:'Fraunces',Georgia,serif" id="lab-title">Sentence Lab</div>
+      <div style="font-weight:800;color:var(--accent-text);font-family:'Fraunces',Georgia,serif" id="lab-title">Sentence Lab</div>
     </div>
     <div id="sentencelab-content"></div>
   </div>
@@ -49728,7 +49789,7 @@ function renderLanguageTrack() {
   if (preview) {
     preview.innerHTML = `
       <div class="checkpoint-topics-label">Preview</div>
-      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.4rem;color:var(--ocean);margin-top:8px">sodadi</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.4rem;color:var(--accent-text);margin-top:8px">sodadi</div>
       <div style="font-size:.85rem;margin-top:6px">a deep longing for someone absent</div>
       ${both ? `<div style="font-size:.85rem;color:var(--ocean-2);margin-top:3px">saudade · <span style="color:var(--muted)">substantivo feminino</span></div>` : ''}
     `;
@@ -53088,7 +53149,7 @@ function renderAchievements() {
       ${earned ? '<div class="ach-earned-label">✓ Earned</div>' : ''}
     </div>`;
   };
-  grid.innerHTML = `<div style="grid-column:1/-1;font-size:.85rem;font-weight:800;color:var(--ocean);margin-bottom:4px">${earnedCount} / ${ACHIEVEMENTS.length} earned</div>`
+  grid.innerHTML = `<div style="grid-column:1/-1;font-size:.85rem;font-weight:800;color:var(--accent-text);margin-bottom:4px">${earnedCount} / ${ACHIEVEMENTS.length} earned</div>`
     + (earnedList.length ? `<div style="grid-column:1/-1;font-size:.78rem;font-weight:700;color:var(--muted);margin:6px 0 2px">🏅 Recently earned</div>` : '')
     + earnedList.map(card).join('')
     + (lockedList.length ? `<div style="grid-column:1/-1;font-size:.78rem;font-weight:700;color:var(--muted);margin:10px 0 2px">🔒 Still to earn</div>` : '')
@@ -53447,7 +53508,7 @@ function renderLevelCard() {
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px">
       <div class="level-mark" style="width:54px;height:54px;background:${current.color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.45rem;font-weight:700;flex-shrink:0">${current.code}</div>
       <div style="flex:1">
-        <div style="font-weight:800;font-size:1rem;color:var(--ocean)">${current.name}</div>
+        <div style="font-weight:800;font-size:1rem;color:var(--accent-text)">${current.name}</div>
         <div style="font-size:.78rem;color:var(--muted)">${current.blurb}</div>
       </div>
     </div>
@@ -53584,7 +53645,7 @@ function renderHomeExtras() {
   if (placeSlot) {
     placeSlot.innerHTML = state.placementDone ? '' :
       `<div style="background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <div><div style="font-weight:800;font-size:.95rem;color:var(--ocean)">🎓 Find your level</div>
+        <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text)">🎓 Find your level</div>
           <div style="font-size:.8rem;color:var(--muted)">Take a quick placement test</div></div>
         <button class="start-btn" onclick="startPlacementTest()">Start Test →</button>
       </div>`;
@@ -53663,7 +53724,7 @@ function renderHomeExtras() {
     if (state.streak >= 2 || freezes > 0) {
       html += `<div style="background:var(--card);border-radius:var(--radius);padding:12px 16px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;align-items:center;gap:10px">
         <span style="font-size:1.4rem">🧊</span>
-        <div style="font-size:.83rem"><b style="color:var(--ocean)">${freezes} streak freeze${freezes===1?'':'s'}</b>
+        <div style="font-size:.83rem"><b style="color:var(--accent-text)">${freezes} streak freeze${freezes===1?'':'s'}</b>
         <span style="color:var(--muted)"> — protects your ${state.streak}-day streak if you miss a day. Earn one every 7 days.</span></div>
       </div>`;
     }
@@ -53724,7 +53785,7 @@ function renderProgressChart() {
     </div>`;
   }).join('');
   return `<div style="background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);margin-bottom:16px">
-    <div style="font-weight:800;font-size:.88rem;color:var(--ocean);margin-bottom:10px">📈 This Week — ${total} XP</div>
+    <div style="font-weight:800;font-size:.88rem;color:var(--accent-text);margin-bottom:10px">📈 This Week — ${total} XP</div>
     <div style="display:flex;align-items:flex-end;gap:4px;height:90px">${bars}</div>
   </div>`;
 }
@@ -53919,7 +53980,7 @@ function renderPath() {
   // Overall progress header
   let html = `<div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:18px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-      <div style="font-weight:800;color:var(--ocean)">Path Progress</div>
+      <div style="font-weight:800;color:var(--accent-text)">Path Progress</div>
       <div style="font-size:.85rem;color:var(--muted);font-weight:700">${doneCount} / ${PATH_ORDER.length} lessons</div>
     </div>
     <div style="background:var(--border);border-radius:99px;height:10px;overflow:hidden">
@@ -53930,7 +53991,7 @@ function renderPath() {
 
   const dueCount = countDueWords();
   if (dueCount > 0) {
-    html += `<button onclick="showTab('review')" style="display:block;width:100%;margin-bottom:16px;background:rgba(255,255,255,.85);border:1px solid var(--border);color:var(--ocean);border-radius:99px;padding:14px;text-align:center;font:800 .82rem/1 'DM Sans',sans-serif;cursor:pointer">Jump to review · ${dueCount} due</button>`;
+    html += `<button onclick="showTab('review')" style="display:block;width:100%;margin-bottom:16px;background:rgba(255,255,255,.85);border:1px solid var(--border);color:var(--accent-text);border-radius:99px;padding:14px;text-align:center;font:800 .82rem/1 'DM Sans',sans-serif;cursor:pointer">Jump to review · ${dueCount} due</button>`;
   }
 
   // Levels: each is a collapsible section, and only open ones are rendered —
@@ -54125,7 +54186,7 @@ function renderStageRoadmap() {
     setTimeout(() => {
       if (!document.getElementById('sentencelab-content')) return;
       document.getElementById('sentencelab-content').insertAdjacentHTML('afterbegin',
-        `<div style="background:var(--card);border:1px solid var(--border);border-left:4px solid #E76F51;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;font-size:.88rem">
+        `<div style="background:var(--card);border:1px solid var(--border);border-left:4px solid var(--coral);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;font-size:.88rem">
           🔥 <b>${dueN} words</b> are waiting for review — a quick warm-up first makes new material stick better.
           <button class="due-btn" style="margin-top:8px" onclick="startWarmupSession()">2-min warm-up →</button>
         </div>`);
@@ -54239,7 +54300,7 @@ function showMasteredWords() {
   ov.onclick = e => { if (e.target === ov) ov.remove(); };
   ov.innerHTML = `<div style="background:var(--bg);border-radius:20px;padding:20px 18px;max-width:460px;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4)">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-      <div style="font-weight:800;font-size:1.1rem;color:var(--ocean);flex:1">🧠 Words Mastered (${masteredList.length})</div>
+      <div style="font-weight:800;font-size:1.1rem;color:var(--accent-text);flex:1">🧠 Words Mastered (${masteredList.length})</div>
       <button class="wl-say" aria-label="Close" onclick="document.getElementById('mastered-overlay').remove()">✕</button>
     </div>
     <div style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Words you've answered correctly ${MASTERY_THRESHOLD}+ times in ${courseName()}.</div>
@@ -55197,7 +55258,7 @@ function renderUnclip(q, container) {
   const shown = escapeHTML(item.k);
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">✂️ Unclip It</div>
     <div style="font-size:.88rem;color:var(--muted);margin-bottom:10px">${isLine ? 'This line is sung with clipped words. Which is the same line in full Kriolu?' : 'Songs clip this word. What is it in full?'}</div>
-    <div style="text-align:center;font-size:1.4rem;font-weight:800;color:var(--ocean);margin-bottom:8px">${shown}</div>
+    <div style="text-align:center;font-size:1.4rem;font-weight:800;color:var(--accent-text);margin-bottom:8px">${shown}</div>
     <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:.9rem;color:var(--muted);margin-bottom:14px">
       <button class="speak-btn" style="margin:0;flex:none" title="Listen" aria-label="Listen" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(isLine ? item.k : (item.ex || item.k))}">🔊</button>
       ${wordByWordBtn(isLine ? item.k : (item.ex || item.k), 'speak-btn', 'margin:0;flex:none')}
@@ -56795,7 +56856,7 @@ function renderSpeaking(q, container) {
     <div class="pronunciation-guide">🗣️ ${escapeHTML(pronounceWord(q.speakTarget || q.item.k))}</div>
     <div class="exercise-example">${q.speakTarget ? 'Featuring: <b>'+escapeHTML(q.item.k)+'</b> ('+escapeHTML(q.item.e)+')' : escapeHTML(q.item.e) + ' • "' + escapeHTML(q.item.ex) + '"'}</div>
     <button class="reveal-btn" style="margin-top:4px" onclick="antonioSayPrompt(this.dataset.w)" data-w="${escapeJS(q.speakTarget || q.item.k)}">🔊 Hear António say it</button>
-    ${wordByWordBtn(q.speakTarget || q.item.k, 'reveal-btn', 'margin-top:6px;background:var(--muted)', '🐢 Word by word')}
+    ${wordByWordBtn(q.speakTarget || q.item.k, 'reveal-btn reveal-ghost', 'margin-top:6px', '🐢 Word by word')}
     ${hasSR
       ? `<button class="speak-mic-btn" id="speak-mic" onclick="startSpeakCheck()">🎤</button>
          <div style="font-size:.78rem;color:var(--muted)">Tap the mic, then say it back to him</div>
@@ -57102,14 +57163,14 @@ function renderSentenceBuilder(q, container) {
 
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">🧩 Build the Sentence</div>
     <div style="font-size:.82rem;color:var(--muted);margin-bottom:6px">Tap the words in the correct order:</div>
-    <div style="font-size:.85rem;font-weight:700;color:var(--ocean);margin-bottom:4px">Featuring: ${escapeHTML(q.item.k)} <span style="color:var(--muted);font-weight:600">(${escapeHTML(q.item.e)})</span></div>
+    <div style="font-size:.85rem;font-weight:700;color:var(--accent-text);margin-bottom:4px">Featuring: ${escapeHTML(q.item.k)} <span style="color:var(--muted);font-weight:600">(${escapeHTML(q.item.e)})</span></div>
     ${meaningLine(q.item, 'sb-meaning')}
     <div style="height:10px"></div>
     <div class="sb-target-area" id="sb-answer"></div>
     <div class="sb-bank" id="sb-bank"></div>
     <button class="submit-btn" id="sb-check" onclick="checkSentence()" disabled>Check ✓</button>
-    <button class="reveal-btn" style="margin-top:8px;background:var(--muted)" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(sentence)}">🔊 Hear the sentence</button>
-    ${wordByWordBtn(sentence, 'reveal-btn', 'margin-top:8px;background:var(--muted)', '🐢 Word by word')}
+    <button class="reveal-btn reveal-ghost" style="margin-top:8px" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(sentence)}">🔊 Hear the sentence</button>
+    ${wordByWordBtn(sentence, 'reveal-btn reveal-ghost', 'margin-top:8px', '🐢 Word by word')}
   </div><div id="feedback-area"></div>`;
 
   renderSbChips();
@@ -57290,7 +57351,7 @@ async function askAntonio(cacheKey, prompt, targetId, btn, maxTok) {
   state.antonioAsks = (state.antonioAsks || 0) + 1;
   saveState();
   const cached = antonioCacheGet(cacheKey);
-  const render = txt => { target.innerHTML = `<div style="background:var(--card);border:1px solid var(--border);border-left:4px solid #088395;border-radius:10px;padding:11px 13px;margin-top:10px;font-size:.85rem;line-height:1.5;white-space:pre-line;text-align:left">🧔🏾 ${escapeHTML(txt)}</div>`; };
+  const render = txt => { target.innerHTML = `<div style="background:var(--card);border:1px solid var(--border);border-left:4px solid var(--ocean-2);border-radius:10px;padding:11px 13px;margin-top:10px;font-size:.85rem;line-height:1.5;white-space:pre-line;text-align:left">🧔🏾 ${escapeHTML(txt)}</div>`; };
   if (cached) { render(cached); return; }
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.disabled = true; btn.innerHTML = '🧔🏾 …'; }
@@ -57586,14 +57647,14 @@ function finishSession() {
   const wrongHTML = state.wrongItems.length
     ? `<div style="margin:14px 0;text-align:left"><div style="font-size:.78rem;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase">Review these:</div>
         ${state.wrongItems.slice(0,5).map(w=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:.85rem">
-          <span style="font-weight:700;color:var(--ocean)">${escapeHTML(w.k)}</span><span style="color:var(--muted)">${escapeHTML(w.e)}</span></div>`).join('')}
+          <span style="font-weight:700;color:var(--accent-text)">${escapeHTML(w.k)}</span><span style="color:var(--muted)">${escapeHTML(w.e)}</span></div>`).join('')}
        </div>` : '';
 
   playSound('complete');
 
   const remaining = getReviewWords().length;
   const reviewNote = session.lessonId === 'review'
-    ? `<div style="font-size:.85rem;font-weight:700;color:var(--ocean);margin-bottom:14px">${remaining === 0 ? '🎉 Review list cleared!' : `📋 ${remaining} word${remaining===1?'':'s'} still need review`}</div>`
+    ? `<div style="font-size:.85rem;font-weight:700;color:var(--accent-text);margin-bottom:14px">${remaining === 0 ? '🎉 Review list cleared!' : `📋 ${remaining} word${remaining===1?'':'s'} still need review`}</div>`
     : '';
 
   document.getElementById('results-card').innerHTML = `
@@ -57678,7 +57739,7 @@ function renderReview() {
       <button class="due-btn" style="width:100%;text-align:left" onclick="startShadowSession()">🗣️ Sentence Shadowing <span style="font-weight:600;opacity:.85;font-size:.78rem">— hear it, say it, get scored</span></button>
       <button class="due-btn" style="width:100%;text-align:left" onclick="startMicroFix()">🩹 2-Minute Fix-It <span style="font-weight:600;opacity:.85;font-size:.78rem">— drill your weakest words in context</span></button>
       <button class="due-btn" style="width:100%;text-align:left" id="podcast-btn" onclick="togglePodcastMode()">🎧 Podcast Mode <span style="font-weight:600;opacity:.85;font-size:.78rem">— hands-free audio review</span></button>
-      <div id="podcast-status" style="display:none;font-size:.85rem;font-weight:700;color:var(--ocean);text-align:center;padding:6px"></div>
+      <div id="podcast-status" style="display:none;font-size:.85rem;font-weight:700;color:var(--accent-text);text-align:center;padding:6px"></div>
     </div>
     ${focusChips ? `<div style="margin-top:10px;font-size:.75rem;color:var(--muted);font-weight:700">Recent focus areas from your writing:</div><div>${focusChips}</div>` : ''}
   </div>`;
@@ -57686,7 +57747,7 @@ function renderReview() {
   if (!struggling.length) {
     content.innerHTML = dueBanner + `<div style="text-align:center;padding:40px 20px;color:var(--muted)">
       <div style="font-size:3rem;margin-bottom:12px">${due.length ? '⏰' : '🎉'}</div>
-      <div style="font-weight:800;font-size:1.1rem;color:var(--ocean)">${due.length ? 'Words ready to review above!' : 'All clear!'}</div>
+      <div style="font-weight:800;font-size:1.1rem;color:var(--accent-text)">${due.length ? 'Words ready to review above!' : 'All clear!'}</div>
       <div style="font-size:.85rem;margin-top:6px">No words from mistakes need review right now. Answer a word correctly ${REVIEW_CLEAR_STREAK} times in a row after a mistake and it clears from this list.</div>
     </div>`;
     return;
@@ -57704,7 +57765,7 @@ function renderReview() {
         `<span style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-left:3px;background:${i < streak ? 'var(--correct)' : 'var(--border)'}"></span>`
       ).join('');
       const ratio = s.correct / Math.max(1, s.correct + s.wrong);
-      const color = ratio > 0.6 ? '#2EC4B6' : ratio > 0.3 ? '#F4A261' : '#E63946';
+      const color = ratio > 0.6 ? 'var(--green)' : ratio > 0.3 ? 'var(--gold)' : 'var(--wrong)';
       return `<div class="review-word-card">
         <div><div class="review-word-k">${escapeHTML(v.k)}</div>
           <div class="review-word-e">${escapeHTML(v.e)}</div>
@@ -58207,13 +58268,13 @@ function showErrorReports() {
     ? reports.map(r => `<div style="padding:9px 0;border-bottom:1px solid var(--border);font-size:.85rem"><b>${escapeHTML(r.k)}</b> <span style="color:var(--muted)">(${escapeHTML(r.e || '')})</span>${r.note ? `<div style="font-size:.78rem;color:var(--muted)">“${escapeHTML(r.note)}”</div>` : ''}<div style="font-size:.7rem;color:var(--muted)">${r.where} · ${r.date}</div></div>`).join('')
     : '<div style="color:var(--muted);font-size:.88rem;padding:14px 0">No flags yet. Tap 🚩 on any word or exercise to flag it for review with your family.</div>';
   ov.innerHTML = `<div style="background:var(--bg);border-radius:20px;padding:22px 20px;max-width:420px;width:100%;max-height:80vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)">
-    <div style="font-weight:800;font-size:1.1rem;color:var(--ocean);margin-bottom:6px">🚩 Reported Errors (${reports.length})</div>
+    <div style="font-weight:800;font-size:1.1rem;color:var(--accent-text);margin-bottom:6px">🚩 Reported Errors (${reports.length})</div>
     <div style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Show these to a native speaker, then paste the list to me to fix the app.</div>
     ${rows}
     <div style="display:flex;gap:8px;margin-top:14px">
       ${reports.length ? `<button class="due-btn" style="flex:1" onclick="copyErrorReports(this)">📋 Copy all</button>
       <button class="due-btn" style="flex:1;background:var(--card);color:var(--wrong);border:1.5px solid var(--border)" onclick="if(confirm('Clear all flags?')){state.errorReports=[];saveState();showErrorReports();}">🗑 Clear</button>` : ''}
-      <button class="due-btn" style="flex:1;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="document.getElementById('error-report-overlay').remove()">Close</button>
+      <button class="due-btn" style="flex:1;background:var(--card);color:var(--accent-text);border:1.5px solid var(--border)" onclick="document.getElementById('error-report-overlay').remove()">Close</button>
     </div>
   </div>`;
   document.body.appendChild(ov);
@@ -58394,7 +58455,7 @@ function openDictWord(k) {
   detail.innerHTML = `
     <button class="back-btn" style="margin-bottom:14px" onclick="closeDictWord()">←</button>
     <div class="grammar-detail-card" style="text-align:center">
-      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:2.2rem;color:var(--ocean)">${escapeHTML(v.k)}</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:2.2rem;color:var(--accent-text)">${escapeHTML(v.k)}</div>
       <div style="font-size:.95rem;color:var(--muted);margin-top:6px">${escapeHTML(v.e)}</div>
       <button style="display:inline-flex;align-items:center;gap:8px;margin-top:15px;background:var(--grad-ocean);color:#fff;border:none;border-radius:99px;padding:12px 22px;font:800 .8rem/1 'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(10,77,104,.28);cursor:pointer" onclick="userHasInteracted=true;speakText('${escapeJS(v.k)}',this)">🔊 Play</button>
       ${v.ex ? `<div style="background:var(--bg);border-radius:14px;padding:14px;margin-top:18px;text-align:left">
@@ -58480,7 +58541,7 @@ function showFavourites() {
   const indexed = state.favourites.map((v, i) => ({ v, i }));
   const shown = favFilter === 'all' ? indexed : indexed.filter(({ v }) => (v.source || 'Other') === favFilter);
 
-  container.innerHTML = `<div style="font-size:.82rem;font-weight:700;color:var(--ocean);margin-bottom:12px">❤️ Your Favourites (${state.favourites.length})</div>` +
+  container.innerHTML = `<div style="font-size:.82rem;font-weight:700;color:var(--accent-text);margin-bottom:12px">❤️ Your Favourites (${state.favourites.length})</div>` +
     chipsHTML +
     shown.map(({ v, i }) => `<div class="review-word-card">
       <div><div class="review-word-k">${escapeHTML(v.k)}</div>
@@ -59132,7 +59193,7 @@ function renderAccountPanel() {
     el.innerHTML = `
       <div style="font-size:.82rem;color:var(--text)">Signed in as <b>${escapeHTML(currentUser.email)}</b></div>
       <div style="font-size:.72rem;color:var(--muted);margin-top:2px" id="sync-status">Synced ✓</div>
-      <button class="due-btn" style="margin-top:8px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="signOutAccount()">Sign out</button>`;
+      <button class="due-btn" style="margin-top:8px;background:var(--card);color:var(--accent-text);border:1.5px solid var(--border)" onclick="signOutAccount()">Sign out</button>`;
   } else {
     el.innerHTML = `
       <input type="email" id="account-email-input" class="type-input" style="width:100%" placeholder="you@example.com" autocomplete="email" />
@@ -59164,11 +59225,11 @@ function showSyncConflictDialog(cloudStateJson, updatedAt) {
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
   overlay.innerHTML = `
     <div style="background:var(--card);border-radius:var(--radius);padding:22px;max-width:360px;width:100%;box-shadow:var(--shadow-lg)">
-      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.1rem;color:var(--ocean)">Two versions of your progress</div>
+      <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.1rem;color:var(--accent-text)">Two versions of your progress</div>
       <div style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.5">This device has progress, and your account already has different progress (last synced ${escapeHTML(new Date(updatedAt).toLocaleDateString())}). Pick which one to keep — the other will be replaced.</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
         <button class="due-btn" onclick="resolveSyncConflict('device')">Keep this device — ${state.xp || 0} XP · ${state.streak || 0} day streak</button>
-        <button class="due-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="resolveSyncConflict('cloud')">Keep my account — ${cloud.xp || 0} XP · ${cloud.streak || 0} day streak</button>
+        <button class="due-btn" style="background:var(--card);color:var(--accent-text);border:1.5px solid var(--border)" onclick="resolveSyncConflict('cloud')">Keep my account — ${cloud.xp || 0} XP · ${cloud.streak || 0} day streak</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -59204,7 +59265,7 @@ async function pushStateToCloud() {
   if (statusEl) statusEl.textContent = error ? '⚠️ Sync failed — will retry' : 'Synced ✓';
 }
 
-const COMMUNITY_AVATAR_COLORS = ['#088395','#C2451A','#12796F','#8A5A0B','#5B3E96','#1B6B93'];
+const COMMUNITY_AVATAR_COLORS = ['#0A4D68','#C2451A','#12796F','#8A5A0B','#5B3E96','#1B6B93'];
 function communityAvatarColor(name) {
   let h = 0;
   for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
@@ -59310,7 +59371,7 @@ async function renderCommunity() {
 
   el.innerHTML = `
     <div style="display:flex;gap:7px;overflow-x:auto;margin-bottom:13px;padding-bottom:2px">
-      ${cats.map(([id, label]) => `<div onclick="setCommunityFilter('${id}')" style="flex:none;border-radius:99px;padding:7px 13px;font:800 .66rem/1 'DM Sans',sans-serif;cursor:pointer;${filter === id ? 'background:var(--ocean-2);color:#fff' : 'background:var(--card);border:1px solid var(--border);color:var(--ocean)'}">${label}</div>`).join('')}
+      ${cats.map(([id, label]) => `<div onclick="setCommunityFilter('${id}')" style="flex:none;border-radius:99px;padding:7px 13px;font:800 .66rem/1 'DM Sans',sans-serif;cursor:pointer;${filter === id ? 'background:var(--ocean-2);color:#fff' : 'background:var(--card);border:1px solid var(--border);color:var(--accent-text)'}">${label}</div>`).join('')}
     </div>
     ${filter === 'all' || filter === 'proverbs' ? `
     <div style="position:relative;overflow:hidden;border-radius:var(--radius);padding:18px;color:#fff;background:var(--grad-sun);box-shadow:var(--shadow-coral);margin-bottom:13px">
@@ -59340,7 +59401,7 @@ async function renderCommunity() {
       <div style="width:52px;height:52px;flex:none;border-radius:14px;background:repeating-linear-gradient(135deg,var(--bg) 0 7px,var(--card) 7px 14px);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem">🎵</div>
       <div style="flex:1;min-width:0">
         <div style="font:800 .66rem/1 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">This week's playlist</div>
-        <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:.95rem;color:var(--ocean);margin-top:3px">Learn songs & lyrics</div>
+        <div style="font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:.95rem;color:var(--accent-text);margin-top:3px">Learn songs & lyrics</div>
         <div style="font-size:.7rem;color:var(--muted);margin-top:1px">${MUSIC_VOCAB.length} key words from Cape Verdean music</div>
       </div>
       <div style="font-size:1rem;color:var(--ocean-2)">›</div>
@@ -59524,13 +59585,13 @@ function showOnboarding() {
   ov.innerHTML = `
     <div style="background:var(--bg,#fff);border-radius:20px;padding:24px 20px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4)">
       <div id="onboard-step0">
-        <div style="font-size:1.25rem;font-weight:800;color:var(--ocean);margin-bottom:4px">🌊 Ben-vindu! · Bem-vindo!</div>
+        <div style="font-size:1.25rem;font-weight:800;color:var(--accent-text);margin-bottom:4px">🌊 Ben-vindu! · Bem-vindo!</div>
         <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">Which language would you like to learn first? You can switch any time — each course keeps its own progress.</div>
         <button class="due-btn" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardLang('kriolu')">🇨🇻 Kriolu — Cape Verdean Creole</button>
         <button class="due-btn" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardLang('portuguese')">🇵🇹 Português — European Portuguese</button>
       </div>
       <div id="onboard-step-dialect" style="display:none">
-        <div style="font-size:1.25rem;font-weight:800;color:var(--ocean);margin-bottom:4px">Which Kriolu do you want to learn?</div>
+        <div style="font-size:1.25rem;font-weight:800;color:var(--accent-text);margin-bottom:4px">Which Kriolu do you want to learn?</div>
         <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">We'll always show you both, and you can switch any time.</div>
         <button class="due-btn" id="onboard-dialect-santiago" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardDialectPick('santiago')">🇨🇻 Santiago · Badiu — Praia · Tarrafal · Assomada</button>
         <button class="due-btn" id="onboard-dialect-visente" style="display:block;width:100%;margin-bottom:12px;text-align:left" onclick="onboardDialectPick('saovicente')">🇨🇻 São Vicente — Mindelu · Baía das Gatas</button>
@@ -59541,12 +59602,12 @@ function showOnboarding() {
         <button class="due-btn" style="display:block;width:100%;text-align:center;background:var(--grad-sun)" onclick="onboardDialectContinue()">Continue</button>
       </div>
       <div id="onboard-step1" style="display:none">
-        <div style="font-size:1.25rem;font-weight:800;color:var(--ocean);margin-bottom:4px" id="onboard-goal-title">Ben-vindu!</div>
+        <div style="font-size:1.25rem;font-weight:800;color:var(--accent-text);margin-bottom:4px" id="onboard-goal-title">Ben-vindu!</div>
         <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px" id="onboard-goal-sub">Why are you learning? We\'ll tailor your path.</div>
         ${Object.entries(GOAL_INFO).map(([g, i]) => `<button class="due-btn" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardGoal('${g}')">${i.label}</button>`).join('')}
       </div>
       <div id="onboard-step2" style="display:none">
-        <div style="font-size:1.25rem;font-weight:800;color:var(--ocean);margin-bottom:4px">How much Kriolu do you know?</div>
+        <div style="font-size:1.25rem;font-weight:800;color:var(--accent-text);margin-bottom:4px">How much Kriolu do you know?</div>
         <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">This sets your starting point.</div>
         <button class="due-btn" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardLevel('beginner')">🌱 Total beginner</button>
         <button class="due-btn" style="display:block;width:100%;margin-bottom:8px;text-align:left" onclick="onboardLevel('some')">🌿 I know some words</button>
@@ -60346,7 +60407,7 @@ function openVerb(inf) {
     <button class="back-btn" style="margin-bottom:14px" onclick="renderVerbList()">←</button>
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-        <div style="font-family:'Fraunces',Georgia,serif;font-size:1.6rem;color:var(--ocean);font-weight:700">${escapeHTML(verb.inf)}</div>
+        <div style="font-family:'Fraunces',Georgia,serif;font-size:1.6rem;color:var(--accent-text);font-weight:700">${escapeHTML(verb.inf)}</div>
         <button class="speak-btn" style="margin:0;font-size:1.1rem" onclick="userHasInteracted=true;speakText('${escapeJS(verb.inf)}',this)">🔊</button>
       </div>
       <div style="font-size:.9rem;color:var(--muted);font-style:italic;margin-bottom:18px">${escapeHTML(verb.e)}</div>
@@ -60387,7 +60448,7 @@ function openWritingPrompt(i) {
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="font-size:2rem">${p.icon}</div>
-        <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--ocean);font-weight:700">${p.title}</div>
+        <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--accent-text);font-weight:700">${p.title}</div>
         <span class="s-level level-${p.level}">${p.level}</span></div>
       </div>
       <div class="g-intro">📝 ${escapeHTML(p.task)}</div>
@@ -60498,7 +60559,7 @@ function openGrammar(id) {
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
         <div style="font-size:2.2rem">${g.icon}</div>
-        <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${g.title}</div>
+        <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--accent-text);font-weight:700">${g.title}</div>
         <div style="font-size:.82rem;color:var(--muted)">${g.sub}</div></div>
       </div>
       <div class="g-intro">${escapeHTML(g.intro)}</div>
@@ -61586,7 +61647,7 @@ function renderDialogueLibrary() {
 }
 
 function renderPassageCards() {
-  return `<div style="font-weight:800;color:var(--ocean);margin:18px 0 10px">📄 Reading passages — longer texts</div>`
+  return `<div style="font-weight:800;color:var(--accent-text);margin:18px 0 10px">📄 Reading passages — longer texts</div>`
     + READING_PASSAGES.map(pz => {
       const done = (state.passagesDone || []).includes(pz.id);
       const words = pz.paras.reduce((n,p)=>n+p.k.split(/\s+/).length,0);
@@ -61637,11 +61698,11 @@ function openPassage(id) {
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:6px">${pz.titleE} · ${pz.level}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
       <button class="due-btn" onclick="pzToggleEnglish(this)">🇬🇧 Show English</button>
-      <button class="due-btn" id="pz-readaloud-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="togglePzReadAloud('${pz.id}',this)">🔊 Read aloud to me</button>
+      <button class="due-btn" id="pz-readaloud-btn" style="background:var(--card);color:var(--accent-text);border:1.5px solid var(--border)" onclick="togglePzReadAloud('${pz.id}',this)">🔊 Read aloud to me</button>
     </div>
     <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin-bottom:12px">
       <div style="font-size:15px">👆</div>
-      <div style="flex:1;min-width:0;font-size:.72rem;line-height:1.45;color:var(--ocean)">Tap any word you don't know — it translates in place and saves to review.</div>
+      <div style="flex:1;min-width:0;font-size:.72rem;line-height:1.45;color:var(--accent-text)">Tap any word you don't know — it translates in place and saves to review.</div>
     </div>
     <div class="story-detail-card">
       ${pz.paras.map((para, i) => `
@@ -61654,7 +61715,7 @@ function openPassage(id) {
         </div>`).join('')}
     </div>
     <div id="pz-saved-count" data-pz-id="${pz.id}" style="text-align:center;font-size:.68rem;color:var(--muted);margin-top:10px"></div>
-    <div style="font-weight:800;color:var(--ocean);margin:16px 0 8px">❓ Comprehension & vocabulary</div>
+    <div style="font-weight:800;color:var(--accent-text);margin:16px 0 8px">❓ Comprehension & vocabulary</div>
     <div id="pz-quiz">
       ${pz.quiz.map((qq, qi) => `
         <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;border:1px solid var(--border)">
@@ -61734,7 +61795,7 @@ function pzAnswer(btn, id, qi, ok) {
       checkAchievements();
     }
     document.getElementById('pz-result').innerHTML =
-      `<div style="background:var(--card);border-radius:var(--radius);padding:16px;text-align:center;font-weight:800;color:var(--ocean)">
+      `<div style="background:var(--card);border-radius:var(--radius);padding:16px;text-align:center;font-weight:800;color:var(--accent-text)">
         ${r === pz.quiz.length ? '🎉 Perfetu!' : r >= pz.quiz.length - 2 ? '👍 Bon trabadju!' : '💪 Read it again and retry!'} ${r}/${pz.quiz.length}
         ${first ? ' · ⭐ +15 XP' : ''}</div>`;
     pzProgress[id] = null;
@@ -62022,9 +62083,9 @@ function lfRenderReader(d, meta) {
       <div class="lab-mistake-icon">💡</div>
       <div>${escapeHTML(meta.tip[0])}<b>${escapeHTML(meta.tip[1])}</b>${escapeHTML(meta.tip[2])}</div>
     </div>` : ''}
-    ${meta.recap ? `<button class="due-btn" style="width:100%;margin-top:12px;background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="lfSetView('recap')">See how the conversation moved →</button>` : ''}
+    ${meta.recap ? `<button class="due-btn" style="width:100%;margin-top:12px;background:var(--card);color:var(--accent-text);border:1.5px solid var(--border)" onclick="lfSetView('recap')">See how the conversation moved →</button>` : ''}
     <button class="due-btn" id="lf-playall" style="width:100%;margin-top:12px" onclick="lfTogglePlay()">${playing ? '❙❙ Pause the scene' : '▶ Play from line ' + (st.at + 1)}</button>
-    <div style="font-weight:800;color:var(--ocean);margin:16px 0 8px" id="dlg-quiz-heading">❓ Quiz</div>
+    <div style="font-weight:800;color:var(--accent-text);margin:16px 0 8px" id="dlg-quiz-heading">❓ Quiz</div>
     <div id="dlg-quiz">
       ${d.quiz.map((qq, qi) => `
         <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;border:1px solid var(--border)">
@@ -62056,7 +62117,7 @@ function lfRenderRecap(d, meta) {
     </div>
     <div class="checkpoint-topics-label" style="margin:16px 0 8px">Phrases that did the work</div>
     ${r.phrases.map(p => `<div style="display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 13px;margin-bottom:8px">
-      <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.85rem;color:var(--ocean)">${escapeHTML(p.k)}</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px">${escapeHTML(p.e)}</div></div>
+      <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.85rem;color:var(--accent-text)">${escapeHTML(p.k)}</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px">${escapeHTML(p.e)}</div></div>
       <button class="speak-btn" style="margin:0" onclick="speakText('${escapeJS(p.k)}',this)">🔊</button>${wordByWordBtn(p.k)}
     </div>`).join('')}
     <button class="due-btn" style="width:100%;margin-top:8px" onclick="lfSetView('reader');setTimeout(()=>document.getElementById('dlg-quiz-heading')?.scrollIntoView({behavior:'smooth'}),50)">❓ ${d.quiz.length} questions</button>`;
@@ -62085,7 +62146,7 @@ function openDialogue(id, from) {
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:12px">${d.titleE} — listen first, then take the quiz</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <button class="due-btn" id="dlg-playall" onclick="playDialogue('${d.id}')">▶ Play the whole dialogue</button>
-      <button class="due-btn" style="background:var(--card);color:var(--ocean);border:1.5px solid var(--border)" onclick="dlgToggleEnglish(this)">🇬🇧 Show English</button>
+      <button class="due-btn" style="background:var(--card);color:var(--accent-text);border:1.5px solid var(--border)" onclick="dlgToggleEnglish(this)">🇬🇧 Show English</button>
       <div style="display:flex;gap:4px;margin-left:auto">
         <div class="story-rate-chip${dlgRate===0.8?' active':''}" onclick="setDlgRate(0.8,this)">0.8×</div>
         <div class="story-rate-chip${dlgRate===1?' active':''}" onclick="setDlgRate(1,this)">1×</div>
@@ -62112,11 +62173,11 @@ function openDialogue(id, from) {
       <div class="wc-words" style="margin-top:9px">${d.vocab.map(w => `<span class="wc-word">${escapeHTML(w)}</span>`).join('')}</div>
     </div>` : ''}
     <div style="display:flex;gap:9px;margin-top:14px">
-      <button class="due-btn" style="flex:1;background:var(--card);color:var(--ocean);border:1.5px dashed var(--ocean-2)" onclick="dlgStartRolePlay('${d.id}')">🎭 Take a role</button>
+      <button class="due-btn" style="flex:1;background:var(--card);color:var(--accent-text);border:1.5px dashed var(--ocean-2)" onclick="dlgStartRolePlay('${d.id}')">🎭 Take a role</button>
       <button class="due-btn" style="flex:1" onclick="document.getElementById('dlg-quiz-heading')?.scrollIntoView({behavior:'smooth',block:'start'})">❓ ${d.quiz.length} questions</button>
     </div>
     <div id="dlg-role-box" style="margin-top:12px"></div>
-    <div id="dlg-quiz-heading" style="font-weight:800;color:var(--ocean);margin:14px 0 8px">❓ Quiz</div>
+    <div id="dlg-quiz-heading" style="font-weight:800;color:var(--accent-text);margin:14px 0 8px">❓ Quiz</div>
     <div id="dlg-quiz">
       ${d.quiz.map((qq, qi) => `
         <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;border:1px solid var(--border)">
@@ -62141,7 +62202,7 @@ function dlgStartRolePlay(id) {
     <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 15px">
       <div style="font-weight:700;font-size:.85rem;margin-bottom:9px">Which role do you want to play?</div>
       <div style="display:flex;gap:8px">
-        ${speakers.map(sp => `<button class="due-btn" style="flex:1;background:var(--bg);color:var(--ocean);border:1.5px solid var(--border)" onclick="dlgRunRolePlay('${escapeJS(id)}','${escapeJS(sp)}')">${escapeHTML(sp)}</button>`).join('')}
+        ${speakers.map(sp => `<button class="due-btn" style="flex:1;background:var(--bg);color:var(--accent-text);border:1.5px solid var(--border)" onclick="dlgRunRolePlay('${escapeJS(id)}','${escapeJS(sp)}')">${escapeHTML(sp)}</button>`).join('')}
       </div>
     </div>`;
 }
@@ -62171,7 +62232,7 @@ async function dlgRunRolePlay(id, myRole) {
     if (!rolePlay || !rolePlay.active) return;
   }
   rows.forEach(el => el.classList.remove('dlg-role-active'));
-  box.innerHTML = `<div style="text-align:center;padding:12px;font-weight:800;color:var(--ocean)">🎉 Scene complete!</div>`;
+  box.innerHTML = `<div style="text-align:center;padding:12px;font-weight:800;color:var(--accent-text)">🎉 Scene complete!</div>`;
   rolePlay = null;
 }
 function dlgRoleContinue() {
@@ -62209,7 +62270,7 @@ function dlgAnswer(btn, id, qi, ok) {
       checkAchievements();
     }
     document.getElementById('dlg-result').innerHTML =
-      `<div style="background:var(--card);border-radius:var(--radius);padding:16px;text-align:center;font-weight:800;color:var(--ocean)">
+      `<div style="background:var(--card);border-radius:var(--radius);padding:16px;text-align:center;font-weight:800;color:var(--accent-text)">
         ${r === d.quiz.length ? '🎉 Perfetu!' : r >= 2 ? '👍 Bon trabadju!' : '💪 Listen again and retry!'} ${r}/${d.quiz.length} correct
         ${first ? ' · ⭐ +10 XP' : ''}</div>`;
     dlgProgress[id] = null;
@@ -62255,7 +62316,7 @@ function renderReadingList() {
   const levels = ['All', ...new Set(STORIES.map(s => s.level))];
   const shownStories = STORIES.filter(s => storyLevelFilter === 'All' || s.level === storyLevelFilter);
   list.innerHTML = renderDialogueCards() + renderPassageCards()
-    + `<div style="font-weight:800;color:var(--ocean);margin:18px 0 10px">📚 Stories</div>`
+    + `<div style="font-weight:800;color:var(--accent-text);margin:18px 0 10px">📚 Stories</div>`
     + (levels.length > 2 ? `<div id="story-level-chips" style="display:flex;gap:7px;overflow-x:auto;margin-bottom:11px;padding-bottom:2px">
         ${levels.map(l => `<div class="dict-chip${storyLevelFilter === l ? ' active' : ''}" onclick="setStoryLevelFilter('${escapeJS(l)}',this)">${escapeHTML(l)}</div>`).join('')}
       </div>` : '')
@@ -62452,7 +62513,7 @@ function openShadow(id) {
     <button class="back-btn" style="margin-bottom:14px" onclick="renderShadowList()">←</button>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
       <div style="font-size:2rem">${set.icon}</div>
-      <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--ocean);font-weight:700">${set.title}</div>
+      <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--accent-text);font-weight:700">${set.title}</div>
       <span class="s-level level-${set.level}">${set.level}</span></div>
     </div>
     <div style="font-size:.78rem;color:var(--muted);margin-bottom:16px">For each phrase: tap ▶ to listen, then tap 🎤 and repeat it out loud. Match the rhythm and speed you hear.</div>
@@ -62665,7 +62726,7 @@ function openStory(id) {
     <div class="story-detail-card">
       <div class="story-cover">${story.icon}</div>
       <div style="text-align:center;margin-top:10px">
-        <div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--ocean);font-weight:700">${story.title}</div>
+        <div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--accent-text);font-weight:700">${story.title}</div>
         <div style="font-size:.82rem;color:var(--muted);font-style:italic">${story.titleE}</div>
       </div>
       <div class="story-player">
@@ -62814,7 +62875,7 @@ function showVerbCard(inf) {
   p.innerHTML = `<div><div class="wp-k">${escapeHTML(v.inf)} — ${escapeHTML(v.e)}</div>
     <div style="font-size:.78rem;margin-top:4px;opacity:.95">${rows}</div></div>
     <button class="wp-speak" onclick="userHasInteracted=true;speakText('${escapeJS(v.inf)}',null)">🔊</button>
-    <button class="wp-speak" style="background:var(--sun,#F4A261)" onclick="this.closest('.word-popup').remove();showTab('grammar');showLearnTab('verbs');openVerb('${escapeJS(v.inf)}')">📖</button>`;
+    <button class="wp-speak" style="background:var(--sun,var(--gold))" onclick="this.closest('.word-popup').remove();showTab('grammar');showLearnTab('verbs');openVerb('${escapeJS(v.inf)}')">📖</button>`;
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 6000);
 }
@@ -62826,7 +62887,7 @@ function showWordPopup(word, meaning) {
   popup.className = 'word-popup';
   popup.innerHTML = `<div><div class="wp-k">${escapeHTML(word)}</div><div class="wp-pron">🗣️ ${escapeHTML(pronounceWord(word))}</div><div class="wp-e">${escapeHTML(meaning)}</div></div>
     <button class="wp-speak" onclick="userHasInteracted=true;speakText('${escapeJS(word)}',null)">🔊</button>
-    <button class="wp-speak" style="background:var(--sun,#F4A261)" onclick="addStoryWordToDeck('${escapeJS(word)}','${escapeJS(meaning)}')">➕</button>`;
+    <button class="wp-speak" style="background:var(--sun,var(--gold))" onclick="addStoryWordToDeck('${escapeJS(word)}','${escapeJS(meaning)}')">➕</button>`;
   document.body.appendChild(popup);
   wordPopupTimer = setTimeout(() => popup.remove(), 4000);
 }
@@ -62946,7 +63007,7 @@ function finishPlacement(score, total) {
     <div class="results-title">You're ${level}!</div>
     <div class="results-sub">Based on ${score}/${total} correct · your path now starts at level ${PLACEMENT_START_LEVEL[level]}</div>
     <div class="results-xp">We recommend starting with these lessons:</div>
-    <div style="text-align:left;margin-bottom:16px">${recommended.slice(0,5).map(l => `<div style="padding:7px 0;border-bottom:1px solid var(--border);font-weight:700;color:var(--ocean)">${l.icon} ${l.title}</div>`).join('')}</div>
+    <div style="text-align:left;margin-bottom:16px">${recommended.slice(0,5).map(l => `<div style="padding:7px 0;border-bottom:1px solid var(--border);font-weight:700;color:var(--accent-text)">${l.icon} ${l.title}</div>`).join('')}</div>
     <button class="results-btn primary" onclick="showTab('path')">Go to the Path</button>
     <button class="results-btn secondary" onclick="showTab('home')">Home</button>`;
   renderHomeGrid(); renderAllLessonsGrid();
