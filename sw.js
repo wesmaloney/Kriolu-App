@@ -1,11 +1,13 @@
 // Kriolu PWA Service Worker
-const CACHE_NAME = 'kriolu-v143';
+const CACHE_NAME = 'kriolu-v144';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+  './img/antonio.webp',
+  './img/antonio-64.webp',
 ];
 
 // Install: cache the app shell
