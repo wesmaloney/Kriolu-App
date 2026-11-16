@@ -754,50 +754,56 @@
     @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
     @keyframes card-flip{0%{transform:rotateX(-90deg);opacity:0}100%{transform:rotateX(0);opacity:1}}
 
-    /* ── SÔR ANTÓNIO ANIMATED CHARACTER ── */
+    /* ── SÔR ANTÓNIO ANIMATED CHARACTER ──
+       A still portrait with short clips cross-faded over it. The clip shown
+       follows his state (idle, listening, thinking, talking) and, while he
+       talks, the mood of the sentence. --lvl is how loud his voice is now. */
     .antonio-stage{display:flex;flex-direction:column;align-items:center;margin-bottom:14px}
-    .antonio{width:150px;height:150px;position:relative;display:flex;align-items:center;justify-content:center}
+    .antonio{width:132px;height:132px;margin:9px;position:relative;flex-shrink:0;--lvl:0}
+    .antonio-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#22c3dd;isolation:isolate}
+    .antonio-face img,.antonio-face video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+    .antonio-clip{opacity:0;transition:opacity .22s ease}
+    .antonio-clip.on{opacity:1}
+    .antonio.talking:not(.voicing) .antonio-clip.on{opacity:0;transition-duration:.14s}
+    /* ring: breathes with his voice, turns coral while he listens, spins while he thinks */
+    .antonio-aura{position:absolute;inset:-7px;border-radius:50%;border:3px solid var(--gold);pointer-events:none;
+      transform:scale(calc(1 + var(--lvl) * .055));transition:transform .09s linear,border-color .25s ease}
+    .antonio.listening .antonio-aura{border-color:var(--coral)}
+    .antonio.thinking .antonio-aura{border-color:transparent;
+      background:conic-gradient(from 0deg,transparent 0 55%,var(--gold) 100%);
+      -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));
+      mask:radial-gradient(farthest-side,transparent calc(100% - 3.5px),#000 calc(100% - 3px));
+      animation:antonio-spin 1.4s linear infinite}
+    .antonio-listening-ring{position:absolute;inset:-7px;border-radius:50%;border:3px solid var(--coral);opacity:0;pointer-events:none}
+    .antonio.listening .antonio-listening-ring{animation:listen-pulse 1.4s ease-out infinite}
     @media (prefers-reduced-motion:no-preference){
-      .antonio.idle{animation:antonio-bob 3.2s ease-in-out infinite}
-      .antonio.talking{animation:antonio-talk-bob .5s ease-in-out infinite}
-      .antonio.listening{animation:antonio-lean 1.6s ease-in-out infinite}
-      .antonio.happy{animation:antonio-hop .5s ease}
+      .antonio.happy{animation:antonio-hop .55s cubic-bezier(.3,.7,.3,1)}
     }
-    @keyframes antonio-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-    @keyframes antonio-talk-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-    @keyframes antonio-lean{0%,100%{transform:rotate(0)}50%{transform:rotate(4deg)}}
-    @keyframes antonio-hop{0%{transform:translateY(0)}30%{transform:translateY(-16px)}55%{transform:translateY(0)}70%{transform:translateY(-7px)}100%{transform:translateY(0)}}
-    /* emoji character */
-    .antonio-emoji{font-size:96px;line-height:1;transition:transform .1s ease;filter:drop-shadow(0 4px 10px rgba(10,77,104,.18));user-select:none}
-    .antonio.blink .antonio-emoji{transform:scaleY(.86)}
+    @media (prefers-reduced-motion:reduce){
+      .antonio-clip{display:none}
+      .antonio-aura{transform:none}
+      .antonio.thinking .antonio-aura{animation:none;background:none;-webkit-mask:none;mask:none;border-color:var(--gold);border-style:dashed}
+    }
+    @keyframes antonio-spin{to{transform:rotate(360deg)}}
+    @keyframes antonio-hop{0%{transform:translateY(0)}30%{transform:translateY(-14px)}55%{transform:translateY(0)}72%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+    @keyframes listen-pulse{0%{opacity:.65;transform:scale(1)}100%{opacity:0;transform:scale(1.22)}}
     .antonio-status{font-size:.82rem;font-weight:700;color:var(--ocean);margin-top:8px;min-height:20px;text-align:center}
     [data-theme="dark"] .antonio-status{color:var(--sky)}
     .antonio-speech{background:var(--card);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:10px 16px;box-shadow:var(--shadow);max-width:280px;margin-top:6px;font-size:.92rem;color:var(--text);position:relative;animation:pop-in .3s ease}
-    .antonio-listening-ring{position:absolute;inset:8px;border-radius:50%;border:3px solid var(--coral);opacity:0;pointer-events:none}
-    .antonio.listening .antonio-listening-ring{animation:listen-pulse 1.2s ease-out infinite}
-    @keyframes listen-pulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.25)}}
-    /* António avatar, sized up as the hero of the Talk screen */
-    .antonio-chat-avatar{width:120px;height:120px;flex-shrink:0;border-radius:50%;background:var(--grad-glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:var(--shadow)}
-    .antonio-chat-avatar .antonio{width:112px;height:112px}
-    .antonio-chat-avatar .antonio-emoji{font-size:70px;filter:none}
-    .antonio-face{width:86%;height:86%;border-radius:50%;overflow:hidden;position:relative;background:#22c3dd;box-shadow:0 4px 14px rgba(10,77,104,.22)}
-    .antonio-chat-avatar .antonio-face{width:100%;height:100%;box-shadow:none}
-    .antonio-face img,.antonio-face video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-    .antonio-face video{opacity:0;transition:opacity .14s}
-    .antonio.talking.voicing .antonio-face video.on{opacity:1}
-    @media (prefers-reduced-motion:reduce){.antonio-face video{display:none}}
+    .antonio-chat-avatar{display:flex;align-items:center;justify-content:center}
     .msg-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
-    .antonio-hero{display:flex;flex-direction:column;align-items:center;padding:6px 0 14px}
-    .antonio-hero-avatar{position:relative;cursor:pointer}
-    .antonio-hero-avatar .antonio-listening-ring{display:block}
-    .antonio-wave{display:flex;align-items:flex-end;justify-content:center;gap:3px;height:26px;margin-top:12px}
-    .wave-bar{width:3px;height:5px;border-radius:99px;background:rgba(10,77,104,.3);transition:height .15s}
-    .antonio-hero:has(.antonio.talking) .wave-bar,
-    .antonio-hero:has(.antonio.listening) .wave-bar{background:var(--coral);animation:wave-bounce .8s ease-in-out infinite}
+    .antonio-hero-avatar{position:relative;cursor:pointer;border-radius:50%;-webkit-tap-highlight-color:transparent}
+    .antonio-hero-avatar:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+    .antonio-wave{display:flex;align-items:center;justify-content:center;gap:3px;height:26px}
+    .wave-bar{width:3px;height:4px;border-radius:99px;background:rgba(255,255,255,.34);transition:height .09s linear,background .25s ease}
+    .antonio-hero:has(.antonio.talking) .wave-bar{background:var(--gold)}
+    .antonio-hero:has(.antonio.listening) .wave-bar{background:#F5B9AB;animation:wave-bounce .9s ease-in-out infinite}
+    .antonio-hero:has(.antonio.thinking) .wave-bar{animation:wave-think 1.2s ease-in-out infinite}
     .wave-bar:nth-child(odd){animation-delay:.15s}
     .wave-bar:nth-child(3n){animation-delay:.3s}
-    @keyframes wave-bounce{0%,100%{height:5px}50%{height:22px}}
-    .antonio-hero-hint{font:800 .72rem/1 'DM Sans',sans-serif;color:var(--ocean);margin-top:9px}
+    @keyframes wave-bounce{0%,100%{height:4px}50%{height:20px}}
+    @keyframes wave-think{0%,100%{opacity:.35}50%{opacity:1}}
+    .antonio-hero-hint{font:600 .72rem/1.3 'DM Sans',sans-serif;color:rgba(255,255,255,.7)}
     [data-theme="dark"] .antonio-hero-hint{color:var(--sky)}
 
     /* Apply to feedback */
@@ -1515,17 +1521,175 @@
     .reveal-btn.reveal-ghost:hover{background:color-mix(in srgb,var(--ocean) 8%,var(--card));color:var(--ocean)}
     /* Dark mode: ocean-blue text becomes the lighter sea blue so it stays readable */
     [data-theme="dark"] .antonio-hero-hint,[data-theme="dark"] .antonio-status,[data-theme="dark"] .autospeak-row,[data-theme="dark"] .bento-tile .bt-val,[data-theme="dark"] .blank-input,[data-theme="dark"] .bottom-nav-btn.active,[data-theme="dark"] .chat-label,[data-theme="dark"] .chat-mini-btn:hover,[data-theme="dark"] .convo-tips h4,[data-theme="dark"] .dc-record-label,[data-theme="dark"] .dict-chip,[data-theme="dark"] .dict-chip:hover,[data-theme="dark"] .dlg-speaker,[data-theme="dark"] .exercise-word,[data-theme="dark"] .font-btn.active,[data-theme="dark"] .font-btn:hover,[data-theme="dark"] .g-point-k,[data-theme="dark"] .hb-title,[data-theme="dark"] .hear-btn,[data-theme="dark"] .hear-btn:hover,[data-theme="dark"] .lab-pattern,[data-theme="dark"] .ladder-legend button.on,[data-theme="dark"] .lang-pill,[data-theme="dark"] .match-btn.selected,[data-theme="dark"] .mic-btn:hover,[data-theme="dark"] .nav-tab.active,[data-theme="dark"] .path-level-name,[data-theme="dark"] .path-unit-title,[data-theme="dark"] .phrase-kriolu,[data-theme="dark"] .profile-edit-btn,[data-theme="dark"] .qa-icon,[data-theme="dark"] .readtab-btn.active,[data-theme="dark"] .readtab-btn:hover,[data-theme="dark"] .recap-btn,[data-theme="dark"] .recap-btn:hover,[data-theme="dark"] .recap-card strong,[data-theme="dark"] .results-btn.secondary,[data-theme="dark"] .results-btn.secondary:hover,[data-theme="dark"] .results-stat .val,[data-theme="dark"] .results-title,[data-theme="dark"] .reveal-btn.reveal-ghost:hover,[data-theme="dark"] .review-word-k,[data-theme="dark"] .roadmap-title,[data-theme="dark"] .scenario-chip:hover,[data-theme="dark"] .section-heading,[data-theme="dark"] .settings-title,[data-theme="dark"] .sf-chip,[data-theme="dark"] .sf-chip:hover,[data-theme="dark"] .shadow-btn.listen,[data-theme="dark"] .shadow-btn:hover,[data-theme="dark"] .shadow-k,[data-theme="dark"] .skip-btn:hover,[data-theme="dark"] .song-title,[data-theme="dark"] .speak-transcript,[data-theme="dark"] .stage-item.active .stage-label,[data-theme="dark"] .stat-card .value,[data-theme="dark"] .story-rate-chip,[data-theme="dark"] .story-rate-chip:hover,[data-theme="dark"] .story-title,[data-theme="dark"] .study-btn.ghost:hover,[data-theme="dark"] .study-k,[data-theme="dark"] .study-speak.small,[data-theme="dark"] .tip-chip,[data-theme="dark"] .tip-chip:hover,[data-theme="dark"] .topic-chip,[data-theme="dark"] .topic-chip:hover,[data-theme="dark"] .track-card-tick,[data-theme="dark"] .translate-output,[data-theme="dark"] .verb-chip,[data-theme="dark"] .verb-chip:hover,[data-theme="dark"] .verb-inf,[data-theme="dark"] .voice-select,[data-theme="dark"] .wc-task,[data-theme="dark"] .wc-word,[data-theme="dark"] .wl-k,[data-theme="dark"] .wotd-play,[data-theme="dark"] .wotd-word{color:var(--sky)}
+
+    /* ══════════════════════════════════════════════════════════════════
+       FORMAT AND MOTION PASS
+       Line icons in the app chrome, a calmer Talk screen with the
+       conversation up front, one motion language, and a desktop layout
+       that uses the extra width.
+       ══════════════════════════════════════════════════════════════════ */
+    :root{--ease-out:cubic-bezier(.22,.8,.26,1)}
+    .ic{width:1.15em;height:1.15em;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em}
+    .ic-fill{fill:currentColor;stroke:none}
+    h1,h2,h3,.hb-title,.d-title,.lesson-title{text-wrap:balance}
+    p,.d-sub,.qa-sub,.lesson-desc{text-wrap:pretty}
+    .stat-chip,.bento-hero-val,.bt-val,.xp-label,.weekly-goal-label,#chat-window{font-variant-numeric:tabular-nums}
+
+    /* Header */
+    .logo{display:flex;align-items:center;gap:8px}
+    .logo-mark{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--ocean);color:#FFFDF8}
+    .logo-mark .ic{width:20px;height:20px;stroke-width:2.1}
+    .stat-chip{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+    .stat-chip .ic{width:16px;height:16px}
+    #streak-icon{display:inline-flex;color:var(--coral)}
+    .stat-chip .ic-star{color:var(--gold)}
+    .icon-btn{display:inline-flex;align-items:center;justify-content:center}
+    .icon-btn .ic{width:19px;height:19px}
+    .flame-unlit{filter:none;opacity:1;color:var(--muted)}
+    .flame-unlit .ic-fill{fill:none;stroke:currentColor}
+    .flame-frozen{color:var(--sky)}
+
+    /* Home stat tiles */
+    .bento-hero-icon,.bt-icon{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:11px;font-size:1rem;margin-bottom:8px}
+    .bento-hero-icon{background:var(--card);color:var(--coral);animation:none}
+    .bento-tile .bt-icon,.bento-wide .bt-icon{background:color-mix(in srgb,var(--ocean) 10%,var(--card));color:var(--accent-text,var(--ocean));font-size:1rem;margin-bottom:8px}
+    .bento-wide .bt-icon{margin-bottom:0}
+    .bento-hero-icon .ic,.bt-icon .ic{width:19px;height:19px}
+    .tile-xp .bt-icon{background:color-mix(in srgb,var(--gold) 20%,var(--card));color:#9A6A0C}
+    [data-theme="dark"] .tile-xp .bt-icon{color:var(--gold)}
+
+    /* Today's flow: numbered steps, actions on their own line */
+    .flow-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+    .flow-count{font-size:.75rem;font-weight:700;color:var(--muted);background:color-mix(in srgb,var(--text) 6%,transparent);border-radius:999px;padding:4px 10px}
+    .flow-count.all{color:var(--ok-fg,var(--correct));background:var(--ok-bg,transparent)}
+    .flow-step{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;column-gap:12px;row-gap:9px;padding:11px 0;border-top:1px solid var(--border)}
+    .flow-step:first-of-type{border-top:none}
+    .flow-n{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 .82rem/1 'Fraunces',Georgia,serif;
+      background:color-mix(in srgb,var(--ocean) 10%,var(--card));color:var(--accent-text,var(--ocean))}
+    .flow-step.done .flow-n{background:var(--ok-bg,#DDF3E4);color:var(--ok-fg,#1B7A3E)}
+    .flow-n .ic{width:15px;height:15px;stroke-width:2.6}
+    .flow-label{font-weight:700;font-size:.88rem;line-height:1.3}
+    .flow-step.done .flow-label{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+    .flow-hint{font-size:.74rem;color:var(--muted);margin-top:1px}
+    .flow-go.due-btn{padding:8px 14px;font-size:.78rem}
+    .flow-routes{grid-column:2 / -1;display:flex;gap:6px;flex-wrap:wrap}
+    .flow-routes .due-btn{padding:7px 13px;font-size:.76rem;background:var(--card);color:var(--accent-text,var(--ocean));border:1px solid var(--border)}
+    .flow-routes .due-btn:hover{background:color-mix(in srgb,var(--ocean) 8%,var(--card))}
+
+    /* ── TALK ── tutor card, settings tucked away, conversation up front */
+    .talk-layout{display:flex;flex-direction:column;gap:12px}
+    .talk-side,.talk-main{display:flex;flex-direction:column;gap:10px;min-width:0}
+    .talk-layout .api-key-panel,.talk-layout .autospeak-row,.talk-layout .chat-tools-row,.talk-layout .chat-section-row,
+    .talk-layout .scenario-chips,.talk-layout .chat-window,.talk-layout .convo-header{margin-bottom:0}
+    .convo-header.talk-hero{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"av name" "av status" "av wave" "av hint";
+      align-content:center;align-items:center;column-gap:16px;row-gap:3px;padding:16px 18px;border-radius:28px 28px 28px 8px;background:var(--ocean);color:#FFFFFF;box-shadow:none;text-align:left}
+    .talk-hero .antonio-hero-avatar{grid-area:av}
+    .talk-hero .antonio{width:96px;height:96px;margin:8px}
+    .talk-hero h3{grid-area:name;font-size:1.3rem;font-weight:600;margin:0;line-height:1.15}
+    .talk-hero #antonio-chat-status{grid-area:status;font-size:.8rem;color:rgba(255,255,255,.8);opacity:1;line-height:1.3;min-height:2.6em}
+    .talk-hero .antonio-wave{grid-area:wave;justify-content:flex-start;margin:4px 0 2px}
+    .talk-hero .antonio-hero-hint,[data-theme="dark"] .talk-hero .antonio-hero-hint{grid-area:hint;color:rgba(255,255,255,.66)}
+    .tutor-settings{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+    .tutor-settings summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"t c" "s c";align-items:center;column-gap:10px;padding:12px 16px;min-height:44px}
+    .tutor-settings summary::-webkit-details-marker{display:none}
+    .tutor-settings summary:focus-visible{outline:3px solid var(--gold);outline-offset:-3px;border-radius:18px}
+    .ts-title{grid-area:t;font-weight:700;font-size:.9rem}
+    .ts-sub{grid-area:s;font-size:.74rem;color:var(--muted)}
+    .ts-chev{grid-area:c;width:18px;height:18px;color:var(--muted);transition:transform .25s var(--ease-out)}
+    .tutor-settings[open] .ts-chev{transform:rotate(180deg)}
+    .ts-body{display:flex;flex-direction:column;gap:12px;padding:4px 16px 16px;border-top:1px solid var(--border)}
+    .ts-body .api-key-panel,.ts-body .autospeak-row,
+    [data-theme="dark"] .ts-body .api-key-panel,[data-theme="dark"] .ts-body .autospeak-row,
+    html[data-lang="portuguese"] .ts-body .api-key-panel,html[data-lang="portuguese"] .ts-body .autospeak-row{background:none;border:none;box-shadow:none;padding:0;border-radius:0}
+    .ts-body .api-key-panel{padding-top:12px;flex-wrap:wrap}
+    .ts-body .api-input{flex:1;min-width:140px}
+    .ts-body .autospeak-row{color:var(--text)}
+    .ts-body .autospeak-row > div{flex:1;min-width:150px;justify-content:flex-end}
+    .ts-body .autospeak-row .voice-select{flex:1;min-width:0}
+    .ts-body .chat-tools-row{gap:12px}
+    .ts-body .difficulty-dial{flex:1;min-width:140px;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+    .ts-body .difficulty-dial .voice-select{width:100%}
+    .talk-main .chat-label{font:600 1.02rem/1.2 'Fraunces',Georgia,serif;color:var(--text)}
+    [data-theme="dark"] .talk-main .chat-label{color:var(--text)}
+    .talk-main .challenge-btn{margin-left:auto}
+    .talk-main .scenario-chips{padding-bottom:2px;scroll-snap-type:x proximity}
+    .talk-main .scenario-chip{scroll-snap-align:start}
+    .chat-window{height:clamp(320px,52vh,560px);border-radius:22px;box-shadow:none;padding:16px 14px}
+    .msg-bubble{max-width:82%;padding:10px 14px;border-radius:18px;font-size:.92rem}
+    .chat-msg.bot .msg-bubble,[data-theme="dark"] .chat-msg.bot .msg-bubble{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:6px}
+    .chat-msg.user .msg-bubble{background:var(--coral);color:#FFFFFF;border-bottom-right-radius:6px}
+    @media (prefers-reduced-motion:no-preference){
+      .chat-msg{animation:msg-in .32s var(--ease-out) both}
+      .chat-msg.user{transform-origin:100% 100%}
+      .chat-msg.bot{transform-origin:0 100%}
+    }
+    @keyframes msg-in{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+    .chat-input-row{background:var(--card);border:1px solid var(--border);border-radius:999px;padding:5px;gap:6px;transition:border-color .2s,box-shadow .2s}
+    .chat-input-row:focus-within{border-color:var(--ocean);box-shadow:0 0 0 3px color-mix(in srgb,var(--ocean) 16%,transparent)}
+    .chat-input-row .chat-input{flex:1;min-width:0;border:none;background:none;box-shadow:none;outline:none;padding:8px 6px;font-size:.95rem;color:var(--text)}
+    .chat-input-row .mic-btn,.chat-input-row .send-btn{width:42px;height:42px;font-size:1rem}
+    .chat-input-row .mic-btn{border:none;background:color-mix(in srgb,var(--text) 6%,transparent)}
+    .mic-btn .ic,.send-btn .ic{width:20px;height:20px}
+    .chat-input-row .mic-btn.listening{background:var(--coral);color:#FFFFFF}
+    .talk-main .recap-btn{margin-top:0}
+    .talk-main .convo-tips{margin-top:0}
+
+    /* ── MOTION ── one easing, short distances, nothing that loops for show */
+    @media (prefers-reduced-motion:no-preference){
+      .screen{animation:screen-in .34s var(--ease-out)}
+      #screen-home.active > *{animation:riseIn .46s var(--ease-out) both}
+      #screen-home.active > *:nth-child(2){animation-delay:.04s}
+      #screen-home.active > *:nth-child(3){animation-delay:.08s}
+      #screen-home.active > *:nth-child(4){animation-delay:.12s}
+      #screen-home.active > *:nth-child(5){animation-delay:.16s}
+      #screen-home.active > *:nth-child(n+6){animation-delay:.2s}
+      .talk-side{animation:riseIn .42s var(--ease-out) both}
+      .talk-main{animation:riseIn .42s var(--ease-out) .07s both}
+      .bottom-nav-btn .bnav-icon{transition:transform .28s var(--ease-out)}
+      .bottom-nav-btn.active .bnav-icon{transform:translateY(-1px) scale(1.08)}
+      .bottom-nav-btn:active .bnav-icon{transform:scale(.9)}
+      .lesson-card,.qa-tile,.bento-tile,.daily-card,.home-block{transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),border-color .2s}
+      .lesson-card:active,.bento-tile.tile-link:active{transform:scale(.985)}
+      .start-btn:active,.reveal-btn:active,.submit-btn:active,.next-btn:active,.due-btn:active,.d-btn:active,
+      .scenario-chip:active,.tip-chip:active,.challenge-btn:active,.send-btn:active,.mic-btn:active{transform:scale(.96)}
+      .xp-bar,.weekly-goal-fill,.progress-fill,.d-fill{transition:width .7s var(--ease-out)}
+    }
+    @keyframes screen-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .bottom-nav-btn{position:relative}
+    .bottom-nav-btn .bnav-icon{width:52px;height:30px;border-radius:999px;align-items:center;justify-content:center;transition:background .25s ease,transform .28s var(--ease-out)}
+    .bottom-nav-btn.active .bnav-icon{background:color-mix(in srgb,var(--ocean) 12%,transparent)}
+    [data-theme="dark"] .bottom-nav-btn.active .bnav-icon{background:color-mix(in srgb,var(--sky) 16%,transparent)}
+
+    /* ── DESKTOP ── the chrome lines up with the column, Talk gets two columns */
+    @media (min-width:900px){
+      #app-header{padding-left:max(18px,calc((100vw - 1040px) / 2));padding-right:max(18px,calc((100vw - 1040px) / 2))}
+      #nav-tabs{justify-content:center;gap:6px}
+      #nav-tabs .nav-tab{flex:0 0 auto}
+      #bottom-nav,[data-theme="dark"] #bottom-nav{left:50%;right:auto;transform:translateX(-50%);bottom:16px;width:min(520px,calc(100vw - 32px));
+        border:1px solid var(--border);border-radius:24px;box-shadow:0 10px 30px rgba(60,40,20,.12);padding-bottom:0}
+      #main{padding-bottom:112px}
+      #main:has(#screen-conversation.active){max-width:1040px}
+      .talk-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:22px;align-items:start}
+      .talk-side{position:sticky;top:132px}
+      .convo-header.talk-hero{grid-template-columns:1fr;grid-template-areas:"av" "name" "status" "wave" "hint";justify-items:center;text-align:center;padding:26px 20px 22px;row-gap:5px}
+      .talk-hero .antonio{width:148px;height:148px;margin:10px 10px 12px}
+      .talk-hero h3{font-size:1.5rem}
+      .talk-hero #antonio-chat-status{min-height:1.3em}
+      .talk-hero .antonio-wave{justify-content:center}
+      .chat-window{height:clamp(380px,calc(100vh - 470px),640px)}
+      .talk-main .scenario-chips{flex-wrap:wrap;overflow:visible}
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <header id="app-header">
-  <div class="logo" onclick="goHome()"><span class="logo-mark">🌊</span> <span class="logo-text">Kriolu</span></div>
+  <div class="logo" onclick="goHome()"><span class="logo-mark" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/><path d="M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/></svg></span> <span class="logo-text">Kriolu</span></div>
   <div class="header-right">
-    <div class="stat-chip"><span id="streak-icon">🔥</span> <span id="streak-count">0</span></div>
-    <div class="stat-chip">⭐ <span id="xp-count">0</span></div>
-    <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
+    <div class="stat-chip" title="Day streak"><span id="streak-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="ic-fill" d="M12 2.5c.6 3.4 2.3 5 3.9 6.8 1.5 1.7 2.6 3.4 2.6 5.700A6.5 6.5 0 0 1 12 21.5 6.5 6.5 0 0 1 5.5 15c0-1.9.8-3.5 2-4.8.3 1.4 1 2.3 2 2.8-.300-3.7.5-7.3 2.5-10.500z"/></svg></span> <span id="streak-count">0</span></div>
+    <div class="stat-chip" title="Total XP"><svg class="ic ic-star" viewBox="0 0 24 24" aria-hidden="true"><path class="ic-fill" d="m12 2.8 2.8 5.9 6.4.8-4.7 4.5 1.2 6.400L12 17.300l-5.7 3.1 1.2-6.400L2.8 9.500l6.4-.8z"/></svg> <span id="xp-count">0</span></div>
+    <button class="icon-btn" onclick="openSettings()" title="Settings" aria-label="Settings"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9"/><path d="M17 7h3"/><circle cx="15" cy="7" r="2"/><path d="M4 17h3"/><path d="M11 17h9"/><circle cx="9" cy="17" r="2"/></svg></button>
   </div>
 </header>
 
@@ -1730,14 +1894,14 @@
     </div>
     <div class="bento">
       <div class="bento-hero" id="bento-streak">
-        <div class="bento-hero-icon" id="streak-icon-big">🔥</div>
+        <div class="bento-hero-icon" id="streak-icon-big"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="ic-fill" d="M12 2.5c.6 3.4 2.3 5 3.9 6.8 1.5 1.7 2.6 3.4 2.6 5.700A6.5 6.5 0 0 1 12 21.5 6.5 6.5 0 0 1 5.5 15c0-1.9.8-3.5 2-4.8.3 1.4 1 2.3 2 2.8-.300-3.7.5-7.3 2.5-10.500z"/></svg></div>
         <div class="bento-hero-val" id="stat-streak">0</div>
         <div class="bento-hero-label">Day Streak</div>
         <div class="bento-hero-sub" id="streak-sub">Start today!</div>
       </div>
-      <div class="bento-tile tile-xp"><div class="bt-icon">⭐</div><div class="bt-val" id="stat-xp">0</div><div class="bt-label">Total XP</div></div>
-      <div class="bento-tile tile-lessons"><div class="bt-icon">✅</div><div class="bt-val" id="stat-lessons">0</div><div class="bt-label">Lessons Done</div></div>
-      <div class="bento-tile bento-wide tile-link" id="tile-mastered" role="button" tabindex="0" onclick="showMasteredWords()" onkeydown="if(event.key==='Enter')showMasteredWords()"><div class="bt-icon">🧠</div><div class="bt-val" id="stat-words">0</div><div class="bt-label">Words Mastered</div><div class="bt-link">See the list →</div></div>
+      <div class="bento-tile tile-xp"><div class="bt-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="ic-fill" d="m12 2.8 2.8 5.9 6.4.8-4.7 4.5 1.2 6.400L12 17.300l-5.7 3.1 1.2-6.400L2.8 9.500l6.4-.8z"/></svg></div><div class="bt-val" id="stat-xp">0</div><div class="bt-label">Total XP</div></div>
+      <div class="bento-tile tile-lessons"><div class="bt-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.500L19 7.5"/></svg></div><div class="bt-val" id="stat-lessons">0</div><div class="bt-label">Lessons Done</div></div>
+      <div class="bento-tile bento-wide tile-link" id="tile-mastered" role="button" tabindex="0" onclick="showMasteredWords()" onkeydown="if(event.key==='Enter')showMasteredWords()"><div class="bt-icon"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.500C10 5 7.5 4.5 4 4.500v13c3.5 0 6 .5 8 2 2-1.5 4.5-2 8-2v-13c-3.5 0-6 .5-8 2z"/><path d="M12 6.500v13"/></svg></div><div class="bt-val" id="stat-words">0</div><div class="bt-label">Words Mastered</div><div class="bt-link">See the list →</div></div>
     </div>
     <div id="daily-card-slot"></div>
     <div class="quick-actions" id="quick-actions">
@@ -2040,16 +2204,20 @@
 
   <!-- CONVERSATION -->
   <div id="screen-conversation" class="screen">
-    <div class="convo-header">
-      <div><h3 id="antonio-chat-name">Sôr António</h3><p id="antonio-chat-status">Your tutor • Powered by Claude</p></div>
+    <div class="talk-layout">
+    <div class="talk-side">
+    <div class="convo-header talk-hero antonio-hero">
+      <div class="antonio-hero-avatar" role="button" tabindex="0" aria-label="Hear Sôr António's last reply again" onclick="replayLastAntonio()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();replayLastAntonio()}"><div class="antonio-chat-avatar"></div></div>
+      <h3 id="antonio-chat-name">Sôr António</h3>
+      <p id="antonio-chat-status">Your tutor • Powered by Claude</p>
+      <div class="antonio-wave" id="antonio-wave" aria-hidden="true"></div>
+      <div class="antonio-hero-hint">Tap him to hear his last reply again</div>
     </div>
-    <div class="antonio-hero">
-      <div class="antonio-hero-avatar" onclick="replayLastAntonio()"><div class="antonio-chat-avatar"></div></div>
-      <div class="antonio-wave" id="antonio-wave"></div>
-      <div class="antonio-hero-hint">Tap Sôr António to hear him again</div>
-    </div>
+    <details class="tutor-settings" id="tutor-settings">
+      <summary><span class="ts-title">Tutor settings</span><span class="ts-sub">Voice, level, dialect and API key</span><svg class="ic ts-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="ts-body">
     <div class="api-key-panel">
-      <label>API Key:</label>
+      <label for="api-key-input">API key</label>
       <input type="password" id="api-key-input" class="api-input" placeholder="sk-ant-..." />
       <button class="api-save-btn" onclick="saveApiKey()">Save</button>
     </div>
@@ -2058,14 +2226,14 @@
       <label class="toggle-switch"><input type="checkbox" id="autospeak-toggle" onchange="toggleAutoSpeak()"><span class="toggle-slider"></span></label>
       <span id="autospeak-label" style="color:var(--muted);font-weight:600">Off</span>
       <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
-        <span style="font-size:.75rem;color:var(--muted);font-weight:700">🎙️</span>
-        <select id="voice-select" class="voice-select" onchange="setVoice(this.value)"><option>Loading…</option></select>
+        <span style="font-size:.75rem;color:var(--muted);font-weight:700">Voice</span>
+        <select id="voice-select" class="voice-select" aria-label="Reading voice" onchange="setVoice(this.value)"><option>Loading…</option></select>
       </div>
     </div>
     <div class="chat-tools-row">
       <div class="difficulty-dial">
         <span style="font-size:.75rem;color:var(--muted);font-weight:700">Difficulty</span>
-        <select id="difficulty-select" class="voice-select" onchange="setChatDifficulty(this.value)">
+        <select id="difficulty-select" class="voice-select" aria-label="Difficulty" onchange="setChatDifficulty(this.value)">
           <option value="auto">Auto (my level)</option>
           <option value="easy">Beginner</option>
           <option value="medium">Intermediate</option>
@@ -2077,35 +2245,39 @@
         <span style="font-size:.75rem;color:var(--muted);font-weight:700">Dialect</span>
         <select class="voice-select ai-dialect-select" aria-label="Sôr António's dialect" onchange="setAiDialect(this.value)"></select>
       </div>
-      <button class="challenge-btn" onclick="renderDailyChallengeScreen()">🎯 Daily Challenge</button>
     </div>
-    <div class="chat-section-row">
-      <span class="chat-label">Scenarios</span>
-      <div class="chat-mini-row">
-        <button class="chat-mini-btn" onclick="suggestTopics()">💡 Suggest topics</button>
-        <button class="chat-mini-btn" onclick="clearChatHistory()">🧹 Clear chat</button>
-        <button class="chat-mini-btn" onclick="resetTutorMemory()">🧠 Reset memory</button>
+    <div class="chat-mini-row">
+      <button class="chat-mini-btn" onclick="clearChatHistory()">Clear chat</button>
+      <button class="chat-mini-btn" onclick="resetTutorMemory()">Reset memory</button>
+    </div>
       </div>
+    </details>
+    </div>
+    <div class="talk-main">
+    <div class="chat-section-row">
+      <span class="chat-label">Start with a scenario</span>
+      <button class="challenge-btn" onclick="renderDailyChallengeScreen()">Daily Challenge</button>
     </div>
     <div class="scenario-chips">
-      <button class="scenario-chip" onclick="startDueWordsChat()">🎯 My due words</button>
-      <button class="scenario-chip" onclick="startScenario('greet')">👋 Greetings</button>
-      <button class="scenario-chip" onclick="startScenario('food')">🍽️ Ordering Food</button>
-      <button class="scenario-chip" onclick="startScenario('directions')">🗺️ Directions</button>
-      <button class="scenario-chip" onclick="startScenario('shopping')">🛒 Shopping</button>
-      <button class="scenario-chip" onclick="startScenario('family')">👨‍👩‍👧 Family Talk</button>
-      <button class="scenario-chip" onclick="startScenario('freeform')">💬 Free Chat</button>
+      <button class="scenario-chip" onclick="startDueWordsChat()">My due words</button>
+      <button class="scenario-chip" onclick="startScenario('greet')">Greetings</button>
+      <button class="scenario-chip" onclick="startScenario('food')">Ordering food</button>
+      <button class="scenario-chip" onclick="startScenario('directions')">Directions</button>
+      <button class="scenario-chip" onclick="startScenario('shopping')">Shopping</button>
+      <button class="scenario-chip" onclick="startScenario('family')">Family talk</button>
+      <button class="scenario-chip" onclick="startScenario('freeform')">Free chat</button>
+      <button class="scenario-chip" onclick="suggestTopics()">Suggest topics</button>
     </div>
     <div class="mission-bar" id="mission-bar" style="display:none"></div>
     <div class="chat-window" id="chat-window"></div>
     <div class="chat-input-row">
-      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak">🎤</button>
-      <input type="text" id="chat-input" class="chat-input" placeholder="Fla ku mi… (or tap 🎤)" onkeydown="if(event.key==='Enter')sendMessage()" />
-      <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Speak" aria-label="Speak"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
+      <input type="text" id="chat-input" class="chat-input" placeholder="Fla ku mi…" aria-label="Message Sôr António" onkeydown="if(event.key==='Enter')sendMessage()" />
+      <button class="send-btn" id="send-btn" onclick="sendMessage()" aria-label="Send"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
     </div>
-    <button class="recap-btn" onclick="endChatRecap()">📋 Wrap up & get my recap</button>
+    <button class="recap-btn" onclick="endChatRecap()">Wrap up and get my recap</button>
     <div class="convo-tips">
-      <h4>💡 Quick starters</h4>
+      <h4>Quick starters</h4>
       <div class="tip-chips">
         <div class="tip-chip" onclick="useStarter('Oi! Kuma bu sta?')">Oi! Kuma bu sta?</div>
         <div class="tip-chip" onclick="useStarter('Fla-m sobri Kabu Verdi')">About Cape Verde</div>
@@ -2114,6 +2286,8 @@
         <div class="tip-chip" onclick="useStarter('Kuze ki kumida tipiku di Kabu Verdi?')">Cape Verde food</div>
         <div class="tip-chip" onclick="useStarter('Konta-m sobri morna')">About morna music</div>
       </div>
+    </div>
+    </div>
     </div>
   </div>
 
@@ -49835,7 +50009,7 @@ function applyLanguageChrome() {
   // Portuguese switches to azulejo blue, terracotta and limestone light.
   document.documentElement.setAttribute('data-lang', currentLang());
   const mark = document.querySelector('.logo-mark');
-  if (mark) mark.textContent = L.mark;
+  if (mark) mark.innerHTML = LOGO_MARK[currentLang()] || LOGO_MARK.kriolu;
   const logo = document.querySelector('.logo-text');
   if (logo) logo.textContent = L.label;
   document.querySelectorAll('[data-lang-name]').forEach(el => el.textContent = L.label);
@@ -51917,11 +52091,17 @@ function streakStatus() {
   if (state.streakFrozenDate && (state.streakFrozenDate === yesterday || state.streakFrozenDate === today)) return 'frozen';
   return 'unlit';
 }
+const LOGO_MARK = {
+  kriolu: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/><path d="M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/></svg>',
+  portuguese: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v13"/><path d="M12 4c4 2.5 6 6 6.5 11H12"/><path d="M12 7c-2.5 2-4 4.5-4.5 8H12"/><path d="M3.5 19h17l-2 2.500h-13z"/></svg>',
+};
+const ICON_FLAME = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="ic-fill" d="M12 2.5c.6 3.4 2.3 5 3.9 6.8 1.5 1.7 2.6 3.4 2.6 5.700A6.5 6.5 0 0 1 12 21.5 6.5 6.5 0 0 1 5.5 15c0-1.9.8-3.5 2-4.8.3 1.4 1 2.3 2 2.8-.300-3.7.5-7.3 2.5-10.500z"/></svg>';
+const ICON_CHECK = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.500L19 7.5"/></svg>';
 function streakIcon() {
   const st = streakStatus();
-  if (st === 'frozen') return '🧊';
-  // Same flame, visibly unlit until today's practice is done
-  return st === 'lit' ? '🔥' : '<span class="flame-unlit">🔥</span>';
+  if (st === 'frozen') return '<span class="flame-frozen" style="display:inline-flex"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18"/><path d="m4.2 7.5 15.6 9"/><path d="m19.8 7.5-15.6 9"/></svg></span>';
+  // Same flame, outlined until today's practice is done
+  return st === 'lit' ? ICON_FLAME : '<span class="flame-unlit" style="display:inline-flex">' + ICON_FLAME + '</span>';
 }
 function streakSubtitle() {
   const st = streakStatus();
@@ -53281,8 +53461,9 @@ function initChatAntonio() {
   if (wave && !wave.children.length) {
     wave.innerHTML = Array.from({ length: 17 }).map(() => '<div class="wave-bar"></div>').join('');
   }
-  antonioStartBlink();
   antonioSetState('idle');
+  const ts = document.getElementById('tutor-settings');
+  if (ts && !ts.dataset.init) { ts.dataset.init = '1'; ts.open = !getApiKey(); }
   // A mission in progress keeps its scene prompt and word tracker
   if (state.activeMission && state.activeMission.lang === currentLang()) currentSystemPrompt = missionPrompt(state.activeMission);
   renderMissionBar();
@@ -53645,7 +53826,7 @@ function renderHomeExtras() {
   if (placeSlot) {
     placeSlot.innerHTML = state.placementDone ? '' :
       `<div style="background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text)">🎓 Find your level</div>
+        <div><div class="hb-title" style="font-size:.98rem">Find your level</div>
           <div style="font-size:.8rem;color:var(--muted)">Take a quick placement test</div></div>
         <button class="start-btn" onclick="startPlacementTest()">Start Test →</button>
       </div>`;
@@ -53661,28 +53842,28 @@ function renderHomeExtras() {
       const next = (() => { for (const id of PATH_ORDER) { if ((state.lessonsFinished?.[id] || 0) < 80) return LESSONS.find(l => l.id === id); } return null; })();
       const dueN = getDueWords().length;
       const steps = [
-        { done: state.lastReviewDate === t, n:'1', label:'Warm up — review what\'s fading', hint: dueN ? dueN + ' words due' : 'quick drill', act: dueN ? 'startDueSession()' : 'startMicroFix()' },
+        { done: state.lastReviewDate === t, n:'1', label:'Warm up: review what\'s fading', hint: dueN ? dueN + ' words due' : 'quick drill', act: dueN ? 'startDueSession()' : 'startMicroFix()' },
         { done: state.lastLessonDate === t, n:'2', label:'Learn something new', hint: next ? 'any lesson counts — next up: ' + next.title : 'any lesson stage counts', act: next ? "startLesson('" + next.id + "')" : "showTab('path')" },
-        { done: state.lastApplyDate === t, n:'3', label:'Apply — speak, listen or chat', hint:'any one of these counts',
-          routes:[['🎙️ Shadow',"startShadowSession()"],['🎧 Dialogue',"showTab('reading')"],['💬 Chat',"showTab('conversation')"]] },
+        { done: state.lastApplyDate === t, n:'3', label:'Apply: speak, listen or chat', hint:'any one of these counts',
+          routes:[['Shadow',"startShadowSession()"],['Dialogue',"showTab('reading')"],['Chat',"showTab('conversation')"]] },
       ];
       const doneCount = steps.filter(x => x.done).length;
-      html += `<div class="home-block" data-wm="🌅">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <div class="hb-title">☀️ Today's Flow</div>
-          <div style="font-size:.75rem;font-weight:800;color:${doneCount===3?'var(--correct)':'var(--muted)'}">${doneCount}/3${doneCount===3?' 🎉':''}</div>
+      html += `<div class="home-block">
+        <div class="flow-head">
+          <div class="hb-title">Today's flow</div>
+          <div class="flow-count${doneCount===3?' all':''}">${doneCount} of 3 done</div>
         </div>
         ${steps.map(st => `
-          <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)">
-            <span style="font-size:1.05rem">${st.done ? '✅' : st.n + '️⃣'}</span>
-            <div style="flex:1;min-width:0">
-              <div style="font-weight:700;font-size:.84rem;${st.done ? 'text-decoration:line-through;opacity:.55' : ''}">${st.label}</div>
-              <div style="font-size:.72rem;color:var(--muted)">${st.hint}</div>
+          <div class="flow-step${st.done ? ' done' : ''}">
+            <span class="flow-n">${st.done ? ICON_CHECK : st.n}</span>
+            <div style="min-width:0">
+              <div class="flow-label">${st.label}</div>
+              <div class="flow-hint">${st.hint}</div>
             </div>
             ${st.done ? '' : (st.routes
-              ? `<div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">${st.routes.map(([lbl,act]) =>
-                  `<button class="due-btn" style="padding:6px 9px;font-size:.7rem" onclick="${act}">${lbl}</button>`).join('')}</div>`
-              : `<button class="due-btn" style="padding:7px 12px;font-size:.75rem" onclick="${st.act}">Go →</button>`)}
+              ? `<div class="flow-routes">${st.routes.map(([lbl,act]) =>
+                  `<button class="due-btn" onclick="${act}">${lbl}</button>`).join('')}</div>`
+              : `<button class="due-btn flow-go" onclick="${st.act}">Go</button>`)}
           </div>`).join('')}
       </div>`;
     })();
@@ -53716,7 +53897,7 @@ function renderHomeExtras() {
       if (state.dialect === 'saovicente') plan.push(`<div style="font-size:.78rem;color:var(--muted);padding:4px 0">🏝️ São Vicente mode on — see the São Vicente dialect lesson for key differences.</div>`);
       if (plan.length) {
         html += `<div class="home-block" data-wm="🧭">
-          <div class="hb-title" style="margin-bottom:10px">🧭 This Week's Plan</div>${plan.join('')}</div>`;
+          <div class="hb-title" style="margin-bottom:10px">This week's plan</div>${plan.join('')}</div>`;
       }
     })();
     // Streak freeze indicator
@@ -53730,7 +53911,7 @@ function renderHomeExtras() {
     }
     if (insights.length) {
       html += `<div class="home-block" data-wm="🐚">
-          <div class="hb-title" style="margin-bottom:8px">📊 Your Insights</div>
+          <div class="hb-title" style="margin-bottom:8px">Your insights</div>
           ${insights.map(i => `<div style="font-size:.83rem;color:var(--text);padding:5px 0">${i}</div>`).join('')}
         </div>`;
     }
@@ -56655,21 +56836,28 @@ let speakRecognition = null;
 // Original friendly Cape Verdean tutor drawn in SVG. He blinks, lip-syncs while
 // speaking, leans in while listening, and reacts to how you do.
 function antonioSVG() {
-  // Illustrated António: a still portrait plus four short silent talking loops, one per
-  // mood (img/antonio-<mood>.*). While he speaks, each sentence picks its mood and the
-  // loop shows only while his voice is sounding (see antonioTalkTick).
+  // Illustrated António: a still portrait plus seven short silent clips. Every clip starts
+  // and ends on the portrait's pose, so any of them can fade in over the still:
+  //   idle (breathing, blinking) · listen (attentive nods) · think (eyes up, "hmm")
+  //   talk / happy / ask / explain (speaking, one per mood of the sentence)
+  // A clip loads the first time it is needed; antonioWarmClips() fetches the rest once
+  // he is on screen.
   return `<div class="antonio idle" id="antonio">
+    <div class="antonio-aura" aria-hidden="true"></div>
     <div class="antonio-listening-ring"></div>
     <div class="antonio-face" role="img" aria-label="${escapeHTML(tutorName())}">
       <img class="antonio-still" src="img/antonio.webp" alt="" width="320" height="320" decoding="async">
-      ${ANTONIO_MOODS.map(m => `<video class="antonio-talk" data-mood="${m}" muted playsinline loop preload="auto" aria-hidden="true">
+      ${ANTONIO_CLIPS.map(m => `<video class="antonio-clip" data-clip="${m}" muted playsinline preload="none" aria-hidden="true" disablepictureinpicture>
         <source src="img/antonio-${m}.webm" type="video/webm"><source src="img/antonio-${m}.mp4" type="video/mp4">
       </video>`).join('')}
     </div>
   </div>`;
 }
 
-let antonioBlinkTimer = null, antonioMouthTimer = null;
+// talk = ordinary speech, happy = praise, ask = a question, explain = a correction.
+const ANTONIO_MOODS = ['talk', 'happy', 'ask', 'explain'];
+const ANTONIO_CLIPS = ['idle', 'listen', 'think', ...ANTONIO_MOODS];
+const antonioCalm = () => !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
 function antonioEl() {
   // Prefer an António inside the currently active screen (exercise or chat)
@@ -56678,42 +56866,66 @@ function antonioEl() {
   return document.getElementById('antonio') || document.getElementById('antonio-chat');
 }
 
+// Show one clip over the still portrait (null = just the still).
+//   loop:    keep playing (default) or play once and fade back to the still
+//   restart: begin at the portrait pose (default) or carry on from where the clip is
+function antonioPlayClip(name, opts) {
+  const el = antonioEl(); if (!el) return;
+  const o = opts || {};
+  if (antonioCalm()) name = null;
+  el.querySelectorAll('.antonio-clip').forEach(v => {
+    if (v.dataset.clip !== name) { v.classList.remove('on'); v.onended = null; if (!v.paused) v.pause(); return; }
+    v.muted = true; v.loop = o.loop !== false;
+    if (o.restart !== false || v.paused || v.ended) { try { v.currentTime = o.from || 0; } catch (e) {} }
+    v.onended = v.loop ? null : () => v.classList.remove('on');
+    v.classList.add('on');
+    const p = v.play(); if (p && p.catch) p.catch(() => {});
+  });
+}
+
+// Fetch the clips he has not used yet, one at a time, once he is visible
+function antonioWarmClips() {
+  const el = antonioEl();
+  if (!el || el.dataset.warm || !el.offsetParent || antonioCalm()) return;
+  el.dataset.warm = '1';
+  if (navigator.connection && navigator.connection.saveData) return;
+  el.querySelectorAll('.antonio-clip').forEach((v, i) => setTimeout(() => {
+    if (v.isConnected && v.paused && v.readyState === 0) { v.preload = 'auto'; try { v.load(); } catch (e) {} }
+  }, 500 + i * 350));
+}
+
+// While he waits he breathes and blinks: the idle clip plays once, he rests on the
+// still for a few seconds, and it plays again. It stops while he is off screen.
+let antonioIdleTimer = null;
+function antonioIdleStop() { if (antonioIdleTimer) { clearTimeout(antonioIdleTimer); antonioIdleTimer = null; } }
+function antonioIdleStart(delay) {
+  antonioIdleStop();
+  if (antonioCalm()) return;
+  antonioIdleTimer = setTimeout(() => {
+    antonioIdleTimer = null;
+    const el = antonioEl();
+    if (!el || !el.classList.contains('idle') || !el.offsetParent) return;
+    if (document.hidden) { antonioIdleStart(3000); return; }
+    antonioPlayClip('idle', { loop: false });
+    antonioIdleStart(4100 + 1600 + Math.random() * 4200);
+  }, delay);
+}
+
+// idle · listening · thinking · talking · happy
 function antonioSetState(s) {
   const el = antonioEl();
   if (!el) return;
-  el.classList.remove('idle','talking','listening','happy');
+  el.classList.remove('idle', 'talking', 'listening', 'thinking', 'happy');
   el.classList.add(s);
+  antonioIdleStop();
+  if (s === 'idle') { antonioPlayClip(null); antonioIdleStart(900); }
+  else if (s === 'listening') antonioPlayClip('listen');
+  else if (s === 'thinking') antonioPlayClip('think');
+  else antonioPlayClip(null);                        // talking picks its own clip; happy is a hop
+  antonioWarmClips();
 }
 
-function antonioStartBlink() {
-  antonioStopBlink();
-  const blink = () => {
-    const el = antonioEl();
-    if (!el) return;
-    el.classList.add('blink');
-    setTimeout(() => { const e = antonioEl(); if (e) e.classList.remove('blink'); }, 130);
-    antonioBlinkTimer = setTimeout(blink, 2200 + Math.random() * 2600);
-  };
-  antonioBlinkTimer = setTimeout(blink, 1800);
-}
-function antonioStopBlink() { if (antonioBlinkTimer) { clearTimeout(antonioBlinkTimer); antonioBlinkTimer = null; } }
-
-// Emoji can't change a "mouth" — instead we give a subtle scale pulse so he
-// looks animated while "speaking". These shape names map to scale amounts.
-const ANTONIO_MOUTH = {
-  rest:  'scale(1)',
-  open:  'scale(1.08)',
-  wide:  'scale(1.1)',
-  small: 'scale(1.03)',
-};
-function antonioMouth(shape) {
-  const root = antonioEl();
-  const m = root ? root.querySelector('.antonio-emoji') : document.getElementById('antonio-mouth');
-  if (m) m.style.transform = ANTONIO_MOUTH[shape] || ANTONIO_MOUTH.rest;
-}
 // ── Talking that follows what he says ──
-// talk = ordinary speech, happy = praise, ask = a question, explain = a correction.
-const ANTONIO_MOODS = ['talk', 'happy', 'ask', 'explain'];
 const ANTONIO_PRAISE = /\b(mutu bon|bon trabadju|perfeitu|ezatu|isatu|parabens|parabéns|muito bem|excelente|exatamente|perfeito|well done|great job|good job|excellent|perfect|exactly|nicely done|bravo)\b|sabi!|[👏🎉🌟🏆🥳]/i;
 const ANTONIO_CORRECT = /\b(kuaze|almost|not quite|instead|we say|you'd say|you would say|should be|the correct|careful|atenson|atenção|em vez de|dizemos|deve ser|ka faz mal|actually|remember|lembra|note that|the rule|small mistake|mistake)\b/i;
 function antonioMoodOf(sentence) {
@@ -56737,67 +56949,126 @@ function antonioSentences(spoken, original) {
   const out = sp.map((x, i) => ({ start: x.start, end: x.end, text: same ? og[i].text : x.text, mood: antonioMoodOf(same ? og[i].text : x.text) }));
   return out.length ? out : [{ start: 0, end: spoken.length, text: original || spoken, mood: 'talk' }];
 }
-let antonioTalkCtl = null;
-function antonioShowMood(mood) {
-  const el = antonioEl(); if (!el) return;
-  el.querySelectorAll('.antonio-talk').forEach(v => {
-    const on = v.dataset.mood === mood;
-    v.classList.toggle('on', on);
-    if (on && v.paused) { try { v.currentTime = 0; } catch (e) {} const p = v.play(); if (p && p.catch) p.catch(() => {}); }
-    else if (!on && !v.paused) v.pause();
-  });
+
+// Loudness of the premium voice's audio in 20ms steps (0–1), so his mouth and the bars
+// follow the real sound. It is decoded on the side: the <audio> element that plays the
+// voice is never touched, so playback behaves exactly as before.
+async function antonioEnvelope(src) {
+  try {
+    const AC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    if (!AC || !src || src.slice(0, 5) !== 'data:') return null;
+    const bin = atob(src.slice(src.indexOf(',') + 1));
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    let ctx; try { ctx = new AC(1, 2, 22050); } catch (e) { ctx = new AC(1, 2, 44100); }
+    const buf = await new Promise((res, rej) => { const p = ctx.decodeAudioData(bytes.buffer, res, rej); if (p && p.then) p.then(res, rej); });
+    const d = buf.getChannelData(0), win = Math.max(1, Math.round(buf.sampleRate * 0.02)), n = Math.floor(d.length / win);
+    if (n < 5) return null;
+    const env = new Float32Array(n);
+    for (let i = 0; i < n; i++) { let s = 0; for (let j = i * win, e = j + win; j < e; j++) s += d[j] * d[j]; env[i] = Math.sqrt(s / win); }
+    const sorted = Array.from(env).sort((x, y) => x - y), ref = sorted[Math.floor(n * 0.95)] || sorted[n - 1];
+    if (!(ref > 0)) return null;
+    for (let i = 0; i < n; i++) env[i] = Math.min(1, env[i] / ref);
+    return { env, step: 0.02, duration: buf.duration, at: t => { const i = Math.floor(t / 0.02); return i >= 0 && i < n ? env[i] : 0; } };
+  } catch (e) { return null; }
 }
-function antonioVoicing(on) { const el = antonioEl(); if (el) el.classList.toggle('voicing', !!on); }
-// Every 80ms: where in the text is he, which mood is that, and is he between sentences?
+// When each sentence ends in the audio: start from its share of the text, then snap to
+// the nearest real pause (160ms or more of quiet), which is where the voice breaks.
+function antonioCuts(E, sents, len) {
+  const pauses = []; let run = -1;
+  for (let i = 0; i <= E.env.length; i++) {
+    const quiet = i < E.env.length && E.env[i] < 0.08;
+    if (quiet && run < 0) run = i;
+    if (!quiet && run >= 0) { if (i - run >= 8) pauses.push((run + i) / 2 * E.step); run = -1; }
+  }
+  const cuts = [];
+  for (let k = 0; k < sents.length - 1; k++) {
+    const est = (sents[k].end / Math.max(1, len)) * E.duration;
+    let best = est, reach = Math.min(1.5, E.duration * 0.2);
+    pauses.forEach(p => { const dd = Math.abs(p - est); if (dd < reach) { reach = dd; best = p; } });
+    cuts.push(Math.max(best, cuts.length ? cuts[cuts.length - 1] : 0));
+  }
+  return cuts;
+}
+
+let antonioTalkCtl = null;
+function antonioShowMood(mood) { antonioPlayClip(mood, { loop: true }); }
+// voicing = his mouth is moving. After a real pause the clip restarts on the portrait
+// pose, so it fades in from the still without a jump.
+function antonioVoicing(on) {
+  const el = antonioEl(); if (!el) return;
+  const was = el.classList.contains('voicing'), c = antonioTalkCtl;
+  if (on && !was && c && performance.now() - c.quietSince > 350) {
+    const v = el.querySelector('.antonio-clip.on');
+    if (v) { try { v.currentTime = 0; } catch (e) {} }
+  }
+  if (!on && was && c) c.quietSince = performance.now();
+  el.classList.toggle('voicing', !!on);
+}
+// The ring around him and the bars under him show his voice. The newest level enters
+// at the centre bar and ripples outwards.
+function antonioMeter(level) {
+  const el = antonioEl(), c = antonioTalkCtl; if (!el || !c) return;
+  el.style.setProperty('--lvl', level.toFixed(3));
+  const wave = el.dataset.chat ? document.getElementById('antonio-wave') : null;
+  if (!wave) return;
+  c.hist.unshift(level); if (c.hist.length > 9) c.hist.length = 9;
+  const bars = wave.children, mid = (bars.length - 1) / 2;
+  for (let i = 0; i < bars.length; i++) bars[i].style.height = (4 + (c.hist[Math.round(Math.abs(i - mid))] || 0) * 20) + 'px';
+}
+// Every 50ms: which sentence is he on, and is there sound right now?
 function antonioTalkTick() {
   const c = antonioTalkCtl; if (!c) return;
-  const now = performance.now();
-  let pos, voiced;
-  if (c.mode === 'boundary') {                       // browser voice reports each word as it is spoken
-    pos = c.lastChar; voiced = now - c.lastWord < 420;
-  } else {
-    const a = c.audio;
-    pos = a && a.duration && isFinite(a.duration) ? (a.currentTime / a.duration) * c.len   // premium voice: real progress
-                                                   : (now - c.t0) / c.msPerChar;          // otherwise an estimate
-    const s = c.sents.find(x => pos >= x.end && pos < x.end + 4);                         // a short pause after each sentence
-    voiced = !s && pos < c.len;
+  const now = performance.now(), a = c.audio;
+  const pulse = () => 0.35 + 0.65 * Math.abs(Math.sin(now / 90) * Math.sin(now / 37));
+  let idx, voiced, level;
+  if (c.env && a) {                                  // premium voice with decoded loudness: exact
+    const t = a.currentTime;
+    level = c.env.at(t);
+    if (level > 0.14) c.lastLoud = now;
+    voiced = now - c.lastLoud < 160 && !a.paused && !a.ended;
+    idx = 0; while (idx < c.cuts.length && t >= c.cuts[idx]) idx++;
+  } else if (c.mode === 'boundary') {                // browser voice: reports each word as it is spoken
+    voiced = now - c.lastWord < 420;
+    idx = c.sents.findIndex(x => c.lastChar < x.end + 4);
+    level = voiced ? pulse() : 0;
+  } else {                                           // no timing yet: estimate from the text length
+    const pos = a && a.duration && isFinite(a.duration) ? (a.currentTime / a.duration) * c.len : (now - c.t0) / c.msPerChar;
+    idx = c.sents.findIndex(x => pos < x.end + 4);
+    voiced = pos < c.len && !c.sents.some(x => pos >= x.end && pos < x.end + 4);
+    level = voiced ? pulse() : 0;
   }
-  const cur = c.sents.find(x => pos < x.end + 4) || c.sents[c.sents.length - 1];
-  if (cur && cur.mood !== c.mood) { c.mood = cur.mood; antonioShowMood(cur.mood); }
+  if (idx < 0 || idx >= c.sents.length) idx = c.sents.length - 1;
+  const mood = c.sents[idx].mood;
+  if (mood !== c.mood) { c.mood = mood; antonioShowMood(mood); }
   antonioVoicing(voiced);
+  antonioMeter(voiced ? level : 0);
 }
 function antonioOnBoundary(charIndex) {
   const c = antonioTalkCtl; if (!c) return;
   c.mode = 'boundary'; c.lastWord = performance.now(); c.lastChar = charIndex;
 }
 function antonioStartTalking(clean, original) {
-  antonioStopTalking(); // clear any previous mouth-timer before starting a fresh one
+  antonioStopTalking(); // clear any previous run before starting a fresh one
   antonioSetState('talking');
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const text = clean || '';
   const sents = antonioSentences(text, original);
-  antonioTalkCtl = { sents, len: text.length, t0: performance.now(), msPerChar: 70, mode: 'estimate', lastWord: 0, lastChar: 0, audio: null, mood: sents[0].mood };
+  antonioTalkCtl = { sents, len: text.length, t0: performance.now(), msPerChar: 70, mode: 'estimate', lastWord: 0, lastChar: 0,
+    lastLoud: 0, quietSince: 0, audio: null, env: null, cuts: [], hist: [], mood: sents[0].mood, timer: null };
+  if (antonioCalm()) return;                         // reduced motion: he stays on the still portrait
   antonioShowMood(sents[0].mood); antonioVoicing(true);
-  antonioTalkCtl.timer = setInterval(antonioTalkTick, 80);
-  const shapes = ['open','small','wide','open','small'];
-  let i = 0;
-  antonioMouthTimer = setInterval(() => {
-    antonioMouth(shapes[i % shapes.length]);
-    i++;
-  }, 140);
+  antonioTalkCtl.timer = setInterval(antonioTalkTick, 50);
 }
 function antonioStopTalking() {
-  if (antonioMouthTimer) { clearInterval(antonioMouthTimer); antonioMouthTimer = null; }
-  antonioMouth('rest');
   if (antonioTalkCtl) { clearInterval(antonioTalkCtl.timer); antonioTalkCtl = null; }
-  antonioVoicing(false);
-  const face = antonioEl();
-  if (face) face.querySelectorAll('.antonio-talk').forEach(v => { v.pause(); v.classList.remove('on'); });
+  document.querySelectorAll('.antonio').forEach(el => { el.classList.remove('voicing'); el.style.removeProperty('--lvl'); });
+  const wave = document.getElementById('antonio-wave');
+  if (wave) Array.from(wave.children).forEach(b => { b.style.height = ''; });
   const el = antonioEl();
   if (el && el.classList.contains('talking')) antonioSetState('idle');
 }
 
-// Make António speak (TTS) with lip-sync, then a callback when done
+// Make António speak (TTS) with lip movement, then a callback when done
 function antonioSpeak(text, statusEl, done) {
   if (statusEl) statusEl.textContent = `🗣️ ${tutorName()} is speaking…`;
   const clean = voiceForm(text);
@@ -56807,14 +57078,16 @@ function antonioSpeak(text, statusEl, done) {
   const finish = () => { if (finished) return; finished = true; clearTimeout(fallback); antonioStopTalking(); if (statusEl) statusEl.textContent = ''; if (done) done(); };
   const ep = getTtsEndpoint && getTtsEndpoint();
   if (ep || !window.speechSynthesis) {
-    // Premium voice: follow the real audio — its progress picks the mood, its end stops him
+    // Premium voice: follow the real audio. Its loudness moves his mouth, its pauses
+    // mark the sentences, and its end stops him.
     fallback = setTimeout(finish, Math.min(20000, 1500 + clean.length * 80));
     Promise.resolve(speakText(text, null)).then(() => {
-      const a = typeof ttsAudio !== 'undefined' ? ttsAudio : null;
-      if (a && !a.paused && !a.ended && antonioTalkCtl) {
-        antonioTalkCtl.audio = a;
+      const a = typeof ttsAudio !== 'undefined' ? ttsAudio : null, c = antonioTalkCtl;
+      if (a && !a.paused && !a.ended && c) {
+        c.audio = a;
         a.addEventListener('ended', finish, { once: true });
         a.addEventListener('pause', finish, { once: true });
+        antonioEnvelope(a.src).then(E => { if (E && antonioTalkCtl === c) { c.env = E; c.cuts = antonioCuts(E, c.sents, c.len); } });
       }
     }).catch(() => {});
     return;
@@ -56832,12 +57105,11 @@ function antonioSpeak(text, statusEl, done) {
 }
 
 function antonioReact(success, statusEl) {
-  const el = antonioEl();
   if (success) {
     antonioSetState('happy');
-    antonioMouth('wide');
+    antonioPlayClip('happy', { loop: false, from: 0.35 });   // a quick laugh
     if (statusEl) statusEl.textContent = ['Mutu bon! 👏','Bo fala dret!','Perfeitu!','Sabi!'][Math.floor(Math.random()*4)];
-    setTimeout(() => { antonioMouth('rest'); antonioSetState('idle'); }, 1400);
+    setTimeout(() => { const el = antonioEl(); if (el && el.classList.contains('happy')) antonioSetState('idle'); }, 1900);
   } else {
     antonioSetState('idle');
     if (statusEl) statusEl.textContent = 'Ka faz mal — tenta otu bes! 💪';
@@ -56870,7 +57142,6 @@ function renderSpeaking(q, container) {
     <button class="skip-btn" onclick="skipSpeaking()">Skip this one →</button>
   </div><div id="feedback-area"></div>`;
   // Bring António to life
-  antonioStartBlink();
   antonioSetState('idle');
   // Greet by speaking the word shortly after appearing
   setTimeout(() => { if (antonioEl()) antonioSayPrompt(q.speakTarget || q.item.k); }, 600);
@@ -57734,7 +58005,7 @@ function renderReview() {
   // Practice Toolkit — the "apply your training" hub (#2 #6 #7)
   const focusChips = (state.grammarFocus || []).map(f => `<span style="display:inline-block;background:var(--border);border-radius:99px;padding:3px 10px;font-size:.72rem;font-weight:700;margin:2px 3px 0 0">📝 ${escapeHTML(f)}</span>`).join('');
   dueBanner += `<div class="home-block" data-wm="🧰" style="padding:16px 18px">
-    <div class="hb-title" style="margin-bottom:10px">🧰 Practice Toolkit</div>
+    <div class="hb-title" style="margin-bottom:10px">Practice toolkit</div>
     <div style="display:flex;flex-direction:column;gap:8px">
       <button class="due-btn" style="width:100%;text-align:left" onclick="startShadowSession()">🗣️ Sentence Shadowing <span style="font-weight:600;opacity:.85;font-size:.78rem">— hear it, say it, get scored</span></button>
       <button class="due-btn" style="width:100%;text-align:left" onclick="startMicroFix()">🩹 2-Minute Fix-It <span style="font-weight:600;opacity:.85;font-size:.78rem">— drill your weakest words in context</span></button>
@@ -58876,6 +59147,11 @@ function toggleAutoSpeak() {
   if (settingsToggle) settingsToggle.checked = autoSpeak;
 }
 
+// Line icons for controls whose icon changes at run time
+const UI_ICON = {
+  mic:  '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>',
+  stop: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>',
+};
 function toggleMic() { isListening ? stopListening() : startListening(); }
 
 let lastInputWasSpeech = false;
@@ -58887,7 +59163,7 @@ function startListening() {
   recognition.continuous = false; recognition.interimResults = true; recognition.lang = 'pt-PT';
   const micBtn = document.getElementById('mic-btn');
   const chatInput = document.getElementById('chat-input');
-  recognition.onstart = () => { isListening=true; micBtn.classList.add('listening'); micBtn.textContent='⏹️'; chatInput.placeholder='🎤 Listening…'; };
+  recognition.onstart = () => { isListening=true; micBtn.classList.add('listening'); micBtn.innerHTML=UI_ICON.stop; micBtn.setAttribute('aria-label','Stop listening'); chatInput.placeholder='Listening…'; if (antonioEl()) antonioSetState('listening'); const st=document.getElementById('antonio-chat-status'); if (st) { st.dataset.prev = st.textContent; st.textContent = 'N sta ta obi… (listening)'; } };
   recognition.onresult = e => { chatInput.value = Array.from(e.results).map(r=>r[0].transcript).join(''); };
   recognition.onend = () => { stopListening(); if(chatInput.value.trim()) { lastInputWasSpeech = true; sendMessage(); } };
   recognition.onerror = e => { stopListening(); if(e.error==='not-allowed') alert('Microphone access denied.'); };
@@ -58897,9 +59173,13 @@ function startListening() {
 function stopListening() {
   isListening = false;
   const micBtn = document.getElementById('mic-btn');
-  if (micBtn) { micBtn.classList.remove('listening'); micBtn.textContent='🎤'; }
+  if (micBtn) { micBtn.classList.remove('listening'); micBtn.innerHTML=UI_ICON.mic; micBtn.setAttribute('aria-label','Speak'); }
   const ci = document.getElementById('chat-input');
-  if (ci) ci.placeholder = 'Fla ku mi… (or tap 🎤)';
+  if (ci) ci.placeholder = 'Fla ku mi…';
+  const ant = antonioEl();
+  if (ant && ant.classList.contains('listening')) antonioSetState('idle');
+  const lst = document.getElementById('antonio-chat-status');
+  if (lst && lst.textContent.includes('obi…')) lst.textContent = lst.dataset.prev || `Your ${aiLang().name} tutor • Powered by Claude`;
   if (recognition) { try { recognition.stop(); } catch(e){} }
 }
 
@@ -59844,7 +60124,7 @@ function antonioChatSpeak(text, btnEl) {
     antonioSpeak(text, null, () => {
       if (status) status.textContent = prevStatus || `Your ${aiLang().name} tutor • Powered by Claude`;
     });
-    if (status) status.textContent = '🗣️ Speaking…';
+    if (status) status.textContent = 'Speaking…';
   } else {
     speakText(text, btnEl);
   }
@@ -59937,10 +60217,10 @@ function showTyping() {
   div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div><div class="msg-bubble"><div class="typing-indicator">
     <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
-  // António looks like he's listening/thinking about your message
-  if (antonioEl()) antonioSetState('listening');
+  // António thinks about your message
+  if (antonioEl()) antonioSetState('thinking');
   const status = document.getElementById('antonio-chat-status');
-  if (status) status.textContent = '💭 N sta ta pensa… (thinking…)';
+  if (status) status.textContent = 'N sta ta pensa… (thinking)';
 }
 
 function hideTyping() {
@@ -60512,7 +60792,7 @@ function renderGrammar() {
   if (note) {
     note.innerHTML = isPT()
       ? `<div class="home-block" data-wm="📐" style="margin-bottom:14px">
-           <div class="hb-title">📐 Portuguese grammar</div>
+           <div class="hb-title">Portuguese grammar</div>
            <div style="font-size:.84rem;color:var(--muted);margin-top:6px">These are your ${GRAMMAR_SKILLS.length} Portuguese Grammar Skills — ser vs estar, tenses, pronouns, the subjunctive, cohesion. Tap any card to train it.</div>
            <button class="due-btn" style="margin-top:10px" onclick="showTab('path')">Go to the Path →</button>
          </div>`
@@ -62357,7 +62637,7 @@ function renderListeningList() {
   const list = document.getElementById('listening-list');
   list.style.display = 'block';
   if (!LISTENING || !LISTENING.length) {
-    list.innerHTML = '<div class="home-block"><div class="hb-title">🎧 Listening</div><div style="font-size:.85rem;color:var(--muted);margin-top:6px">No listening exercises yet for this course.</div></div>';
+    list.innerHTML = '<div class="home-block"><div class="hb-title">Listening</div><div style="font-size:.85rem;color:var(--muted);margin-top:6px">No listening exercises yet for this course.</div></div>';
     return;
   }
   list.innerHTML = `<div style="font-size:.82rem;color:var(--muted);margin-bottom:12px">
