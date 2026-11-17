@@ -1,6 +1,7 @@
 # Netlify configuration for the Kriolu app
 [build]
   publish = "."
+  command = "node stamp-build.js"
   functions = "netlify/functions"
 
 # Friendly redirect so the app can call /api/tts
@@ -8,3 +9,19 @@
   from = "/api/tts"
   to = "/.netlify/functions/tts"
   status = 200
+
+# The files that decide which build runs must always be revalidated
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"

@@ -1,5 +1,5 @@
 // Kriolu PWA Service Worker
-const CACHE_NAME = 'kriolu-v150';
+const CACHE_NAME = 'kriolu-v151';
 const APP_SHELL = [
   './',
   './index.html',
@@ -15,7 +15,14 @@ const APP_SHELL = [
 // Install: cache the app shell
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
+    // Fetch each file past the HTTP cache so a new build never installs a stale
+    // copy, and let a missing optional file (an image) fail without blocking the
+    // update; only the page itself is required.
+    caches.open(CACHE_NAME).then((cache) => Promise.all(APP_SHELL.map((url) =>
+      fetch(new Request(url, { cache: 'reload' }))
+        .then((resp) => { if (!resp.ok) throw new Error(url + ' ' + resp.status); return cache.put(url, resp); })
+        .catch((err) => { if (url === './' || url === './index.html') throw err; })
+    )))
   );
   self.skipWaiting();
 });
@@ -46,6 +53,8 @@ self.addEventListener('fetch', (event) => {
   if (url.hostname.includes('anthropic.com')) return;
   if (url.hostname.includes('elevenlabs.io')) return;
   if (url.pathname.includes('/api/tts') || url.pathname.includes('/.netlify/')) return;
+  // Version probes from the page must reach the server untouched
+  if (url.searchParams.has('probe')) return;
   // Video clips are fetched in byte ranges, which can't be cached: leave them to the browser
   if (event.request.headers.has('range')) return;
 
@@ -69,8 +78,9 @@ self.addEventListener('fetch', (event) => {
   // App files: network-first, cache fallback (offline mode)
   if (url.origin === self.location.origin) {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: 'no-cache' })
         .then((resp) => {
+          if (!resp.ok) return resp;
           const copy = resp.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
           return resp;

@@ -53001,27 +53001,39 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v143';
-// If the running code is older than the copy on the server, say so plainly
-// rather than leaving the user to guess why a fix has not appeared.
-async function checkForNewerBuild() {
+const APP_BUILD = 'v151';
+// Compares the code that is running with the copy on the server, code to code:
+// the server's index.html carries its own build number. Runs on start-up, when
+// the app returns to the foreground, and when Settings opens.
+let lastBuildCheck = 0;
+async function checkForNewerBuild(force) {
+  if (!force && Date.now() - lastBuildCheck < 30000) return;
+  lastBuildCheck = Date.now();
   try {
-    const res = await fetch('sw.js?probe=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('index.html?probe=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) return;
     const txt = await res.text();
-    const m = txt.match(/kriolu-v(\d+)/);
+    const m = txt.match(/const APP_BUILD = 'v(\d+)'/);
     if (!m) return;
     const server = parseInt(m[1], 10);
     const running = parseInt(String(APP_BUILD).replace(/\D/g, ''), 10);
+    const banner = document.getElementById('update-banner');
     if (server > running) {
       const el = document.getElementById('build-version');
-      if (el) el.innerHTML += `<br><b style="color:var(--coral)">Update available: v${server}</b>`;
-      const banner = document.getElementById('update-banner');
+      if (el && !el.querySelector('.build-newer')) el.innerHTML += `<br><b class="build-newer" style="color:var(--coral)">Update available: v${server}</b>`;
       if (banner) {
         document.getElementById('update-banner-sub').textContent = `You are on ${APP_BUILD} · v${server} is on the server`;
-        banner.classList.add('show');
+        if (!banner.classList.contains('show')) { banner.classList.add('show'); showToast('Update available — tap Reload'); }
       }
-      showToast('🔄 Update available — tap Check for update');
+      // A stuck update is a worker still holding the old build: ask it to look again
+      try { const reg = await navigator.serviceWorker.getRegistration(); if (reg) reg.update(); } catch (e) {}
+    } else if (banner) {
+      banner.classList.remove('show');
+    }
+    // After "Reload", say honestly whether it worked instead of looping
+    if (sessionStorage.getItem('kriolu_updating')) {
+      sessionStorage.removeItem('kriolu_updating');
+      showToast(server > running ? `Still on ${APP_BUILD} — the server has v${server}. Try again in a minute.` : `Updated to ${APP_BUILD}`);
     }
   } catch (e) {}
 }
@@ -53080,24 +53092,23 @@ function showBuildVersion() {
 // Drop the caches and pull a fresh copy, for when an update seems stuck.
 async function forceUpdate() {
   showToast('Updating…');
+  try { sessionStorage.setItem('kriolu_updating', '1'); } catch (e) {}
   try {
     // Clear every cache except the paid TTS audio.
     if (window.caches) {
       const keys = await caches.keys();
       await Promise.all(keys.filter(k => k !== 'kriolu-tts-audio').map(k => caches.delete(k)));
     }
-    // A worker can get stuck serving an old build — especially in an installed
-    // home-screen app, where reloading a browser tab never reaches it. Updating
-    // is not always enough, so unregister and let the page register a fresh one.
+    // A worker can get stuck serving an old build, especially in an installed
+    // home-screen app, where reloading a browser tab never reaches it. Unregister
+    // it and let the page register a fresh one.
     if (navigator.serviceWorker) {
       const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(async r => { try { await r.update(); } catch (e) {} 
-                                              try { await r.unregister(); } catch (e) {} }));
+      await Promise.all(regs.map(async r => { try { await r.unregister(); } catch (e) {} }));
     }
   } catch (e) {}
   // Cache-busted URL so the reload cannot be served from the HTTP cache either.
-  const url = location.origin + location.pathname + '?u=' + Date.now();
-  location.replace(url);
+  location.replace(location.origin + location.pathname + '?u=' + Date.now());
 }
 
 function openSettings() {
@@ -63765,10 +63776,12 @@ function init() {
       .catch(() => {});
     // Check again whenever the app is brought back to the foreground.
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && navigator.serviceWorker.ready) {
-        navigator.serviceWorker.ready.then((reg) => reg.update()).catch(() => {});
+      if (document.visibilityState === 'visible') {
+        checkForNewerBuild();
+        if (navigator.serviceWorker.ready) navigator.serviceWorker.ready.then((reg) => reg.update()).catch(() => {});
       }
     });
+    setTimeout(() => checkForNewerBuild(true), 2500);
   }
 }
 
