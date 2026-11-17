@@ -1753,6 +1753,10 @@
     @media (prefers-reduced-motion:reduce){
       .lesson-card,.qa-tile,.bento-tile,.bento-hero,.story-card,.grammar-card,.ach-card,.badge-chip,.daily-card.path-card{transform:none;transition:none}
     }
+
+    /* a Listen button while its audio is on the way */
+    .tts-loading{position:relative;animation:none !important;opacity:1 !important}
+    .tts-loading::after{content:'';position:absolute;inset:-3px;border-radius:inherit;border:2.5px solid transparent;border-top-color:var(--coral);animation:antonio-spin .7s linear infinite;pointer-events:none}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -53630,6 +53634,7 @@ function initChatAntonio() {
     wave.innerHTML = Array.from({ length: 17 }).map(() => '<div class="wave-bar"></div>').join('');
   }
   antonioSetState('idle');
+  ttsWarm();
   const ts = document.getElementById('tutor-settings');
   if (ts && !ts.dataset.init) { ts.dataset.init = '1'; ts.open = !getApiKey(); }
   // A mission in progress keeps its scene prompt and word tracker
@@ -57217,13 +57222,13 @@ function antonioOnBoundary(charIndex) {
   const c = antonioTalkCtl; if (!c) return;
   c.mode = 'boundary'; c.lastWord = performance.now(); c.lastChar = charIndex;
 }
-function antonioStartTalking(clean, original) {
-  antonioStopTalking(); // clear any previous run before starting a fresh one
+function antonioStartTalking(clean, original, audio) {
+  if (antonioTalkCtl) { clearInterval(antonioTalkCtl.timer); antonioTalkCtl = null; }   // clear any previous run
   antonioSetState('talking');
   const text = clean || '';
   const sents = antonioSentences(text, original);
   antonioTalkCtl = { sents, len: text.length, t0: performance.now(), msPerChar: 70, mode: 'estimate', lastWord: 0, lastChar: 0,
-    lastLoud: 0, quietSince: 0, audio: null, env: null, cuts: [], hist: [], mood: sents[0].mood, timer: null };
+    lastLoud: 0, quietSince: 0, audio: audio || null, env: null, cuts: [], hist: [], mood: sents[0].mood, timer: null };
   if (antonioCalm()) return;                         // reduced motion: he stays on the still portrait
   antonioShowMood(sents[0].mood); antonioVoicing(true);
   antonioTalkCtl.timer = setInterval(antonioTalkTick, 50);
@@ -57237,40 +57242,108 @@ function antonioStopTalking() {
   if (el && el.classList.contains('talking')) antonioSetState('idle');
 }
 
-// Make António speak (TTS) with lip movement, then a callback when done
+// Long replies are spoken in parts: the first sentence on its own so the voice
+// starts quickly, then the rest in pieces of a few sentences. Each part is fetched
+// while the one before it plays.
+function antonioParts(text) {
+  const sents = antonioSplit(text);
+  if (sents.length < 2 || text.length < 90) return [text];
+  const parts = []; let cur = '';
+  sents.forEach((x, i) => {
+    cur += (cur ? ' ' : '') + x.text;
+    if (cur.length >= (parts.length ? 110 : 12)) { parts.push(cur); cur = ''; }
+  });
+  if (cur) { if (cur.length < 25 && parts.length) parts[parts.length - 1] += ' ' + cur; else parts.push(cur); }
+  return parts;
+}
+// The premium voice runs on a server function that goes to sleep; a free, empty
+// request wakes it before the first real one.
+let ttsWarmedAt = 0;
+function ttsWarm() {
+  const ep = getTtsEndpoint();
+  if (!ep || Date.now() - ttsWarmedAt < 240000) return;
+  ttsWarmedAt = Date.now();
+  try { fetch(ep, { method: 'OPTIONS' }).catch(() => {}); } catch (e) {}
+}
+
+// Make António speak, then call done(). He looks thoughtful while the voice is
+// being prepared and only starts moving his mouth when sound actually starts.
+let antonioSpeakRun = 0, antonioSpeakingRun = 0;
+// Something else is about to make sound: António stops where he is
+function antonioHush() {
+  if (!antonioSpeakingRun) return;
+  antonioSpeakingRun = 0; antonioSpeakRun++;
+  antonioStopTalking();
+  const el = antonioEl();
+  if (el && el.classList.contains('thinking')) antonioSetState('idle');
+}
 function antonioSpeak(text, statusEl, done) {
-  if (statusEl) statusEl.textContent = `🗣️ ${tutorName()} is speaking…`;
-  const clean = voiceForm(text);
-  antonioStartTalking(clean, text);
+  const run = ++antonioSpeakRun;
+  antonioSpeakingRun = run;
+  if (statusEl) statusEl.textContent = `${tutorName()} is speaking…`;
   userHasInteracted = true;
-  let finished = false, fallback = null;
-  const finish = () => { if (finished) return; finished = true; clearTimeout(fallback); antonioStopTalking(); if (statusEl) statusEl.textContent = ''; if (done) done(); };
-  const ep = getTtsEndpoint && getTtsEndpoint();
-  if (ep || !window.speechSynthesis) {
-    // Premium voice: follow the real audio. Its loudness moves his mouth, its pauses
-    // mark the sentences, and its end stops him.
-    fallback = setTimeout(finish, Math.min(20000, 1500 + clean.length * 80));
-    Promise.resolve(speakText(text, null)).then(() => {
-      const a = typeof ttsAudio !== 'undefined' ? ttsAudio : null, c = antonioTalkCtl;
-      if (a && !a.paused && !a.ended && c) {
-        c.audio = a;
-        a.addEventListener('ended', finish, { once: true });
-        a.addEventListener('pause', finish, { once: true });
-        antonioEnvelope(a.src).then(E => { if (E && antonioTalkCtl === c) { c.env = E; c.cuts = antonioCuts(E, c.sents, c.len); } });
-      }
-    }).catch(() => {});
-    return;
-  }
-  // Browser voice: word-boundary events say exactly where he is
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(clean);
-  if (bestVoice) utter.voice = bestVoice;
-  utter.lang = bestVoice?.lang || 'pt-PT';
-  utter.rate = 0.82;
-  utter.onboundary = e => { if (e.name !== 'sentence') antonioOnBoundary(e.charIndex); };
-  utter.onend = finish; utter.onerror = finish;
-  fallback = setTimeout(finish, Math.min(30000, 2500 + clean.length * 110));
-  window.speechSynthesis.speak(utter);
+  wordByWordRun++;
+  if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (antonioTalkCtl) { clearInterval(antonioTalkCtl.timer); antonioTalkCtl = null; }
+  antonioSetState('thinking');
+  let finished = false;
+  const live = () => run === antonioSpeakRun && !finished;
+  const finish = () => {
+    if (finished) return; finished = true;
+    if (antonioSpeakingRun === run) { antonioSpeakingRun = 0; antonioStopTalking(); const el = antonioEl(); if (el && el.classList.contains('thinking')) antonioSetState('idle'); }
+    if (statusEl) statusEl.textContent = '';
+    if (done) done();
+  };
+  const browserSay = original => new Promise(resolve => {
+    const clean = voiceForm(original);
+    if (!window.speechSynthesis || !clean) return resolve();
+    const utter = new SpeechSynthesisUtterance(clean);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice?.lang || 'pt-PT';
+    utter.rate = 0.82;
+    let started = false, guard = null;
+    const start = () => { if (started || !live()) return; started = true; antonioStartTalking(clean, original); };
+    const end = () => { clearTimeout(guard); clearTimeout(late); resolve(); };
+    utter.onstart = start;
+    utter.onboundary = e => { start(); if (e.name !== 'sentence') antonioOnBoundary(e.charIndex); };
+    utter.onend = end; utter.onerror = end;
+    const late = setTimeout(start, 600);             // some browsers never report the start
+    guard = setTimeout(end, Math.min(30000, 2500 + clean.length * 110));
+    window.speechSynthesis.speak(utter);
+  });
+  const playPart = (b64, clean, original) => new Promise(resolve => {
+    const a = new Audio('data:audio/mpeg;base64,' + b64);
+    ttsAudio = a;
+    let guard = null;
+    const end = () => { clearTimeout(guard); a.onended = a.onerror = a.onpause = null; resolve(); };
+    a.onplaying = () => {
+      if (!live() || antonioTalkCtl && antonioTalkCtl.audio === a) return;
+      antonioStartTalking(clean, original, a);
+      const c = antonioTalkCtl;
+      antonioEnvelope(a.src).then(E => { if (E && antonioTalkCtl === c) { c.env = E; c.cuts = antonioCuts(E, c.sents, c.len); } });
+    };
+    a.onended = end; a.onerror = end;
+    a.onpause = () => { if (!a.ended) { if (live()) antonioHush(); end(); } };   // something else took over the sound
+    guard = setTimeout(end, Math.min(60000, 6000 + clean.length * 140));
+    a.play().catch(end);
+  });
+  (async () => {
+    const parts = antonioParts(text).map(o => ({ original: o, clean: voiceForm(o) })).filter(x => x.clean);
+    const premium = !!getTtsEndpoint();
+    const audio = parts.map(() => null);
+    const want = i => { if (premium && i < parts.length && !audio[i]) audio[i] = fetchTtsAudio(parts[i].clean); };
+    want(0); want(1);
+    for (let i = 0; i < parts.length && run === antonioSpeakRun; i++) {
+      want(i); want(i + 1);
+      const b64 = premium ? await audio[i] : null;
+      if (run !== antonioSpeakRun) break;
+      if (b64) { await playPart(b64, parts[i].clean, parts[i].original); }
+      else { await browserSay(parts.slice(i).map(x => x.original).join(' ')); break; }
+      if (run === antonioSpeakRun && i < parts.length - 1) antonioVoicing(false);   // mouth closed between parts
+    }
+    finish();
+  })();
 }
 
 function antonioReact(success, statusEl) {
@@ -57312,6 +57385,7 @@ function renderSpeaking(q, container) {
   </div><div id="feedback-area"></div>`;
   // Bring António to life
   antonioSetState('idle');
+  ttsWarm();
   // Greet by speaking the word shortly after appearing
   setTimeout(() => { if (antonioEl()) antonioSayPrompt(q.speakTarget || q.item.k); }, 600);
 }
@@ -59210,8 +59284,10 @@ async function speakText(text, btnEl, rate) {
   const clean = voiceForm(text);   // Kriolu is respelled for the Portuguese voice (never shown)
   if (!clean) return;
   if (getTtsEndpoint()) {
-    if (btnEl) btnEl.classList.add('speaking');
+    antonioHush();                   // a Listen button takes the sound from António
+    if (btnEl) btnEl.classList.add('speaking', 'tts-loading');
     const audio = await fetchTtsAudio(clean);
+    if (btnEl) btnEl.classList.remove('tts-loading');
     if (audio) {
       try { await playTtsAudio(audio, btnEl, rate); return; } catch (e) { /* fall through */ }
     }
@@ -59222,6 +59298,7 @@ async function speakText(text, btnEl, rate) {
 }
 
 function browserSpeak(clean, btnEl, rate) {
+  antonioHush();
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(clean);
