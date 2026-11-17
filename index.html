@@ -9,7 +9,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Kriolu" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
+  <link rel="icon" type="image/png" sizes="64x64" href="icon-64.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet" />
@@ -1679,6 +1681,84 @@
       .chat-window{height:clamp(380px,calc(100vh - 470px),640px)}
       .talk-main .scenario-chips{flex-wrap:wrap;overflow:visible}
     }
+
+    /* ══════════════════════════════════════════════════════════════════
+       SUBJECT ART AND RAISED CARDS
+       Every subject has its own illustration on a small raised tile, and
+       cards are solid objects: a visible edge underneath, a soft shadow,
+       a lean toward the pointer, and they sink when pressed.
+       ══════════════════════════════════════════════════════════════════ */
+    .art{display:inline-block;position:relative;width:1.9em;height:1.9em;border-radius:28%;overflow:hidden;flex-shrink:0;vertical-align:middle;line-height:0;
+      background:color-mix(in srgb,var(--ocean) 10%,var(--card));box-shadow:0 .1em 0 rgba(40,25,10,.2),0 .2em .35em -.08em rgba(60,40,20,.4)}
+    .art img{width:100%;height:100%;display:block;object-fit:cover}
+    .art::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+      box-shadow:inset 0 .07em 0 rgba(255,255,255,.55),inset 0 -.1em 0 rgba(0,0,0,.16);
+      background:linear-gradient(160deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 42%)}
+    [data-theme="dark"] .art{box-shadow:0 .1em 0 rgba(0,0,0,.5),0 .2em .4em -.05em rgba(0,0,0,.7)}
+    .due-btn .art,.sf-chip .art,h2 .art,.start-btn .art,.art-inline{width:1.5em;height:1.5em;margin-right:.4em;vertical-align:-.38em}
+    .lesson-icon{font-size:2.3rem;margin-bottom:12px;line-height:1}
+    .path-icon{font-size:1.15rem}.path-unit-icon{font-size:1.5rem}
+    .story-card .s-icon,.grammar-card .g-icon{font-size:1.7rem}
+    .ach-icon{font-size:1.9rem}.badge-icon{font-size:1.25rem}
+    .story-cover{background:color-mix(in srgb,var(--ocean) 7%,var(--card));font-size:3.4rem}
+    .path-status{display:flex;align-items:center;justify-content:center;color:var(--muted)}
+    .path-status .ic{width:20px;height:20px}
+    .path-done .path-status{color:var(--ok-fg,var(--correct))}
+    .path-next .path-status{color:var(--coral)}
+    .path-locked .path-icon{filter:grayscale(.85);opacity:.6}
+
+    :root{--edge:#E2D3BB;--lift:5px;--ground:rgba(70,45,20,.3)}
+    [data-theme="dark"]{--edge:#0B0908;--ground:rgba(0,0,0,.7)}
+    .lesson-card,.qa-tile,.bento-tile,.bento-hero,.story-card,.grammar-card,.ach-card,.badge-chip,.daily-card.path-card{
+      --ty:0px;position:relative;border:1px solid var(--border);border-radius:22px;transform-style:preserve-3d;
+      box-shadow:0 var(--lift) 0 var(--edge),0 calc(var(--lift) + 12px) 22px -14px var(--ground),inset 0 1px 0 rgba(255,255,255,.75);
+      transform:perspective(900px) translateY(var(--ty)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+      transition:transform .18s var(--ease-out),box-shadow .18s var(--ease-out),border-color .2s}
+    [data-theme="dark"] :is(.lesson-card,.qa-tile,.bento-tile,.bento-hero,.story-card,.grammar-card,.ach-card,.badge-chip){
+      box-shadow:0 var(--lift) 0 var(--edge),0 calc(var(--lift) + 12px) 22px -14px var(--ground),inset 0 1px 0 rgba(255,255,255,.07)}
+    .lesson-card,.story-card,.grammar-card{border-color:var(--border) !important;border-left-width:1px}
+    .lesson-card::before{display:none}
+    .bento-hero,.qa-warm{--edge:color-mix(in srgb,var(--coral) 34%,#E2D3BB)}
+    [data-theme="dark"] .bento-hero,[data-theme="dark"] .qa-warm{--edge:#0B0908}
+    .daily-card.path-card,[data-theme="dark"] .daily-card.path-card{--edge:#06344A;border:none;
+      box-shadow:0 var(--lift) 0 var(--edge),0 calc(var(--lift) + 14px) 26px -14px rgba(6,52,74,.6),inset 0 1px 0 rgba(255,255,255,.18)}
+    .ach-card:not(.earned){--lift:3px}
+    .badge-chip{--lift:3px;border-radius:16px}
+    @media (hover:hover){
+      :is(.lesson-card,.qa-tile,.bento-tile.tile-link,.story-card,.grammar-card,.daily-card.path-card):hover{--ty:-3px;
+        box-shadow:0 calc(var(--lift) + 3px) 0 var(--edge),0 calc(var(--lift) + 20px) 30px -16px var(--ground),inset 0 1px 0 rgba(255,255,255,.75)}
+    }
+    :is(.lesson-card,.qa-tile,.bento-tile.tile-link,.story-card,.grammar-card):active{--ty:var(--lift);transition-duration:.06s;
+      box-shadow:0 0 0 var(--edge),0 6px 12px -10px var(--ground),inset 0 1px 0 rgba(255,255,255,.75)}
+    /* things inside float a little above the card face */
+    .lesson-card .lesson-icon,.qa-tile .qa-icon,.qa-tile .qa-avatar,.bento-tile .bt-icon,.bento-hero-icon,.story-card .s-icon,.grammar-card .g-icon,.ach-card .ach-icon{transform:translateZ(22px)}
+    .lesson-card .lesson-title,.qa-tile .qa-text,.bento-tile .bt-val,.bento-hero-val{transform:translateZ(10px)}
+    .qa-icon,.bt-icon,.bento-hero-icon{box-shadow:inset 0 -2px 0 rgba(40,25,10,.1),inset 0 1px 0 rgba(255,255,255,.7),0 3px 5px -2px rgba(60,40,20,.28)}
+    /* room for the edge under each card */
+    .lessons-grid{gap:16px 12px}
+    .quick-actions,.bento{gap:15px 10px}
+    .story-card,.grammar-card{margin-bottom:17px}
+    .achievements-strip{padding-bottom:12px}
+    .daily-card.path-card{margin-bottom:calc(16px + var(--lift))}
+
+    /* Lesson card: art, title, progress */
+    .lesson-card{padding:16px 15px 14px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;overflow:visible}
+    .lesson-title{font-size:1rem;line-height:1.2;margin-bottom:2px}
+    .lesson-sub{margin-bottom:12px}
+    .lc-foot{display:flex;align-items:center;gap:10px;width:100%;margin-top:auto}
+    .lc-foot .mastery-bar{flex:1;height:7px;margin:0;background:color-mix(in srgb,var(--ocean) 11%,var(--border));box-shadow:inset 0 1px 1px rgba(40,25,10,.12)}
+    .lc-count{font-size:.72rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+    .lc-go{width:30px;height:30px;border-radius:50%;background:var(--ocean);color:#FFFDF8;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      box-shadow:0 2px 0 color-mix(in srgb,var(--ocean) 70%,#000)}
+    .lc-go .ic{width:16px;height:16px;stroke-width:2.4}
+    .lesson-card .done-badge{top:14px;right:14px;box-shadow:0 2px 0 rgba(0,0,0,.15)}
+    @media (prefers-reduced-motion:reduce){
+      .lesson-card,.qa-tile,.bento-tile,.bento-hero,.story-card,.grammar-card,.ach-card,.badge-chip,.daily-card.path-card{transform:none;transition:none}
+    }
+
+    /* a Listen button while its audio is on the way */
+    .tts-loading{position:relative;animation:none !important;opacity:1 !important}
+    .tts-loading::after{content:'';position:absolute;inset:-3px;border-radius:inherit;border:2.5px solid transparent;border-top-color:var(--coral);animation:antonio-spin .7s linear infinite;pointer-events:none}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1931,7 +2011,7 @@
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
     <div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text);margin-bottom:2px">🎯 Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from all lessons</div></div>
+      <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text);margin-bottom:2px">Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from all lessons</div></div>
       <button class="start-btn" onclick="startMixedSession()">Start →</button>
     </div>
   </div>
@@ -1939,7 +2019,7 @@
   <!-- PATH -->
   <div id="screen-path" class="screen">
     <h2 class="section-heading">Your Learning Path</h2>
-    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Follow this path for a structured, step-by-step journey. Each lesson unlocks the next. You can also practice any lesson freely from the 📚 Lessons tab anytime.</p>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:16px">Follow this path for a structured, step-by-step journey. Each lesson unlocks the next. You can also practice any lesson freely from the Lessons tab anytime.</p>
     <div id="path-content"></div>
   </div>
 
@@ -52091,6 +52171,100 @@ function streakStatus() {
   if (state.streakFrozenDate && (state.streakFrozenDate === yesterday || state.streakFrozenDate === today)) return 'frozen';
   return 'unlit';
 }
+// ── SUBJECT ART ── one illustration per subject (img/art/<subject>.webp), in the
+// same illustrated style as Sôr António. Lessons, stories, grammar points and
+// badges keep their emoji in the data; subjectOf() maps that emoji to a subject.
+const ART = {};
+'food bake drink fruit home family talk greet lang book time numbers health body sport music art craft tools tech science space nature farm animal sea boat travel transport island city market work civic faith party weather feelings games media clothing action award water paper idea child general'
+  .split(' ').forEach(k => { ART[k] = 1; });
+const ART_SUBJECTS = {
+food:'🍲 🍳 🍽️ 🥄 🧀 🔪 🧂 🥣 🍜 🍛 🍴 🍢 🥬 🍚 🍱 🥟 🫓 🥢 🥘 🥩 🥗 🌶 🌶️ 🧆 🌮 🥙 🍖 🍝 🥚 🧈 🍿 🥜 🧇 🍠 🥮 🫙 🍯 🫀 🧽 🥖 🥨 🫚',
+bake:'🍞 🍰 🎂 🍫 🍨 🍦 🍩 🍡 🍬 🥐 🧁 🍮 🪒',
+drink:'☕ 🍵 🍇 🍷 🍸 🍺 🍹 🧋 🥛 🧃 🫖 🥂 🛢',
+fruit:'🍊 🥭 🍓 🍍 🥦 🥕 🍄 🍌 🍈 🍑 🍉 🥥 🍎 🌽',
+home:'🏠 🛋️ 🧹 📦 🔑 🪑 🔌 🧴 🔒 🏡 🚪 🛏 🛏️ 🛌 🧺 🪣 🗃️ 🛁 🧼 🧻 🛖 🪞 🚿 🗑️ 🔐 🏚️ 🏘️ 🏘',
+family:'👨‍👩‍👧 👵 🧸 🤰 👶 👴 👩 🧒 🍼 👨‍👩‍👧‍👦 🧓 👣 🫂 👥 🫱 💑 👰 💍 🙋 🧔🏾 👑',
+talk:'💬 🗣️ 🤝 👋 ❓ 🗨️ 🎤 📞 ☎️ 🙌 🤫 🤟 😎 🎩 🛎️ 🤲 📣 ✊ 🫵 🚫 😗 🤏',
+lang:'🔤 🏷️ 🔠 🅰️ 🅱️ ✂️ ✂ 🔗 🎚️ 🧮 ➕ 💯 🔁 🔄 ⏱️ ⏪ ⏩ 🗺️ 🖐️ 👅 👃 👂 👁️ 🙆 🦴 🧍 🦶 🤚',
+book:'📖 📚 🎓 📜 🏫 🎒 🌟 🗝️ 📗 📘 📕 📓 🍀 🐉 🧙 🐺 💥',
+time:'📅 ⏰ 🕰️ 🕐 ⏳ 📆 🗓️ ⌚ 🌅 😴',
+numbers:'🔢 📐 📏 📊 📈 📉 🔷 🟦 🔵 🔴 🟤 ⭕',
+health:'🏥 🩺 💊 🦷 💉 🤒 🤧 🩹 ⚕️ 🧘 💆 💈 💇 💇‍♀️ 👓 ♿ 🦯 🚨 🆘 🚒 🧬 💄 🪮',
+sport:'⚽ 🤸 🏊 🏅 🥋 🛹 🏋️ ⛳ 🏉 🏹 🎾 🤾 🏀 ⛷️ 🪂 🏟️ 🏃 🏃‍♂️ 🚴 🤿 🥾 🛝',
+music:'🎸 🎶 🎵 🎧 🎙️ 🎹 🎻 🎼 🥁 🪘 🪗 🪕 💃 💿 🔊 🪇',
+art:'🎨 🖼 🖼️ 🖌 🖌️ 🖍 🎭 🎪 🗿 🖋️ 🖋 ✒️ 🧊 🏖 🦋 🪷 🌈 🎈 🏰 🫧 🏺 ⚱️ 🪅 🏮 🎐 🦢 🎏 🪨 🖨 🧱 ⚖',
+craft:'🚬 🪭 🧶 🧵 🪢 🪡 📿 🎀 👞 👜 👒 👖 👢 🪶 🕸 🕸️ 🪝 🕯 🧷 ⛓ 🪵 🐑 🔮 🛶',
+tools:'🔧 🔨 🛠️ 🪚 🏗️ 🏗 ⚒️ ⛏️ 🧰 👷 🛞 ⚙️',
+tech:'💻 📱 🌐 🤖 🎮 📲 ⌨ ⌨️ 🖱️ 🖨️ 🗄️ ☁️ ₿ 📡 🛰️ 🛸 📵 📼',
+science:'🔬 🧪 ⚛️ 🔭 🧠 💎 🌋',
+space:'🚀 🌌 🌙 ⭐ ✨ 🌠 ☄️ ♈ 🌗 🌃 🔦 🗼 🎆 🕶️',
+nature:'🌿 🌱 🌳 🪴 🌸 🌼 🍃 🌺 🌹 🏞️ ♻️ ♻ 🪱 🏕️ ⛺ 🌴',
+farm:'🌾 🐐 🐓 🐄 🚜 🐴 🐷 🐂 ⛰ 🌬 🐝',
+animal:'🐕 🐦 🐾 🦁 🦎 🕊️ 🦉 🦅 🐶 🐱 🐈 🐞 🦔 🐛 🐆 🐼 🦘 🐜 🦡 🦝 🐕‍🦺 🐸 🦜 🙈',
+sea:'🐟 🌊 🎣 🐋 🐠 🐚 🐡 🦞 🐢 🦀 🐬 🪸',
+boat:'⛵ ⚓ ⛴ 🚢 🚣',
+travel:'✈️ 🧳 🧭 🛂 🛃 🏨 🛫 🛬 🎫 🌍 📍',
+transport:'🚲 🚗 🚌 🚐 🚚 🚕 🚇 🚙 🚘 🚆 🚂 🚡 🛴 🛵 🏍️ 🏍 🚏 🚋 🚔 🚁',
+island:'🏝️ 🏝 🏖️ 🏔️ ⛰️ 🗻 🇵🇹 🌇 🌆',
+city:'🏙️ 🏪 🏢 🏬 🏛️',
+market:'🛒 🏦 💰 💵 🧾 💹 🛍 🪙 💶 💸 💱 👡',
+work:'💼 📋 🧑‍💼 🗂️ 📎 🖇️',
+civic:'⚖️ 🗳️ 🎖️ ⚔️ 🛡️',
+faith:'⛪ 🕯️ 🙏 🕉️',
+party:'🎉 🎊 🎄 🚩 🎡 🃏',
+weather:'☀️ ☀ ⛈️ ⛈ 🌪️ 🌧 🌧️ 🌩️ 🌤️ ⛅ 🌦 🌦️ ☂️ ☔ ❄️ ❄ 🌞',
+feelings:'❤️ 💭 💘 💔 💞 💗 💝 🙂 💌',
+games:'🎲 ♟️ 🧩 🁫 🪀 🪁',
+media:'📷 📸 🎬 🎥 🎞️ 🎞 📺 📰 📻',
+clothing:'👗 👔 👕 👟',
+action:'🔥 ⚡ 🎯 🔋 🔱',
+award:'🏆 🥇 🥈 🥉 🎗️',
+water:'💧 🚰 🕳️',
+paper:'📄 📝 ✍️ ✉️ 📨 📮 📪 📇',
+idea:'💡',
+greet:'👋 🤝 🙌 🙋',
+body:'🖐️ 👅 👃 👂 👁️ 🙆 🦴 🧍 🦶 🤚 🧘 🏋️ 🤸',
+child:'🧸 👶 🍼 🧒 👣 🛝 🪀 🪁',
+};
+const ART_OF = {};
+Object.entries(ART_SUBJECTS).forEach(([s, list]) => list.split(' ').forEach(e => { if (e) ART_OF[e.replace(/️/g, '')] = s; }));
+function subjectOf(icon) { return ART_OF[String(icon || '').replace(/️/g, '').trim()] || 'general'; }
+// art('🍲') or art('food'): the illustration for a subject, on its raised tile
+function art(icon, cls) {
+  const s = ART[icon] ? icon : subjectOf(icon);
+  return `<span class="art${cls ? ' ' + cls : ''}" aria-hidden="true"><img src="img/art/${s}.webp" alt="" width="176" height="176" loading="lazy" decoding="async"></span>`;
+}
+// Marks on the learning path: done, next, open, locked
+const PATH_MARK = {
+  done: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" style="fill:currentColor;stroke:none"/><path d="m7.8 12.3 2.9 2.9 5.5-5.7" style="stroke:#FFFDF8;stroke-width:2.2"/></svg>',
+  next: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" style="fill:currentColor;stroke:none"/><path d="M8 12h8M12.5 8.5 16 12l-3.5 3.5" style="stroke:#FFFDF8;stroke-width:2.2"/></svg>',
+  open: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/></svg>',
+  lock: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>',
+};
+function pathMark(status) {
+  if (status === '🔒') return PATH_MARK.lock;
+  if ('✅🏆🏅'.includes(status)) return PATH_MARK.done;
+  if (status === '○') return PATH_MARK.open;
+  return PATH_MARK.next;
+}
+// Cards lean toward the pointer on devices that have one
+(function () {
+  if (!window.matchMedia || !matchMedia('(hover:hover) and (pointer:fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const SEL = '.lesson-card,.qa-tile,.bento-tile,.bento-hero,.story-card,.grammar-card,.ach-card,.daily-card.path-card';
+  let cur = null;
+  const clear = el => { el.style.removeProperty('--rx'); el.style.removeProperty('--ry'); };
+  document.addEventListener('pointermove', e => {
+    const el = e.target.closest ? e.target.closest(SEL) : null;
+    if (cur && cur !== el) clear(cur);
+    cur = el;
+    if (!el) return;
+    const r = el.getBoundingClientRect(), k = Math.min(1, 240 / r.width) * 9;
+    el.style.setProperty('--ry', (((e.clientX - r.left) / r.width - .5) * k).toFixed(2) + 'deg');
+    el.style.setProperty('--rx', ((.5 - (e.clientY - r.top) / r.height) * k).toFixed(2) + 'deg');
+  }, { passive: true });
+  document.addEventListener('pointerleave', () => { if (cur) { clear(cur); cur = null; } }, true);
+})();
+
 const LOGO_MARK = {
   kriolu: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/><path d="M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/></svg>',
   portuguese: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v13"/><path d="M12 4c4 2.5 6 6 6.5 11H12"/><path d="M12 7c-2.5 2-4 4.5-4.5 8H12"/><path d="M3.5 19h17l-2 2.500h-13z"/></svg>',
@@ -53291,7 +53465,7 @@ function showNextBadgeToast() {
   badgeToastShowing = true;
   const toast = document.createElement('div');
   toast.className = 'badge-toast';
-  toast.innerHTML = `<div class="badge-icon-lg">${ach.icon}</div>
+  toast.innerHTML = `<div class="badge-icon-lg">${art(ach.icon)}</div>
     <div class="badge-text"><b>New Badge: ${ach.name}!</b><span>${ach.desc}</span></div>`;
   document.body.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add('show'));
@@ -53323,7 +53497,7 @@ function renderAchievements() {
   const card = ach => {
     const earned = state.earnedBadges.includes(ach.id);
     return `<div class="ach-card ${earned ? 'earned' : 'locked'}">
-      <div class="ach-icon">${ach.icon}</div>
+      <div class="ach-icon">${art(ach.icon)}</div>
       <div class="ach-name">${ach.name}</div>
       <div class="ach-desc">${ach.desc}</div>
       ${earned ? '<div class="ach-earned-label">✓ Earned</div>' : ''}
@@ -53353,7 +53527,7 @@ function renderHomeBadges() {
   }
   strip.innerHTML = recent.map(({ ach }) => `
     <div class="badge-chip earned">
-      <div class="badge-icon">${ach.icon}</div>
+      <div class="badge-icon">${art(ach.icon)}</div>
       <div><div class="badge-label">${ach.name}</div><div class="badge-desc">${ach.desc}</div></div>
     </div>`).join('');
 }
@@ -53462,6 +53636,7 @@ function initChatAntonio() {
     wave.innerHTML = Array.from({ length: 17 }).map(() => '<div class="wave-bar"></div>').join('');
   }
   antonioSetState('idle');
+  ttsWarm();
   const ts = document.getElementById('tutor-settings');
   if (ts && !ts.dataset.init) { ts.dataset.init = '1'; ts.open = !getApiKey(); }
   // A mission in progress keeps its scene prompt and word tracker
@@ -53580,16 +53755,17 @@ function renderLessonCard(lesson) {
   const mastered = lesson.vocab.filter(v => (state.wordScores[v.k]?.correct || 0) >= MASTERY_THRESHOLD).length;
   const masteryPct = Math.round((mastered / total) * 100);
   const bestPct = (state.lessonsFinished || {})[lesson.id] || 0;
-  const badge = bestPct >= 80
-    ? `<div class="done-badge">✓</div>`
-    : `<div style="position:absolute;top:10px;right:10px;font-size:.7rem;color:var(--muted);font-weight:700">${mastered}/${total}</div>`;
-  return `<div class="lesson-card" onclick="startLesson('${lesson.id}')" style="border-top-color:${lesson.color || 'var(--ocean)'}">
+  const badge = bestPct >= 80 ? `<div class="done-badge">✓</div>` : '';
+  return `<div class="lesson-card" onclick="startLesson('${lesson.id}')">
     ${badge}
-    <div class="lesson-icon">${lesson.icon}</div>
+    <div class="lesson-icon">${art(lesson.icon)}</div>
     <div class="lesson-title">${lesson.title}</div>
     <div class="lesson-sub">${lesson.titleKriolu}</div>
-    <div class="mastery-bar"><div class="mastery-fill" style="width:${masteryPct}%"></div></div>
-    <button class="start-btn">Practice →</button>
+    <div class="lc-foot">
+      <div class="mastery-bar"><div class="mastery-fill" style="width:${masteryPct}%"></div></div>
+      <span class="lc-count">${mastered}/${total}</span>
+      <span class="lc-go"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+    </div>
   </div>`;
 }
 
@@ -53881,7 +54057,7 @@ function renderHomeExtras() {
       const weakest = Object.entries(wrongByLesson).sort((a, b) => b[1] - a[1])[0];
       if (weakest && weakest[1] >= 3) {
         const wl = LESSONS.find(x => x.id === weakest[0]);
-        plan.push(`<button class="due-btn" style="width:100%;text-align:left;margin-bottom:6px" onclick="startLesson('${wl.id}')">${wl.icon} Revisit ${wl.title} (${weakest[1]} tricky words) →</button>`);
+        plan.push(`<button class="due-btn" style="width:100%;text-align:left;margin-bottom:6px" onclick="startLesson('${wl.id}')">${art(wl.icon)} Revisit ${wl.title} (${weakest[1]} tricky words) →</button>`);
       }
       const goalXP = state.weeklyGoal || 100;
       const gap = goalXP - (state.weeklyXP || 0);
@@ -53891,7 +54067,7 @@ function renderHomeExtras() {
         const nextRec = gi.lessons.find(id => (state.lessonsFinished?.[id] || 0) < 80);
         if (nextRec) {
           const rl = LESSONS.find(x => x.id === nextRec);
-          if (rl) plan.push(`<button class="due-btn" style="width:100%;text-align:left" onclick="startLesson('${rl.id}')">${rl.icon} For ${gi.line}: ${rl.title} →</button>`);
+          if (rl) plan.push(`<button class="due-btn" style="width:100%;text-align:left" onclick="startLesson('${rl.id}')">${art(rl.icon)} For ${gi.line}: ${rl.title} →</button>`);
         }
       }
       if (state.dialect === 'saovicente') plan.push(`<div style="font-size:.78rem;color:var(--muted);padding:4px 0">🏝️ São Vicente mode on — see the São Vicente dialect lesson for key differences.</div>`);
@@ -54093,15 +54269,15 @@ function renderPathUnit(unit, ui, nextId) {
     const status = complete ? '✅' : unlocked ? (isNext ? '👉' : '○') : '🔒';
     const cls = complete ? 'path-done' : unlocked ? (isNext ? 'path-next' : 'path-open') : 'path-locked';
     return `<div class="path-lesson ${cls}" onclick="${unlocked ? `startLesson('${id}')` : `pathLockedMsg()`}">
-      <span class="path-status">${status}</span>
-      <span class="path-icon">${lesson.icon}</span>
+      <span class="path-status">${pathMark(status)}</span>
+      <span class="path-icon">${art(lesson.icon)}</span>
       <span class="path-name">${lesson.title}<span class="path-sub"> · ${lesson.titleKriolu}</span></span>
       ${isNext ? '<span class="path-next-tag">Next</span>' : ''}
     </div>`;
   }).join('');
   return `<div class="path-unit">
     <div class="path-unit-head">
-      <span class="path-unit-icon">${unit.icon}</span>
+      <span class="path-unit-icon">${art(unit.icon)}</span>
       <div><div class="path-unit-title">${unit.unit}</div><div class="path-unit-desc">${unit.desc}</div></div>
       <div class="path-unit-count">${unitDone}/${unitLessons.length}</div>
     </div>
@@ -54109,11 +54285,11 @@ function renderPathUnit(unit, ui, nextId) {
     ${GRAMMAR_SKILLS.filter(g => g.unit === unit.id).map(sk => {
       const unlocked = unitLessons.some(id => (state.lessonsFinished?.[id] || 0) >= 80);
       const passed = ((state.grammarSkillsDone || {})[sk.id] || 0) >= 60;
-      const status = passed ? '✅' : unlocked ? sk.icon : '🔒';
+      const status = passed ? '✅' : unlocked ? '👉' : '🔒';
       const cls = passed ? 'path-done' : unlocked ? 'path-next' : 'path-locked';
       return `<div class="path-lesson ${cls}" onclick="${unlocked ? `startGrammarSkill('${sk.id}')` : 'pathLockedMsg()'}">
-        <span class="path-status">${status}</span>
-        <span class="path-icon">💡</span>
+        <span class="path-status">${pathMark(status)}</span>
+        <span class="path-icon">${art('idea')}</span>
         <span class="path-name">Grammar Skill: ${sk.title}<span class="path-sub"> · learn the rule, then drill it${passed ? ' — passed!' : ''}</span></span>
         ${unlocked && !passed ? '<span class="path-next-tag">Train</span>' : ''}
       </div>`;
@@ -54124,8 +54300,8 @@ function renderPathUnit(unit, ui, nextId) {
       const status = passed ? '🏆' : allDone ? '🎯' : '🔒';
       const cls = passed ? 'path-done' : allDone ? 'path-next' : 'path-locked';
       return `<div class="path-lesson ${cls}" onclick="${allDone ? `renderCheckpointIntro(${ui})` : `pathLockedMsg()`}">
-        <span class="path-status">${status}</span>
-        <span class="path-icon">📜</span>
+        <span class="path-status">${pathMark(status)}</span>
+        <span class="path-icon">${art('paper')}</span>
         <span class="path-name">Unit Checkpoint<span class="path-sub"> · random test of the whole unit${passed ? ' — passed!' : ''}</span></span>
         ${allDone && !passed ? '<span class="path-next-tag">Test</span>' : ''}
       </div>`;
@@ -54136,8 +54312,8 @@ function renderPathUnit(unit, ui, nextId) {
       const status = done ? '🏅' : allDone ? '🎭' : '🔒';
       const cls = done ? 'path-done' : allDone ? 'path-next' : 'path-locked';
       return `<div class="path-lesson ${cls}" onclick="${allDone ? `startUnitMission(${ui})` : `pathLockedMsg()`}">
-        <span class="path-status">${status}</span>
-        <span class="path-icon">🎭</span>
+        <span class="path-status">${pathMark(status)}</span>
+        <span class="path-icon">${art('talk')}</span>
         <span class="path-name">Mission with ${escapeHTML(tutorName())}<span class="path-sub"> · a role-play using this unit's words${done ? ' — complete!' : ''}</span></span>
         ${allDone && !done ? '<span class="path-next-tag">Play</span>' : ''}
       </div>`;
@@ -54208,7 +54384,7 @@ function onPathLevelToggle(el) {
 }
 
 function pathLockedMsg() {
-  alert('🔒 Complete the previous lesson first to unlock this one!\n\n(Tip: you can still practice any lesson freely from the 📚 Lessons tab.)');
+  alert('🔒 Complete the previous lesson first to unlock this one!\n\n(Tip: you can still practice any lesson freely from the Lessons tab.)');
 }
 
 function startLesson(id) {
@@ -55476,7 +55652,7 @@ function renderCompleteDialogue(q, container) {
   q.correctText = line.k;
   q.reveal = `<div class="odd-reveal"><div><b>${escapeHTML(line.sp)}:</b> ${escapeHTML(line.k)}</div><div style="color:var(--muted)">${escapeHTML(line.e)}</div></div>`;
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">💬 Complete the Conversation</div>
-    <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">${escapeHTML(d.icon || '')} ${escapeHTML(d.titleE || d.title)}</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">${art(d.icon)} ${escapeHTML(d.titleE || d.title)}</div>
     <div class="dlg-lines">${prev.map(l => `<div class="dlg-line"><b>${escapeHTML(l.sp)}:</b> ${escapeHTML(l.k)}<div class="dlg-e">${escapeHTML(l.e)}</div></div>`).join('')}
       <div class="dlg-line dlg-next"><b>${escapeHTML(line.sp)}:</b> …</div></div>
     <div style="font-size:.85rem;font-weight:700;margin:10px 0 6px">What does ${escapeHTML(line.sp)} say next?</div>
@@ -55625,7 +55801,7 @@ function renderStory() {
   });
   const last = shown >= v.length;
   document.getElementById('sentencelab-content').innerHTML = `
-    <div class="story-head"><span class="story-icon">${lesson.icon}</span><div><div class="story-title">${escapeHTML(lesson.title)}</div>
+    <div class="story-head"><span class="story-icon">${art(lesson.icon)}</span><div><div class="story-title">${escapeHTML(lesson.title)}</div>
       <div class="story-sub">Read or listen to the story first — the words will make sense before you drill them.</div></div></div>
     <label class="story-toggle"><input type="checkbox" ${storyState.english ? 'checked' : ''} onchange="storyState.english=this.checked;renderStory()"> Show English</label>
     <div class="story-panels">${html}</div>
@@ -57048,13 +57224,13 @@ function antonioOnBoundary(charIndex) {
   const c = antonioTalkCtl; if (!c) return;
   c.mode = 'boundary'; c.lastWord = performance.now(); c.lastChar = charIndex;
 }
-function antonioStartTalking(clean, original) {
-  antonioStopTalking(); // clear any previous run before starting a fresh one
+function antonioStartTalking(clean, original, audio) {
+  if (antonioTalkCtl) { clearInterval(antonioTalkCtl.timer); antonioTalkCtl = null; }   // clear any previous run
   antonioSetState('talking');
   const text = clean || '';
   const sents = antonioSentences(text, original);
   antonioTalkCtl = { sents, len: text.length, t0: performance.now(), msPerChar: 70, mode: 'estimate', lastWord: 0, lastChar: 0,
-    lastLoud: 0, quietSince: 0, audio: null, env: null, cuts: [], hist: [], mood: sents[0].mood, timer: null };
+    lastLoud: 0, quietSince: 0, audio: audio || null, env: null, cuts: [], hist: [], mood: sents[0].mood, timer: null };
   if (antonioCalm()) return;                         // reduced motion: he stays on the still portrait
   antonioShowMood(sents[0].mood); antonioVoicing(true);
   antonioTalkCtl.timer = setInterval(antonioTalkTick, 50);
@@ -57068,40 +57244,108 @@ function antonioStopTalking() {
   if (el && el.classList.contains('talking')) antonioSetState('idle');
 }
 
-// Make António speak (TTS) with lip movement, then a callback when done
+// Long replies are spoken in parts: the first sentence on its own so the voice
+// starts quickly, then the rest in pieces of a few sentences. Each part is fetched
+// while the one before it plays.
+function antonioParts(text) {
+  const sents = antonioSplit(text);
+  if (sents.length < 2 || text.length < 90) return [text];
+  const parts = []; let cur = '';
+  sents.forEach((x, i) => {
+    cur += (cur ? ' ' : '') + x.text;
+    if (cur.length >= (parts.length ? 110 : 12)) { parts.push(cur); cur = ''; }
+  });
+  if (cur) { if (cur.length < 25 && parts.length) parts[parts.length - 1] += ' ' + cur; else parts.push(cur); }
+  return parts;
+}
+// The premium voice runs on a server function that goes to sleep; a free, empty
+// request wakes it before the first real one.
+let ttsWarmedAt = 0;
+function ttsWarm() {
+  const ep = getTtsEndpoint();
+  if (!ep || Date.now() - ttsWarmedAt < 240000) return;
+  ttsWarmedAt = Date.now();
+  try { fetch(ep, { method: 'OPTIONS' }).catch(() => {}); } catch (e) {}
+}
+
+// Make António speak, then call done(). He looks thoughtful while the voice is
+// being prepared and only starts moving his mouth when sound actually starts.
+let antonioSpeakRun = 0, antonioSpeakingRun = 0;
+// Something else is about to make sound: António stops where he is
+function antonioHush() {
+  if (!antonioSpeakingRun) return;
+  antonioSpeakingRun = 0; antonioSpeakRun++;
+  antonioStopTalking();
+  const el = antonioEl();
+  if (el && el.classList.contains('thinking')) antonioSetState('idle');
+}
 function antonioSpeak(text, statusEl, done) {
-  if (statusEl) statusEl.textContent = `🗣️ ${tutorName()} is speaking…`;
-  const clean = voiceForm(text);
-  antonioStartTalking(clean, text);
+  const run = ++antonioSpeakRun;
+  antonioSpeakingRun = run;
+  if (statusEl) statusEl.textContent = `${tutorName()} is speaking…`;
   userHasInteracted = true;
-  let finished = false, fallback = null;
-  const finish = () => { if (finished) return; finished = true; clearTimeout(fallback); antonioStopTalking(); if (statusEl) statusEl.textContent = ''; if (done) done(); };
-  const ep = getTtsEndpoint && getTtsEndpoint();
-  if (ep || !window.speechSynthesis) {
-    // Premium voice: follow the real audio. Its loudness moves his mouth, its pauses
-    // mark the sentences, and its end stops him.
-    fallback = setTimeout(finish, Math.min(20000, 1500 + clean.length * 80));
-    Promise.resolve(speakText(text, null)).then(() => {
-      const a = typeof ttsAudio !== 'undefined' ? ttsAudio : null, c = antonioTalkCtl;
-      if (a && !a.paused && !a.ended && c) {
-        c.audio = a;
-        a.addEventListener('ended', finish, { once: true });
-        a.addEventListener('pause', finish, { once: true });
-        antonioEnvelope(a.src).then(E => { if (E && antonioTalkCtl === c) { c.env = E; c.cuts = antonioCuts(E, c.sents, c.len); } });
-      }
-    }).catch(() => {});
-    return;
-  }
-  // Browser voice: word-boundary events say exactly where he is
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(clean);
-  if (bestVoice) utter.voice = bestVoice;
-  utter.lang = bestVoice?.lang || 'pt-PT';
-  utter.rate = 0.82;
-  utter.onboundary = e => { if (e.name !== 'sentence') antonioOnBoundary(e.charIndex); };
-  utter.onend = finish; utter.onerror = finish;
-  fallback = setTimeout(finish, Math.min(30000, 2500 + clean.length * 110));
-  window.speechSynthesis.speak(utter);
+  wordByWordRun++;
+  if (ttsAudio) { try { ttsAudio.pause(); } catch (e) {} }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (antonioTalkCtl) { clearInterval(antonioTalkCtl.timer); antonioTalkCtl = null; }
+  antonioSetState('thinking');
+  let finished = false;
+  const live = () => run === antonioSpeakRun && !finished;
+  const finish = () => {
+    if (finished) return; finished = true;
+    if (antonioSpeakingRun === run) { antonioSpeakingRun = 0; antonioStopTalking(); const el = antonioEl(); if (el && el.classList.contains('thinking')) antonioSetState('idle'); }
+    if (statusEl) statusEl.textContent = '';
+    if (done) done();
+  };
+  const browserSay = original => new Promise(resolve => {
+    const clean = voiceForm(original);
+    if (!window.speechSynthesis || !clean) return resolve();
+    const utter = new SpeechSynthesisUtterance(clean);
+    if (bestVoice) utter.voice = bestVoice;
+    utter.lang = bestVoice?.lang || 'pt-PT';
+    utter.rate = 0.82;
+    let started = false, guard = null;
+    const start = () => { if (started || !live()) return; started = true; antonioStartTalking(clean, original); };
+    const end = () => { clearTimeout(guard); clearTimeout(late); resolve(); };
+    utter.onstart = start;
+    utter.onboundary = e => { start(); if (e.name !== 'sentence') antonioOnBoundary(e.charIndex); };
+    utter.onend = end; utter.onerror = end;
+    const late = setTimeout(start, 600);             // some browsers never report the start
+    guard = setTimeout(end, Math.min(30000, 2500 + clean.length * 110));
+    window.speechSynthesis.speak(utter);
+  });
+  const playPart = (b64, clean, original) => new Promise(resolve => {
+    const a = new Audio('data:audio/mpeg;base64,' + b64);
+    ttsAudio = a;
+    let guard = null;
+    const end = () => { clearTimeout(guard); a.onended = a.onerror = a.onpause = null; resolve(); };
+    a.onplaying = () => {
+      if (!live() || antonioTalkCtl && antonioTalkCtl.audio === a) return;
+      antonioStartTalking(clean, original, a);
+      const c = antonioTalkCtl;
+      antonioEnvelope(a.src).then(E => { if (E && antonioTalkCtl === c) { c.env = E; c.cuts = antonioCuts(E, c.sents, c.len); } });
+    };
+    a.onended = end; a.onerror = end;
+    a.onpause = () => { if (!a.ended) { if (live()) antonioHush(); end(); } };   // something else took over the sound
+    guard = setTimeout(end, Math.min(60000, 6000 + clean.length * 140));
+    a.play().catch(end);
+  });
+  (async () => {
+    const parts = antonioParts(text).map(o => ({ original: o, clean: voiceForm(o) })).filter(x => x.clean);
+    const premium = !!getTtsEndpoint();
+    const audio = parts.map(() => null);
+    const want = i => { if (premium && i < parts.length && !audio[i]) audio[i] = fetchTtsAudio(parts[i].clean); };
+    want(0); want(1);
+    for (let i = 0; i < parts.length && run === antonioSpeakRun; i++) {
+      want(i); want(i + 1);
+      const b64 = premium ? await audio[i] : null;
+      if (run !== antonioSpeakRun) break;
+      if (b64) { await playPart(b64, parts[i].clean, parts[i].original); }
+      else { await browserSay(parts.slice(i).map(x => x.original).join(' ')); break; }
+      if (run === antonioSpeakRun && i < parts.length - 1) antonioVoicing(false);   // mouth closed between parts
+    }
+    finish();
+  })();
 }
 
 function antonioReact(success, statusEl) {
@@ -57143,6 +57387,7 @@ function renderSpeaking(q, container) {
   </div><div id="feedback-area"></div>`;
   // Bring António to life
   antonioSetState('idle');
+  ttsWarm();
   // Greet by speaking the word shortly after appearing
   setTimeout(() => { if (antonioEl()) antonioSayPrompt(q.speakTarget || q.item.k); }, 600);
 }
@@ -58163,7 +58408,7 @@ function renderCheckpointIntro(unitIdx) {
     if (!lesson) return '';
     return `<div class="checkpoint-topic-row"><div class="checkpoint-topic-check">✓</div><div class="checkpoint-topic-name">${escapeHTML(lesson.title)}</div><div class="checkpoint-topic-count">${lesson.vocab.length} words</div></div>`;
   }).join('') + GRAMMAR_SKILLS.filter(g => g.unit === unit.id).map(sk =>
-    `<div class="checkpoint-topic-row"><div class="checkpoint-topic-check grammar">${sk.icon}</div><div class="checkpoint-topic-name">${escapeHTML(sk.title)}</div><div class="checkpoint-topic-count">grammar</div></div>`
+    `<div class="checkpoint-topic-row"><div class="checkpoint-topic-check grammar">${art(sk.icon)}</div><div class="checkpoint-topic-name">${escapeHTML(sk.title)}</div><div class="checkpoint-topic-count">grammar</div></div>`
   ).join('');
   container.innerHTML = `
     <div style="text-align:center">
@@ -58450,7 +58695,7 @@ function startGrammarSkill(id) {
   const sk = GRAMMAR_SKILLS.find(g => g.id === id);
   if (!sk) return;
   lessonPlan = null;
-  document.getElementById('lab-title').textContent = sk.icon + ' Grammar Skill';
+  document.getElementById('lab-title').textContent = 'Grammar Skill';
   showScreen('sentencelab');
   const c = document.getElementById('sentencelab-content');
   c.innerHTML = `
@@ -58471,7 +58716,7 @@ function gskillDrill(id) {
   if (!sk) return;
   const qs = sk.dynamic ? genVerbWorkout() : shuffle([...sk.qs]);
   state.session = {
-    questions: qs.map(gq => ({ item: { k: sk.icon + ' ' + sk.title, e: '', ex: '' }, type: 'grammarChoice', gq, lessonId: 'gskill' })),
+    questions: qs.map(gq => ({ item: { k: sk.title, e: '', ex: '' }, type: 'grammarChoice', gq, lessonId: 'gskill' })),
     lessonId: 'gskill', skillId: sk.id, lessonTitle: sk.title,
   };
   state.qIndex = 0; state.score = 0; state.wrongItems = []; state.awaitingNext = false; state.lives = 3;
@@ -58634,7 +58879,7 @@ function dictCategoryHTML(lesson, rowsHTML, open, count) {
   const li = LESSONS.indexOf(lesson);
   return `<div class="phrase-category">
       <div class="phrase-cat-header" onclick="togglePhraseCat(${li})" style="--cat:${lesson.color || 'var(--ocean)'}">
-        ${lesson.icon} ${escapeHTML(lesson.title)} <span style="margin-left:auto;font-size:.75rem;opacity:.85">${count}</span><span style="margin-left:8px">▾</span>
+        ${art(lesson.icon)} ${escapeHTML(lesson.title)} <span style="margin-left:auto;font-size:.75rem;opacity:.85">${count}</span><span style="margin-left:8px">▾</span>
       </div>
       <div class="phrase-cat-body${open ? ' open' : ''}" id="pc-${li}"${rowsHTML ? ' data-filled="1"' : ''}>${rowsHTML}</div>
     </div>`;
@@ -59041,8 +59286,10 @@ async function speakText(text, btnEl, rate) {
   const clean = voiceForm(text);   // Kriolu is respelled for the Portuguese voice (never shown)
   if (!clean) return;
   if (getTtsEndpoint()) {
-    if (btnEl) btnEl.classList.add('speaking');
+    antonioHush();                   // a Listen button takes the sound from António
+    if (btnEl) btnEl.classList.add('speaking', 'tts-loading');
     const audio = await fetchTtsAudio(clean);
+    if (btnEl) btnEl.classList.remove('tts-loading');
     if (audio) {
       try { await playTtsAudio(audio, btnEl, rate); return; } catch (e) { /* fall through */ }
     }
@@ -59053,6 +59300,7 @@ async function speakText(text, btnEl, rate) {
 }
 
 function browserSpeak(clean, btnEl, rate) {
+  antonioHush();
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(clean);
@@ -60710,7 +60958,7 @@ function renderWriting() {
   if (!container) return;
   container.innerHTML = WRITING_PROMPTS.map((p, i) => `
     <div class="story-card" onclick="openWritingPrompt(${i})" style="border-left-color:var(--gold)">
-      <div class="s-icon">${p.icon}</div>
+      <div class="s-icon">${art(p.icon)}</div>
       <div style="flex:1">
         <div class="s-title">${p.title}</div>
         <div class="s-titleE">${p.task}</div>
@@ -60727,7 +60975,7 @@ function openWritingPrompt(i) {
     <button class="back-btn" style="margin-bottom:14px" onclick="renderWriting()">←</button>
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-        <div style="font-size:2rem">${p.icon}</div>
+        <div style="font-size:2rem">${art(p.icon)}</div>
         <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--accent-text);font-weight:700">${p.title}</div>
         <span class="s-level level-${p.level}">${p.level}</span></div>
       </div>
@@ -60808,7 +61056,7 @@ function renderGrammar() {
       const done = !!(state.grammarSkillsDone || {})[sk.id];
       const sub = strip(sk.explain).slice(0, 70) + '…';
       return `<div class="grammar-card" onclick="startGrammarSkill('${sk.id}')">
-        <div class="g-icon">${sk.icon}</div>
+        <div class="g-icon">${art(sk.icon)}</div>
         <div><div class="g-title">${sk.title}</div><div class="g-sub">${sub}</div></div>
         ${done ? '<div class="g-check">✓</div>' : ''}
       </div>`;
@@ -60818,7 +61066,7 @@ function renderGrammar() {
   list.innerHTML = KR_GRAMMAR_REFERENCE.map(g => {
     const read = (state.grammarRead || []).includes(g.id);
     return `<div class="grammar-card" onclick="openGrammar('${g.id}')">
-      <div class="g-icon">${g.icon}</div>
+      <div class="g-icon">${art(g.icon)}</div>
       <div><div class="g-title">${g.title}</div><div class="g-sub">${g.sub}</div></div>
       ${read ? '<div class="g-check">✓</div>' : ''}
     </div>`;
@@ -60838,7 +61086,7 @@ function openGrammar(id) {
     <button class="back-btn" style="margin-bottom:14px" onclick="renderGrammar()">←</button>
     <div class="grammar-detail-card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div style="font-size:2.2rem">${g.icon}</div>
+        <div style="font-size:2.2rem">${art(g.icon)}</div>
         <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--accent-text);font-weight:700">${g.title}</div>
         <div style="font-size:.82rem;color:var(--muted)">${g.sub}</div></div>
       </div>
@@ -61880,7 +62128,7 @@ function renderDialogueCards() {
       const done = (state.dialoguesDone || []).includes(d.id);
       const opener = DLG_LONGFORM_IDS.includes(d.id) ? `openLongform('${d.id}')` : `openDialogue('${d.id}')`;
       return `<div class="story-card" onclick="${opener}">
-        <div class="s-icon">${d.icon}</div>
+        <div class="s-icon">${art(d.icon)}</div>
         <div style="flex:1">
           <div class="s-title">${d.title} ${done ? '<span style="color:var(--correct)">✓</span>' : ''}</div>
           <div class="s-titleE">${d.titleE} — ${d.lines.length} lines · ${d.quiz.length} questions</div>
@@ -61917,7 +62165,7 @@ function renderDialogueLibrary() {
       const long = DLG_LONGFORM_IDS.includes(d.id);
       const opener = long ? `openLongform('${d.id}','dlglib')` : `openDialogue('${d.id}','dlglib')`;
       return `<div class="story-card" onclick="${opener}">
-        <div class="s-icon">${d.icon}</div>
+        <div class="s-icon">${art(d.icon)}</div>
         <div style="flex:1">
           <div class="s-title">${d.title} ${done ? '<span style="color:var(--correct)">✓</span>' : ''}</div>
           <div class="s-titleE">${d.titleE} — ${d.lines.length} lines${long ? ' · long-form' : ''}</div>
@@ -61932,7 +62180,7 @@ function renderPassageCards() {
       const done = (state.passagesDone || []).includes(pz.id);
       const words = pz.paras.reduce((n,p)=>n+p.k.split(/\s+/).length,0);
       return `<div class="story-card" onclick="openPassage('${pz.id}')">
-        <div class="s-icon">${pz.icon}</div>
+        <div class="s-icon">${art(pz.icon)}</div>
         <div style="flex:1">
           <div class="s-title">${pz.title} ${done ? '<span style="color:var(--correct)">✓</span>' : ''}</div>
           <div class="s-titleE">${pz.titleE} — ~${words} words · ${pz.quiz.length} questions</div>
@@ -61974,7 +62222,7 @@ function openPassage(id) {
 
   det.innerHTML = `
     <button class="back-btn" onclick="stopPzReadAloud();renderReadingList()">←</button>
-    <h2 style="margin:8px 0 2px">${pz.icon} ${pz.title}</h2>
+    <h2 style="margin:8px 0 2px">${art(pz.icon)} ${pz.title}</h2>
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:6px">${pz.titleE} · ${pz.level}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
       <button class="due-btn" onclick="pzToggleEnglish(this)">🇬🇧 Show English</button>
@@ -62311,7 +62559,7 @@ function lfRenderBrief(d, meta) {
     <button class="back-btn" onclick="lfBack()">←</button>
     <div class="lab-card" style="margin-top:8px">
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="font-size:1.7rem">${d.icon}</div>
+        <div style="font-size:1.7rem">${art(d.icon)}</div>
         <span class="s-level level-${d.level}">${d.level}</span>
       </div>
       <h2 style="margin:12px 0 2px">${d.title}</h2>
@@ -62340,7 +62588,7 @@ function lfRenderReader(d, meta) {
   const playing = lfPlayer.playing && lfPlayer.id === d.id;
   return `
     <button class="back-btn" onclick="lfBack()">←</button>
-    <h2 style="margin:8px 0 2px">${d.icon} ${d.title}</h2>
+    <h2 style="margin:8px 0 2px">${art(d.icon)} ${d.title}</h2>
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:10px">${d.titleE} · ${d.level}</div>
     <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
       <div style="flex:1;height:5px;border-radius:99px;background:var(--border);overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--grad-ocean);width:${pct}%"></div></div>
@@ -62422,7 +62670,7 @@ function openDialogue(id, from) {
   det.style.display = 'block';
   det.innerHTML = `
     <button class="back-btn" onclick="dlgPlaying=false;rolePlay=null;${backCall}">←</button>
-    <h2 style="margin:8px 0 2px">${d.icon} ${d.title}</h2>
+    <h2 style="margin:8px 0 2px">${art(d.icon)} ${d.title}</h2>
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:12px">${d.titleE} — listen first, then take the quiz</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <button class="due-btn" id="dlg-playall" onclick="playDialogue('${d.id}')">▶ Play the whole dialogue</button>
@@ -62603,7 +62851,7 @@ function renderReadingList() {
     + shownStories.map(s => {
     const read = (state.storiesRead || []).includes(s.id);
     return `<div class="story-card" onclick="openStory('${s.id}')">
-      <div class="s-icon">${s.icon}</div>
+      <div class="s-icon">${art(s.icon)}</div>
       <div style="flex:1">
         <div class="s-title">${s.title} ${read ? '<span style="color:var(--correct)">✓</span>' : ''}</div>
         <div class="s-titleE">${s.titleE} — ${s.summary}</div>
@@ -62662,7 +62910,7 @@ function openListening(id) {
   det.style.display = 'block';
   det.innerHTML = `
     <button class="back-btn" style="margin-bottom:14px" onclick="stopListeningExercise();renderListeningList()">←</button>
-    <h2 style="font-family:'Fraunces',Georgia,serif;margin:0 0 4px">${l.icon || '🎧'} ${l.title}</h2>
+    <h2 style="font-family:'Fraunces',Georgia,serif;margin:0 0 4px">${art(l.icon || '🎧')} ${l.title}</h2>
     <div style="font-size:.82rem;color:var(--muted);margin-bottom:4px">${l.titleE} · ${l.level}</div>
     <div style="font-size:.85rem;margin-bottom:14px">${l.intro || ''}</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
@@ -62774,7 +63022,7 @@ function renderShadowList() {
   list.style.display = 'block';
   list.innerHTML = SHADOW_SETS.map(s => `
     <div class="story-card" onclick="openShadow('${s.id}')" style="border-left-color:var(--coral)">
-      <div class="s-icon">${s.icon}</div>
+      <div class="s-icon">${art(s.icon)}</div>
       <div style="flex:1">
         <div class="s-title">${s.title}</div>
         <div class="s-titleE">${s.phrases.length} phrases to practice</div>
@@ -62792,7 +63040,7 @@ function openShadow(id) {
   detail.innerHTML = `
     <button class="back-btn" style="margin-bottom:14px" onclick="renderShadowList()">←</button>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-      <div style="font-size:2rem">${set.icon}</div>
+      <div style="font-size:2rem">${art(set.icon)}</div>
       <div><div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;color:var(--accent-text);font-weight:700">${set.title}</div>
       <span class="s-level level-${set.level}">${set.level}</span></div>
     </div>
@@ -62861,7 +63109,7 @@ function renderMusic() {
   list.innerHTML = lessonCard + ARTISTS.map((a, ai) => `
     <div class="music-card">
       <div class="music-head">
-        <div class="music-icon">${a.icon}</div>
+        <div class="music-icon">${art('music')}</div>
         <div style="flex:1;min-width:0"><div class="music-name">${escapeHTML(a.name)}</div><div class="music-tag">${escapeHTML(a.tag)}</div></div>
         ${a.sp ? `<a class="artist-sp" href="https://open.spotify.com/artist/${a.sp}" target="_blank" rel="noopener" title="${escapeHTML(a.name)} on Spotify">♫ Spotify</a>` : ''}
       </div>
@@ -62889,7 +63137,7 @@ function renderMusic() {
             }</div>` : ''}
             ${(s.focus || []).length ? `<div class="song-focus"><span class="sf-label">📚 Study first:</span>${
               s.focus.map(id => { const L = LESSONS.find(x => x.id === id); return L
-                ? `<button class="sf-chip" onclick="event.stopPropagation();startLesson('${L.id}')">${L.icon} ${escapeHTML(L.title)}</button>` : ''; }).join('')
+                ? `<button class="sf-chip" onclick="event.stopPropagation();startLesson('${L.id}')">${art(L.icon)} ${escapeHTML(L.title)}</button>` : ''; }).join('')
             }</div>` : ''}
           </div>
         </div>`;
@@ -63004,7 +63252,7 @@ function openStory(id) {
   detail.innerHTML = `
     <button class="back-btn" style="margin-bottom:14px" onclick="stopStoryPlayback();renderReadingList()">←</button>
     <div class="story-detail-card">
-      <div class="story-cover">${story.icon}</div>
+      <div class="story-cover">${art(story.icon)}</div>
       <div style="text-align:center;margin-top:10px">
         <div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:var(--accent-text);font-weight:700">${story.title}</div>
         <div style="font-size:.82rem;color:var(--muted);font-style:italic">${story.titleE}</div>
@@ -63287,7 +63535,7 @@ function finishPlacement(score, total) {
     <div class="results-title">You're ${level}!</div>
     <div class="results-sub">Based on ${score}/${total} correct · your path now starts at level ${PLACEMENT_START_LEVEL[level]}</div>
     <div class="results-xp">We recommend starting with these lessons:</div>
-    <div style="text-align:left;margin-bottom:16px">${recommended.slice(0,5).map(l => `<div style="padding:7px 0;border-bottom:1px solid var(--border);font-weight:700;color:var(--accent-text)">${l.icon} ${l.title}</div>`).join('')}</div>
+    <div style="text-align:left;margin-bottom:16px">${recommended.slice(0,5).map(l => `<div style="padding:7px 0;border-bottom:1px solid var(--border);font-weight:700;color:var(--accent-text)">${art(l.icon)} ${l.title}</div>`).join('')}</div>
     <button class="results-btn primary" onclick="showTab('path')">Go to the Path</button>
     <button class="results-btn secondary" onclick="showTab('home')">Home</button>`;
   renderHomeGrid(); renderAllLessonsGrid();

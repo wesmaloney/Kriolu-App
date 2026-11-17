@@ -1,12 +1,12 @@
 {
-  "name": "Kriolu — Learn Cape Verdean Creole",
+  "name": "Kriolu & Português with Sôr António",
   "short_name": "Kriolu",
   "description": "Learn Cape Verdean Creole with lessons, games, and an AI conversation tutor",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FBF4EA",
+  "background_color": "#0A4D68",
   "theme_color": "#FBF4EA",
   "icons": [
     {

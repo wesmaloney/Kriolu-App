@@ -5,6 +5,8 @@
 //   ELEVENLABS_API_KEY  = your ElevenLabs key
 //   ELEVENLABS_VOICE_ID = (optional) a voice ID; defaults to a clear multilingual voice
 
+let goodVoice = null;
+
 exports.handler = async (event) => {
   // CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -46,43 +48,58 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'No text provided' }) };
   }
 
+  // Model: a low-latency one by default so playback starts quickly. Set
+  // ELEVENLABS_MODEL (e.g. eleven_multilingual_v2) to trade speed for the older,
+  // slower voice model. If the chosen model is refused, the older one is tried.
+  const modelChain = [...new Set([process.env.ELEVENLABS_MODEL || 'eleven_flash_v2_5', 'eleven_multilingual_v2'])];
+  // A voice that worked is remembered while this function stays warm, so a
+  // voice the plan can't use is not retried on every request.
+  if (goodVoice && voiceChain.includes(goodVoice)) { voiceChain.splice(voiceChain.indexOf(goodVoice), 1); voiceChain.unshift(goodVoice); }
+
   let lastStatus = 500, lastDetail = '';
   try {
-    for (const voiceId of voiceChain) {
-      const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: 'POST',
-        headers: {
-          'xi-api-key': apiKey,
-          'Content-Type': 'application/json',
-          'Accept': 'audio/mpeg',
-        },
-        body: JSON.stringify({
-          text,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: { stability: 0.5, similarity_boost: 0.75 },
-        }),
-      });
-
-      if (resp.ok) {
-        const arrayBuffer = await resp.arrayBuffer();
-        const base64Audio = Buffer.from(arrayBuffer).toString('base64');
-        return {
-          statusCode: 200,
+    voices: for (const voiceId of voiceChain) {
+      for (const modelId of modelChain) {
+        // 32 kbps mono speech: a third of the default size, so it arrives sooner
+        const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_22050_32`, {
+          method: 'POST',
           headers: {
+            'xi-api-key': apiKey,
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
+            'Accept': 'audio/mpeg',
           },
-          body: JSON.stringify({ audio: base64Audio, voice: voiceId }),
-        };
-      }
+          body: JSON.stringify({
+            text,
+            model_id: modelId,
+            voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+          }),
+        });
 
-      lastStatus = resp.status;
-      lastDetail = (await resp.text()).slice(0, 300);
-      // Voice-specific rejections → try the next voice in the chain.
-      // 402 = library voice on a free plan, 404/422 = voice ID not found.
-      const voiceProblem = resp.status === 402 || resp.status === 404 || resp.status === 422
-        || /paid_plan_required|voice_not_found|payment_required/i.test(lastDetail);
-      if (!voiceProblem) break; // key/quota/server errors won't be fixed by another voice
+        if (resp.ok) {
+          goodVoice = voiceId;
+          const arrayBuffer = await resp.arrayBuffer();
+          const base64Audio = Buffer.from(arrayBuffer).toString('base64');
+          return {
+            statusCode: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({ audio: base64Audio, voice: voiceId, model: modelId }),
+          };
+        }
+
+        lastStatus = resp.status;
+        lastDetail = (await resp.text()).slice(0, 300);
+        // Voice-specific rejections → try the next voice in the chain.
+        // 402 = library voice on a free plan, 404 = voice ID not found.
+        const voiceProblem = resp.status === 402 || resp.status === 404
+          || /paid_plan_required|voice_not_found|payment_required/i.test(lastDetail);
+        if (voiceProblem) continue voices;
+        // 400/422 without a voice problem may be the model: try the older one
+        if (resp.status === 400 || resp.status === 422) continue;
+        break voices; // key/quota/server errors won't be fixed by another voice or model
+      }
     }
 
     return {
