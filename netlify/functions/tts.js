@@ -3,7 +3,9 @@
 //
 // Set these in Netlify → Site settings → Environment variables:
 //   ELEVENLABS_API_KEY  = your ElevenLabs key
-//   ELEVENLABS_VOICE_ID = (optional) a voice ID; defaults to a clear multilingual voice
+//   ELEVENLABS_VOICE_ID = (optional) a backup voice ID, tried if Sôr António's voice
+//                         (Mateus, below) is refused
+//   ELEVENLABS_MODEL    = (optional) override the speech model
 
 let goodVoice = null;
 
@@ -34,9 +36,12 @@ exports.handler = async (event) => {
   // via the API — Voice Library voices return 402 "paid_plan_required". So we
   // try the configured voice first, then fall back to premade voices that are
   // always free-eligible ("Sarah", then "George").
+  // Sôr António's voice is "Mateus" (a Voice Library voice). It always comes first,
+  // whatever ELEVENLABS_VOICE_ID holds; that variable is now the backup.
+  const SOR_ANTONIO_VOICE = 'ybSQXXKaA88uXOUGaM03';
   const PREMADE_FALLBACKS = ['EXAVITQu4vr4xnSDxMaL', 'JBFqnCBsd6RMkjVDRZzb'];
   const configured = process.env.ELEVENLABS_VOICE_ID;
-  const voiceChain = [...new Set([configured, ...PREMADE_FALLBACKS].filter(Boolean))];
+  const voiceChain = [...new Set([SOR_ANTONIO_VOICE, configured, ...PREMADE_FALLBACKS].filter(Boolean))];
 
   let text = '';
   try {

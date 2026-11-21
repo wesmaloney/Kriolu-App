@@ -53001,7 +53001,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v151';
+const APP_BUILD = 'v153';
 // Compares the code that is running with the copy on the server, code to code:
 // the server's index.html carries its own build number. Runs on start-up, when
 // the app returns to the foreground, and when Settings opens.
@@ -53966,7 +53966,7 @@ function renderHomeExtras() {
       <div class="wotd-info">
         <div class="wotd-label">Word of the day</div>
         <div class="wotd-word">${escapeHTML(w.k)}</div>
-        <div class="wotd-gloss">${escapeHTML(w.e || '')}</div>
+        <div class="wotd-gloss">${escapeHTML(w.e || '')}</div>${w.ex ? `<div class="wotd-gloss" style="font-style:italic;margin-top:5px">${escapeHTML(w.ex)}</div>` : ''}
       </div>
       <button class="wotd-play" onclick="userHasInteracted=true;speakText('${escapeJS(w.k)}',this)">▶</button>
     </div>`;
@@ -59228,6 +59228,16 @@ let ttsAudio = null;
 // replayed from cache forever — repeat plays cost zero credits and start instantly.
 // This makes the monthly free-tier quota last (the app repeats the same words a lot).
 const TTS_CACHE = 'kriolu-tts-audio'; // NOT version-bumped; survives app updates
+// Audio is stored per voice. Changing the voice means changing this tag: clips
+// recorded in the previous voice are then dropped once and fetched again.
+const TTS_VOICE = 'mateus1';
+(function () {
+  try {
+    if (localStorage.getItem('kriolu_tts_voice') === TTS_VOICE) return;
+    localStorage.setItem('kriolu_tts_voice', TTS_VOICE);
+    if (window.caches) caches.delete(TTS_CACHE);
+  } catch (e) {}
+})();
 let ttsQuotaBlockedUntil = 0;         // circuit breaker: skip API while quota exhausted
 
 async function ttsCacheGet(key) {
@@ -59269,7 +59279,7 @@ async function fetchTtsAudio(clean) {
   const endpoint = getTtsEndpoint();
   if (!endpoint) return null;
   // 1) Cached audio? Zero credits used.
-  const cached = await ttsCacheGet(clean);
+  const cached = await ttsCacheGet(TTS_VOICE + '|' + clean);
   if (cached) return cached;
   // 2) Quota circuit-breaker: if ElevenLabs recently said we're out of credits,
   //    don't waste a slow doomed request.
@@ -59283,7 +59293,7 @@ async function fetchTtsAudio(clean) {
     });
     if (resp.ok) {
       const data = await resp.json();
-      if (data.audio) { ttsCachePut(clean, data.audio); return data.audio; } // cache: fire-and-forget
+      if (data.audio) { ttsCachePut(TTS_VOICE + '|' + clean, data.audio); return data.audio; } // cache: fire-and-forget
     } else if (resp.status === 401 || resp.status === 402 || resp.status === 429) {
       // Out of credits / rate limited — stop trying for an hour.
       ttsQuotaBlockedUntil = Date.now() + 60 * 60 * 1000;
@@ -60205,19 +60215,54 @@ function onboardLevel(lv) {
   }
 }
 
-// Shared by the AI tutor's context (buildTutorContext) and the Home "word of
-// the day" card, so both surfaces agree on which word today's word is.
-const WOTD_LIST = ['Sodadi (longing/nostalgia)','Morabeza (Cape Verdean warmth & hospitality)','Funaná (a music genre)','Cretcheu (sweetheart/beloved)','Txeu (a lot/many)','Fixe (cool/great)','Dexa (to leave/let)','Sabi (tasty/nice)','Pamodi (why/because)','Manera (way/how)','Konsigui (to manage/succeed)','Spritu (spirit/wit)'];
+// ── WORD OF THE DAY ──
+// The dictionary is the word bank: every one- or two-word entry of the current
+// course (full sentences make poor "words"). A new word is drawn at random once
+// per day, and no word comes back until every word in the bank has had its turn;
+// then the bank starts over. What has been shown is remembered per course on this
+// device. The Home card and the AI tutor share the same word.
+const WOTD_MAX_WORDS = 2;
+let wotdBankCache = { lang: null, size: -1, bank: [] };
+function wotdBank() {
+  const lang = currentLang(), size = LESSONS.length;
+  if (wotdBankCache.lang === lang && wotdBankCache.size === size) return wotdBankCache.bank;
+  const seen = new Map();
+  LESSONS.forEach(l => (l.vocab || []).forEach(v => {
+    if (l.id === 'alphabet') return;                      // letters and sounds, not words
+    const k = String(v.k || '').trim(), e = String(v.e || '').trim();
+    if (k.length < 3 || !e || k.split(/\s+/).length > WOTD_MAX_WORDS) return;
+    if (k.toLowerCase() === e.toLowerCase()) return;      // a gloss that only repeats the word teaches nothing
+    const id = k.toLowerCase();
+    if (!seen.has(id)) seen.set(id, v);
+  }));
+  wotdBankCache = { lang, size, bank: [...seen.values()] };
+  return wotdBankCache.bank;
+}
+const wotdKey = () => 'kriolu_wotd_' + currentLang();
+function wotdLoad() { try { return JSON.parse(localStorage.getItem(wotdKey()) || 'null') || {}; } catch (e) { return {}; } }
+function wotdSave(o) { try { localStorage.setItem(wotdKey(), JSON.stringify(o)); } catch (e) {} }
 function wordOfTheDay() {
-  const dayNum = Math.floor(new Date().setHours(0, 0, 0, 0) / 86400000);
-  const entry = WOTD_LIST[dayNum % WOTD_LIST.length];
-  const m = entry.match(/^(.+?)\s*\((.+)\)$/);
-  const headword = m ? m[1] : entry;
-  const parenGloss = m ? m[2] : '';
-  // Prefer the real lesson vocab's example sentence when this headword is
-  // actually taught somewhere, so the card isn't just a floating definition.
-  const vocab = LESSONS.flatMap(l => l.vocab).find(v => v.k && v.k.toLowerCase() === headword.toLowerCase());
-  return { k: headword, e: vocab ? vocab.e : parenGloss, ex: vocab ? vocab.ex : '' };
+  const bank = wotdBank();
+  if (!bank.length) return { k: '', e: '', ex: '' };
+  const today = new Date().toDateString();
+  const st = wotdLoad();
+  let used = Array.isArray(st.used) ? st.used : [];
+  if (st.day === today && st.word) {
+    const hit = bank.find(v => v.k.trim().toLowerCase() === st.word);
+    if (hit) return { k: hit.k, e: hit.e, ex: hit.ex || '' };
+  }
+  const usedSet = new Set(used);
+  let pool = bank.filter(v => !usedSet.has(v.k.trim().toLowerCase()));
+  if (!pool.length) {                                   // every word has had its turn: start a new round
+    const last = used[used.length - 1];
+    used = [];
+    pool = bank.length > 1 ? bank.filter(v => v.k.trim().toLowerCase() !== last) : bank;
+  }
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  const id = pick.k.trim().toLowerCase();
+  used.push(id);
+  wotdSave({ day: today, word: id, used });
+  return { k: pick.k, e: pick.e, ex: pick.ex || '' };
 }
 
 function buildTutorContext() {
@@ -60259,9 +60304,9 @@ function buildTutorContext() {
   };
   if (diffMap[diff]) ctx += diffMap[diff];
   // Word of the day — António naturally teaches one fresh word per day
-  const dayNum = Math.floor(new Date().setHours(0,0,0,0) / 86400000);
-  const wotd = WOTD_LIST[dayNum % WOTD_LIST.length];
-  ctx += `\nWORD OF THE DAY: If it fits naturally, weave in the word "${wotd}" during the conversation and briefly highlight it as today's word to learn. Don't force it.`;
+  const wd = wordOfTheDay();
+  const wotd = wd.k ? `${wd.k} (${wd.e})` : '';
+  if (wotd) ctx += `\nWORD OF THE DAY: If it fits naturally, weave in the word "${wotd}" during the conversation and briefly highlight it as today's word to learn. Don't force it.`;
   if (state.tutorMemory && state.tutorMemory.trim()) {
     ctx += `\n\n--- WHAT YOU REMEMBER ABOUT THIS LEARNER (from past conversations) ---\n${state.tutorMemory.trim()}`;
     ctx += `\nReference these naturally when relevant (e.g. "Ália bes bu fla-m ma bu gosta di múzika..." / "Last time you told me you like music...").`;
