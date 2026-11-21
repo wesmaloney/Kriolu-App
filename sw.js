@@ -1,5 +1,5 @@
 // Kriolu PWA Service Worker
-const CACHE_NAME = 'kriolu-v152';
+const CACHE_NAME = 'kriolu-v153';
 const APP_SHELL = [
   './',
   './index.html',
