@@ -53001,7 +53001,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v151';
+const APP_BUILD = 'v152';
 // Compares the code that is running with the copy on the server, code to code:
 // the server's index.html carries its own build number. Runs on start-up, when
 // the app returns to the foreground, and when Settings opens.
@@ -59228,6 +59228,16 @@ let ttsAudio = null;
 // replayed from cache forever — repeat plays cost zero credits and start instantly.
 // This makes the monthly free-tier quota last (the app repeats the same words a lot).
 const TTS_CACHE = 'kriolu-tts-audio'; // NOT version-bumped; survives app updates
+// Audio is stored per voice. Changing the voice means changing this tag: clips
+// recorded in the previous voice are then dropped once and fetched again.
+const TTS_VOICE = 'mateus1';
+(function () {
+  try {
+    if (localStorage.getItem('kriolu_tts_voice') === TTS_VOICE) return;
+    localStorage.setItem('kriolu_tts_voice', TTS_VOICE);
+    if (window.caches) caches.delete(TTS_CACHE);
+  } catch (e) {}
+})();
 let ttsQuotaBlockedUntil = 0;         // circuit breaker: skip API while quota exhausted
 
 async function ttsCacheGet(key) {
@@ -59269,7 +59279,7 @@ async function fetchTtsAudio(clean) {
   const endpoint = getTtsEndpoint();
   if (!endpoint) return null;
   // 1) Cached audio? Zero credits used.
-  const cached = await ttsCacheGet(clean);
+  const cached = await ttsCacheGet(TTS_VOICE + '|' + clean);
   if (cached) return cached;
   // 2) Quota circuit-breaker: if ElevenLabs recently said we're out of credits,
   //    don't waste a slow doomed request.
@@ -59283,7 +59293,7 @@ async function fetchTtsAudio(clean) {
     });
     if (resp.ok) {
       const data = await resp.json();
-      if (data.audio) { ttsCachePut(clean, data.audio); return data.audio; } // cache: fire-and-forget
+      if (data.audio) { ttsCachePut(TTS_VOICE + '|' + clean, data.audio); return data.audio; } // cache: fire-and-forget
     } else if (resp.status === 401 || resp.status === 402 || resp.status === 429) {
       // Out of credits / rate limited — stop trying for an hour.
       ttsQuotaBlockedUntil = Date.now() + 60 * 60 * 1000;
