@@ -25,3 +25,20 @@
   for = "/"
   [headers.values]
     Cache-Control = "no-cache, must-revalidate"
+
+# ── Security headers for every page ──
+# The CSP keeps the page from talking to, or loading code from, anywhere but the
+# services the app uses (Anthropic for the tutor, Supabase for community and
+# sync, jsDelivr for the Supabase library, Google Fonts, Spotify embeds).
+# 'unsafe-inline' stays for scripts and styles because the app is one file with
+# inline handlers; everything else is locked down. A voice server on another
+# domain (the Voice address in Settings) must be added to connect-src.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://api.anthropic.com https://icnbwjbcpjonzbuyhqvm.supabase.co wss://icnbwjbcpjonzbuyhqvm.supabase.co; frame-src https://open.spotify.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "microphone=(self), camera=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000"
