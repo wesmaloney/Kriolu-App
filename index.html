@@ -1759,6 +1759,10 @@
     /* a Listen button while its audio is on the way */
     .tts-loading{position:relative;animation:none !important;opacity:1 !important}
     .tts-loading::after{content:'';position:absolute;inset:-3px;border-radius:inherit;border:2.5px solid transparent;border-top-color:var(--coral);animation:antonio-spin .7s linear infinite;pointer-events:none}
+
+    /* When the app provides the tutor itself no key is asked for anywhere */
+    html.tutor-server .own-key-section,html.tutor-server .api-key-panel,html.tutor-server #translate-key-panel{display:none !important}
+    html:not(.tutor-server) #ai-server-note{display:none}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.min.js" integrity="sha384-dl/4LkSyQ4uEucc48NM6VDZLAjLLq9yMzZ5JLXumBq7Ld33XBof73hseOqPhO89+" crossorigin="anonymous"></script>
 </head>
@@ -2263,8 +2267,8 @@
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">🔊</div><div><div style="font-weight:700;font-size:.85rem">Natural voice</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Falls back to your device voice offline</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0"><div style="font-size:17px">🧠</div><div><div style="font-weight:700;font-size:.85rem">Tutor memory</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Remembers what you struggle with</div></div></div>
     </div>
-    <div class="checkpoint-topics-label" style="margin-bottom:8px">Your own API key · optional</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px">
+    <div class="checkpoint-topics-label own-key-section" style="margin-bottom:8px">Your own API key · optional</div>
+    <div class="own-key-section" style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px">
       <div style="font-size:.78rem;line-height:1.55">Leave this blank and the app uses the shared connection. Add your own key for higher limits — it is stored on this device only and never sent anywhere but the model.</div>
       <div style="display:flex;align-items:center;gap:9px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:12px">
         <input type="password" id="ai-setup-key-input" style="flex:1;border:none;outline:none;background:transparent;font:600 .8rem/1 ui-monospace,Menlo,monospace;color:var(--text)" placeholder="sk-ant-..." />
@@ -2275,6 +2279,7 @@
         <button style="flex:none;background:var(--bg);border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:13px 16px;font:800 .78rem/1 'DM Sans',sans-serif;cursor:pointer" onclick="clearApiKeyFromAiSetup()">Clear</button>
       </div>
     </div>
+    <div id="ai-server-note" style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;font-size:.78rem;line-height:1.55"></div>
     <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)">
       <div style="font-size:1.1rem">📡</div>
       <div style="font-size:.75rem;color:var(--muted);line-height:1.5">Lessons, review and the phrasebook all run without a connection — only the tutor chat, translate and writing feedback need one.</div>
@@ -53006,7 +53011,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v154';
+const APP_BUILD = 'v155';
 // Compares the code that is running with the copy on the server, code to code:
 // the server's index.html carries its own build number. Runs on start-up, when
 // the app returns to the foreground, and when Settings opens.
@@ -56175,11 +56180,7 @@ Reply with ONLY valid JSON, no markdown:
  "reply": "a short, warm reaction to what they told you, in ${L.name}, with the English in [brackets]"}`;
   let r = null;
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 500, system: sys, messages: [{ role: 'user', content: text }] })
-    });
+    const resp = await claudeFetch({ max_tokens: 500, system: sys, messages: [{ role: 'user', content: text }] });
     const data = await resp.json();
     if (data.error) throw new Error(data.error.message);
     r = JSON.parse(data.content[0].text.replace(/```json|```/g, '').trim());
@@ -56513,13 +56514,9 @@ function renderLabPatterns(lesson, patterns, container) {
 // Ask Claude for lesson-specific, pedagogically rich sentence patterns
 async function fetchSmartPatterns(lesson, key) {
   const words = lesson.vocab.slice(0, 16).map(v => `${v.k} (${v.e})`).join(', ');
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:700,
+  const resp = await claudeFetch({ max_tokens:700,
       system:`You are a teacher of ${aiLang().full} creating sentence-structure lessons. ${aiLang().note} Output ONLY valid JSON, no markdown.`,
-      messages:[{role:'user', content:`For a lesson titled "${lesson.title}" with these words: ${words}\n\nCreate 3-4 reusable ${aiLang().name} sentence patterns that teach learners how to USE these words in real conversation, building toward fluency. For each, give the pattern template, a one-sentence English explanation, and 1-2 example sentences (${aiLang().name} + English) using the lesson's actual words.\n\nReturn ONLY JSON: [{"pattern":"template with [brackets]","en":"explanation","examples":[["target-language sentence","english"]]}]`}] })
-  });
+      messages:[{role:'user', content:`For a lesson titled "${lesson.title}" with these words: ${words}\n\nCreate 3-4 reusable ${aiLang().name} sentence patterns that teach learners how to USE these words in real conversation, building toward fluency. For each, give the pattern template, a one-sentence English explanation, and 1-2 example sentences (${aiLang().name} + English) using the lesson's actual words.\n\nReturn ONLY JSON: [{"pattern":"template with [brackets]","en":"explanation","examples":[["target-language sentence","english"]]}]`}] });
   const data = await resp.json();
   let raw = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '[]';
   raw = raw.replace(/```json|```/g, '').trim();
@@ -57879,11 +57876,7 @@ function antonioCachePut(k, v) {
 async function askAntonioAI(prompt, maxTok) {
   const key = getApiKey();
   if (!key) return null;
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens: maxTok || 300, system: ANTONIO_SYS, messages:[{role:'user', content: prompt}] })
-  });
+  const resp = await claudeFetch({ max_tokens: maxTok || 300, system: ANTONIO_SYS, messages:[{role:'user', content: prompt}] });
   if (!resp.ok) throw new Error('api ' + resp.status);
   const data = await resp.json();
   return (data.content && data.content[0] && data.content[0].text || '').trim();
@@ -58079,11 +58072,7 @@ async function submitWritingChallenge() {
   if (fb) fb.innerHTML = `<div style="text-align:center;padding:14px;color:var(--muted)">✍️ ${tutorName()} is reading…</div>`;
   const sys = `${aiLang().persona} You are a writing tutor for ${aiLang().full}. The learner just finished the "${lesson.title}" lesson. Their task: "${task}". They wrote a ${aiLang().name} attempt. Give brief, kind feedback in simple English:\n1. One sentence of genuine encouragement.\n2. "✅ Good:" 1-2 things done well.\n3. "📝 Fix:" any errors as "X → Y (brief reason)", or warmly say it's correct.\n4. "✨ Natural version:" one clean Kriolu version.\nKeep it short and supportive.\nEnd with one final line formatted EXACTLY as: FOCUS: <one 3-6 word grammar point to practice>`;
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:500, system:sys, messages:[{role:'user', content:text}] })
-    });
+    const resp = await claudeFetch({ max_tokens:500, system:sys, messages:[{role:'user', content:text}] });
     const data = await resp.json();
     if (data.error) { if (fb) fb.innerHTML = `<div class="feedback-bar wrong">⚠️ ${escapeHTML(data.error.message)}</div><button class="next-btn" onclick="finishWritingChallenge()">Finish lesson →</button>`; return; }
     let feedback = data.content[0].text;
@@ -59521,13 +59510,9 @@ async function endChatRecap() {
   showTyping();
   try {
     const convo = state.chatHistory.slice(-20).map(m => `${m.role === 'user' ? 'Learner' : 'António'}: ${m.content}`).join('\n');
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:450,
+    const resp = await claudeFetch({ max_tokens:450,
         system:`You are a supportive ${aiLang().name} tutor giving a short end-of-session recap in English. Be encouraging and specific.`,
-        messages:[{role:'user', content:`Here is a ${aiLang().name} practice conversation. Give the learner a brief, encouraging recap with exactly these three short sections using these labels:\n\n**New words & phrases:** (up to 5 useful Kriolu items they encountered, with English)\n**What to watch:** (1-2 gentle corrections or patterns to improve, if any)\n**Practice next:** (one concrete suggestion)\n\nKeep it concise.\n\nConversation:\n${convo}`}] })
-    });
+        messages:[{role:'user', content:`Here is a ${aiLang().name} practice conversation. Give the learner a brief, encouraging recap with exactly these three short sections using these labels:\n\n**New words & phrases:** (up to 5 useful Kriolu items they encountered, with English)\n**What to watch:** (1-2 gentle corrections or patterns to improve, if any)\n**Practice next:** (one concrete suggestion)\n\nKeep it concise.\n\nConversation:\n${convo}`}] });
     const data = await resp.json();
     hideTyping();
     const text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Great session!';
@@ -59554,13 +59539,9 @@ async function suggestTopics() {
   showTyping();
   try {
     const ctx = buildTutorContext();
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:250,
+    const resp = await claudeFetch({ max_tokens:250,
         system:`You suggest ${aiLang().name} conversation topics. Output ONLY a JSON array of 4 short topic strings in English, no markdown.`,
-        messages:[{role:'user', content:`Based on this learner profile, suggest 4 engaging ${aiLang().name} conversation topics tailored to their interests and level. Return ONLY JSON like ["topic 1","topic 2","topic 3","topic 4"].${ctx}`}] })
-    });
+        messages:[{role:'user', content:`Based on this learner profile, suggest 4 engaging ${aiLang().name} conversation topics tailored to their interests and level. Return ONLY JSON like ["topic 1","topic 2","topic 3","topic 4"].${ctx}`}] });
     const data = await resp.json();
     hideTyping();
     let raw = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '[]';
@@ -60053,7 +60034,58 @@ function saveApiKey() {
   }
 }
 
-function getApiKey() { return localStorage.getItem('kriolu_api_key') || ''; }
+// ── THE TUTOR'S CONNECTION ──
+// Sôr António's brain is reached through the app's own server function (/api/tutor),
+// which holds the Anthropic key, so no key lives in the browser. If the site has not
+// been given a key, the page falls back to the learner's own key, called directly
+// from the browser as before. Every place that talks to the model goes through
+// claudeFetch, so it is decided here and nowhere else.
+const TUTOR_MODELS = { chat: 'claude-sonnet-5-5', light: 'claude-haiku-5-5' };   // used only with the learner's own key
+let tutorServer = false;
+try { tutorServer = localStorage.getItem('kriolu_tutor_server') === '1'; } catch (e) {}
+document.documentElement.classList.toggle('tutor-server', tutorServer);
+// 'server' stands in for a key wherever the page only asks "is the tutor available?"
+function getApiKey() { return tutorServer ? 'server' : (localStorage.getItem('kriolu_api_key') || ''); }
+function setTutorServer(on) {
+  tutorServer = !!on;
+  try { localStorage.setItem('kriolu_tutor_server', on ? '1' : '0'); } catch (e) {}
+  document.documentElement.classList.toggle('tutor-server', tutorServer);
+  if (typeof renderAiSetup === 'function') renderAiSetup();
+}
+async function probeTutorServer() {
+  try {
+    const r = await fetch('/api/tutor', { cache: 'no-store' });
+    const j = r.ok ? await r.json() : null;
+    setTutorServer(!!(j && j.configured));
+  } catch (e) { /* offline or not on Netlify: keep what we knew */ }
+}
+async function claudeFetch(body, tier) {
+  tier = tier === 'light' ? 'light' : 'chat';
+  const system = String(body.system || '').slice(0, 30000);
+  const messages = (body.messages || []).slice(-40).map(m => ({ role: m.role, content: String(m.content).slice(0, 8000) }));
+  const maxTokens = body.max_tokens || 400;
+  if (tutorServer) {
+    const r = await fetch('/api/tutor', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ tier, system, messages, max_tokens: maxTokens }) });
+    // The site stopped providing the tutor: remember that and carry on with the learner's own key
+    if (r.status === 503 && /not set up/i.test(await r.clone().text())) { setTutorServer(false); if (!localStorage.getItem('kriolu_api_key')) return r; }
+    else return r;
+  }
+  // The learner's own key, straight to Anthropic. Same model choice and effort as the server.
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': localStorage.getItem('kriolu_api_key') || '', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+    // max_tokens leaves room for thinking, which counts toward it
+    body: JSON.stringify({ model: TUTOR_MODELS[tier], max_tokens: Math.min(maxTokens, 1200) + 500, system, messages, output_config: { effort: 'low' } }),
+  });
+  const data = await resp.json();
+  let status = resp.status, out = data;
+  if (data && Array.isArray(data.content)) {
+    // Callers read content[0].text: hand them the text blocks only, never a thinking block
+    out = { ...data, content: data.content.filter(b => b.type === 'text') };
+    if (!out.content.length) { status = 502; out = { type: 'error', error: { type: 'api_error', message: 'The tutor sent no reply, please try again' } }; }
+  }
+  return new Response(JSON.stringify(out), { status, headers: { 'Content-Type': 'application/json' } });
+}
 
 // AI Tutor Setup screen — a fuller explanation of what the shared/own-key
 // connection powers, on top of the same localStorage key the chat and
@@ -60063,14 +60095,21 @@ function renderAiSetup() {
   const card = document.getElementById('ai-status-card');
   if (card) {
     card.style.background = connected ? '#D4F5F1' : 'var(--bg)';
+    const sub = tutorServer ? 'Sôr António is provided by the app, so you do not need a key' : connected ? 'Chat, feedback and voice are all live with your own key' : 'Add your own key below to turn the tutor on';
     card.innerHTML = `<div style="display:flex;align-items:center;gap:12px">
       <div style="width:10px;height:10px;flex:none;border-radius:50%;background:${connected ? 'var(--correct)' : 'var(--muted)'}"></div>
-      <div><div style="font-weight:800;font-size:.85rem;color:${connected ? '#1A7A6E' : 'var(--text)'}">${connected ? 'Connected' : 'Using the shared connection'}</div>
-      <div style="font-size:.72rem;color:${connected ? '#1A7A6E' : 'var(--muted)'};margin-top:1px">${connected ? 'Chat, feedback and voice are all live with your own key' : 'Add your own key below for higher limits'}</div></div>
+      <div><div style="font-weight:800;font-size:.85rem;color:${connected ? '#1A7A6E' : 'var(--text)'}">${connected ? 'Connected' : 'Not connected'}</div>
+      <div style="font-size:.72rem;color:${connected ? '#1A7A6E' : 'var(--muted)'};margin-top:1px">${sub}</div></div>
     </div>`;
   }
   const input = document.getElementById('ai-setup-key-input');
-  if (input) input.placeholder = connected ? '••••••••••••• (saved ✓)' : 'sk-ant-...';
+  if (input) input.placeholder = connected && !tutorServer ? '••••••••••••• (saved ✓)' : 'sk-ant-...';
+  const note = document.getElementById('ai-server-note');
+  if (note) {
+    const hasOwn = !!localStorage.getItem('kriolu_api_key');
+    note.innerHTML = `<div style="font-weight:700;font-size:.85rem;margin-bottom:4px">No key needed</div>The tutor runs on the app's own connection, so nothing secret is kept on this device.` +
+      (hasOwn ? `<div style="margin-top:10px">An API key you saved earlier is still stored here and is no longer used.</div><button style="margin-top:10px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:11px 14px;font:800 .78rem/1 'DM Sans',sans-serif;cursor:pointer" onclick="clearApiKeyFromAiSetup()">Remove the saved key from this device</button>` : '');
+  }
 }
 function toggleAiKeyVisibility(el) {
   const input = document.getElementById('ai-setup-key-input');
@@ -60344,11 +60383,7 @@ async function updateTutorMemory(key) {
       .map(m => `${m.role === 'user' ? 'Learner' : 'António'}: ${m.content}`).join('\n');
     if (!recent.trim()) return;
     const prompt = `Here are existing notes about a ${aiLang().name} learner:\n"""${state.tutorMemory || '(none yet)'}"""\n\nHere is the latest part of their conversation with their tutor:\n"""${recent}"""\n\nUpdate the notes. Keep a concise running memory (max ~150 words) capturing durable facts useful for future tutoring: the learner's name, interests, goals, job/family if mentioned, topics they enjoy, and Kriolu words or grammar they repeatedly struggle with. Merge new info with old; drop nothing important; remove redundancy. Write plain notes (no preamble, no markdown headers), in English. If nothing new is worth saving, return the existing notes unchanged.`;
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:300, system:'You maintain concise, durable memory notes about a language learner for their tutor. Output only the updated notes.', messages:[{role:'user', content:prompt}] })
-    });
+    const resp = await claudeFetch({ max_tokens:300, system:'You maintain concise, durable memory notes about a language learner for their tutor. Output only the updated notes.', messages:[{role:'user', content:prompt}] }, 'light');
     const data = await resp.json();
     if (data.content && data.content[0] && data.content[0].text) {
       state.tutorMemory = data.content[0].text.trim().slice(0, 1200);
@@ -60482,13 +60517,9 @@ async function chatExplain(msgId) {
   if (!key) { if (extra) extra.innerHTML = '<div class="msg-note">Add your API key to use explanations.</div>'; return; }
   if (extra) extra.innerHTML = '<div class="msg-note">💡 Thinking…</div>';
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:350,
+    const resp = await claudeFetch({ max_tokens:350,
         system:`You are a ${aiLang().full} grammar coach. Explain clearly and concisely in English.`,
-        messages:[{role:'user', content:`Explain the grammar and word choices in this ${aiLang().name} sentence for a learner, in 2-4 short plain-English points. Keep it brief and practical:\n\n"${m.kriolu}"`}] })
-    });
+        messages:[{role:'user', content:`Explain the grammar and word choices in this ${aiLang().name} sentence for a learner, in 2-4 short plain-English points. Keep it brief and practical:\n\n"${m.kriolu}"`}] });
     const data = await resp.json();
     const text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Could not explain right now.';
     if (extra) extra.innerHTML = `<div class="msg-note">💡 ${formatBotText(escapeHTML(text))}</div>`;
@@ -60505,13 +60536,9 @@ async function chatSaveWords(msgId) {
   if (!key) { if (extra) extra.innerHTML = '<div class="msg-note">Add your API key to save words.</div>'; return; }
   if (extra) extra.innerHTML = '<div class="msg-note">⭐ Finding key words…</div>';
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:300,
+    const resp = await claudeFetch({ max_tokens:300,
         system:`You extract vocabulary for a ${aiLang().name} learner. Output ONLY valid JSON, no markdown.`,
-        messages:[{role:'user', content:`From this ${aiLang().name} sentence, extract up to 4 useful vocabulary words/phrases a learner should save. Return ONLY a JSON array like [{"k":"word or phrase","e":"english","ex":"the example sentence"}]. Sentence:\n\n"${m.kriolu}"`}] })
-    });
+        messages:[{role:'user', content:`From this ${aiLang().name} sentence, extract up to 4 useful vocabulary words/phrases a learner should save. Return ONLY a JSON array like [{"k":"word or phrase","e":"english","ex":"the example sentence"}]. Sentence:\n\n"${m.kriolu}"`}] });
     const data = await resp.json();
     let raw = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '[]';
     raw = raw.replace(/```json|```/g, '').trim();
@@ -60613,11 +60640,7 @@ async function callClaude(userText) {
   }
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, system:currentSystemPrompt + buildTutorContext() + missionContext(), messages })
-    });
+    const resp = await claudeFetch({ max_tokens:600, system:currentSystemPrompt + buildTutorContext() + missionContext(), messages });
     const data = await resp.json();
     hideTyping();
     if (data.error) { appendBotMessage(`⚠️ API Error: ${escapeHTML(data.error.message)}`, ''); }
@@ -60806,12 +60829,7 @@ Respond with ONLY valid JSON, no markdown fences, in this exact format:
 {"translation":"the translated text","note":"a one-sentence note about word choice, grammar, or culture if helpful, else empty string"${wantVariant ? `,"variant":"the same sentence as it would actually be said in ${variantDialect}, if meaningfully different from your translation — else empty string"` : ''}}`;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      // temperature 0: the most likely wording every time, not a fresh sample
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:400, temperature:0, system:sysPrompt, messages:[{role:'user', content:input}] })
-    });
+    const resp = await claudeFetch({ max_tokens:400, system:sysPrompt, messages:[{role:'user', content:input}] });
     const data = await resp.json();
     if (data.error) {
       showTranslation('⚠️ ' + data.error.message, '');
@@ -61095,11 +61113,7 @@ For C1 do not rewrite the whole text — give a natural version of only the two 
 Task level: ${currentWritingPrompt.level}.`;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:700, system:sysPrompt, messages:[{role:'user', content:text}] })
-    });
+    const resp = await claudeFetch({ max_tokens:700, system:sysPrompt, messages:[{role:'user', content:text}] });
     const data = await resp.json();
     if (data.error) { fb.innerHTML = `<div class="feedback-bar wrong">⚠️ ${escapeHTML(data.error.message)}</div>`; return; }
     const feedback = data.content[0].text;
@@ -63819,6 +63833,8 @@ function init() {
 
   const savedKey = getApiKey();
   if (savedKey) document.getElementById('api-key-input').placeholder = '••••••••••••• (saved ✓)';
+
+  probeTutorServer();     // does the site provide the tutor itself?
 
   // Register PWA service worker for offline support + installability
   if ('serviceWorker' in navigator) {

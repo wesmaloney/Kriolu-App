@@ -1,0 +1,8 @@
+{
+  "name": "kriolu-app",
+  "private": true,
+  "description": "Kriolu & Português learning app. The page is static; netlify/functions holds the voice and tutor proxies.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.7.0"
+  }
+}
