@@ -2259,6 +2259,7 @@
       <h2 class="section-heading" style="margin:0;flex:1">Community</h2>
       <button onclick="toggleComposeBox()" title="Write a post" style="width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--grad-sun);color:#fff;border:none;box-shadow:var(--shadow-coral);cursor:pointer;font-size:.95rem">✎</button>
     </div>
+    <div id="community-signin"></div>
     <div id="community-compose" style="display:none;margin-bottom:14px">
       <textarea id="community-compose-text" class="type-input" style="width:100%;min-height:64px;resize:vertical" maxlength="500" placeholder="Share something with the community…"></textarea>
       <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
@@ -2270,6 +2271,7 @@
         </select>
         <button class="start-btn" style="margin:0" onclick="postCommunityMessage()">Post</button>
       </div>
+      <div id="community-compose-name" style="font-size:.72rem;color:var(--muted);margin-top:6px"></div>
       <div id="community-compose-error" style="display:none;color:var(--wrong);font-size:.75rem;margin-top:6px"></div>
     </div>
     <div id="community-content"></div>
@@ -4495,7 +4497,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v163';
+const APP_BUILD = 'v164';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -10853,27 +10855,36 @@ function initAccountSync() {
   sb.auth.onAuthStateChange((event, session) => {
     currentUser = session?.user || null;
     renderAccountPanel();
-    if (event === 'SIGNED_IN') handleSignedIn();
+    if (communityVisible()) { renderCommunitySignIn(); renderCommunity(); }
+    if (event === 'SIGNED_IN') { handleSignedIn(); returnToCommunityAfterSignIn(); }
   });
   sb.auth.getSession().then(({ data }) => {
     currentUser = data?.session?.user || null;
     renderAccountPanel();
+    if (communityVisible()) { renderCommunitySignIn(); renderCommunity(); }
   });
 }
 
-async function sendMagicLink() {
+async function sendMagicLink(prefix) {
+  prefix = prefix || 'account';
   const sb = getSupabase();
   if (!sb) return;
-  const input = document.getElementById('account-email-input');
+  const input = document.getElementById(prefix + '-email-input');
   const email = (input?.value || '').trim();
-  const msgEl = document.getElementById('account-message');
+  const msgEl = document.getElementById(prefix + '-message');
   const showMsg = (text) => { if (msgEl) { msgEl.textContent = text; msgEl.style.display = 'block'; } };
   if (!email || !email.includes('@')) { showMsg('Enter a valid email address.'); return; }
-  const btn = document.getElementById('account-send-btn');
+  const btn = document.getElementById(prefix + '-send-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
   const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
   if (btn) { btn.disabled = false; btn.textContent = 'Send magic link'; }
   showMsg(error ? ('⚠️ ' + error.message) : '✅ Check your email for a sign-in link.');
+  // The link opens in a new tab, so remember (on this device, for an hour) that the learner was heading for Community
+  if (!error && prefix === 'community-signin') { try { localStorage.setItem('kriolu_after_signin', String(Date.now())); } catch (e) {} }
+}
+function returnToCommunityAfterSignIn() {
+  let t = 0; try { t = Number(localStorage.getItem('kriolu_after_signin')) || 0; localStorage.removeItem('kriolu_after_signin'); } catch (e) {}
+  if (t && Date.now() - t < 3600000) { try { showMainTab('community'); showToast('Signed in — you can post now'); } catch (e) {} }
 }
 
 async function signOutAccount() {
@@ -10882,6 +10893,7 @@ async function signOutAccount() {
   await sb.auth.signOut();
   currentUser = null;
   renderAccountPanel();
+  if (communityVisible()) { renderCommunitySignIn(); renderCommunity(); }
   showToast('Signed out — your progress stays on this device');
 }
 
@@ -11049,7 +11061,7 @@ async function renderCommunity() {
   const ids = (posts || []).map(p => p.id);
   const [{ data: likeRows }, { data: myLikeRows }] = error || !ids.length ? [{ data: [] }, { data: [] }] : await Promise.all([
     sb.from('community_likes').select('post_id').in('post_id', ids),
-    sb.from('community_likes').select('post_id').in('post_id', ids).eq('device_id', deviceId()),
+    currentUser ? sb.from('community_likes').select('post_id').in('post_id', ids).eq('user_id', currentUser.id) : Promise.resolve({ data: [] }),
   ]);
   if (error) {
     // Keep the last feed on screen if we had one; otherwise say we're retrying
@@ -11058,6 +11070,7 @@ async function renderCommunity() {
     return;
   }
   el.dataset.loaded = '1';
+  renderCommunitySignIn();
 
   const likeCounts = {};
   (likeRows || []).forEach(r => { likeCounts[r.post_id] = (likeCounts[r.post_id] || 0) + 1; });
@@ -11112,27 +11125,67 @@ async function renderCommunity() {
 
 function setCommunityFilter(id) { state.communityFilter = id; saveState(); renderCommunity(); }
 
+// Reading the community is open to everyone; posting, liking and reporting need a signed-in
+// (email-verified) account, so a person's limits follow them and cannot be dodged by changing devices.
+let communitySignInOpen = false;
+function communitySignInCard() {
+  return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);margin-bottom:13px">
+    <div style="font-weight:800;font-size:.9rem">Sign in to join in</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:4px">Anyone can read the community. To post, like or report, sign in with your email: we send a one-time link, no password. Your email is never shown to other people.</div>
+    <input type="email" id="community-signin-email-input" class="type-input" style="width:100%;margin-top:10px" placeholder="you@example.com" autocomplete="email" />
+    <button class="start-btn" style="margin-top:8px" id="community-signin-send-btn" onclick="sendMagicLink('community-signin')">Send magic link</button>
+    <div id="community-signin-message" style="display:none;font-size:.75rem;margin-top:6px;color:var(--muted)"></div>
+  </div>`;
+}
+function renderCommunitySignIn() {
+  const el = document.getElementById('community-signin');
+  if (!el) return;
+  if (currentUser) { communitySignInOpen = false; el.innerHTML = ''; return; }   // next time signed out, start from the compact banner
+  el.innerHTML = communitySignInOpen ? communitySignInCard()
+    : `<div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin-bottom:13px">
+         <div style="flex:1;font-size:.78rem;color:var(--muted);line-height:1.4">Sign in to post, like and report.</div>
+         <button class="due-btn" style="padding:8px 14px;font-size:.76rem" onclick="showCommunitySignIn()">Sign in</button></div>`;
+}
+function showCommunitySignIn() {
+  communitySignInOpen = true; renderCommunitySignIn();
+  document.getElementById('community-signin-email-input')?.focus();
+}
+// true when the learner is signed in; otherwise asks them to, and returns false
+function requireCommunitySignIn(whatFor) {
+  if (currentUser) return true;
+  showToast('Sign in to ' + whatFor);
+  showCommunitySignIn();
+  document.getElementById('community-signin')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  return false;
+}
+
 async function toggleCommunityLike(id) {
+  if (!requireCommunitySignIn('like posts')) return;
   const sb = getSupabase();
   if (!sb) return;
-  const dev = deviceId();
-  const { data: existing } = await sb.from('community_likes').select('post_id').eq('post_id', id).eq('device_id', dev).maybeSingle();
-  if (existing) await sb.from('community_likes').delete().eq('post_id', id).eq('device_id', dev);
-  else await sb.from('community_likes').insert({ post_id: id, device_id: dev });
+  const { data: existing } = await sb.from('community_likes').select('post_id').eq('post_id', id).eq('user_id', currentUser.id).maybeSingle();
+  const { error } = existing
+    ? await sb.from('community_likes').delete().eq('post_id', id).eq('user_id', currentUser.id)
+    : await sb.from('community_likes').insert({ post_id: id, device_id: deviceId() });   // user_id is filled in by the database
+  if (error) showToast(error.code === '42501' ? 'Please sign in again' : "Couldn't save that — try again");
   renderCommunity();
 }
 
 async function reportCommunityPost(id) {
   const sb = getSupabase();
   if (!sb) return;
+  if (!requireCommunitySignIn('report posts')) return;
   if (!confirm('Report this post for review?')) return;
-  await sb.from('community_reports').insert({ post_id: id, device_id: deviceId() });
-  showToast('🚩 Reported — thank you');
+  const { error } = await sb.from('community_reports').insert({ post_id: id, device_id: deviceId() });
+  showToast(!error || error.code === '23505' ? '🚩 Reported — thank you' : error.code === '42501' ? 'Please sign in again' : "Couldn't send that — try again");
 }
 
 function toggleComposeBox() {
+  if (!requireCommunitySignIn('post')) return;
   const box = document.getElementById('community-compose');
   if (!box) return;
+  const nameEl = document.getElementById('community-compose-name');
+  if (nameEl) nameEl.textContent = state.userName ? 'Posting as ' + state.userName : 'Posting as “You”. Add your name in Settings to post under it.';
   box.style.display = box.style.display === 'none' ? 'block' : 'none';
   if (box.style.display === 'block') document.getElementById('community-compose-text')?.focus();
 }
@@ -11144,13 +11197,14 @@ async function postCommunityMessage() {
   const text = (ta?.value || '').trim();
   if (errEl) errEl.style.display = 'none';
   if (!text) return;
+  if (!requireCommunitySignIn('post')) return;
   const sb = getSupabase();
   if (!sb) return;
   const { error } = await sb.from('community_posts').insert({
     author: (state.userName || 'You').slice(0, 40), category, body: text, device_id: deviceId(),
   });
   if (error) {
-    if (errEl) { errEl.textContent = error.message.includes('wait') ? '⏱️ ' + error.message : error.message.includes('blocked word') ? '⚠️ That post was rejected — please rephrase.' : "Couldn't post — try again."; errEl.style.display = 'block'; }
+    if (errEl) { errEl.textContent = error.code === '42501' ? 'Please sign in again to post.' : error.message.includes('wait') ? '⏱️ ' + error.message : error.message.includes('blocked word') ? '⚠️ That post was rejected — please rephrase.' : "Couldn't post — try again."; errEl.style.display = 'block'; }
     return;
   }
   ta.value = '';
