@@ -1808,7 +1808,7 @@
       <button class="profile-edit-btn" onclick="toggleProfileNameEdit()">Edit</button>
     </div>
     <div id="profile-name-edit" style="display:none;margin-bottom:14px">
-      <input type="text" id="profile-name-input" class="type-input" style="width:100%" placeholder="Your name" />
+      <input type="text" id="profile-name-input" class="type-input" style="width:100%" placeholder="Your name" maxlength="40" />
       <button class="start-btn" style="margin-top:8px" onclick="saveProfileName()">Save</button>
     </div>
     <div class="setting-row">
@@ -53018,7 +53018,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v156';
+const APP_BUILD = 'v157';
 // Compares the code that is running with the copy on the server, code to code:
 // the server's index.html carries its own build number. Runs on start-up, when
 // the app returns to the foreground, and when Settings opens.
@@ -53158,7 +53158,7 @@ function toggleProfileNameEdit() {
   box.style.display = box.style.display === 'none' ? 'block' : 'none';
 }
 function saveProfileName() {
-  state.userName = document.getElementById('profile-name-input').value.trim();
+  state.userName = document.getElementById('profile-name-input').value.trim().slice(0, 40);
   saveState();
   document.getElementById('profile-name-edit').style.display = 'none';
   renderProfileHeader();
@@ -60011,7 +60011,7 @@ async function postCommunityMessage() {
   const sb = getSupabase();
   if (!sb) return;
   const { error } = await sb.from('community_posts').insert({
-    author: state.userName || 'You', category, body: text, device_id: deviceId(),
+    author: (state.userName || 'You').slice(0, 40), category, body: text, device_id: deviceId(),
   });
   if (error) {
     if (errEl) { errEl.textContent = error.message.includes('wait') ? '⏱️ ' + error.message : error.message.includes('blocked word') ? '⚠️ That post was rejected — please rephrase.' : "Couldn't post — try again."; errEl.style.display = 'block'; }

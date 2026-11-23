@@ -1,5 +1,6 @@
 -- Kriolu app — community / sync hardening
--- NOT applied automatically. Review, then run once in the Supabase SQL Editor.
+-- APPLIED to the live database on 2026-11-23 as migration "community_hardening"
+-- (kept here so a fresh Supabase project can be reproduced).
 -- Every statement is safe to run on the live database: constraints are added
 -- NOT VALID, so rows that already exist can never make them fail.
 
@@ -12,7 +13,7 @@ alter function public.community_posts_rate_limit() set search_path = public, pg_
 -- 2. Bound what a client can store. The app only sends the display name and a
 --    body, but the table accepts anything: a script could post a 10 MB author.
 alter table community_posts
-  add constraint community_posts_author_len check (char_length(author) between 1 and 40) not valid;
+  add constraint community_posts_author_len check (char_length(author) between 1 and 60) not valid;
 alter table community_posts
   add constraint community_posts_body_not_blank check (char_length(btrim(body)) > 0) not valid;
 alter table community_posts
