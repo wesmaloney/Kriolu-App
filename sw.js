@@ -1,5 +1,5 @@
 // Kriolu PWA Service Worker
-const CACHE_NAME = 'kriolu-v154';
+const CACHE_NAME = 'kriolu-v155';
 const APP_SHELL = [
   './',
   './index.html',
@@ -52,7 +52,7 @@ self.addEventListener('fetch', (event) => {
   // Never cache or intercept API calls
   if (url.hostname.includes('anthropic.com')) return;
   if (url.hostname.includes('elevenlabs.io')) return;
-  if (url.pathname.includes('/api/tts') || url.pathname.includes('/.netlify/')) return;
+  if (url.pathname.startsWith('/api/') || url.pathname.includes('/.netlify/')) return;   // voice and tutor: always live
   // Version probes from the page must reach the server untouched
   if (url.searchParams.has('probe')) return;
   // Video clips are fetched in byte ranges, which can't be cached: leave them to the browser
