@@ -1760,7 +1760,7 @@
     .tts-loading{position:relative;animation:none !important;opacity:1 !important}
     .tts-loading::after{content:'';position:absolute;inset:-3px;border-radius:inherit;border:2.5px solid transparent;border-top-color:var(--coral);animation:antonio-spin .7s linear infinite;pointer-events:none}
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.min.js" integrity="sha384-dl/4LkSyQ4uEucc48NM6VDZLAjLLq9yMzZ5JLXumBq7Ld33XBof73hseOqPhO89+" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -52578,6 +52578,11 @@ let state = {
 
 const MASTERY_THRESHOLD = 3; // correct answers needed to "master" a word
 
+// JSON.parse that refuses keys able to change an object's prototype, for saved
+// progress, backups and cloud copies that are merged into the live state.
+function parseJSONSafe(text) {
+  return JSON.parse(text, (k, v) => (k === '__proto__' || k === 'constructor' || k === 'prototype') ? undefined : v);
+}
 function loadState() {
   // ── Migrate from old save keys ──
   const oldKeys = ['kriolu_state', 'kriolu_state_v2'];
@@ -52589,7 +52594,7 @@ function loadState() {
 
   const saved = localStorage.getItem('kriolu_state_v3');
   if (saved) {
-    try { Object.assign(state, JSON.parse(saved)); } catch(e) {}
+    try { Object.assign(state, parseJSONSafe(saved)); } catch(e) {}
   } else if (migrated) {
     // Bring over all fields that exist in both versions
     const fields = ['xp','streak','lastActiveDate','completedLessons','earnedBadges','favourites','darkMode','sfx','fontSize','weeklyGoal'];
@@ -53001,7 +53006,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v153';
+const APP_BUILD = 'v154';
 // Compares the code that is running with the copy on the server, code to code:
 // the server's index.html carries its own build number. Runs on start-up, when
 // the app returns to the foreground, and when Settings opens.
@@ -53210,6 +53215,7 @@ function exportProgress() {
     state: localStorage.getItem('kriolu_state_v3'),
     apiKey: localStorage.getItem('kriolu_api_key') || '',
     ttsEndpoint: localStorage.getItem('kriolu_tts_endpoint') || '',
+    // NOTE: this file contains your API key in plain text. Don't share it.
     antonioCache: localStorage.getItem('kriolu_antonio_cache') || '',
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
@@ -53222,32 +53228,43 @@ function exportProgress() {
   a.click();
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  alert('✅ Backup downloaded!\n\nKeep this file safe. You can import it later to restore your progress on this or any device.');
+  alert('✅ Backup downloaded!\n\nThis file includes your Anthropic API key, so keep it private and never share it. You can import it later to restore your progress on this or any device.');
 }
 
+// Where a premium-voice address may point: https, or http on this computer
+function isSafeVoiceEndpoint(u) {
+  try { const x = new URL(u); return x.protocol === 'https:' || (x.protocol === 'http:' && /^(localhost|127\.0\.0\.1)$/.test(x.hostname)); } catch (e) { return false; }
+}
 function importProgress(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
+  if (file.size > 8 * 1024 * 1024) { alert('⚠️ That file is too large to be a Kriolu backup. Import cancelled.'); event.target.value = ''; return; }
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
-      const backup = JSON.parse(e.target.result);
-      if (backup.app !== 'kriolu' || !backup.state) {
+      const backup = parseJSONSafe(e.target.result);
+      if (!backup || backup.app !== 'kriolu' || typeof backup.state !== 'string') {
         alert('⚠️ This doesn\'t look like a Kriolu backup file. Import cancelled.');
         return;
       }
-      // Show what's being imported for confirmation
-      let summary = '';
-      try {
-        const s = JSON.parse(backup.state);
-        summary = `\n\nThis backup has:\n• ${s.xp || 0} XP\n• ${s.streak || 0} day streak\n• ${s.masteredWords || 0} mastered words\n• Exported ${backup.exportedAt ? backup.exportedAt.slice(0,10) : 'unknown date'}`;
-      } catch (e) {}
+      let s;
+      try { s = parseJSONSafe(backup.state); } catch (err) { s = null; }
+      if (!s || typeof s !== 'object' || Array.isArray(s)) { alert('⚠️ This backup\'s progress data is damaged. Import cancelled.'); return; }
+      const summary = `\n\nThis backup has:\n• ${Number(s.xp) || 0} XP\n• ${Number(s.streak) || 0} day streak\n• ${Number(s.masteredWords) || 0} mastered words\n• Exported ${String(backup.exportedAt || 'unknown').slice(0, 10)}`;
       if (!confirm(`⚠️ Importing will REPLACE your current progress with this backup.${summary}\n\nContinue?`)) return;
 
-      localStorage.setItem('kriolu_state_v3', backup.state);
-      if (backup.apiKey) localStorage.setItem('kriolu_api_key', backup.apiKey);
-      if (backup.ttsEndpoint) localStorage.setItem('kriolu_tts_endpoint', backup.ttsEndpoint);
-      if (backup.antonioCache) localStorage.setItem('kriolu_antonio_cache', backup.antonioCache);
+      localStorage.setItem('kriolu_state_v3', JSON.stringify(s));
+      // A backup file can carry a key and a voice-server address. Those decide where your
+      // chat and your text are sent, so they are only taken with an explicit yes.
+      if (typeof backup.apiKey === 'string' && backup.apiKey && /^sk-ant-[\w-]{10,}$/.test(backup.apiKey) &&
+          confirm('This backup also contains an Anthropic API key. Use it on this device?')) localStorage.setItem('kriolu_api_key', backup.apiKey);
+      if (typeof backup.ttsEndpoint === 'string' && backup.ttsEndpoint) {
+        if (!isSafeVoiceEndpoint(backup.ttsEndpoint)) alert('The voice server address in this backup was not restored because it is not a secure (https) address.');
+        else if (confirm('This backup also sets the voice server to:\n\n' + backup.ttsEndpoint + '\n\nThe words you ask to hear are sent there. Only continue if you recognise it. Use it?')) localStorage.setItem('kriolu_tts_endpoint', backup.ttsEndpoint);
+      }
+      if (typeof backup.antonioCache === 'string' && backup.antonioCache.length < 2e6) {
+        try { parseJSONSafe(backup.antonioCache); localStorage.setItem('kriolu_antonio_cache', backup.antonioCache); } catch (err) {}
+      }
       alert('✅ Progress restored! The app will now reload.');
       location.reload();
     } catch (err) {
@@ -53265,6 +53282,7 @@ async function saveTtsEndpoint() {
     alert('Premium voice disabled — using the free browser voice.');
     return;
   }
+  if (!isSafeVoiceEndpoint(url)) { alert('⚠️ The voice address must start with https://'); return; }
   localStorage.setItem('kriolu_tts_endpoint', url);
   userHasInteracted = true;
 
@@ -53662,7 +53680,7 @@ function initChatAntonio() {
     state.chatHistory.forEach(m => {
       if (m.role === 'assistant') {
         const { kriolu, translation } = parseResponse(m.content);
-        renderBotBubble(formatBotText(kriolu), translation);
+        renderBotBubble(safeBotText(kriolu), translation);
       } else if (m.role === 'user') {
         const txt = m.content.replace(/^\[VOICE\]\s*/, '');
         renderUserBubble(txt, m.content.startsWith('[VOICE]'));
@@ -56834,7 +56852,7 @@ function renderListening(q, container) {
   }).join('');
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">👂 Listening</div>
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:8px">${isAlpha ? 'Listen and choose the letter you heard:' : 'Listen and choose the correct meaning:'}</div>
-    <button class="listen-play-btn" id="listen-btn" onclick="playListenWord('${escapeHTML(escapeJS(q.item.k))}',this)">🔊</button>
+    <button class="listen-play-btn" id="listen-btn" onclick="playListenWord('${escapeJS(q.item.k)}',this)">🔊</button>
     ${wordByWordBtn(q.item.k, 'skip-btn', 'margin:0 0 10px', '🐢 Word by word')}
     <div class="choices-grid">${choiceHTML}</div>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
@@ -57382,7 +57400,7 @@ function renderSpeaking(q, container) {
     <div class="exercise-word" style="${(q.speakTarget||'').length>18?'font-size:1.35rem':''}">${escapeHTML(q.speakTarget || q.item.k)}</div>
     <div class="pronunciation-guide">🗣️ ${escapeHTML(pronounceWord(q.speakTarget || q.item.k))}</div>
     <div class="exercise-example">${q.speakTarget ? 'Featuring: <b>'+escapeHTML(q.item.k)+'</b> ('+escapeHTML(q.item.e)+')' : escapeHTML(q.item.e) + ' • "' + escapeHTML(q.item.ex) + '"'}</div>
-    <button class="reveal-btn" style="margin-top:4px" onclick="antonioSayPrompt(this.dataset.w)" data-w="${escapeJS(q.speakTarget || q.item.k)}">🔊 Hear António say it</button>
+    <button class="reveal-btn" style="margin-top:4px" onclick="antonioSayPrompt(this.dataset.w)" data-w="${escapeHTML(q.speakTarget || q.item.k)}">🔊 Hear António say it</button>
     ${wordByWordBtn(q.speakTarget || q.item.k, 'reveal-btn reveal-ghost', 'margin-top:6px', '🐢 Word by word')}
     ${hasSR
       ? `<button class="speak-mic-btn" id="speak-mic" onclick="startSpeakCheck()">🎤</button>
@@ -59294,9 +59312,12 @@ async function fetchTtsAudio(clean) {
     if (resp.ok) {
       const data = await resp.json();
       if (data.audio) { ttsCachePut(TTS_VOICE + '|' + clean, data.audio); return data.audio; } // cache: fire-and-forget
-    } else if (resp.status === 401 || resp.status === 402 || resp.status === 429) {
-      // Out of credits / rate limited — stop trying for an hour.
+    } else if (resp.status === 401 || resp.status === 402) {
+      // Out of credits — stop trying for an hour.
       ttsQuotaBlockedUntil = Date.now() + 60 * 60 * 1000;
+    } else if (resp.status === 429) {
+      // Asked too often: pause for a minute, then carry on
+      ttsQuotaBlockedUntil = Date.now() + 60 * 1000;
     }
   } catch (e) {}
   return null;
@@ -59768,7 +59789,7 @@ async function handleSignedIn() {
 }
 
 function showSyncConflictDialog(cloudStateJson, updatedAt) {
-  let cloud; try { cloud = JSON.parse(cloudStateJson); } catch (e) { cloud = {}; }
+  let cloud; try { cloud = parseJSONSafe(cloudStateJson); } catch (e) { cloud = {}; }
   const overlay = document.createElement('div');
   overlay.id = 'sync-conflict-overlay';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
@@ -59821,7 +59842,7 @@ function communityAvatarColor(name) {
   return COMMUNITY_AVATAR_COLORS[h % COMMUNITY_AVATAR_COLORS.length];
 }
 function communityInitials(name) {
-  return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+  return escapeHTML(String(name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?');
 }
 function communityTimeAgo(iso) {
   const secs = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
@@ -60389,7 +60410,9 @@ function appendBotMessage(kriolu, english) {
   div.className = 'chat-msg bot';
   const tHTML = english ? `<div class="msg-translation" style="display:none">${escapeHTML(english)}</div>` : '';
   const msgId = 'msg-' + (++chatMsgSeq) + '-' + Date.now();
-  const plain = kriolu.replace(/<[^>]+>/g, ''); // strip formatting for TTS/word actions
+  // Plain text for speech and word actions: drop the formatting, read the entities back.
+  // DOMParser builds an inert document, so nothing in it can load or run.
+  const plain = (new DOMParser().parseFromString(String(kriolu).replace(/<br\s*\/?>/gi, ' '), 'text/html').body.textContent || '').trim();
   chatMsgStore[msgId] = { kriolu: plain, english: english || '' };
   div.innerHTML = `<div class="msg-avatar">${antonioAvatarImg()}</div>
     <div style="flex:1">
@@ -60534,6 +60557,8 @@ function hideTyping() {
   if (status && status.textContent.includes('pensa')) status.textContent = `Your ${aiLang().name} tutor • Powered by Claude`;
 }
 
+// For model output: escape first, then apply the light **bold** / *italic* formatting
+function safeBotText(text) { return formatBotText(escapeHTML(text)); }
 function formatBotText(text) {
   return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br/>');
 }
@@ -60595,13 +60620,13 @@ async function callClaude(userText) {
     });
     const data = await resp.json();
     hideTyping();
-    if (data.error) { appendBotMessage(`⚠️ API Error: ${data.error.message}`, ''); }
+    if (data.error) { appendBotMessage(`⚠️ API Error: ${escapeHTML(data.error.message)}`, ''); }
     else {
       const fullText = data.content[0].text;
       state.chatHistory.push({role:'assistant', content:fullText});
       saveState();
       const { kriolu, translation } = parseResponse(fullText);
-      appendBotMessage(formatBotText(kriolu), translation);
+      appendBotMessage(safeBotText(kriolu), translation);
       // Every few exchanges, quietly distill the conversation into durable memory
       const userTurns = state.chatHistory.filter(m => m.role === 'user').length;
       if (userTurns > 0 && userTurns % 4 === 0) {
@@ -63294,7 +63319,7 @@ function openStory(id) {
       const clean = token.toLowerCase().replace(/[.,!?¡¿"]/g,'');
       const meaning = vocabMap[clean];
       if (meaning) {
-        return `<span class="story-word" onclick="showWordPopup('${escapeHTML(escapeJS(token))}','${escapeHTML(escapeJS(meaning))}')">${escapeHTML(token)}</span>`;
+        return `<span class="story-word" onclick="showWordPopup('${escapeJS(token)}','${escapeJS(meaning)}')">${escapeHTML(token)}</span>`;
       }
       return `<span>${escapeHTML(token)}</span>`;
     }).join('');
@@ -63704,7 +63729,10 @@ function normalizeText(s) {
 }
 function escapeHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 // Safe to embed inside an onclick="...('HERE')" — escapes for the JS string layer so apostrophes don't break handlers.
-function escapeJS(s) { return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,' '); }
+function escapeJS(s) {
+  const js = String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/[\r\n\u2028\u2029]/g,' ');
+  return escapeHTML(js);   // the attribute layer: a raw " or < must never survive into onclick="..."
+}
 function levenshtein(a,b){const m=a.length,n=b.length,dp=Array.from({length:m+1},(_,i)=>Array.from({length:n+1},(_,j)=>i===0?j:j===0?i:0));for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);return dp[m][n];}
 
 // ═══════════════════════════════════════════
