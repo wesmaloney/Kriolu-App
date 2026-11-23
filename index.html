@@ -1763,6 +1763,13 @@
     /* When the app provides the tutor itself no key is asked for anywhere */
     html.tutor-server .own-key-section,html.tutor-server .api-key-panel,html.tutor-server #translate-key-panel{display:none !important}
     html:not(.tutor-server) #ai-server-note{display:none}
+
+    /* Header: the logo gives way before the chips do, on any phone width or text size */
+    .logo{min-width:0;flex:0 1 auto}
+    .logo-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .header-right{flex:0 0 auto}
+    @media (max-width:430px){.header-right{gap:6px}.stat-chip{padding:4px 9px;gap:5px}}
+    html.tutor-server .ts-key-only{display:none}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.min.js" integrity="sha384-dl/4LkSyQ4uEucc48NM6VDZLAjLLq9yMzZ5JLXumBq7Ld33XBof73hseOqPhO89+" crossorigin="anonymous"></script>
 </head>
@@ -2299,7 +2306,7 @@
       <div class="antonio-hero-hint">Tap him to hear his last reply again</div>
     </div>
     <details class="tutor-settings" id="tutor-settings">
-      <summary><span class="ts-title">Tutor settings</span><span class="ts-sub">Voice, level, dialect and API key</span><svg class="ic ts-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <summary><span class="ts-title">Tutor settings</span><span class="ts-sub">Voice, level, dialect<span class="ts-key-only"> and API key</span></span><svg class="ic ts-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
       <div class="ts-body">
     <div class="api-key-panel">
       <label for="api-key-input">API key</label>
@@ -53011,7 +53018,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v155';
+const APP_BUILD = 'v156';
 // Compares the code that is running with the copy on the server, code to code:
 // the server's index.html carries its own build number. Runs on start-up, when
 // the app returns to the foreground, and when Settings opens.
@@ -53803,11 +53810,16 @@ function renderLessonCard(lesson) {
   </div>`;
 }
 
+// 35138 -> 35.1k, so a big total never pushes the header's other items around
+function compactCount(n) {
+  n = Number(n) || 0;
+  return n >= 10000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n);
+}
 function updateHeader() {
   document.getElementById('streak-count').textContent = state.streak;
   const si = document.getElementById('streak-icon');
   if (si) si.innerHTML = streakIcon();
-  document.getElementById('xp-count').textContent = state.xp + ' XP';
+  document.getElementById('xp-count').textContent = compactCount(state.xp) + ' XP';
 }
 
 // ═══════════════════════════════════════════
