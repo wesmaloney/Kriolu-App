@@ -1,5 +1,5 @@
 // Kriolu PWA Service Worker
-const CACHE_NAME = 'kriolu-v157';
+const CACHE_NAME = 'kriolu-v163';
 const APP_SHELL = [
   './',
   './index.html',
@@ -85,7 +85,10 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
           return resp;
         })
-        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
+        .catch(() => caches.match(event.request).then((cached) =>
+          // Offline: the page itself may fall back to the app shell; a script or image must not
+          // (the app shell is HTML, and handing it to a <script> would only break it)
+          cached || (event.request.mode === 'navigate' ? caches.match('./index.html') : Response.error())))
     );
   }
 });
