@@ -4497,7 +4497,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v166';
+const APP_BUILD = 'v167';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -5174,7 +5174,7 @@ function initChatAntonio() {
         const { kriolu, translation } = parseResponse(m.content);
         renderBotBubble(safeBotText(kriolu), translation);
       } else if (m.role === 'user') {
-        const txt = m.content.replace(/^\[VOICE\]\s*/, '');
+        const txt = m.content.replace(/^\[VOICE\]\s*/, '').replace(/ \{recognizer heard: "[^"]*"\}$/, '');
         renderUserBubble(txt, m.content.startsWith('[VOICE]'));
       }
     });
@@ -8959,51 +8959,202 @@ function phoneticKey(s) {
     .replace(/\s+/g, '');
 }
 
-function speechMatches(target, candidates) {
-  const tNorm = normalizeText(target);
-  const tPhon = phoneticKey(target);
-  const tWords = tNorm.split(' ').filter(Boolean);
-
-  for (const cand of candidates) {
-    const cNorm = normalizeText(cand);
-    const cPhon = phoneticKey(cand);
-    if (!cNorm) continue;
-
-    // 1) Direct fuzzy match on normalized text (generous: 40% of length)
-    const tol = Math.max(2, Math.floor(tNorm.length * 0.4));
-    if (levenshtein(cNorm, tNorm) <= tol) return true;
-
-    // 2) Containment either way
-    if (cNorm.includes(tNorm) || tNorm.includes(cNorm)) return true;
-
-    // 3) Phonetic-skeleton match (handles Portuguese spelling of Kriolu sounds)
-    const ptol = Math.max(1, Math.floor(tPhon.length * 0.34));
-    if (levenshtein(cPhon, tPhon) <= ptol) return true;
-    if (cPhon.includes(tPhon) || tPhon.includes(cPhon)) return true;
-
-    // 4) Per-word matching for phrases: most words recognized → accept
-    if (tWords.length > 1) {
-      const cWords = cNorm.split(' ').filter(Boolean);
-      let hits = 0;
-      for (const tw of tWords) {
-        const twP = phoneticKey(tw);
-        if (cWords.some(cw => {
-          const cwP = phoneticKey(cw);
-          return levenshtein(cw, tw) <= Math.max(1, Math.floor(tw.length*0.4))
-              || levenshtein(cwP, twP) <= 1 || cwP === twP;
-        })) hits++;
-      }
-      if (hits / tWords.length >= 0.6) return true;   // 60% of words is a pass
-    }
+// ═══════════════════════════════════════════
+//  SOUND-BASED SPEECH MATCHING
+// ═══════════════════════════════════════════
+// The browser's recognizer only knows Portuguese, so whatever the learner says comes back as the nearest
+// Portuguese words. Comparing spellings of that text is a poor test of a Kriolu sound. Instead, both the
+// word we asked for (Kriolu spelling) and what the recognizer heard (Portuguese spelling) are turned into
+// SOUNDS, and the sounds are compared. A swap between sounds that are alike (b/v, o/u, e/i, s/sh, dj/j…)
+// costs little; a swap between unlike sounds costs a lot.
+//
+// Sound symbols (one character each): vowels a e i o u; glides j w; consonants p b t d k g f v s z m n l r;
+// S = sh, Z = zh (the s in "measure"), C = ch (tx), J = dj, N = nh (ny), L = lh (ly), R = rolled r.
+const PHON_VOWELS = 'aeiou';
+function phonGraphemes(word, mode) {
+  const pt = mode === 'pt';
+  let w = String(word || '').toLowerCase().normalize('NFC');
+  w = w.replace(/ão|ãe|õe/g, m => ({ 'ão': 'aun', 'ãe': 'ajn', 'õe': 'ojn' })[m]);   // nasal diphthongs
+  w = w.replace(/[ãâáà]/g, 'a').replace(/[êéè]/g, 'e').replace(/[îíì]/g, 'i').replace(/[õôóò]/g, 'o').replace(/[ûúù]/g, 'u')
+       .replace(/ç/g, 's').replace(/[^a-z]/g, '');
+  if (!w) return '';
+  // multi-letter sounds first
+  w = w.replace(/tch|tx/g, 'C').replace(/dj/g, 'J').replace(/nh/g, 'N').replace(/lh/g, 'L').replace(/ch/g, 'S');
+  w = w.replace(/qu(?=[ei])/g, 'k').replace(/qu/g, 'kw').replace(/gu(?=[ei])/g, 'g');
+  if (pt) {
+    w = w.replace(/sc(?=[ei])/g, 's').replace(/ss/g, 's').replace(/rr/g, 'R').replace(/^r/g, 'R').replace(/(?<=[nls])r/g, 'R');
+    w = w.replace(/c(?=[ei])/g, 's').replace(/g(?=[ei])/g, 'Z').replace(/j/g, 'Z').replace(/x/g, 'S');
+    w = w.replace(/(?<=[aeiou])s(?=[aeiou])/g, 'z');                       // casa → "caza"
+    w = w.replace(/ou/g, 'o').replace(/(?<=[aeiouAEIOU])m$/, 'n');
+    w = w.replace(/o$/, 'u').replace(/e$/, 'i');                            // European Portuguese reduces final o/e
+    w = w.replace(/(?<=[aeiou])[nm](?=[^aeiou]|$)/g, 'n');                  // nasal vowel → vowel + n
+  } else {
+    w = w.replace(/rr/g, 'R').replace(/^r/g, 'R').replace(/ss/g, 's');
+    w = w.replace(/c(?=[ei])/g, 's').replace(/j/g, 'Z').replace(/x/g, 'S');
   }
-  return false;
+  w = w.replace(/c/g, 'k').replace(/y/g, 'j').replace(/h/g, '').replace(/q/g, 'k');
+  w = w.replace(/(.)\1+/g, '$1');                                           // doubled letters are one sound
+  return w;
+}
+const phonCache = new Map();
+function phones(word, mode) {
+  const key = mode + '|' + word;
+  let v = phonCache.get(key);
+  if (v === undefined) { v = phonGraphemes(word, mode); if (phonCache.size > 20000) phonCache.clear(); phonCache.set(key, v); }
+  return v;
+}
+
+// cost of treating sound a as sound b (0 = identical, ≥1 = unrelated)
+const PHON_SUB = (() => {
+  const t = {};
+  const set = (pairs, cost) => pairs.split(' ').forEach(p => { t[p] = cost; t[p[1] + p[0]] = cost; });
+  set('pb td kg fv sz SZ CJ', .35);        // same place, voiced vs voiceless
+  set('bv', .3);                           // b and v are interchangeable in Kriolu speech
+  set('sS zZ', .45); set('SC ZJ SZ', .45); set('ZJ', .4); set('dJ tC', .6); set('zS sZ', .6);
+  set('mn nN', .45); set('mN', .6);
+  set('rR', .3); set('lr', .6); set('lL', .5); set('lw', .5);
+  set('ij', .3); set('uw', .3); set('iL', .6); set('jL', .5);
+  set('ei', .35); set('ou', .35); set('ae', .6); set('ao', .6); set('eo', .8); set('iu', .8);
+  set('ai', .9); set('au', .9); set('eu', .9); set('io', .9);
+  return t;
+})();
+function phonSub(a, b) {
+  if (a === b) return 0;
+  const c = PHON_SUB[a + b];
+  if (c !== undefined) return c;
+  const va = PHON_VOWELS.includes(a), vb = PHON_VOWELS.includes(b);
+  return va !== vb ? 1.3 : 1;
+}
+// cost of a sound being added or dropped: vowels get reduced or dropped in fast speech, nasals vanish
+function phonIndel(s) {
+  if (PHON_VOWELS.includes(s)) return .6;
+  if (s === 'j' || s === 'w') return .4;
+  if (s === 'n') return .4;
+  if (s === 'r' || s === 'R') return .7;
+  if (s === 's' || s === 'S') return .8;
+  return 1;
+}
+function phonDistance(a, b) {
+  const m = a.length, n = b.length;
+  if (!m) return [...b].reduce((x, c) => x + phonIndel(c), 0);
+  if (!n) return [...a].reduce((x, c) => x + phonIndel(c), 0);
+  let prev = new Array(n + 1);
+  prev[0] = 0;
+  for (let j = 1; j <= n; j++) prev[j] = prev[j - 1] + phonIndel(b[j - 1]);
+  for (let i = 1; i <= m; i++) {
+    const cur = new Array(n + 1);
+    cur[0] = prev[0] + phonIndel(a[i - 1]);
+    for (let j = 1; j <= n; j++) {
+      cur[j] = Math.min(prev[j - 1] + phonSub(a[i - 1], b[j - 1]), prev[j] + phonIndel(a[i - 1]), cur[j - 1] + phonIndel(b[j - 1]));
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+// 0 (nothing alike) … 1 (same sounds)
+function phonSimilarity(a, b) {
+  if (!a || !b) return 0;
+  return Math.max(0, 1 - phonDistance(a, b) / Math.max(a.length, b.length));
+}
+
+const SPEECH_PASS = .66, SPEECH_GREAT = .86;
+function speechTokens(s) { return String(s || '').toLowerCase().replace(/[.,!?;:"'¡¿()\[\]…—–-]/g, ' ').split(/\s+/).filter(Boolean); }
+
+// How well does what the recognizer heard (cand) sound like the target? target is spelled in targetMode, what was
+// heard is always Portuguese spelling.
+function speechSimilarity(target, cand, targetMode) {
+  const tTok = speechTokens(target), cTok = speechTokens(cand);
+  if (!tTok.length || !cTok.length) return 0;
+  const tPh = tTok.map(t => phones(t, targetMode)), cPh = cTok.map(c => phones(c, 'pt'));
+  // whole utterance run together (the recognizer may split or join words differently)
+  let best = phonSimilarity(tPh.join(''), cPh.join(''));
+  // word by word: each target word against the best-sounding heard word (or two joined)
+  const pieces = cPh.slice();
+  for (let i = 0; i + 1 < cPh.length; i++) pieces.push(cPh[i] + cPh[i + 1]);
+  let num = 0, den = 0;
+  tPh.forEach(tp => {
+    let s = 0;
+    pieces.forEach(cp => { const v = phonSimilarity(tp, cp); if (v > s) s = v; });
+    num += s * tp.length; den += tp.length;
+  });
+  if (den) best = Math.max(best, num / den);
+  return best;
+}
+// Best score over all of the recognizer's guesses. {score, heard}
+function speechScore(target, candidates, targetMode) {
+  let score = 0, heard = '';
+  for (const c of candidates) {
+    const s = speechSimilarity(target, c, targetMode);
+    if (s > score) { score = s; heard = c; }
+  }
+  return { score, heard };
+}
+
+// Did the learner say it? The target is Kriolu spelling in the Kriolu course and Portuguese spelling in the
+// Portuguese course; what the recognizer heard is always Portuguese spelling.
+function speechMode() { return isPT() ? 'pt' : 'kr'; }
+function speechVerdict(target, candidates) {
+  const r = speechScore(target, candidates, speechMode());
+  return { pass: r.score >= SPEECH_PASS, great: r.score >= SPEECH_GREAT, score: r.score, heard: r.heard };
+}
+function speechMatches(target, candidates) { return speechVerdict(target, candidates).pass; }
+
+// ── Turning what the recognizer heard into real Kriolu words ──
+// Every word in the course (vocabulary and example sentences), with its sounds, so a Portuguese-sounding
+// guess like "cuma" or "obrigado" can be matched to the Kriolu word it most sounds like.
+let krLexiconCache = { lang: null, size: -1, words: [], exact: new Map(), byLen: [] };
+function krLexicon() {
+  const lang = currentLang(), size = LESSONS.length;
+  if (krLexiconCache.lang === lang && krLexiconCache.size === size) return krLexiconCache;
+  const exact = new Map(), words = [];
+  const add = t => {
+    const key = normalizeText(t);
+    if (key.length < 2 || !/^[a-z]+$/.test(key) || exact.has(key)) return;
+    const entry = { w: t, key, ph: phones(t, 'kr') };
+    exact.set(key, entry); words.push(entry);
+  };
+  LESSONS.forEach(l => (l.vocab || []).forEach(v => {
+    if (l.id === 'alphabet') return;
+    speechTokens(v.k).forEach(add); speechTokens(v.ex).forEach(add);
+  }));
+  const byLen = [];
+  words.forEach(e => { (byLen[e.ph.length] = byLen[e.ph.length] || []).push(e); });
+  krLexiconCache = { lang, size, words, exact, byLen };
+  return krLexiconCache;
+}
+// One heard word → the course word it sounds most like (or itself when nothing is close enough)
+function krWordFor(tok) {
+  const lex = krLexicon(), key = normalizeText(tok);
+  const hit = lex.exact.get(key);
+  if (hit) return { w: hit.w, sim: 1 };
+  const ph = phones(tok, 'pt');
+  if (ph.length < 3) return { w: tok, sim: 0 };           // too short to guess safely
+  let best = null, bestSim = 0;
+  for (let L = Math.max(1, ph.length - 2); L <= ph.length + 2; L++) {
+    (lex.byLen[L] || []).forEach(e => { const v = phonSimilarity(ph, e.ph); if (v > bestSim) { bestSim = v; best = e; } });
+  }
+  return best && bestSim >= SPEECH_REMAP ? { w: best.w, sim: bestSim } : { w: tok, sim: 0 };
+}
+const SPEECH_REMAP = .82;
+// Pick the recognizer's guess that sounds most like real Kriolu, and spell its words the Kriolu way.
+function kriolizeSpeech(alternatives) {
+  let best = null;
+  alternatives.slice(0, 5).forEach((alt, rank) => {
+    const toks = speechTokens(alt);
+    if (!toks.length) return;
+    const mapped = toks.map(krWordFor);
+    const quality = mapped.reduce((a, m) => a + m.sim, 0) / mapped.length - rank * .02;   // ties go to the recognizer's first choice
+    if (!best || quality > best.quality) best = { text: mapped.map(m => m.w).join(' '), quality, raw: alt };
+  });
+  return best || { text: alternatives[0] || '', quality: 0, raw: alternatives[0] || '' };
 }
 
 function evaluateSpeech(displayTranscript, alternatives, q) {
   if (state.awaitingNext) return;
   lastUserAnswer = displayTranscript;
   state.lastApplyDate = new Date().toDateString();   // speaking aloud counts too
-  const isClose = speechMatches(q.speakTarget || q.item.k, alternatives);
+  const verdict = speechVerdict(q.speakTarget || q.item.k, alternatives);
+  const isClose = verdict.pass;
 
   const resultEl = document.getElementById('speak-result');
   state.awaitingNext = true;
@@ -9013,7 +9164,7 @@ function evaluateSpeech(displayTranscript, alternatives, q) {
     state.score++; recordWordResult(q.item, true); playSound('correct');
     state.speakingCorrect = (state.speakingCorrect || 0) + 1;
     antonioReact(true, aStatus);
-    resultEl.innerHTML = `<div class="speak-result good">🎉 Great pronunciation!</div>`;
+    resultEl.innerHTML = `<div class="speak-result good">${verdict.great ? '🎉 Great pronunciation!' : '👍 Close — that sounded right!'}</div>`;
     showFeedback(true, '');
   } else {
     antonioReact(false, aStatus);
@@ -10584,17 +10735,33 @@ const UI_ICON = {
 function toggleMic() { isListening ? stopListening() : startListening(); }
 
 let lastInputWasSpeech = false;
+let lastSpeechHeard = '';   // what the recognizer actually returned, when it was reworded into Kriolu
 
 function startListening() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { alert('Speech recognition not supported. Use Chrome or Edge.'); return; }
   recognition = new SR();
   recognition.continuous = false; recognition.interimResults = true; recognition.lang = 'pt-PT';
+  recognition.maxAlternatives = 5;   // the recognizer's other guesses: one of them often sounds more like real Kriolu
+  let speechAlts = [];
   const micBtn = document.getElementById('mic-btn');
   const chatInput = document.getElementById('chat-input');
   recognition.onstart = () => { isListening=true; micBtn.classList.add('listening'); micBtn.innerHTML=UI_ICON.stop; micBtn.setAttribute('aria-label','Stop listening'); chatInput.placeholder='Listening…'; if (antonioEl()) antonioSetState('listening'); const st=document.getElementById('antonio-chat-status'); if (st) { st.dataset.prev = st.textContent; st.textContent = 'N sta ta obi… (listening)'; } };
-  recognition.onresult = e => { chatInput.value = Array.from(e.results).map(r=>r[0].transcript).join(''); };
-  recognition.onend = () => { stopListening(); if(chatInput.value.trim()) { lastInputWasSpeech = true; sendMessage(); } };
+  recognition.onresult = e => {
+    chatInput.value = Array.from(e.results).map(r=>r[0].transcript).join('');
+    speechAlts = []; const last = e.results[e.results.length - 1];
+    for (let a = 0; a < last.length; a++) speechAlts.push(last[a].transcript);
+  };
+  recognition.onend = () => {
+    stopListening();
+    if (!chatInput.value.trim()) return;
+    lastSpeechHeard = '';
+    // The recognizer only knows Portuguese. Match what it heard to Kriolu words by sound before sending.
+    if (!isPT() && speechAlts.length) {
+      try { const k = kriolizeSpeech(speechAlts); if (k.text) { lastSpeechHeard = chatInput.value.trim(); chatInput.value = k.text; } } catch (e) {}
+    }
+    lastInputWasSpeech = true; sendMessage();
+  };
   recognition.onerror = e => { stopListening(); if(e.error==='not-allowed') alert('Microphone access denied.'); };
   recognition.start();
 }
@@ -10630,6 +10797,7 @@ Rules:
 8. VOICE MESSAGES: Messages prefixed with [VOICE] were spoken aloud by the learner and transcribed by a Portuguese speech recognizer. This is your chance to coach pronunciation:
    - If the transcription contains odd words, Portuguese substitutions, or garbled phrases, the learner likely mispronounced the ${L.name}. Work out what they probably meant to say, show the correct ${L.name}, and give ONE simple pronunciation tip using readable syllables (e.g. "Kuma bu sta" → "KOO-mah boo STAH" — stress the last word).
    - If the transcription is clean and correct ${L.name}, briefly praise their pronunciation (e.g. "Bu pronunsia e bon! 👏") before continuing the conversation.
+   - Where a {recognizer heard: "..."} note follows the message, the text before it was matched by sound to ${L.name} words from the course, and the note is the raw Portuguese guess. If the two differ a lot, the learner's pronunciation may have been off: read the likely intent from both, and coach only if it helps. If the matched text itself is not sensible ${L.name}, say what you think they meant.
    - Never mention the transcription system or that you received a transcript — speak as if you heard them directly.`;
 }
 Object.defineProperty(window, 'BASE_SYSTEM', { get(){ return buildBaseSystem(); } });
@@ -11642,10 +11810,10 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
   if (!getApiKey()) { appendBotMessage('Please save your API key first! ☝️', ''); return; }
-  const wasSpeech = lastInputWasSpeech;
-  lastInputWasSpeech = false;
+  const wasSpeech = lastInputWasSpeech, heard = lastSpeechHeard;
+  lastInputWasSpeech = false; lastSpeechHeard = '';
   input.value = '';
-  appendUserMessage(text, wasSpeech);
+  appendUserMessage(text, wasSpeech, heard);
   missionCheck(text);
   state.chatMessages++;
   state.lastApplyDate = new Date().toDateString();   // chatting counts as "apply"
@@ -11671,7 +11839,7 @@ function awardChatXP() {
 
 function useStarter(text) { document.getElementById('chat-input').value = text; document.getElementById('chat-input').focus(); }
 
-function appendUserMessage(text, wasSpeech) {
+function appendUserMessage(text, wasSpeech, heard) {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg user';
@@ -11679,7 +11847,9 @@ function appendUserMessage(text, wasSpeech) {
   div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${micTag}${escapeHTML(text)}</div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
   // Tag voice messages so the tutor analyzes pronunciation; display stays clean
-  state.chatHistory.push({role:'user', content: wasSpeech ? '[VOICE] ' + text : text});
+  // For the tutor: the Kriolu we matched by sound, and (when different) the raw Portuguese the recognizer heard
+  const heardNote = wasSpeech && heard && normalizeText(heard) !== normalizeText(text) ? ' {recognizer heard: "' + heard.replace(/["{}]/g, '') + '"}' : '';
+  state.chatHistory.push({role:'user', content: wasSpeech ? '[VOICE] ' + text + heardNote : text});
 }
 
 let chatMsgSeq = 0;
@@ -12190,6 +12360,8 @@ function toggleTransMic() {
   transRecognition.interimResults = true;
   // Listen in the input language
   transRecognition.lang = transDirection === 'k2e' ? 'pt-PT' : 'en-US';
+  transRecognition.maxAlternatives = 5;
+  let transAlts = [];
 
   const micBtn = document.getElementById('trans-mic-btn');
   const input = document.getElementById('translate-input');
@@ -12202,9 +12374,15 @@ function toggleTransMic() {
   };
   transRecognition.onresult = e => {
     input.value = Array.from(e.results).map(r => r[0].transcript).join('');
+    transAlts = []; const last = e.results[e.results.length - 1];
+    for (let a = 0; a < last.length; a++) transAlts.push(last[a].transcript);
   };
   transRecognition.onend = () => {
     stopTransMic();
+    // Kriolu spoken into a Portuguese recognizer: match it to Kriolu words by sound before translating
+    if (transDirection === 'k2e' && !isPT() && transAlts.length && input.value.trim()) {
+      try { const k = kriolizeSpeech(transAlts); if (k.text) input.value = k.text; } catch (e) {}
+    }
     if (input.value.trim()) doTranslate();
   };
   transRecognition.onerror = e => {
@@ -13431,10 +13609,10 @@ function shadowRepeat(i, target) {
   shadowRecognition.onend = () => {
     btn.classList.remove('listening'); btn.textContent = '🎤 Repeat';
     if (!alts.length) { resultEl.innerHTML = '<span style="color:var(--muted);font-size:.8rem">Didn\'t catch that — tap 🎤 and try again.</span>'; return; }
-    const ok = speechMatches(target, alts);
+    const verdict = speechVerdict(target, alts), ok = verdict.pass;
     if (ok) { state.shadowDone = (state.shadowDone||0) + 1; saveState(); checkAchievements(); }
     resultEl.innerHTML = ok
-      ? '<div class="speak-result good" style="margin-top:8px">🎉 Great — that sounded right!</div>'
+      ? `<div class="speak-result good" style="margin-top:8px">${verdict.great ? '🎉 Great — that sounded right!' : '👍 Close — that sounded right!'}</div>`
       : `<div class="speak-result bad" style="margin-top:8px">Heard: "${escapeHTML(alts[0])}" — listen again and match the rhythm. Keep going!</div>`;
   };
   shadowRecognition.onerror = () => { btn.classList.remove('listening'); btn.textContent = '🎤 Repeat'; };
