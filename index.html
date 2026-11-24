@@ -4498,7 +4498,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v171';
+const APP_BUILD = 'v172';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -8834,38 +8834,53 @@ function ensureVoiceConsent() {
   return yes;
 }
 let activeClip = null;
-// Record until the learner stops talking (or taps stop, or maxMs). Resolves to a Blob, or null if nothing usable.
+// Record until the learner stops talking (or taps stop, or maxMs). Resolves to a clip whose .done is a Blob, or null.
+// Speech counts only when it is loud enough, for long enough, and above the room's own noise, so a tap or a breath
+// at the start is not mistaken for talking; the clip ends after a pause that follows real speech.
 async function recordClip(maxMs) {
+  // A recorder left over from a failed attempt must never block the next one
+  if (activeClip && Date.now() - activeClip.t0 > maxMs + 4000) { try { activeClip.stop(); } catch (e) {} activeClip = null; }
   const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
   const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find(t => MediaRecorder.isTypeSupported(t));
   const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
-  const chunks = [];
+  const chunks = [], t0 = Date.now();
   rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-  let ctx = null, timer = null;
-  const clip = { stopped: false, stop() { if (!this.stopped) { this.stopped = true; try { rec.state !== 'inactive' && rec.stop(); } catch (e) {} } } };
-  const done = new Promise(resolve => {
-    rec.onstop = () => {
-      clearInterval(timer); stream.getTracks().forEach(t => t.stop()); try { ctx && ctx.close(); } catch (e) {}
-      if (activeClip === clip) activeClip = null;
-      resolve(chunks.length ? new Blob(chunks, { type: rec.mimeType || mime || 'audio/webm' }) : null);
-    };
-  });
-  // Stop on its own once they have spoken and then gone quiet
+  let ctx = null, timer = null, finished = false, resolveDone;
+  const done = new Promise(r => { resolveDone = r; });
+  const clip = { t0, stopped: false, vad: false, heardSpeech: false, done,
+    stop() {
+      if (this.stopped) return; this.stopped = true;
+      try { if (rec.state !== 'inactive') rec.stop(); } catch (e) {}
+      setTimeout(finish, 2000);                       // if the recorder never says it stopped, finish anyway
+    } };
+  function finish() {
+    if (finished) return; finished = true;
+    clearInterval(timer); stream.getTracks().forEach(t => t.stop()); try { ctx && ctx.close(); } catch (e) {}
+    if (activeClip === clip) activeClip = null;
+    resolveDone(chunks.length ? new Blob(chunks, { type: rec.mimeType || mime || 'audio/webm' }) : null);
+  }
+  rec.onstop = finish; rec.onerror = () => clip.stop();
+  stream.getTracks().forEach(t => { t.onended = () => clip.stop(); });
   try {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') await ctx.resume().catch(() => {});
+    if (ctx.state !== 'running') throw new Error('no level meter');
     const an = ctx.createAnalyser(); an.fftSize = 1024; ctx.createMediaStreamSource(stream).connect(an);
-    const buf = new Uint8Array(an.fftSize), t0 = Date.now(); let spoke = false, lastVoice = t0;
+    const buf = new Uint8Array(an.fftSize), quiet = []; let loud = 0, lastVoice = t0;
+    clip.vad = true;
     timer = setInterval(() => {
       an.getByteTimeDomainData(buf);
       let peak = 0; for (let i = 0; i < buf.length; i++) peak = Math.max(peak, Math.abs(buf[i] - 128));
-      const now = Date.now();
-      if (peak > 9) { spoke = true; lastVoice = now; }
-      if ((spoke && now - lastVoice > 1200) || (!spoke && now - t0 > 6000) || now - t0 > maxMs) clip.stop();
+      const now = Date.now(), age = now - t0;
+      if (age < 450) { quiet.push(peak); return; }                       // learn how noisy the room is first
+      quiet.sort((a, b) => a - b);
+      const above = peak > Math.max(14, (quiet[Math.floor(quiet.length / 2)] || 0) + 10);
+      if (above) { lastVoice = now; if (++loud >= 3) clip.heardSpeech = true; } else loud = 0;
+      if ((clip.heardSpeech && now - lastVoice > 1400 && age > 1500) || (!clip.heardSpeech && age > 7000) || age > maxMs) clip.stop();
     }, 90);
-  } catch (e) { setTimeout(() => clip.stop(), Math.min(maxMs, 6000)); }   // no level meter: record for a fixed time
+  } catch (e) { setTimeout(() => clip.stop(), Math.min(maxMs, 7000)); }  // no level meter: record for a fixed time
   activeClip = clip;
   rec.start(250);
-  clip.done = done;
   return clip;
 }
 // A recorded clip → Kriolu text (throws if the service cannot be reached)
@@ -8879,22 +8894,36 @@ async function transcribeClip(blob) {
 }
 // One go at listening: start recording, report progress, resolve to the text ('' if nothing was said).
 // Rejects with {denied:true} when the mic is blocked, or {fallback:true} when the browser recognizer should be used.
+// The last few tries, kept on this phone, so a "it stopped working" report can be traced (shown in AI tutor setup)
+function sttNote(entry) {
+  try {
+    const log = JSON.parse(localStorage.getItem('kriolu_stt_log') || '[]'); log.push({ at: new Date().toTimeString().slice(0, 8), ...entry });
+    localStorage.setItem('kriolu_stt_log', JSON.stringify(log.slice(-8)));
+  } catch (e) {}
+}
 async function listenKriolu(maxMs, onRecording, onSending) {
   let clip;
   try { clip = await recordClip(maxMs); }
-  catch (e) { throw { denied: /NotAllowed|Permission|Security/i.test(String(e && (e.name || e.message))), error: e }; }
+  catch (e) { sttNote({ err: String(e && (e.name || e.message)).slice(0, 40) }); throw { denied: /NotAllowed|Permission|Security/i.test(String(e && (e.name || e.message))), error: e }; }
   onRecording && onRecording(clip);
   const blob = await clip.done;
-  if (!blob) return '';
+  const secs = +((Date.now() - clip.t0) / 1000).toFixed(1);
+  if (!blob) { sttNote({ secs, none: 1 }); return ''; }
   onSending && onSending();
-  try { return await transcribeClip(blob); }
+  try { const text = await transcribeClip(blob); sttNote({ secs, kb: Math.round(blob.size / 1024), vad: clip.vad ? 1 : 0, speech: clip.heardSpeech ? 1 : 0, chars: text.length }); return text; }
   catch (e) {
+    sttNote({ secs, kb: Math.round(blob.size / 1024), err: String(e && e.message).slice(0, 30) });
     if (sttServer === false) throw { fallback: true };
     if (String(e && e.message) === 'stt-unavailable') { sttSkipOnce = true; throw { fallback: true }; }
     throw { failed: true, error: e };
   }
 }
 function stopActiveClip() { if (activeClip) activeClip.stop(); }
+// Is a recording really in progress? One left over from a failed attempt (older than any recording can last) is cleared.
+function clipBusy() {
+  if (activeClip && Date.now() - activeClip.t0 > 25000) { try { activeClip.stop(); } catch (e) {} activeClip = null; }
+  return !!activeClip;
+}
 
 async function startSpeakCheck() {
   if (state.awaitingNext) return;
@@ -8907,7 +8936,7 @@ async function startSpeakCheck() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
 
   // Kriolu recognizer: tapping the mic again while it records stops it early
-  if (activeClip) { stopActiveClip(); return; }
+  if (clipBusy()) { stopActiveClip(); return; }
   if (canListenKriolu() && ensureVoiceConsent()) {
     const aStatus = document.getElementById('antonio-status');
     const back = () => { micBtn.classList.remove('listening'); micBtn.textContent = '🎤'; };
@@ -11697,6 +11726,12 @@ async function claudeFetch(body, tier) {
 // connection powers, on top of the same localStorage key the chat and
 // translate panels already read/write, so all three stay in sync.
 // The Kriolu-aware microphone: what it does with the voice, and a switch
+function sttLogHTML() {
+  let log = []; try { log = JSON.parse(localStorage.getItem('kriolu_stt_log') || '[]'); } catch (e) {}
+  if (!log.length) return '';
+  const line = e => escapeHTML([e.at, e.secs != null ? e.secs + 's' : '', e.kb != null ? e.kb + ' KB' : '', e.chars != null ? (e.chars ? e.chars + ' letters' : 'no words') : '', e.none ? 'no audio' : '', e.err ? 'problem: ' + e.err : ''].filter(Boolean).join(' · '));
+  return `<div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border);font-size:.68rem;color:var(--muted);line-height:1.6"><b>Last tries on this phone</b><br>${log.slice().reverse().map(line).join('<br>')}</div>`;
+}
 function renderListenCard() {
   const el = document.getElementById('ai-listen-card');
   if (!el) return;
@@ -11707,7 +11742,7 @@ function renderListenCard() {
     <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.85rem">Kriolu listening ${on ? '· on' : voiceChoice() === 'no' ? '· off' : ''}</div>
     <div style="font-size:.74rem;color:var(--muted);line-height:1.45;margin-top:3px">The phone's own recognizer only knows Portuguese. With this on, the mic sends a short recording of your voice to a speech service (ElevenLabs) that knows Kriolu. The app does not keep recordings. Used in the Kriolu course only.</div></div>
     <button class="due-btn" style="flex:none;padding:8px 14px;font-size:.76rem" onclick="setVoiceChoice('${on ? 'no' : 'yes'}');renderListenCard()">${on ? 'Turn off' : 'Turn on'}</button>
-  </div>`;
+  </div>${sttLogHTML()}`;
 }
 function renderAiSetup() {
   const connected = !!getApiKey();
@@ -13825,7 +13860,7 @@ async function shadowRepeat(i, target) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const resultEl = document.getElementById('shadow-result-' + i);
   const btn = document.getElementById('shadow-rec-' + i);
-  if (activeClip) { stopActiveClip(); return; }
+  if (clipBusy()) { stopActiveClip(); return; }
   if (canListenKriolu() && ensureVoiceConsent()) {
     userHasInteracted = true;
     if (window.speechSynthesis) window.speechSynthesis.cancel();

@@ -126,6 +126,7 @@ export default async (req, context) => {
       .filter((w) => w && w.type === 'word')
       .slice(0, 80)
       .map((w) => ({ text: String(w.text || '').slice(0, 40), logprob: Number.isFinite(w.logprob) ? Math.round(w.logprob * 100) / 100 : 0 }));
+    console.log('Scribe ok', 'bytes', bytes.byteLength, 'letters', text.length);   // sizes only, never the words
     return json(200, { text, words });
   } catch (e) {
     console.error('Scribe request error', String((e && e.message) || e).slice(0, 300));
