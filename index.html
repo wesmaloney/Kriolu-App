@@ -4498,7 +4498,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v173';
+const APP_BUILD = 'v174';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -10730,7 +10730,10 @@ function cleanForSpeech(text) {
   let out = raw
     .replace(/\[[^\]]+\]/g,'').replace(/<[^>]+>/g,'').replace(/&quot;/g,'').replace(/&amp;/g,'and').replace(/&lt;/g,'').replace(/&gt;/g,'')
     .replace(/[\u{1F000}-\u{1FFFF}]/gu,'').replace(/[\u{2600}-\u{27BF}]/gu,'').replace(/[\u{1F300}-\u{1F9FF}]/gu,'')
-    .replace(/[*_~`#►▾•→←]/g,'').replace(/\s{2,}/g,' ').trim();
+    .replace(/[*_~`#►▾•→←]/g,'').replace(/(^|\n)[ \t]*[-–][ \t]+/g, '$1')    // list dashes are not spoken
+    // A line break is a pause: end the line with a full stop unless it already has punctuation, so a reply made of
+    // several lines or paragraphs is not read as one run-on sentence
+    .replace(/([^\s.!?…:;,)"”'])[ \t]*\n+\s*/g, '$1. ').replace(/\s{2,}/g,' ').trim();
   // Alphabet cards show upper and lower case ("A a", "Lh lh") so the learner can
   // see both — but the letter should be SPOKEN once, not "ah ah".
   const pair = out.match(/^(\S+)\s+(\S+)$/);
@@ -12007,6 +12010,10 @@ function buildTutorContext() {
     }).slice(-8);
 
   let ctx = `\n\n--- LEARNER PROFILE (use naturally; don't read it back as a list) ---`;
+  const learnerName = String(state.userName || '').replace(/[\r\n"{}]/g, ' ').trim().slice(0, 40);
+  ctx += learnerName
+    ? `\nThe learner's name is ${learnerName}. Use it now and then, naturally, no more than once in a reply. Never call them any other name: if your notes or the conversation suggest a different one, ignore it.`
+    : `\nYou do not know the learner's name. Never guess or invent one. If it fits, ask for it once.`;
   ctx += `\nCEFR level: ${lvl.current.code} (${lvl.current.name}). Mastered words: ${lvl.words}. Lessons done: ${lvl.lessons}. Day streak: ${state.streak || 0}.`;
   if (recentLessons.length) ctx += `\nRecently studied: ${recentLessons.join(', ')}.`;
   if (weak.length) ctx += `\nWords they find tricky (weave in gentle review when natural): ${weak.join(', ')}.`;
@@ -12052,7 +12059,7 @@ async function updateTutorMemory(key) {
     const recent = (state.chatHistory || []).slice(-14)
       .map(m => `${m.role === 'user' ? 'Learner' : 'António'}: ${m.content}`).join('\n');
     if (!recent.trim()) return;
-    const prompt = `Here are existing notes about a ${aiLang().name} learner:\n"""${state.tutorMemory || '(none yet)'}"""\n\nHere is the latest part of their conversation with their tutor:\n"""${recent}"""\n\nUpdate the notes. Keep a concise running memory (max ~150 words) capturing durable facts useful for future tutoring: the learner's name, interests, goals, job/family if mentioned, topics they enjoy, and Kriolu words or grammar they repeatedly struggle with. Merge new info with old; drop nothing important; remove redundancy. Write plain notes (no preamble, no markdown headers), in English. If nothing new is worth saving, return the existing notes unchanged.`;
+    const prompt = `Here are existing notes about a ${aiLang().name} learner:\n"""${state.tutorMemory || '(none yet)'}"""\n\nHere is the latest part of their conversation with their tutor:\n"""${recent}"""\n\nUpdate the notes. Only record what the learner actually said or did; never invent facts such as a name. Keep a concise running memory (max ~150 words) capturing durable facts useful for future tutoring: the learner's name, interests, goals, job/family if mentioned, topics they enjoy, and Kriolu words or grammar they repeatedly struggle with. Merge new info with old; drop nothing important; remove redundancy. Write plain notes (no preamble, no markdown headers), in English. If nothing new is worth saving, return the existing notes unchanged.`;
     const resp = await claudeFetch({ max_tokens:300, system:'You maintain concise, durable memory notes about a language learner for their tutor. Output only the updated notes.', messages:[{role:'user', content:prompt}] }, 'light');
     const data = await resp.json();
     if (data.content && data.content[0] && data.content[0].text) {
