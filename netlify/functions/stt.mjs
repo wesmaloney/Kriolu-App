@@ -14,6 +14,8 @@
 //
 // Recordings are forwarded and not stored by this app.
 
+import { KEYTERMS } from './stt-terms.mjs';
+
 const env = (k) => (typeof Netlify !== 'undefined' ? Netlify.env.get(k) : process.env[k]);
 
 const LIMITS = {
@@ -22,6 +24,7 @@ const LIMITS = {
   hourlyPerIp: 240,              // a second, per-instance cap on top of the platform rate limit
 };
 const LANGUAGE = 'kea';          // Kabuverdianu
+let termsHow = 'list';   // how the key terms were last accepted (kept while this instance lives)
 const hits = new Map();
 function overHourlyCap(ip) {
   const now = Date.now();
@@ -83,19 +86,30 @@ export default async (req, context) => {
   if (bytes.byteLength > LIMITS.maxBytes) return fail(413, 'That recording is too long');
   if (bytes.byteLength < LIMITS.minBytes) return json(200, { text: '', words: [] });   // nothing recorded
 
-  const form = new FormData();
-  form.append('model_id', env('STT_MODEL') || 'scribe_v2');
-  form.append('language_code', LANGUAGE);
-  form.append('tag_audio_events', 'false');
-  form.append('file', new Blob([bytes], { type: kind.type }), kind.name);
+  // One request to Scribe. `how` is how the key terms are attached: 'list' (one field per term), 'json' (one
+  // JSON field) or 'none'. They make Scribe listen harder for Kriolu words it would otherwise take for Portuguese.
+  const send = (how) => {
+    const form = new FormData();
+    form.append('model_id', env('STT_MODEL') || 'scribe_v2');
+    form.append('language_code', LANGUAGE);
+    form.append('tag_audio_events', 'false');
+    if (how === 'list') KEYTERMS.forEach((t) => form.append('keyterms', t));
+    if (how === 'json') form.append('keyterms', JSON.stringify(KEYTERMS));
+    form.append('file', new Blob([bytes], { type: kind.type }), kind.name);
+    return fetch('https://api.elevenlabs.io/v1/speech-to-text', { method: 'POST', headers: { 'xi-api-key': apiKey }, body: form, signal: AbortSignal.timeout(20000) });
+  };
 
   try {
-    const r = await fetch('https://api.elevenlabs.io/v1/speech-to-text', {
-      method: 'POST',
-      headers: { 'xi-api-key': apiKey },
-      body: form,
-      signal: AbortSignal.timeout(20000),
-    });
+    // Use the way that worked last time; if Scribe refuses the key terms (400/422), try the next way, then none
+    const order = ['list', 'json', 'none'];
+    let r, how;
+    for (let i = Math.max(0, order.indexOf(termsHow)); i < order.length; i++) {
+      how = order[i];
+      r = await send(how);
+      if (r.ok || (r.status !== 400 && r.status !== 422) || how === 'none') break;
+      console.error('Scribe refused key terms as', how, r.status, String(await r.clone().text().catch(() => '')).slice(0, 200));
+    }
+    if (r.ok && how !== termsHow) { termsHow = how; console.log('Scribe key terms:', how); }
     if (!r.ok) {
       // Detail goes to the function log, never to the browser
       console.error('Scribe request failed', r.status, String(await r.text().catch(() => '')).slice(0, 300));
