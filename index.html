@@ -4497,7 +4497,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v165';
+const APP_BUILD = 'v166';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -11156,6 +11156,10 @@ function setCommunityFilter(id) { state.communityFilter = id; saveState(); rende
 
 // Reading the community is open to everyone; posting, liking and reporting need a signed-in
 // (email-verified) account, so a person's limits follow them and cannot be dodged by changing devices.
+// Switch: false = anyone can post, like and report (as before); true = those need a signed-in account.
+// Left off while the emailed sign-in code cannot be sent (it needs custom SMTP in Supabase). Turn it on
+// together with community-signin-2-contract.sql, never before: that file makes the database enforce it.
+const COMMUNITY_REQUIRES_SIGNIN = false;
 let communitySignInOpen = false;
 function communitySignInCard() {
   return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);margin-bottom:13px">
@@ -11170,6 +11174,7 @@ function communitySignInCard() {
 function renderCommunitySignIn() {
   const el = document.getElementById('community-signin');
   if (!el) return;
+  if (!COMMUNITY_REQUIRES_SIGNIN) { el.dataset.state = ''; el.innerHTML = ''; return; }
   if (currentUser) communitySignInOpen = false;   // next time signed out, start from the compact banner
   // Redrawn only when it changes: the feed refreshes on its own (live updates, polling) and a redraw
   // would wipe the email or code the learner is in the middle of typing.
@@ -11188,7 +11193,7 @@ function showCommunitySignIn() {
 }
 // true when the learner is signed in; otherwise asks them to, and returns false
 function requireCommunitySignIn(whatFor) {
-  if (currentUser) return true;
+  if (!COMMUNITY_REQUIRES_SIGNIN || currentUser) return true;
   showToast('Sign in to ' + whatFor);
   showCommunitySignIn();
   document.getElementById('community-signin')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -11199,9 +11204,11 @@ async function toggleCommunityLike(id) {
   if (!requireCommunitySignIn('like posts')) return;
   const sb = getSupabase();
   if (!sb) return;
-  const { data: existing } = await sb.from('community_likes').select('post_id').eq('post_id', id).eq('user_id', currentUser.id).maybeSingle();
+  const byUser = COMMUNITY_REQUIRES_SIGNIN && currentUser;
+  const who = (q) => byUser ? q.eq('user_id', currentUser.id) : q.eq('device_id', deviceId());
+  const { data: existing } = await who(sb.from('community_likes').select('post_id').eq('post_id', id)).maybeSingle();
   const { error } = existing
-    ? await sb.from('community_likes').delete().eq('post_id', id).eq('user_id', currentUser.id)
+    ? await who(sb.from('community_likes').delete().eq('post_id', id))
     : await sb.from('community_likes').insert({ post_id: id, device_id: deviceId() });   // user_id is filled in by the database
   if (error) showToast(error.code === '42501' ? 'Please sign in again' : "Couldn't save that — try again");
   renderCommunity();
