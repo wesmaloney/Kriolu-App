@@ -4497,7 +4497,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v167';
+const APP_BUILD = 'v168';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -5174,21 +5174,22 @@ function initChatAntonio() {
         const { kriolu, translation } = parseResponse(m.content);
         renderBotBubble(safeBotText(kriolu), translation);
       } else if (m.role === 'user') {
+        const hm = m.content.match(/ \{recognizer heard: "([^"]*)"\}$/);
         const txt = m.content.replace(/^\[VOICE\]\s*/, '').replace(/ \{recognizer heard: "[^"]*"\}$/, '');
-        renderUserBubble(txt, m.content.startsWith('[VOICE]'));
+        renderUserBubble(txt, m.content.startsWith('[VOICE]'), hm ? hm[1] : '');
       }
     });
   }
 }
 
 // Render-only helpers (do NOT modify chatHistory) — used to restore a saved chat
-function renderUserBubble(text, wasSpeech) {
+function renderUserBubble(text, wasSpeech, heard) {
   const win = document.getElementById('chat-window');
   if (!win) return;
   const div = document.createElement('div');
   div.className = 'chat-msg user';
   const micTag = wasSpeech ? '<span style="opacity:.7;font-size:.78rem;margin-right:4px">🎤</span>' : '';
-  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${micTag}${escapeHTML(text)}</div>`;
+  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${micTag}${escapeHTML(text)}${heard ? heardLineHTML(heard) : ''}</div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
 }
 function renderBotBubble(kriolu, english) {
@@ -9018,46 +9019,71 @@ const PHON_SUB = (() => {
   set('ai', .9); set('au', .9); set('eu', .9); set('io', .9);
   return t;
 })();
-function phonSub(a, b) {
+// Swaps that turn one real word into another (pela/bela, pela/pila): never treated as "the same sound" when we
+// are rewording what someone said, only when we are judging how close a pronunciation was. Rewording therefore
+// only follows the regular Kriolu/Portuguese spelling differences (cuma/kuma, obrigado/obrigadu, sabe/sabi).
+const PHON_REGULAR = new Set(['sz', 'zs', 'bv', 'vb', 'rR', 'Rr', 'ij', 'ji', 'uw', 'wu']);   // the only swaps that are just spelling or accent
+function phonSub(a, b, strict) {
   if (a === b) return 0;
+  if (strict && !PHON_REGULAR.has(a + b)) return 1;
   const c = PHON_SUB[a + b];
   if (c !== undefined) return c;
   const va = PHON_VOWELS.includes(a), vb = PHON_VOWELS.includes(b);
   return va !== vb ? 1.3 : 1;
 }
 // cost of a sound being added or dropped: vowels get reduced or dropped in fast speech, nasals vanish
-function phonIndel(s) {
-  if (PHON_VOWELS.includes(s)) return .6;
+function phonIndel(s, strict) {
+  if (PHON_VOWELS.includes(s)) return strict ? 1 : .6;
   if (s === 'j' || s === 'w') return .4;
   if (s === 'n') return .4;
   if (s === 'r' || s === 'R') return .7;
   if (s === 's' || s === 'S') return .8;
   return 1;
 }
-function phonDistance(a, b) {
+function phonDistance(a, b, strict) {
   const m = a.length, n = b.length;
-  if (!m) return [...b].reduce((x, c) => x + phonIndel(c), 0);
-  if (!n) return [...a].reduce((x, c) => x + phonIndel(c), 0);
+  if (!m) return [...b].reduce((x, c) => x + phonIndel(c, strict), 0);
+  if (!n) return [...a].reduce((x, c) => x + phonIndel(c, strict), 0);
   let prev = new Array(n + 1);
   prev[0] = 0;
-  for (let j = 1; j <= n; j++) prev[j] = prev[j - 1] + phonIndel(b[j - 1]);
+  for (let j = 1; j <= n; j++) prev[j] = prev[j - 1] + phonIndel(b[j - 1], strict);
   for (let i = 1; i <= m; i++) {
     const cur = new Array(n + 1);
-    cur[0] = prev[0] + phonIndel(a[i - 1]);
+    cur[0] = prev[0] + phonIndel(a[i - 1], strict);
     for (let j = 1; j <= n; j++) {
-      cur[j] = Math.min(prev[j - 1] + phonSub(a[i - 1], b[j - 1]), prev[j] + phonIndel(a[i - 1]), cur[j - 1] + phonIndel(b[j - 1]));
+      cur[j] = Math.min(prev[j - 1] + phonSub(a[i - 1], b[j - 1], strict), prev[j] + phonIndel(a[i - 1], strict), cur[j - 1] + phonIndel(b[j - 1], strict));
     }
     prev = cur;
   }
   return prev[n];
 }
 // 0 (nothing alike) … 1 (same sounds)
-function phonSimilarity(a, b) {
+function phonSimilarity(a, b, strict) {
   if (!a || !b) return 0;
-  return Math.max(0, 1 - phonDistance(a, b) / Math.max(a.length, b.length));
+  return Math.max(0, 1 - phonDistance(a, b, strict) / Math.max(a.length, b.length));
+}
+// Line two words of sounds up and list what differs: [{op:'sub'|'del'|'ins', t, h, at (0–1 along the target), cost}]
+function phonAlign(a, b) {
+  const m = a.length, n = b.length, d = [];
+  for (let i = 0; i <= m; i++) { d.push(new Array(n + 1).fill(0)); }
+  for (let i = 1; i <= m; i++) d[i][0] = d[i - 1][0] + phonIndel(a[i - 1]);
+  for (let j = 1; j <= n; j++) d[0][j] = d[0][j - 1] + phonIndel(b[j - 1]);
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i - 1][j - 1] + phonSub(a[i - 1], b[j - 1]), d[i - 1][j] + phonIndel(a[i - 1]), d[i][j - 1] + phonIndel(b[j - 1]));
+  const ops = []; let i = m, j = n;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && d[i][j] === d[i - 1][j - 1] + phonSub(a[i - 1], b[j - 1])) {
+      const c = phonSub(a[i - 1], b[j - 1]); if (c > 0) ops.push({ op: 'sub', t: a[i - 1], h: b[j - 1], at: (i - .5) / m, cost: c }); i--; j--;
+    } else if (i > 0 && d[i][j] === d[i - 1][j] + phonIndel(a[i - 1])) { ops.push({ op: 'del', t: a[i - 1], at: (i - .5) / m, cost: phonIndel(a[i - 1]) }); i--; }
+    else { ops.push({ op: 'ins', h: b[j - 1], at: Math.min(1, j / Math.max(n, 1)), cost: phonIndel(b[j - 1]) }); j--; }
+  }
+  return ops.reverse();
 }
 
-const SPEECH_PASS = .66, SPEECH_GREAT = .86;
+const SPEECH_PASS = .66, SPEECH_GREAT = .86, SPEECH_PASS_SHORT = .75;   // short words have little room for error
+const SOUND_NAMES = { C: '“tx” (like ch in church)', J: '“dj” (like j in jump)', N: '“nh” (like ny in canyon)', L: '“lh” (like lli in million)',
+  S: '“x” (like sh)', Z: '“j” (like the s in measure)', R: 'a rolled r', r: 'r', a: '“ah”', e: '“eh”', i: '“ee”', o: '“oh”', u: '“oo”', j: '“y”', w: '“w”' };
+const soundName = c => SOUND_NAMES[c] || '“' + c + '”';
 function speechTokens(s) { return String(s || '').toLowerCase().replace(/[.,!?;:"'¡¿()\[\]…—–-]/g, ' ').split(/\s+/).filter(Boolean); }
 
 // How well does what the recognizer heard (cand) sound like the target? target is spelled in targetMode, what was
@@ -9094,8 +9120,31 @@ function speechScore(target, candidates, targetMode) {
 // Portuguese course; what the recognizer heard is always Portuguese spelling.
 function speechMode() { return isPT() ? 'pt' : 'kr'; }
 function speechVerdict(target, candidates) {
-  const r = speechScore(target, candidates, speechMode());
-  return { pass: r.score >= SPEECH_PASS, great: r.score >= SPEECH_GREAT, score: r.score, heard: r.heard };
+  const mode = speechMode(), r = speechScore(target, candidates, mode);
+  const need = phones(speechTokens(target).join(''), mode).length <= 3 ? SPEECH_PASS_SHORT : SPEECH_PASS;
+  return { pass: r.score >= need, great: r.score >= SPEECH_GREAT, score: r.score, heard: r.heard, hint: r.score >= need ? '' : speechHint(target, r.heard, mode) };
+}
+// When it did not match: which sound was off? One short, friendly pointer, never a verdict on the learner.
+function speechHint(target, heard, mode) {
+  const tTok = speechTokens(target), cTok = speechTokens(heard);
+  if (!tTok.length || !cTok.length) return '';
+  const cPh = cTok.map(c => phones(c, 'pt')); cPh.push(cPh.join(''));
+  for (let i = 0; i + 1 < cTok.length; i++) cPh.push(cPh[i] + cPh[i + 1]);
+  let pick = null;                                         // the target word that matched worst
+  tTok.forEach(t => {
+    const tp = phones(t, mode); if (!tp) return;
+    let bestS = -1, bestC = '';
+    cPh.forEach(cp => { const v = phonSimilarity(tp, cp); if (v > bestS) { bestS = v; bestC = cp; } });
+    if (!pick || bestS < pick.s) pick = { t, tp, s: bestS, cp: bestC };
+  });
+  if (!pick) return '';
+  const ops = phonAlign(pick.tp, pick.cp).filter(o => o.cost >= .5).sort((x, y) => y.cost - x.cost);
+  if (!ops.length) return '';
+  const o = ops[0], where = o.at < .34 ? 'beginning' : o.at > .66 ? 'ending' : 'middle';
+  const word = tTok.length > 1 ? ' in “' + pick.t + '”' : '';
+  if (o.op === 'sub') return `Listen to the ${where}${word}: it should be ${soundName(o.t)}, and it sounded like ${soundName(o.h)}.`;
+  if (o.op === 'del') return `I couldn't hear the ${soundName(o.t)} at the ${where}${word}.`;
+  return `There was an extra ${soundName(o.h)} sound at the ${where}${word}.`;
 }
 function speechMatches(target, candidates) { return speechVerdict(target, candidates).pass; }
 
@@ -9131,11 +9180,11 @@ function krWordFor(tok) {
   if (ph.length < 3) return { w: tok, sim: 0 };           // too short to guess safely
   let best = null, bestSim = 0;
   for (let L = Math.max(1, ph.length - 2); L <= ph.length + 2; L++) {
-    (lex.byLen[L] || []).forEach(e => { const v = phonSimilarity(ph, e.ph); if (v > bestSim) { bestSim = v; best = e; } });
+    (lex.byLen[L] || []).forEach(e => { const v = phonSimilarity(ph, e.ph, true); if (v > bestSim) { bestSim = v; best = e; } });
   }
   return best && bestSim >= SPEECH_REMAP ? { w: best.w, sim: bestSim } : { w: tok, sim: 0 };
 }
-const SPEECH_REMAP = .82;
+const SPEECH_REMAP = .85;
 // Pick the recognizer's guess that sounds most like real Kriolu, and spell its words the Kriolu way.
 function kriolizeSpeech(alternatives) {
   let best = null;
@@ -9170,7 +9219,7 @@ function evaluateSpeech(displayTranscript, alternatives, q) {
     antonioReact(false, aStatus);
     // Don't punish immediately — the recognizer struggles with Kriolu.
     // Offer a one-tap override so a wrong rejection never costs a life unfairly.
-    resultEl.innerHTML = `<div class="speak-result bad">Heard: "${escapeHTML(displayTranscript)}"<br>
+    resultEl.innerHTML = `<div class="speak-result bad">Heard: "${escapeHTML(displayTranscript)}"${verdict.hint ? '<br><span style="font-size:.82rem">💡 ' + escapeHTML(verdict.hint) + '</span>' : ''}<br>
       <span style="font-size:.78rem">${isPT() ? 'Speech recognition isn\'t perfect — if you said it right, tap below.' : 'The recognizer hears Kriolu as Portuguese, so it isn\'t perfect.'}</span></div>
       <div class="self-assess-row" style="margin-top:10px">
         <button class="fc-btn wrong" onclick="speakOverride(false)">Try again ↺</button>
@@ -11839,12 +11888,15 @@ function awardChatXP() {
 
 function useStarter(text) { document.getElementById('chat-input').value = text; document.getElementById('chat-input').focus(); }
 
+// When what we show was reworded by sound, say what the recognizer actually heard, so nothing is hidden from the learner
+const heardLineHTML = heard => `<div style="font-size:.66rem;opacity:.7;margin-top:3px">heard: “${escapeHTML(heard)}”</div>`;
 function appendUserMessage(text, wasSpeech, heard) {
   const win = document.getElementById('chat-window');
   const div = document.createElement('div');
   div.className = 'chat-msg user';
   const micTag = wasSpeech ? '<span style="opacity:.7;font-size:.78rem;margin-right:4px">🎤</span>' : '';
-  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${micTag}${escapeHTML(text)}</div>`;
+  const heardLine = wasSpeech && heard && normalizeText(heard) !== normalizeText(text) ? heardLineHTML(heard) : '';
+  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${micTag}${escapeHTML(text)}${heardLine}</div>`;
   win.appendChild(div); win.scrollTop = win.scrollHeight;
   // Tag voice messages so the tutor analyzes pronunciation; display stays clean
   // For the tutor: the Kriolu we matched by sound, and (when different) the raw Portuguese the recognizer heard
@@ -13613,7 +13665,7 @@ function shadowRepeat(i, target) {
     if (ok) { state.shadowDone = (state.shadowDone||0) + 1; saveState(); checkAchievements(); }
     resultEl.innerHTML = ok
       ? `<div class="speak-result good" style="margin-top:8px">${verdict.great ? '🎉 Great — that sounded right!' : '👍 Close — that sounded right!'}</div>`
-      : `<div class="speak-result bad" style="margin-top:8px">Heard: "${escapeHTML(alts[0])}" — listen again and match the rhythm. Keep going!</div>`;
+      : `<div class="speak-result bad" style="margin-top:8px">Heard: "${escapeHTML(alts[0])}"${verdict.hint ? '<br><span style="font-size:.82rem">💡 ' + escapeHTML(verdict.hint) + '</span>' : ''} — listen again and match the rhythm. Keep going!</div>`;
   };
   shadowRecognition.onerror = () => { btn.classList.remove('listening'); btn.textContent = '🎤 Repeat'; };
   shadowRecognition.start();
