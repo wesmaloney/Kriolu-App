@@ -2295,6 +2295,7 @@
     <button class="back-btn" style="margin-bottom:10px" onclick="showScreen('home')">←</button>
     <h2 class="section-heading">AI tutor setup</h2>
     <div id="ai-status-card" style="border-radius:16px;padding:14px 16px;margin-bottom:16px"></div>
+    <div id="ai-listen-card" style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:16px;box-shadow:var(--shadow)"></div>
     <div class="checkpoint-topics-label" style="margin-bottom:8px">What the AI powers</div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2px 16px;box-shadow:var(--shadow);margin-bottom:16px">
       <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)"><div style="font-size:17px">💬</div><div><div style="font-weight:700;font-size:.85rem">Conversation with your tutor</div><div style="font-size:.7rem;color:var(--muted);margin-top:1px">Sôr António, in Kriolu and Portuguese</div></div></div>
@@ -4497,7 +4498,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v168';
+const APP_BUILD = 'v169';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -8808,16 +8809,129 @@ function skipQuestion() {
   advanceQuestion();
 }
 
-function startSpeakCheck() {
+// ═══════════════════════════════════════════
+//  LISTENING TO KRIOLU
+// ═══════════════════════════════════════════
+// The phone's built-in recognizer only knows Portuguese. When the site can, the mic records a short clip and
+// sends it to a speech service that knows Kriolu (ElevenLabs Scribe, through /api/stt). The browser recognizer
+// stays as the fallback: for the Portuguese course, when the learner says no, and when the service is not set up.
+let sttServer = null;      // does the site offer Kriolu listening? null = not asked yet
+async function probeSttServer() {
+  try { const r = await fetch('/api/stt', { cache: 'no-store' }); const j = r.ok ? await r.json() : null; sttServer = !!(j && j.configured); } catch (e) { /* offline: keep what we knew */ }
+}
+function voiceChoice() { try { return localStorage.getItem('kriolu_voice_ok'); } catch (e) { return null; } }
+function setVoiceChoice(v) { try { localStorage.setItem('kriolu_voice_ok', v); } catch (e) {} }
+let sttSkipOnce = false;   // the service just failed: use the phone's recognizer for this one attempt
+function canListenKriolu() {
+  if (sttSkipOnce) { sttSkipOnce = false; return false; }
+  return sttServer === true && !isPT() && voiceChoice() !== 'no' && typeof MediaRecorder !== 'undefined' && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+// A recording leaves the phone, so ask first (once). Cancel = keep using the phone's own recognizer.
+function ensureVoiceConsent() {
+  if (voiceChoice() === 'yes') return true;
+  const yes = confirm('To understand your Kriolu, the mic sends a short recording of your voice to a speech service (ElevenLabs) each time you speak. The app does not keep the recordings.\n\nOK = use it.\nCancel = use your phone\'s built-in recognizer instead (it is less accurate for Kriolu).\n\nYou can change this later in the AI Tutor settings.');
+  setVoiceChoice(yes ? 'yes' : 'no');
+  return yes;
+}
+let activeClip = null;
+// Record until the learner stops talking (or taps stop, or maxMs). Resolves to a Blob, or null if nothing usable.
+async function recordClip(maxMs) {
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+  const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find(t => MediaRecorder.isTypeSupported(t));
+  const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
+  const chunks = [];
+  rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+  let ctx = null, timer = null;
+  const clip = { stopped: false, stop() { if (!this.stopped) { this.stopped = true; try { rec.state !== 'inactive' && rec.stop(); } catch (e) {} } } };
+  const done = new Promise(resolve => {
+    rec.onstop = () => {
+      clearInterval(timer); stream.getTracks().forEach(t => t.stop()); try { ctx && ctx.close(); } catch (e) {}
+      if (activeClip === clip) activeClip = null;
+      resolve(chunks.length ? new Blob(chunks, { type: rec.mimeType || mime || 'audio/webm' }) : null);
+    };
+  });
+  // Stop on its own once they have spoken and then gone quiet
+  try {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const an = ctx.createAnalyser(); an.fftSize = 1024; ctx.createMediaStreamSource(stream).connect(an);
+    const buf = new Uint8Array(an.fftSize), t0 = Date.now(); let spoke = false, lastVoice = t0;
+    timer = setInterval(() => {
+      an.getByteTimeDomainData(buf);
+      let peak = 0; for (let i = 0; i < buf.length; i++) peak = Math.max(peak, Math.abs(buf[i] - 128));
+      const now = Date.now();
+      if (peak > 9) { spoke = true; lastVoice = now; }
+      if ((spoke && now - lastVoice > 1200) || (!spoke && now - t0 > 6000) || now - t0 > maxMs) clip.stop();
+    }, 90);
+  } catch (e) { setTimeout(() => clip.stop(), Math.min(maxMs, 6000)); }   // no level meter: record for a fixed time
+  activeClip = clip;
+  rec.start(250);
+  clip.done = done;
+  return clip;
+}
+// A recorded clip → Kriolu text (throws if the service cannot be reached)
+async function transcribeClip(blob) {
+  const r = await fetch('/api/stt', { method: 'POST', headers: { 'Content-Type': blob.type || 'audio/webm' }, body: blob });
+  if (r.status === 503 || r.status === 404) { sttServer = false; throw new Error('not-set-up'); }
+  if (r.status === 502) throw new Error('stt-unavailable');   // the speech service itself failed: worth trying the phone's recognizer
+  if (!r.ok) throw new Error('stt-' + r.status);
+  const j = await r.json();
+  return String(j.text || '').trim();
+}
+// One go at listening: start recording, report progress, resolve to the text ('' if nothing was said).
+// Rejects with {denied:true} when the mic is blocked, or {fallback:true} when the browser recognizer should be used.
+async function listenKriolu(maxMs, onRecording, onSending) {
+  let clip;
+  try { clip = await recordClip(maxMs); }
+  catch (e) { throw { denied: /NotAllowed|Permission|Security/i.test(String(e && (e.name || e.message))), error: e }; }
+  onRecording && onRecording(clip);
+  const blob = await clip.done;
+  if (!blob) return '';
+  onSending && onSending();
+  try { return await transcribeClip(blob); }
+  catch (e) {
+    if (sttServer === false) throw { fallback: true };
+    if (String(e && e.message) === 'stt-unavailable') { sttSkipOnce = true; throw { fallback: true }; }
+    throw { failed: true, error: e };
+  }
+}
+function stopActiveClip() { if (activeClip) activeClip.stop(); }
+
+async function startSpeakCheck() {
   if (state.awaitingNext) return;
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return;
   const q = state.session.questions[state.qIndex];
   const micBtn = document.getElementById('speak-mic');
   const transcriptEl = document.getElementById('speak-transcript');
 
   // Stop any TTS so it doesn't hear itself
   if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+  // Kriolu recognizer: tapping the mic again while it records stops it early
+  if (activeClip) { stopActiveClip(); return; }
+  if (canListenKriolu() && ensureVoiceConsent()) {
+    const aStatus = document.getElementById('antonio-status');
+    const back = () => { micBtn.classList.remove('listening'); micBtn.textContent = '🎤'; };
+    micBtn.classList.add('listening'); micBtn.textContent = '👂'; transcriptEl.textContent = '';
+    antonioSetState('listening');
+    if (aStatus) aStatus.textContent = '👂 N sta ta obi… (I\'m listening…)';
+    try {
+      const text = await listenKriolu(9000, null, () => { micBtn.textContent = '⏳'; if (aStatus) aStatus.textContent = 'N sta ta obi bo… (working it out)'; });
+      back();
+      if (!text) {
+        transcriptEl.textContent = "Didn't catch that — tap 🎤 to try again!"; antonioSetState('idle');
+        if (aStatus) aStatus.textContent = 'N ka obi dret — tenta otu bes! (Try again)'; return;
+      }
+      transcriptEl.textContent = '"' + text + '"';
+      evaluateSpeech(text, [text], q, true);
+    } catch (e) {
+      back(); antonioSetState('idle');
+      if (e && e.denied) { alert('Microphone access denied. Please allow it in browser settings.'); return; }
+      if (e && e.fallback && SR) { startSpeakCheck(); return; }       // the service is not available: use the phone's recognizer
+      transcriptEl.textContent = "Couldn't hear that — check your connection and tap 🎤 to try again.";
+    }
+    return;
+  }
+  if (!SR) return;
 
   speakRecognition = new SR();
   speakRecognition.continuous = false;
@@ -9088,10 +9202,10 @@ function speechTokens(s) { return String(s || '').toLowerCase().replace(/[.,!?;:
 
 // How well does what the recognizer heard (cand) sound like the target? target is spelled in targetMode, what was
 // heard is always Portuguese spelling.
-function speechSimilarity(target, cand, targetMode) {
+function speechSimilarity(target, cand, targetMode, heardMode) {
   const tTok = speechTokens(target), cTok = speechTokens(cand);
   if (!tTok.length || !cTok.length) return 0;
-  const tPh = tTok.map(t => phones(t, targetMode)), cPh = cTok.map(c => phones(c, 'pt'));
+  const tPh = tTok.map(t => phones(t, targetMode)), cPh = cTok.map(c => phones(c, heardMode || 'pt'));
   // whole utterance run together (the recognizer may split or join words differently)
   let best = phonSimilarity(tPh.join(''), cPh.join(''));
   // word by word: each target word against the best-sounding heard word (or two joined)
@@ -9107,10 +9221,12 @@ function speechSimilarity(target, cand, targetMode) {
   return best;
 }
 // Best score over all of the recognizer's guesses. {score, heard}
-function speechScore(target, candidates, targetMode) {
+function speechScore(target, candidates, targetMode, viaKriolu) {
   let score = 0, heard = '';
-  for (const c of candidates) {
-    const s = speechSimilarity(target, c, targetMode);
+  // Text from the Kriolu recognizer is spelled the Kriolu way, but may lean on Portuguese spelling for loan words: allow both
+  const heardModes = viaKriolu ? ['kr', 'pt'] : ['pt'];
+  for (const c of candidates) for (const hm of heardModes) {
+    const s = speechSimilarity(target, c, targetMode, hm);
     if (s > score) { score = s; heard = c; }
   }
   return { score, heard };
@@ -9119,16 +9235,16 @@ function speechScore(target, candidates, targetMode) {
 // Did the learner say it? The target is Kriolu spelling in the Kriolu course and Portuguese spelling in the
 // Portuguese course; what the recognizer heard is always Portuguese spelling.
 function speechMode() { return isPT() ? 'pt' : 'kr'; }
-function speechVerdict(target, candidates) {
-  const mode = speechMode(), r = speechScore(target, candidates, mode);
+function speechVerdict(target, candidates, viaKriolu) {
+  const mode = speechMode(), r = speechScore(target, candidates, mode, viaKriolu);
   const need = phones(speechTokens(target).join(''), mode).length <= 3 ? SPEECH_PASS_SHORT : SPEECH_PASS;
-  return { pass: r.score >= need, great: r.score >= SPEECH_GREAT, score: r.score, heard: r.heard, hint: r.score >= need ? '' : speechHint(target, r.heard, mode) };
+  return { pass: r.score >= need, great: r.score >= SPEECH_GREAT, score: r.score, heard: r.heard, hint: r.score >= need ? '' : speechHint(target, r.heard, mode, viaKriolu) };
 }
 // When it did not match: which sound was off? One short, friendly pointer, never a verdict on the learner.
-function speechHint(target, heard, mode) {
+function speechHint(target, heard, mode, viaKriolu) {
   const tTok = speechTokens(target), cTok = speechTokens(heard);
   if (!tTok.length || !cTok.length) return '';
-  const cPh = cTok.map(c => phones(c, 'pt')); cPh.push(cPh.join(''));
+  const cPh = cTok.map(c => phones(c, viaKriolu ? 'kr' : 'pt')); cPh.push(cPh.join(''));
   for (let i = 0; i + 1 < cTok.length; i++) cPh.push(cPh[i] + cPh[i + 1]);
   let pick = null;                                         // the target word that matched worst
   tTok.forEach(t => {
@@ -9198,11 +9314,11 @@ function kriolizeSpeech(alternatives) {
   return best || { text: alternatives[0] || '', quality: 0, raw: alternatives[0] || '' };
 }
 
-function evaluateSpeech(displayTranscript, alternatives, q) {
+function evaluateSpeech(displayTranscript, alternatives, q, viaKriolu) {
   if (state.awaitingNext) return;
   lastUserAnswer = displayTranscript;
   state.lastApplyDate = new Date().toDateString();   // speaking aloud counts too
-  const verdict = speechVerdict(q.speakTarget || q.item.k, alternatives);
+  const verdict = speechVerdict(q.speakTarget || q.item.k, alternatives, viaKriolu);
   const isClose = verdict.pass;
 
   const resultEl = document.getElementById('speak-result');
@@ -9220,7 +9336,7 @@ function evaluateSpeech(displayTranscript, alternatives, q) {
     // Don't punish immediately — the recognizer struggles with Kriolu.
     // Offer a one-tap override so a wrong rejection never costs a life unfairly.
     resultEl.innerHTML = `<div class="speak-result bad">Heard: "${escapeHTML(displayTranscript)}"${verdict.hint ? '<br><span style="font-size:.82rem">💡 ' + escapeHTML(verdict.hint) + '</span>' : ''}<br>
-      <span style="font-size:.78rem">${isPT() ? 'Speech recognition isn\'t perfect — if you said it right, tap below.' : 'The recognizer hears Kriolu as Portuguese, so it isn\'t perfect.'}</span></div>
+      <span style="font-size:.78rem">${isPT() || viaKriolu ? 'Speech recognition isn\'t perfect — if you said it right, tap below.' : 'The recognizer hears Kriolu as Portuguese, so it isn\'t perfect.'}</span></div>
       <div class="self-assess-row" style="margin-top:10px">
         <button class="fc-btn wrong" onclick="speakOverride(false)">Try again ↺</button>
         <button class="fc-btn correct" onclick="speakOverride(true)">I said it right ✓</button>
@@ -10786,8 +10902,25 @@ function toggleMic() { isListening ? stopListening() : startListening(); }
 let lastInputWasSpeech = false;
 let lastSpeechHeard = '';   // what the recognizer actually returned, when it was reworded into Kriolu
 
-function startListening() {
+async function startListening() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (canListenKriolu() && ensureVoiceConsent()) {
+    const micBtn = document.getElementById('mic-btn'), chatInput = document.getElementById('chat-input');
+    isListening = true; micBtn.classList.add('listening'); micBtn.innerHTML = UI_ICON.stop; micBtn.setAttribute('aria-label', 'Stop listening');
+    chatInput.placeholder = 'Listening…'; if (antonioEl()) antonioSetState('listening');
+    const st = document.getElementById('antonio-chat-status'); if (st) { st.dataset.prev = st.textContent; st.textContent = 'N sta ta obi… (listening)'; }
+    try {
+      const text = await listenKriolu(15000, null, () => { chatInput.placeholder = 'Working it out…'; });
+      stopListening();
+      if (text) { chatInput.value = text; lastSpeechHeard = ''; lastInputWasSpeech = true; sendMessage(); }
+    } catch (e) {
+      stopListening();
+      if (e && e.denied) alert('Microphone access denied.');
+      else if (e && e.fallback && SR) startListening();
+      else appendBotMessage('⚠️ I couldn\'t hear that. Check your connection and try the mic again.', '');
+    }
+    return;
+  }
   if (!SR) { alert('Speech recognition not supported. Use Chrome or Edge.'); return; }
   recognition = new SR();
   recognition.continuous = false; recognition.interimResults = true; recognition.lang = 'pt-PT';
@@ -10826,6 +10959,7 @@ function stopListening() {
   const lst = document.getElementById('antonio-chat-status');
   if (lst && lst.textContent.includes('obi…')) lst.textContent = lst.dataset.prev || `Your ${aiLang().name} tutor • Powered by Claude`;
   if (recognition) { try { recognition.stop(); } catch(e){} }
+  stopActiveClip();
 }
 
 // ═══════════════════════════════════════════
@@ -10843,7 +10977,7 @@ Rules:
 5. Be encouraging and culturally informative about ${L.culture}.
 6. Format bold with **word** syntax.
 7. Keep responses concise — 3-5 sentences max unless they ask for more.
-8. VOICE MESSAGES: Messages prefixed with [VOICE] were spoken aloud by the learner and transcribed by a Portuguese speech recognizer. This is your chance to coach pronunciation:
+8. VOICE MESSAGES: Messages prefixed with [VOICE] were spoken aloud by the learner and transcribed by a speech recognizer, so the transcript can contain mistakes. This is your chance to coach pronunciation:
    - If the transcription contains odd words, Portuguese substitutions, or garbled phrases, the learner likely mispronounced the ${L.name}. Work out what they probably meant to say, show the correct ${L.name}, and give ONE simple pronunciation tip using readable syllables (e.g. "Kuma bu sta" → "KOO-mah boo STAH" — stress the last word).
    - If the transcription is clean and correct ${L.name}, briefly praise their pronunciation (e.g. "Bu pronunsia e bon! 👏") before continuing the conversation.
    - Where a {recognizer heard: "..."} note follows the message, the text before it was matched by sound to ${L.name} words from the course, and the note is the raw Portuguese guess. If the two differ a lot, the learner's pronunciation may have been off: read the likely intent from both, and coach only if it helps. If the matched text itself is not sensible ${L.name}, say what you think they meant.
@@ -11552,6 +11686,19 @@ async function claudeFetch(body, tier) {
 // AI Tutor Setup screen — a fuller explanation of what the shared/own-key
 // connection powers, on top of the same localStorage key the chat and
 // translate panels already read/write, so all three stay in sync.
+// The Kriolu-aware microphone: what it does with the voice, and a switch
+function renderListenCard() {
+  const el = document.getElementById('ai-listen-card');
+  if (!el) return;
+  if (sttServer !== true) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  const on = voiceChoice() === 'yes';
+  el.innerHTML = `<div style="display:flex;align-items:center;gap:12px">
+    <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.85rem">Kriolu listening ${on ? '· on' : voiceChoice() === 'no' ? '· off' : ''}</div>
+    <div style="font-size:.74rem;color:var(--muted);line-height:1.45;margin-top:3px">The phone's own recognizer only knows Portuguese. With this on, the mic sends a short recording of your voice to a speech service (ElevenLabs) that knows Kriolu. The app does not keep recordings. Used in the Kriolu course only.</div></div>
+    <button class="due-btn" style="flex:none;padding:8px 14px;font-size:.76rem" onclick="setVoiceChoice('${on ? 'no' : 'yes'}');renderListenCard()">${on ? 'Turn off' : 'Turn on'}</button>
+  </div>`;
+}
 function renderAiSetup() {
   const connected = !!getApiKey();
   const card = document.getElementById('ai-status-card');
@@ -11564,6 +11711,7 @@ function renderAiSetup() {
       <div style="font-size:.72rem;color:${connected ? '#1A7A6E' : 'var(--muted)'};margin-top:1px">${sub}</div></div>
     </div>`;
   }
+  renderListenCard();
   const input = document.getElementById('ai-setup-key-input');
   if (input) input.placeholder = connected && !tutorServer ? '••••••••••••• (saved ✓)' : 'sk-ant-...';
   const note = document.getElementById('ai-server-note');
@@ -12107,8 +12255,11 @@ async function callClaude(userText) {
   }
 
   try {
-    const resp = await claudeFetch({ max_tokens:600, system:currentSystemPrompt + buildTutorContext() + missionContext(), messages });
-    const data = await resp.json();
+    // A phone connection can drop for a moment (or a gateway answer with something that is not JSON): try once more
+    const body = { max_tokens:600, system:currentSystemPrompt + buildTutorContext() + missionContext(), messages };
+    let data;
+    try { data = await (await claudeFetch(body)).json(); }
+    catch (first) { await new Promise(r => setTimeout(r, 1200)); data = await (await claudeFetch(body)).json(); }
     hideTyping();
     if (data.error) { appendBotMessage(`⚠️ API Error: ${escapeHTML(data.error.message)}`, ''); }
     else {
@@ -12125,7 +12276,7 @@ async function callClaude(userText) {
     }
   } catch(err) {
     hideTyping();
-    appendBotMessage('⚠️ Connection error. Make sure you\'re running via Live Server or GitHub Pages.', '');
+    appendBotMessage('⚠️ I couldn\'t reach Sôr António just now. Check your connection and send that again.', '');
   }
   if (sendBtn) sendBtn.disabled = false;
 }
@@ -12400,9 +12551,26 @@ function saveTranslationFav() {
 }
 
 // — Translator mic —
-function toggleTransMic() {
+async function toggleTransMic() {
   if (transIsListening) { stopTransMic(); return; }
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (transDirection === 'k2e' && canListenKriolu() && ensureVoiceConsent()) {
+    userHasInteracted = true;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    const micBtn = document.getElementById('trans-mic-btn'), input = document.getElementById('translate-input');
+    transIsListening = true; micBtn.classList.add('listening'); micBtn.textContent = '⏹️'; input.placeholder = '🎤 Listening…';
+    try {
+      const text = await listenKriolu(15000, null, () => { input.placeholder = 'Working it out…'; });
+      stopTransMic();
+      if (text) { input.value = text; doTranslate(); }
+    } catch (e) {
+      stopTransMic();
+      if (e && e.denied) alert('Microphone access denied. Please allow it in browser settings.');
+      else if (e && e.fallback && SR) toggleTransMic();
+      else showTranslation('⚠️ I couldn\'t hear that. Check your connection and try again.', '');
+    }
+    return;
+  }
   if (!SR) { alert('Speech recognition not supported in this browser. Use Chrome or Edge.'); return; }
   userHasInteracted = true;
   if (window.speechSynthesis) window.speechSynthesis.cancel();
@@ -12450,6 +12618,7 @@ function stopTransMic() {
   if (micBtn) { micBtn.classList.remove('listening'); micBtn.textContent = '🎤'; }
   updateTranslateUI();
   if (transRecognition) { try { transRecognition.stop(); } catch(e) {} }
+  stopActiveClip();
 }
 
 // ═══════════════════════════════════════════
@@ -13635,10 +13804,36 @@ function openShadow(id) {
 }
 
 let shadowRecognition = null;
-function shadowRepeat(i, target) {
+function showShadowVerdict(resultEl, target, alts, viaKriolu) {
+  const verdict = speechVerdict(target, alts, viaKriolu), ok = verdict.pass;
+  if (ok) { state.shadowDone = (state.shadowDone||0) + 1; saveState(); checkAchievements(); }
+  resultEl.innerHTML = ok
+    ? `<div class="speak-result good" style="margin-top:8px">${verdict.great ? '🎉 Great — that sounded right!' : '👍 Close — that sounded right!'}</div>`
+    : `<div class="speak-result bad" style="margin-top:8px">Heard: "${escapeHTML(alts[0])}"${verdict.hint ? '<br><span style="font-size:.82rem">💡 ' + escapeHTML(verdict.hint) + '</span>' : ''} — listen again and match the rhythm. Keep going!</div>`;
+}
+async function shadowRepeat(i, target) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const resultEl = document.getElementById('shadow-result-' + i);
   const btn = document.getElementById('shadow-rec-' + i);
+  if (activeClip) { stopActiveClip(); return; }
+  if (canListenKriolu() && ensureVoiceConsent()) {
+    userHasInteracted = true;
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    btn.classList.add('listening'); btn.textContent = '👂 Listening…'; resultEl.innerHTML = '';
+    const reset = () => { btn.classList.remove('listening'); btn.textContent = '🎤 Repeat'; };
+    try {
+      const text = await listenKriolu(9000, null, () => { btn.textContent = '⏳ Working it out…'; });
+      reset();
+      if (!text) { resultEl.innerHTML = '<span style="color:var(--muted);font-size:.8rem">Didn\'t catch that — tap 🎤 and try again.</span>'; return; }
+      showShadowVerdict(resultEl, target, [text], true);
+    } catch (e) {
+      reset();
+      if (e && e.denied) { alert('Microphone access denied. Please allow it in browser settings.'); return; }
+      if (e && e.fallback && SR) { shadowRepeat(i, target); return; }
+      resultEl.innerHTML = '<span style="color:var(--muted);font-size:.8rem">Couldn\'t hear that — check your connection and try again.</span>';
+    }
+    return;
+  }
   if (!SR) {
     resultEl.innerHTML = '<span style="color:var(--muted);font-size:.8rem">Speech recognition not supported here — just practice saying it aloud after the audio.</span>';
     return;
@@ -13661,11 +13856,7 @@ function shadowRepeat(i, target) {
   shadowRecognition.onend = () => {
     btn.classList.remove('listening'); btn.textContent = '🎤 Repeat';
     if (!alts.length) { resultEl.innerHTML = '<span style="color:var(--muted);font-size:.8rem">Didn\'t catch that — tap 🎤 and try again.</span>'; return; }
-    const verdict = speechVerdict(target, alts), ok = verdict.pass;
-    if (ok) { state.shadowDone = (state.shadowDone||0) + 1; saveState(); checkAchievements(); }
-    resultEl.innerHTML = ok
-      ? `<div class="speak-result good" style="margin-top:8px">${verdict.great ? '🎉 Great — that sounded right!' : '👍 Close — that sounded right!'}</div>`
-      : `<div class="speak-result bad" style="margin-top:8px">Heard: "${escapeHTML(alts[0])}"${verdict.hint ? '<br><span style="font-size:.82rem">💡 ' + escapeHTML(verdict.hint) + '</span>' : ''} — listen again and match the rhythm. Keep going!</div>`;
+    showShadowVerdict(resultEl, target, alts, false);
   };
   shadowRecognition.onerror = () => { btn.classList.remove('listening'); btn.textContent = '🎤 Repeat'; };
   shadowRecognition.start();
@@ -14315,6 +14506,7 @@ async function init() {
   if (savedKey) document.getElementById('api-key-input').placeholder = '••••••••••••• (saved ✓)';
 
   probeTutorServer();     // does the site provide the tutor itself?
+  probeSttServer().then(() => { if (typeof renderListenCard === 'function') renderListenCard(); });   // and Kriolu listening?
 
   // Register PWA service worker for offline support + installability
   if ('serviceWorker' in navigator) {
