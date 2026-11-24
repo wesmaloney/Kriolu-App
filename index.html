@@ -4497,7 +4497,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v164';
+const APP_BUILD = 'v165';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -10877,10 +10877,38 @@ async function sendMagicLink(prefix) {
   const btn = document.getElementById(prefix + '-send-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
   const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
-  if (btn) { btn.disabled = false; btn.textContent = 'Send magic link'; }
-  showMsg(error ? ('⚠️ ' + error.message) : '✅ Check your email for a sign-in link.');
+  if (btn) { btn.disabled = false; btn.textContent = 'Send sign-in email'; }
+  showMsg(error ? ('⚠️ ' + error.message) : '✅ Check your email. Type the code it contains below (or, on the website in a browser, tap the link).');
+  if (!error) { const row = document.getElementById(prefix + '-code-row'); if (row) { row.style.display = 'block'; document.getElementById(prefix + '-code-input')?.focus(); } }
   // The link opens in a new tab, so remember (on this device, for an hour) that the learner was heading for Community
   if (!error && prefix === 'community-signin') { try { localStorage.setItem('kriolu_after_signin', String(Date.now())); } catch (e) {} }
+}
+// The emailed link opens the phone's browser, which has its own sign-in, so an installed copy of the
+// app never hears about it. The same email carries a short code instead: typing it into the app signs
+// in right there, whichever way the app was opened. (Needs {{ .Token }} in the Supabase email templates.)
+function emailCodeRow(prefix) {
+  return `<div id="${prefix}-code-row" style="display:none;margin-top:10px">
+    <div style="font-size:.76rem;color:var(--muted);line-height:1.45;margin-bottom:6px">Type the code from the email here. The link in the email opens your browser, not this app, so the code is the way to sign in inside the app.</div>
+    <div style="display:flex;gap:8px">
+      <input type="text" id="${prefix}-code-input" class="type-input" style="flex:1;min-width:0;letter-spacing:.18em" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456" />
+      <button class="start-btn" style="margin:0" id="${prefix}-verify-btn" onclick="verifyEmailCode('${prefix}')">Sign in</button>
+    </div></div>`;
+}
+async function verifyEmailCode(prefix) {
+  prefix = prefix || 'account';
+  const sb = getSupabase();
+  if (!sb) return;
+  const email = (document.getElementById(prefix + '-email-input')?.value || '').trim();
+  const token = (document.getElementById(prefix + '-code-input')?.value || '').replace(/\s+/g, '');
+  const msgEl = document.getElementById(prefix + '-message');
+  const showMsg = (text) => { if (msgEl) { msgEl.textContent = text; msgEl.style.display = 'block'; } };
+  if (!email || !email.includes('@')) { showMsg('Enter the email address you asked the code for.'); return; }
+  if (!/^\d{6,10}$/.test(token)) { showMsg('Type the code from the email (digits only).'); return; }
+  const btn = document.getElementById(prefix + '-verify-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Checking…'; }
+  const { error } = await sb.auth.verifyOtp({ email, token, type: 'email' });
+  if (btn) { btn.disabled = false; btn.textContent = 'Sign in'; }
+  showMsg(error ? 'That code did not work. Check it, or send a new one.' : '✅ Signed in.');
 }
 function returnToCommunityAfterSignIn() {
   let t = 0; try { t = Number(localStorage.getItem('kriolu_after_signin')) || 0; localStorage.removeItem('kriolu_after_signin'); } catch (e) {}
@@ -10908,8 +10936,9 @@ function renderAccountPanel() {
   } else {
     el.innerHTML = `
       <input type="email" id="account-email-input" class="type-input" style="width:100%" placeholder="you@example.com" autocomplete="email" />
-      <button class="start-btn" style="margin-top:8px" id="account-send-btn" onclick="sendMagicLink()">Send magic link</button>
-      <div id="account-message" style="display:none;font-size:.75rem;margin-top:6px;color:var(--muted)"></div>`;
+      <button class="start-btn" style="margin-top:8px" id="account-send-btn" onclick="sendMagicLink()">Send sign-in email</button>
+      <div id="account-message" style="display:none;font-size:.75rem;margin-top:6px;color:var(--muted)"></div>
+      ${emailCodeRow('account')}`;
   }
 }
 
@@ -11131,17 +11160,24 @@ let communitySignInOpen = false;
 function communitySignInCard() {
   return `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);margin-bottom:13px">
     <div style="font-weight:800;font-size:.9rem">Sign in to join in</div>
-    <div style="font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:4px">Anyone can read the community. To post, like or report, sign in with your email: we send a one-time link, no password. Your email is never shown to other people.</div>
+    <div style="font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:4px">Anyone can read the community. To post, like or report, sign in with your email: we send you a one-time code, no password. Your email is never shown to other people.</div>
     <input type="email" id="community-signin-email-input" class="type-input" style="width:100%;margin-top:10px" placeholder="you@example.com" autocomplete="email" />
-    <button class="start-btn" style="margin-top:8px" id="community-signin-send-btn" onclick="sendMagicLink('community-signin')">Send magic link</button>
+    <button class="start-btn" style="margin-top:8px" id="community-signin-send-btn" onclick="sendMagicLink('community-signin')">Send sign-in email</button>
     <div id="community-signin-message" style="display:none;font-size:.75rem;margin-top:6px;color:var(--muted)"></div>
+    ${emailCodeRow('community-signin')}
   </div>`;
 }
 function renderCommunitySignIn() {
   const el = document.getElementById('community-signin');
   if (!el) return;
-  if (currentUser) { communitySignInOpen = false; el.innerHTML = ''; return; }   // next time signed out, start from the compact banner
-  el.innerHTML = communitySignInOpen ? communitySignInCard()
+  if (currentUser) communitySignInOpen = false;   // next time signed out, start from the compact banner
+  // Redrawn only when it changes: the feed refreshes on its own (live updates, polling) and a redraw
+  // would wipe the email or code the learner is in the middle of typing.
+  const state = currentUser ? 'in' : communitySignInOpen ? 'card' : 'banner';
+  if (el.dataset.state === state) return;
+  el.dataset.state = state;
+  if (state === 'in') { el.innerHTML = ''; return; }
+  el.innerHTML = state === 'card' ? communitySignInCard()
     : `<div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;margin-bottom:13px">
          <div style="flex:1;font-size:.78rem;color:var(--muted);line-height:1.4">Sign in to post, like and report.</div>
          <button class="due-btn" style="padding:8px 14px;font-size:.76rem" onclick="showCommunitySignIn()">Sign in</button></div>`;

@@ -1,0 +1,14 @@
+<!-- Supabase email template for the Kriolu app.
+     Paste this into BOTH templates in the Supabase dashboard:
+       Authentication > Emails (Email Templates) > "Magic link"
+       Authentication > Emails (Email Templates) > "Confirm sign up"
+     (A brand-new email address receives "Confirm sign up"; a returning one receives "Magic link".)
+     Suggested subject: Your Kriolu sign-in code
+     {{ .Token }} is the short code the app asks for; {{ .ConfirmationURL }} is the link for people
+     using the website in a browser. An installed copy of the app cannot receive the link, which is
+     why the code is the main thing. -->
+<h2>Your Kriolu sign-in code</h2>
+<p>Type this code into the Kriolu app:</p>
+<p style="font-size:32px;font-weight:700;letter-spacing:8px;margin:16px 0">{{ .Token }}</p>
+<p>It works for the next hour. If you did not ask for it, you can ignore this email.</p>
+<p style="color:#666;font-size:13px">Using Kriolu on the website in a browser instead? <a href="{{ .ConfirmationURL }}">Tap here to sign in</a>.</p>
