@@ -7,7 +7,8 @@
 // short audio clips from this site, so it cannot be turned into a general transcription service.
 //
 // Netlify → Site settings → Environment variables:
-//   ELEVENLABS_API_KEY   (already set for Sôr António's voice; scope: Functions)
+//   ELEVENLABS_API_KEY   (the key used for Sôr António's voice; scope: Functions). If the key is restricted in
+//                        ElevenLabs, its permissions must include Speech to Text as well as Text to Speech.
 //   STT_MODEL            (optional) Scribe model, default scribe_v2
 //   ALLOWED_ORIGINS      (optional) extra sites allowed to call this, comma separated
 //
@@ -98,6 +99,9 @@ export default async (req, context) => {
     if (!r.ok) {
       // Detail goes to the function log, never to the browser
       console.error('Scribe request failed', r.status, String(await r.text().catch(() => '')).slice(0, 300));
+      // The key is missing, or lacks the Speech to Text permission: that will not fix itself, so say "not set up"
+      // and the page stops trying until the next visit
+      if (r.status === 401 || r.status === 403) return fail(503, 'Kriolu listening is not set up on this site');
       if (r.status === 429) return fail(429, 'Listening is busy, please try again in a moment', { 'Retry-After': '10' });
       return fail(502, 'Listening is not available right now');
     }
