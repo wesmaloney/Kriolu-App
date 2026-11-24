@@ -4498,7 +4498,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v172';
+const APP_BUILD = 'v173';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -8837,17 +8837,18 @@ let activeClip = null;
 // Record until the learner stops talking (or taps stop, or maxMs). Resolves to a clip whose .done is a Blob, or null.
 // Speech counts only when it is loud enough, for long enough, and above the room's own noise, so a tap or a breath
 // at the start is not mistaken for talking; the clip ends after a pause that follows real speech.
-async function recordClip(maxMs) {
+async function recordClip(maxMs, plain) {
   // A recorder left over from a failed attempt must never block the next one
   if (activeClip && Date.now() - activeClip.t0 > maxMs + 4000) { try { activeClip.stop(); } catch (e) {} activeClip = null; }
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+  // plain = the browser's default settings (used when the filtered mic turned out to be silent)
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: plain ? true : { echoCancellation: true, noiseSuppression: true } });
   const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find(t => MediaRecorder.isTypeSupported(t));
   const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
   const chunks = [], t0 = Date.now();
   rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
   let ctx = null, timer = null, finished = false, resolveDone;
   const done = new Promise(r => { resolveDone = r; });
-  const clip = { t0, stopped: false, vad: false, heardSpeech: false, done,
+  const clip = { t0, stopped: false, vad: false, heardSpeech: false, dead: false, maxPeak: 0, plain: !!plain, done,
     stop() {
       if (this.stopped) return; this.stopped = true;
       try { if (rec.state !== 'inactive') rec.stop(); } catch (e) {}
@@ -8872,6 +8873,10 @@ async function recordClip(maxMs) {
       an.getByteTimeDomainData(buf);
       let peak = 0; for (let i = 0; i < buf.length; i++) peak = Math.max(peak, Math.abs(buf[i] - 128));
       const now = Date.now(), age = now - t0;
+      if (peak > clip.maxPeak) clip.maxPeak = peak;
+      // A working microphone always has a little noise of its own. Flat silence means the phone is not giving us the mic
+      // (another app, headphones on Bluetooth...): say so now, not after seven seconds.
+      if (age > 1800 && clip.maxPeak <= 1) { clip.dead = true; clip.stop(); return; }
       if (age < 450) { quiet.push(peak); return; }                       // learn how noisy the room is first
       quiet.sort((a, b) => a - b);
       const above = peak > Math.max(14, (quiet[Math.floor(quiet.length / 2)] || 0) + 10);
@@ -8901,16 +8906,24 @@ function sttNote(entry) {
     localStorage.setItem('kriolu_stt_log', JSON.stringify(log.slice(-8)));
   } catch (e) {}
 }
+const DEAD_MIC = 'I can\'t hear anything from your microphone. Another app may be using it, or Bluetooth headphones may be selected as the mic. Close other apps that use sound, or disconnect the headphones, and try again.';
+let sttPlainAudio = false;   // the filtered mic gave silence once: use the browser's default settings from now on
 async function listenKriolu(maxMs, onRecording, onSending) {
-  let clip;
-  try { clip = await recordClip(maxMs); }
-  catch (e) { sttNote({ err: String(e && (e.name || e.message)).slice(0, 40) }); throw { denied: /NotAllowed|Permission|Security/i.test(String(e && (e.name || e.message))), error: e }; }
-  onRecording && onRecording(clip);
-  const blob = await clip.done;
+  let clip, blob;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try { clip = await recordClip(maxMs, sttPlainAudio); }
+    catch (e) { sttNote({ err: String(e && (e.name || e.message)).slice(0, 40) }); throw { denied: /NotAllowed|Permission|Security/i.test(String(e && (e.name || e.message))), error: e }; }
+    onRecording && onRecording(clip);
+    blob = await clip.done;
+    if (!clip.dead) break;
+    sttNote({ dead: 1, mode: clip.plain ? 'plain' : 'filtered' });
+    if (clip.plain) throw { dead: true };            // silent either way
+    sttPlainAudio = true;                             // try once more with the default settings
+  }
   const secs = +((Date.now() - clip.t0) / 1000).toFixed(1);
   if (!blob) { sttNote({ secs, none: 1 }); return ''; }
   onSending && onSending();
-  try { const text = await transcribeClip(blob); sttNote({ secs, kb: Math.round(blob.size / 1024), vad: clip.vad ? 1 : 0, speech: clip.heardSpeech ? 1 : 0, chars: text.length }); return text; }
+  try { const text = await transcribeClip(blob); sttNote({ secs, kb: Math.round(blob.size / 1024), peak: clip.maxPeak, mode: clip.plain ? 'plain' : 'filtered', speech: clip.heardSpeech ? 1 : 0, chars: text.length }); return text; }
   catch (e) {
     sttNote({ secs, kb: Math.round(blob.size / 1024), err: String(e && e.message).slice(0, 30) });
     if (sttServer === false) throw { fallback: true };
@@ -8955,6 +8968,7 @@ async function startSpeakCheck() {
     } catch (e) {
       back(); antonioSetState('idle');
       if (e && e.denied) { alert('Microphone access denied. Please allow it in browser settings.'); return; }
+      if (e && e.dead) { transcriptEl.textContent = DEAD_MIC; return; }
       if (e && e.fallback && SR) { startSpeakCheck(); return; }       // the service is not available: use the phone's recognizer
       transcriptEl.textContent = "Couldn't hear that — check your connection and tap 🎤 to try again.";
     }
@@ -10955,6 +10969,7 @@ async function startListening() {
     } catch (e) {
       stopListening();
       if (e && e.denied) alert('Microphone access denied.');
+      else if (e && e.dead) appendBotMessage('⚠️ ' + DEAD_MIC, '');
       else if (e && e.fallback && SR) startListening();
       else appendBotMessage('⚠️ I couldn\'t hear that. Check your connection and try the mic again.', '');
     }
@@ -11729,7 +11744,7 @@ async function claudeFetch(body, tier) {
 function sttLogHTML() {
   let log = []; try { log = JSON.parse(localStorage.getItem('kriolu_stt_log') || '[]'); } catch (e) {}
   if (!log.length) return '';
-  const line = e => escapeHTML([e.at, e.secs != null ? e.secs + 's' : '', e.kb != null ? e.kb + ' KB' : '', e.chars != null ? (e.chars ? e.chars + ' letters' : 'no words') : '', e.none ? 'no audio' : '', e.err ? 'problem: ' + e.err : ''].filter(Boolean).join(' · '));
+  const line = e => escapeHTML([e.at, e.secs != null ? e.secs + 's' : '', e.kb != null ? e.kb + ' KB' : '', e.chars != null ? (e.chars ? e.chars + ' letters' : 'no words') : '', e.none ? 'no audio' : '', e.peak != null ? 'level ' + e.peak : '', e.mode || '', e.dead ? 'silent mic' : '', e.err ? 'problem: ' + e.err : ''].filter(Boolean).join(' · '));
   return `<div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border);font-size:.68rem;color:var(--muted);line-height:1.6"><b>Last tries on this phone</b><br>${log.slice().reverse().map(line).join('<br>')}</div>`;
 }
 function renderListenCard() {
@@ -12611,6 +12626,7 @@ async function toggleTransMic() {
     } catch (e) {
       stopTransMic();
       if (e && e.denied) alert('Microphone access denied. Please allow it in browser settings.');
+      else if (e && e.dead) showTranslation('⚠️ ' + DEAD_MIC, '');
       else if (e && e.fallback && SR) toggleTransMic();
       else showTranslation('⚠️ I couldn\'t hear that. Check your connection and try again.', '');
     }
@@ -13874,6 +13890,7 @@ async function shadowRepeat(i, target) {
     } catch (e) {
       reset();
       if (e && e.denied) { alert('Microphone access denied. Please allow it in browser settings.'); return; }
+      if (e && e.dead) { resultEl.innerHTML = '<span style="color:var(--muted);font-size:.8rem">' + DEAD_MIC + '</span>'; return; }
       if (e && e.fallback && SR) { shadowRepeat(i, target); return; }
       resultEl.innerHTML = '<span style="color:var(--muted);font-size:.8rem">Couldn\'t hear that — check your connection and try again.</span>';
     }
