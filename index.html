@@ -4517,7 +4517,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v175';
+const APP_BUILD = 'v176';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -5861,7 +5861,7 @@ function renderPathUnit(unit, ui, nextId) {
         ${allDone && !passed ? '<span class="path-next-tag">Test</span>' : ''}
       </div>`;
     })()}
-    ${extra ? '' : (() => {
+    ${extra || unitLessons.every(id => id === 'alphabet') ? '' : (() => {   // letters are not role-play material: no mission for the alphabet unit
       const allDone = unitDone === unitLessons.length;
       const done = (state.missionsDone || {})[unit.id];
       const status = done ? '🏅' : allDone ? '🎭' : '🔒';
