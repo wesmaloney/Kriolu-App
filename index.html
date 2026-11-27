@@ -450,6 +450,8 @@
     .dlg-line{background:var(--bg);border-radius:12px;padding:8px 11px;font-size:.92rem}
     .dlg-e{font-size:.75rem;color:var(--muted);margin-top:2px}
     .dlg-next{border:2px dashed var(--border);background:transparent}
+    .dlg-scene{font-size:.82rem;color:var(--muted);background:var(--bg);border-left:3px solid var(--ocean);border-radius:8px;padding:7px 10px;margin-bottom:9px;text-align:left}
+    .dlg-say{margin:0 0 0 4px;padding:0 4px;font-size:.8rem;vertical-align:middle;min-width:0;width:auto;height:auto;background:none;border:none;box-shadow:none}
     .speed-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:12px}
     .speed-fill{height:100%;width:100%;background:var(--grad-sun);transition:width .2s linear}
     .ladder-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px}
@@ -2060,7 +2062,7 @@
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
     <div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text);margin-bottom:2px">Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from all lessons</div></div>
+      <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text);margin-bottom:2px">Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from the lessons you have studied</div></div>
       <button class="start-btn" onclick="startMixedSession()">Start →</button>
     </div>
   </div>
@@ -3175,7 +3177,7 @@ const PT_PRONOUNS = ['eu','tu','ele/ela','nós','eles/elas'];
 let LESSONS = [], LEARNING_PATH = [], GRAMMAR_SKILLS = [], GRAMMAR_SPOTLIGHTS = {}, LISTENING = [], SHADOW_SETS = [],
     SENTENCE_PATTERNS = {}, WRITING_TASKS = {}, DIALOGUES = [], READING_PASSAGES = [],
     STORIES = [], VERBS = [], EN_VERB_FORMS = {}, WRITING_PROMPTS = [],
-    LESSON_ALIASES = {}, CHECKPOINT_SOURCES = {}, WORD_RENAMES = {};
+    LESSON_ALIASES = {}, CHECKPOINT_SOURCES = {}, WORD_RENAMES = {}, LESSON_DIALOGUES = {};
 
 const LANGS = {
   kriolu:     { code:'kriolu',     label:'Kriolu',     flag:'🇨🇻', mark:'🌊', native:'Kriolu',    tutor:'Sôr António', avatar:'🧔🏾', ttsLang:'pt-PT',
@@ -3258,6 +3260,7 @@ function pointContentAt(lang) {
   SENTENCE_PATTERNS  = PT ? PT_SENTENCE_PATTERNS  : KR_SENTENCE_PATTERNS;
   WRITING_TASKS      = PT ? PT_WRITING_TASKS      : KR_WRITING_TASKS;
   DIALOGUES          = PT ? PT_DIALOGUES          : KR_DIALOGUES;
+  LESSON_DIALOGUES   = PT ? (typeof PT_LESSON_DIALOGUES !== 'undefined' ? PT_LESSON_DIALOGUES : {}) : (typeof KR_LESSON_DIALOGUES !== 'undefined' ? KR_LESSON_DIALOGUES : {});
   READING_PASSAGES   = PT ? PT_READING_PASSAGES   : KR_READING_PASSAGES;
   STORIES            = PT ? PT_STORIES            : KR_STORIES;
   VERBS              = PT ? PT_VERBS              : KR_VERBS;
@@ -4517,7 +4520,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v176';
+const APP_BUILD = 'v177';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -5533,7 +5536,7 @@ function renderHomeExtras() {
     // Daily lesson card
     cards += `<div class="daily-card">
       <div><div class="d-title">${done ? '✅ Daily lesson done!' : '☀️ Today\'s Mix'}</div>
-        <div class="d-sub">${done ? 'Come back tomorrow to keep your streak.' : (due > 0 ? `${due} word${due===1?'':'s'} due for review + new words` : 'A fresh mix of words to learn')}</div></div>
+        <div class="d-sub">${done ? 'Come back tomorrow to keep your streak.' : (due > 0 ? `${due} word${due===1?'':'s'} due for review, plus words you have studied` : 'A mix of the words you have studied')}</div></div>
       ${done ? '' : '<button class="d-btn" onclick="startDailyLesson()">Start →</button>'}
     </div>`;
     pathSlot.innerHTML = cards;
@@ -5760,8 +5763,20 @@ function buildSession(lessonId) {
   return { questions, lessonId, lessonTitle: lesson.title };
 }
 
+// Words the learner has actually studied: anything they have practised, plus every word of a lesson they finished.
+function studiedVocab() {
+  const ws = state.wordScores || {}, lf = state.lessonsFinished || {};
+  return LESSONS.flatMap(l => lf[l.id] ? l.vocab : l.vocab.filter(v => ws[v.k]));
+}
+// Review sessions test with hearts, so they never bring in words the learner has not studied yet
+function noStudiedWordsYet() {
+  const next = getNextPathLesson();
+  showToast('Finish a lesson first: reviews only use words you have studied');
+  if (next) startLesson(next);
+}
 function buildMixedSession() {
-  const allVocab = LESSONS.flatMap(l => l.vocab);
+  const allVocab = studiedVocab();
+  if (!allVocab.length) return null;
   const items = buildSpacedSession(allVocab, 20);
   const types = assignExerciseTypes(items.length);
   const questions = items.map((item, i) => ({
@@ -6997,7 +7012,7 @@ function typeEligible(t, item) {
   switch (t) {
     case 'fillBlank': case 'sentenceBuilder': return exN >= 3;
     case 'structureDrill': return exN >= 3 && !!structureDrillFor(item.ex);
-    case 'markerDrill': return !isPT() && !!findMarker(item.ex);
+    case 'markerDrill': { const m = !isPT() && findMarker(item.ex); return !!m && isTaught(m, lessonOfItem(item)); }
     case 'fixSentence': return !!makeFixSentence(item);
     case 'completeDialogue': return !!findDialogueFor(item);
     case 'listenMeaning': return exN >= 3 && exN <= 16 && !!sentenceMeaning(item);
@@ -7222,18 +7237,79 @@ function renderUnclip(q, container) {
     </div><div id="feedback-area"></div>`;
 }
 
-// 3. COMPLETE THE CONVERSATION — a dialogue line that uses this word.
+// ═══════════════════════════════════════════
+//  WHAT HAS BEEN TAUGHT
+// ═══════════════════════════════════════════
+// A learner is never asked to produce or choose words they have not met. "Taught" means: the word is (part of) a
+// vocabulary item of this lesson or of a required lesson that comes before it on the path. An optional lesson counts
+// its own words plus the required lessons of the levels below it.
+function teachTokens(text) {
+  const out = [];
+  String(text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/(\p{L}+)\/a\b/gu, (m, w) => w + ' ' + (/[uo]$/.test(w) ? w.slice(0, -1) + 'a' : w + 'a'))   // bunitu/a → bunitu bunita
+    .replace(/[\p{L}\d]+(?:[-'’][\p{L}]+)*/gu, t => { out.push(t); return t; });
+  return out;
+}
+let TAUGHT = null;
+function taughtIndex() {
+  if (TAUGHT && TAUGHT.lang === currentLang() && TAUGHT.size === LESSONS.length) return TAUGHT;
+  const first = new Map(), rank = new Map(), levelEnd = {}, byId = new Map(LESSONS.map(l => [l.id, l]));
+  const addAll = (set, v) => teachTokens(v.k + ' ' + (v.full || '')).forEach(t => { set(t); t.split(/[-'’]/).forEach(p => p && set(p)); });
+  PATH_ORDER.forEach((id, i) => {
+    rank.set(id, i); levelEnd[PATH_LEVEL_OF[id]] = i;
+    ((byId.get(id) || {}).vocab || []).forEach(v => addAll(t => { if (!first.has(t)) first.set(t, i); }, v));
+  });
+  TAUGHT = { lang: currentLang(), size: LESSONS.length, first, rank, levelEnd, own: new Map(), addAll };
+  return TAUGHT;
+}
+function taughtChecker(lesson) {
+  const T = taughtIndex();
+  if (!lesson) return () => false;
+  let r = T.rank.get(lesson.id);
+  if (r === undefined) {                               // optional lesson: the levels below it, plus its own words
+    const li = PATH_LEVELS.indexOf(PATH_LEVEL_OF[lesson.id]);
+    r = li > 0 && T.levelEnd[PATH_LEVELS[li - 1]] !== undefined ? T.levelEnd[PATH_LEVELS[li - 1]] : (li < 0 ? Infinity : -1);
+  }
+  let own = T.own.get(lesson.id);
+  if (!own) { own = new Set(); (lesson.vocab || []).forEach(v => T.addAll(t => own.add(t), v)); T.own.set(lesson.id, own); }
+  const known = t => own.has(t) || (T.first.has(t) && T.first.get(t) <= r) || /^\d+$/.test(t);
+  return text => teachTokens(text).every(t => known(t) || t.split(/[-'’]/).every(p => !p || known(p)));
+}
+// Is every word of this text taught by the time the learner does this lesson?
+function isTaught(text, lesson) { return taughtChecker(lesson)(text); }
+function lessonOfItemStrict(item) { item = (item && item._src) || item; return lessonOfItem(item); }
+
+// 3. COMPLETE THE CONVERSATION — the learner reads a short scene and picks the reply that fits.
+// Scenes come first from the lesson's own conversations (written with only the words taught so far, each reply tied
+// to the vocabulary it practises), then from the dialogue library when the scene is at or below the lesson's level
+// and every word of it has been taught. Otherwise this exercise is not offered for the word.
 const DIALOGUE_STOP = new Set(['txeu','kuma','kuze','pamodi','undi','kantu','tambe','também','kusa','mesmu','agora','ainda','muito','muita','para','como','quando','onde','isso','isto','esta','este','essa','esse','aqui','obrigadu','obrigado','obrigada','bon','boa','bom']);
 function findDialogueFor(item) {
+  item = (item && item._src) || item;
   if (item._dlg !== undefined) return item._dlg;
-  const toks = [...new Set((String(item.k || '').toLowerCase().normalize('NFC').match(/\p{L}{4,}/gu) || []))].filter(t => !DIALOGUE_STOP.has(t));
   let found = null;
-  for (const d of (DIALOGUES || [])) {
-    for (let i = 1; i < (d.lines || []).length && !found; i++) {
-      const line = d.lines[i].k.toLowerCase().normalize('NFC');
-      if (toks.some(t => new RegExp('(^|[^\\p{L}])' + t + '($|[^\\p{L}])', 'u').test(line))) found = { d, i };
+  const lesson = lessonOfItem(item);
+  // 1. the lesson's own conversations
+  for (const d of ((lesson && LESSON_DIALOGUES[lesson.id]) || [])) {
+    const a = (d.ask || []).find(a => (a.for || []).includes(item.k));
+    if (a && d.lines[a.i]) { found = { d, i: a.i, wrong: a.wrong, own: true }; break; }
+  }
+  // 2. a library scene the learner can fully read
+  if (!found && lesson) {
+    const ok = taughtChecker(lesson), lvRank = PATH_LEVELS.indexOf(PATH_LEVEL_OF[lesson.id]);
+    const toks = [...new Set((String(item.k || '').toLowerCase().normalize('NFC').match(/\p{L}{4,}/gu) || []))].filter(t => !DIALOGUE_STOP.has(t));
+    const fits = (DIALOGUES || []).filter(d => PATH_LEVELS.indexOf(d.level) <= lvRank);
+    for (const d of fits) {
+      for (let i = 1; i < (d.lines || []).length && !found; i++) {
+        const line = d.lines[i].k.toLowerCase().normalize('NFC');
+        if (!toks.some(t => new RegExp('(^|[^\\p{L}])' + t + '($|[^\\p{L}])', 'u').test(line))) continue;
+        if (!d.lines.slice(Math.max(0, i - 4), i + 1).every(l => ok(l.k))) continue;   // everything the learner will be shown
+        // wrong replies: lines from other scenes, long enough not to fit anywhere, all in taught words
+        const wrong = fits.filter(x => x !== d).flatMap(x => x.lines).map(l => l.k).filter(k => k !== d.lines[i].k && k.trim().split(/\s+/).length >= 3 && ok(k));
+        if (wrong.length >= 2) found = { d, i, pool: wrong };
+      }
+      if (found) break;
     }
-    if (found) break;
   }
   item._dlg = found;
   return found;
@@ -7242,17 +7318,21 @@ function renderCompleteDialogue(q, container) {
   const f = findDialogueFor(q.item);
   if (!f) { renderFillBlank(q, container); return; }
   const { d, i } = f, line = d.lines[i];
-  const others = shuffle((DIALOGUES || []).filter(x => x !== d).flatMap(x => x.lines)).filter(l => l.k !== line.k).slice(0, 2);
-  const prev = d.lines.slice(Math.max(0, i - 2), i);
-  const opts = shuffle([line, ...others]);
+  const wrong = f.wrong ? f.wrong.slice(0, 2) : shuffle([...new Set(f.pool)]).slice(0, 2);
+  const prev = d.lines.slice(Math.max(0, i - 4), i);
+  const after = d.lines[i + 1];
   q.correctText = line.k;
-  q.reveal = `<div class="odd-reveal"><div><b>${escapeHTML(line.sp)}:</b> ${escapeHTML(line.k)}</div><div style="color:var(--muted)">${escapeHTML(line.e)}</div></div>`;
+  q.reveal = `<div class="odd-reveal"><div><b>${escapeHTML(line.sp)}:</b> ${escapeHTML(line.k)}</div><div style="color:var(--muted)">${escapeHTML(line.e)}</div>`
+    + (after ? `<div style="margin-top:6px"><b>${escapeHTML(after.sp)}:</b> ${escapeHTML(after.k)}</div><div style="color:var(--muted)">${escapeHTML(after.e)}</div>` : '') + `</div>`;
+  const scene = d.scene || d.titleE || d.title || '';
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">💬 Complete the Conversation</div>
-    <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">${art(d.icon)} ${escapeHTML(d.titleE || d.title)}</div>
-    <div class="dlg-lines">${prev.map(l => `<div class="dlg-line"><b>${escapeHTML(l.sp)}:</b> ${escapeHTML(l.k)}<div class="dlg-e">${escapeHTML(l.e)}</div></div>`).join('')}
+    <div class="dlg-scene">${d.icon ? art(d.icon) + ' ' : ''}${escapeHTML(scene)}</div>
+    <div class="dlg-lines">${prev.map(l => `<div class="dlg-line"><b>${escapeHTML(l.sp)}:</b> ${escapeHTML(l.k)}
+        <button class="speak-btn dlg-say" title="Listen" aria-label="Listen" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(l.k)}">🔊</button>
+        <div class="dlg-e">${escapeHTML(l.e)}</div></div>`).join('')}
       <div class="dlg-line dlg-next"><b>${escapeHTML(line.sp)}:</b> …</div></div>
     <div style="font-size:.85rem;font-weight:700;margin:10px 0 6px">What does ${escapeHTML(line.sp)} say next?</div>
-    <div class="choices-grid" style="grid-template-columns:1fr">${opts.map(l => choiceBtn(l.k, l === line)).join('')}</div>
+    <div class="choices-grid" style="grid-template-columns:1fr">${shuffle([line.k, ...wrong]).map(k => choiceBtn(k, k === line.k)).join('')}</div>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
     </div><div id="feedback-area"></div>`;
 }
@@ -7961,7 +8041,9 @@ async function fetchSmartPatterns(lesson, key) {
 }
 
 function startMixedSession() {
-  lessonPlan = null; state.session = buildMixedSession(); state.qIndex = 0; state.score = 0;
+  const built = buildMixedSession();
+  if (!built) { noStudiedWordsYet(); return; }
+  lessonPlan = null; state.session = built; state.qIndex = 0; state.score = 0;
   state.wrongItems = []; state.awaitingNext = false; state.lives = 3;
   state.mixedSessions++; saveState();
   showScreen('exercise'); renderQuestion();
@@ -8306,7 +8388,8 @@ function playListenWord(word, btn) {
 // — Dictation: hear a sentence, write it (listening + spelling + writing) —
 function renderDictation(q, container) {
   // Use the example sentence; fall back to the word if there isn't one
-  const sentence = (q.item.ex && q.item.ex.trim().split(/\s+/).length >= 2) ? q.item.ex.trim() : q.item.k;
+  // Use the example sentence when the learner has been taught every word of it; otherwise just the word itself
+  const sentence = (q.item.ex && q.item.ex.trim().split(/\s+/).length >= 2 && isTaught(q.item.ex, lessonOfItem(q.item))) ? q.item.ex.trim() : q.item.k;
   q._dictation = sentence; // stash for checking
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">✍️ Dictation</div>
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">Listen carefully, then type exactly what you hear in ${courseName()}.</div>
@@ -14378,12 +14461,9 @@ function startDailyLesson() {
   // Mix of due SR words + new words from least-practiced lesson
   const due = getDueWords();
   let pool = [...due];
-  if (pool.length < 12) {
-    const allVocab = LESSONS.flatMap(l => l.vocab);
-    const unseen = shuffle(allVocab.filter(v => !state.wordScores[v.k]));
-    pool = pool.concat(unseen.slice(0, 12 - pool.length));
-  }
-  if (!pool.length) pool = shuffle(LESSONS.flatMap(l => l.vocab)).slice(0, 12);
+  // Top up with other words the learner has studied (hardest first), never with words they have not met
+  if (pool.length < 12) pool = pool.concat(buildSpacedSession(studiedVocab(), 24));
+  if (!pool.length) { noStudiedWordsYet(); return; }
   // Dedupe
   const seen = new Set(); const items = [];
   for (const v of pool) { if (!seen.has(v.k)) { seen.add(v.k); items.push(v); } if (items.length >= 12) break; }
