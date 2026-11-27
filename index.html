@@ -1032,6 +1032,18 @@
     .path-level-code{color:#fff;font-weight:800;font-size:.8rem;border-radius:8px;padding:4px 8px}
     .path-level-name{font-weight:800;color:var(--ocean);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .path-level-count{margin-left:auto;font-size:.78rem;font-weight:800;color:var(--muted)}
+    .path-core-label,.path-extras-note{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:2px 4px 10px}
+    .path-extras{margin:6px 0 4px}
+    .path-extras>summary,.path-theme>summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--bg);border:1px dashed var(--border);border-radius:var(--radius);padding:12px 14px;font-weight:800;color:var(--ocean)}
+    .path-extras>summary::-webkit-details-marker,.path-theme>summary::-webkit-details-marker{display:none}
+    .path-extras>summary::after,.path-theme>summary::after{content:'▾';margin-left:auto;color:var(--muted);transition:transform .2s}
+    .path-extras:not([open])>summary::after,.path-theme:not([open])>summary::after{transform:rotate(-90deg)}
+    .path-extras-tag{font-size:.66rem;font-weight:800;color:var(--muted);background:var(--card);border-radius:99px;padding:2px 8px}
+    .path-extras-body{padding:10px 0 0 8px}
+    .path-theme{margin-bottom:10px}
+    .path-theme>summary{background:var(--card);border-style:solid;padding:10px 12px;font-size:.88rem}
+    .path-theme-body{padding:10px 0 0}
+    .path-unit.path-unit-extra .path-unit-head{background:var(--card)}
     .path-unit{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
     .path-unit-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
     .path-unit-icon{font-size:1.6rem}
@@ -3779,18 +3791,25 @@ function streakSubtitle() {
 // The path runs A1 → C1; every unit carries its CEFR level.
 const PATH_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
 let PATH_LEVEL_OF = {}, LEVEL_START_LESSON = {};
+// Each level has a REQUIRED core (units without track:'extra': in order, locks, progress) and OPTIONAL extras
+// (track:'extra': themed groups the learner can open any time once they reach the level).
+let PATH_EXTRA_ORDER = [], PATH_IS_EXTRA = new Set();
 function computePathOrder() {
   const seen = new Set(); const order = [];
-  PATH_LEVEL_OF = {}; LEVEL_START_LESSON = {};
+  PATH_LEVEL_OF = {}; LEVEL_START_LESSON = {}; PATH_EXTRA_ORDER = []; PATH_IS_EXTRA = new Set();
   LEARNING_PATH.forEach(u => u.lessons.forEach(id => {
     if (seen.has(id)) return;
-    seen.add(id); order.push(id);
+    seen.add(id);
     PATH_LEVEL_OF[id] = u.level;
+    if (u.track === 'extra') { PATH_EXTRA_ORDER.push(id); PATH_IS_EXTRA.add(id); return; }
+    order.push(id);
     if (u.level && !LEVEL_START_LESSON[u.level]) LEVEL_START_LESSON[u.level] = id;
   }));
   return order;
 }
 let PATH_ORDER = [];
+// Every lesson of a level, required first, then optional
+function pathIdsForLevel(lv) { return PATH_ORDER.filter(id => PATH_LEVEL_OF[id] === lv).concat(PATH_EXTRA_ORDER.filter(id => PATH_LEVEL_OF[id] === lv)); }
 // The placement test reports Beginner / Intermediate / Advanced; each maps to the level it starts you at.
 const PLACEMENT_START_LEVEL = { Beginner: 'A1', Intermediate: 'B1', Advanced: 'B2' };
 function placementLevelRank() { return Math.max(0, PATH_LEVELS.indexOf(PLACEMENT_START_LEVEL[state.placementLevel] || 'A1')); }
@@ -4498,7 +4517,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v174';
+const APP_BUILD = 'v175';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -5238,7 +5257,7 @@ let lessonsOpenLevels = null;
 function lessonCardsForLevel(lv) {
   if (lv === 'more') return LESSONS.filter(l => !PATH_LEVEL_OF[l.id]).map(renderLessonCard).join('');
   const byId = new Map(LESSONS.map(l => [l.id, l]));
-  return PATH_ORDER.filter(id => PATH_LEVEL_OF[id] === lv).map(id => byId.get(id)).filter(Boolean).map(renderLessonCard).join('');
+  return pathIdsForLevel(lv).map(id => byId.get(id)).filter(Boolean).map(renderLessonCard).join('');
 }
 function renderAllLessonsGrid() {
   const grid = document.getElementById('all-lessons-grid');
@@ -5247,7 +5266,7 @@ function renderAllLessonsGrid() {
   if (!lessonsOpenLevels) lessonsOpenLevels = new Set([(nextId && PATH_LEVEL_OF[nextId]) || PATH_LEVELS[0]]);
   const sections = PATH_LEVELS.map(lv => {
     const info = CEFR_LEVELS.find(c => c.code === lv) || { name: lv, color: 'var(--ocean)' };
-    return { lv, ids: PATH_ORDER.filter(id => PATH_LEVEL_OF[id] === lv), name: info.name, color: info.color };
+    return { lv, ids: pathIdsForLevel(lv), name: info.name, color: info.color };
   });
   const unplaced = LESSONS.filter(l => !PATH_LEVEL_OF[l.id]).map(l => l.id);
   if (unplaced.length) sections.push({ lv: 'more', ids: unplaced, name: 'More lessons', color: 'var(--ocean)' });
@@ -5768,7 +5787,14 @@ function isPathLessonProgressed(id) {
 // the lesson before it is done, or if it opens a level at or below where the
 // placement test put you. Lessons you've progressed stay replayable even when an
 // earlier one is unfinished — ordering the path by difficulty can create that.
+// Optional extras are never locked in sequence: they open once the learner has reached their level.
+function pathCurrentLevelRank() {
+  const next = getNextPathLesson();
+  const reached = next ? PATH_LEVELS.indexOf(PATH_LEVEL_OF[next]) : PATH_LEVELS.length - 1;
+  return Math.max(reached, placementLevelRank());
+}
 function isPathLessonUnlocked(id) {
+  if (PATH_IS_EXTRA.has(id)) return isPathLessonProgressed(id) || PATH_LEVELS.indexOf(PATH_LEVEL_OF[id]) <= pathCurrentLevelRank();
   const idx = PATH_ORDER.indexOf(id);
   if (idx <= 0 || isPathLessonProgressed(id)) return true;
   if (isPathLessonProgressed(PATH_ORDER[idx - 1])) return true;
@@ -5803,14 +5829,15 @@ function renderPathUnit(unit, ui, nextId) {
       ${isNext ? '<span class="path-next-tag">Next</span>' : ''}
     </div>`;
   }).join('');
-  return `<div class="path-unit">
+  const extra = unit.track === 'extra';
+  return `<div class="path-unit${extra ? ' path-unit-extra' : ''}">
     <div class="path-unit-head">
       <span class="path-unit-icon">${art(unit.icon)}</span>
       <div><div class="path-unit-title">${unit.unit}</div><div class="path-unit-desc">${unit.desc}</div></div>
       <div class="path-unit-count">${unitDone}/${unitLessons.length}</div>
     </div>
     ${lessonsHTML}
-    ${GRAMMAR_SKILLS.filter(g => g.unit === unit.id).map(sk => {
+    ${extra ? '' : GRAMMAR_SKILLS.filter(g => g.unit === unit.id).map(sk => {
       const unlocked = unitLessons.some(id => (state.lessonsFinished?.[id] || 0) >= 80);
       const passed = ((state.grammarSkillsDone || {})[sk.id] || 0) >= 60;
       const status = passed ? '✅' : unlocked ? '👉' : '🔒';
@@ -5822,7 +5849,7 @@ function renderPathUnit(unit, ui, nextId) {
         ${unlocked && !passed ? '<span class="path-next-tag">Train</span>' : ''}
       </div>`;
     }).join('')}
-    ${(() => {
+    ${extra ? '' : (() => {
       const allDone = unitDone === unitLessons.length;
       const passed = (state.checkpointsPassed || {})[unit.id];
       const status = passed ? '🏆' : allDone ? '🎯' : '🔒';
@@ -5834,7 +5861,7 @@ function renderPathUnit(unit, ui, nextId) {
         ${allDone && !passed ? '<span class="path-next-tag">Test</span>' : ''}
       </div>`;
     })()}
-    ${(() => {
+    ${extra ? '' : (() => {
       const allDone = unitDone === unitLessons.length;
       const done = (state.missionsDone || {})[unit.id];
       const status = done ? '🏅' : allDone ? '🎭' : '🔒';
@@ -5852,8 +5879,47 @@ function renderPathUnit(unit, ui, nextId) {
 // Levels the learner has expanded on the Path screen; starts with the level of their next lesson.
 let pathOpenLevels = null;
 
+const PATH_THEME_NAMES = {everyday:'Everyday Life',family:'Family & People',home:'Home Life',food:'Food & Cooking',town:'Town & Errands',nature:'Nature & Animals',language:'Words & Expressions',play:'Games, Sport & Outdoors',culture:'Music, Arts & Culture',work:'Work & Trades',crafts:'Crafts & Making',school:'School & Learning',world:'World & Travel',health:'Health & Care',tech:'Technology & Media',society:'Society, Law & Money',science:'Science & Ideas',mixed:'Mixed Topics'};
+const PATH_THEME_ICONS = {everyday:'☀️',family:'👨‍👩‍👧',home:'🏠',food:'🍳',town:'🏙️',nature:'🌿',language:'💬',play:'⚽',culture:'🎶',work:'🛠️',crafts:'🧵',school:'📚',world:'🌍',health:'💊',tech:'📱',society:'⚖️',science:'🔬',mixed:'🧩'};
+let pathOpenExtras = new Set();   // 'A2' (a level's extras) and 'A2|food' (one theme) the learner has opened
+const pathExtraUnits = lv => LEARNING_PATH.map((u, ui) => ({ u, ui })).filter(x => x.u.level === lv && x.u.track === 'extra');
+const pathThemeUnits = (lv, th) => pathExtraUnits(lv).filter(x => x.u.theme === th);
 function pathLevelUnits(lv, nextId) {
-  return LEARNING_PATH.map((u, ui) => u.level === lv ? renderPathUnit(u, ui, nextId) : '').join('');
+  const core = LEARNING_PATH.map((u, ui) => u.level === lv && u.track !== 'extra' ? renderPathUnit(u, ui, nextId) : '').join('');
+  const extras = pathExtraUnits(lv);
+  if (!extras.length) return core;
+  const total = extras.reduce((a, x) => a + x.u.lessons.length, 0), done = extras.reduce((a, x) => a + x.u.lessons.filter(isLessonComplete).length, 0);
+  const open = pathOpenExtras.has(lv);
+  return `<div class="path-core-label">Required · in order</div>${core}
+    <details class="path-extras" data-level="${lv}" ${open ? 'open' : ''} ontoggle="onPathExtrasToggle(this)">
+      <summary>➕ Optional extras <span class="path-extras-tag">${done}/${total}</span></summary>
+      <div class="path-extras-body">${open ? pathThemesHTML(lv, nextId) : ''}</div>
+    </details>`;
+}
+function pathThemesHTML(lv, nextId) {
+  const themes = [...new Set(pathExtraUnits(lv).map(x => x.u.theme))];
+  return `<div class="path-extras-note">Not required: open any time, in any order. Your path above never waits for these.</div>` + themes.map(th => {
+    const us = pathThemeUnits(lv, th), total = us.reduce((a, x) => a + x.u.lessons.length, 0), done = us.reduce((a, x) => a + x.u.lessons.filter(isLessonComplete).length, 0);
+    const open = pathOpenExtras.has(lv + '|' + th);
+    return `<details class="path-theme" data-level="${lv}" data-theme="${th}" ${open ? 'open' : ''} ontoggle="onPathThemeToggle(this)">
+      <summary><span>${PATH_THEME_ICONS[th] || '📘'}</span> ${escapeHTML(PATH_THEME_NAMES[th] || th)} <span class="path-extras-tag">${done}/${total}</span></summary>
+      <div class="path-theme-body">${open ? us.map(x => renderPathUnit(x.u, x.ui, nextId)).join('') : ''}</div>
+    </details>`;
+  }).join('');
+}
+function onPathExtrasToggle(el) {
+  const lv = el.dataset.level;
+  if (!el.open) { pathOpenExtras.delete(lv); return; }
+  pathOpenExtras.add(lv);
+  const body = el.querySelector('.path-extras-body');
+  if (body && !body.children.length) body.innerHTML = pathThemesHTML(lv, getNextPathLesson());
+}
+function onPathThemeToggle(el) {
+  const key = el.dataset.level + '|' + el.dataset.theme;
+  if (!el.open) { pathOpenExtras.delete(key); return; }
+  pathOpenExtras.add(key);
+  const body = el.querySelector('.path-theme-body');
+  if (body && !body.children.length) body.innerHTML = pathThemeUnits(el.dataset.level, el.dataset.theme).map(x => renderPathUnit(x.u, x.ui, getNextPathLesson())).join('');
 }
 
 function renderPath() {
@@ -5861,17 +5927,19 @@ function renderPath() {
   if (!container) return;
   const nextId = getNextPathLesson();
   const doneCount = PATH_ORDER.filter(isLessonComplete).length;
+  const extraDone = PATH_EXTRA_ORDER.filter(isLessonComplete).length;
 
   // Overall progress header
   let html = `<div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:18px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-      <div style="font-weight:800;color:var(--accent-text)">Path Progress</div>
+      <div style="font-weight:800;color:var(--accent-text)">Path Progress${PATH_EXTRA_ORDER.length ? ' · required' : ''}</div>
       <div style="font-size:.85rem;color:var(--muted);font-weight:700">${doneCount} / ${PATH_ORDER.length} lessons</div>
     </div>
     <div style="background:var(--border);border-radius:99px;height:10px;overflow:hidden">
       <div style="height:100%;width:${Math.round(doneCount/PATH_ORDER.length*100)}%;background:linear-gradient(90deg,var(--sky),var(--ocean));border-radius:99px;transition:width .5s"></div>
     </div>
-    ${nextId ? '' : '<div style="margin-top:10px;font-weight:700;color:var(--correct)">🎉 You\'ve completed the entire path! Bravo!</div>'}
+    ${PATH_EXTRA_ORDER.length ? `<div style="margin-top:9px;font-size:.74rem;color:var(--muted)">Optional extras: ${extraDone} of ${PATH_EXTRA_ORDER.length} done. Open them inside each level.</div>` : ''}
+    ${nextId ? '' : '<div style="margin-top:10px;font-weight:700;color:var(--correct)">🎉 You\'ve completed the required path! Bravo!</div>'}
   </div>`;
 
   const dueCount = countDueWords();
