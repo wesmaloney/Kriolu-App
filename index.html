@@ -450,6 +450,8 @@
     .dlg-line{background:var(--bg);border-radius:12px;padding:8px 11px;font-size:.92rem}
     .dlg-e{font-size:.75rem;color:var(--muted);margin-top:2px}
     .dlg-next{border:2px dashed var(--border);background:transparent}
+    .dlg-scene{font-size:.82rem;color:var(--muted);background:var(--bg);border-left:3px solid var(--ocean);border-radius:8px;padding:7px 10px;margin-bottom:9px;text-align:left}
+    .dlg-say{margin:0 0 0 4px;padding:0 4px;font-size:.8rem;vertical-align:middle;min-width:0;width:auto;height:auto;background:none;border:none;box-shadow:none}
     .speed-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:12px}
     .speed-fill{height:100%;width:100%;background:var(--grad-sun);transition:width .2s linear}
     .ladder-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px}
@@ -1032,6 +1034,18 @@
     .path-level-code{color:#fff;font-weight:800;font-size:.8rem;border-radius:8px;padding:4px 8px}
     .path-level-name{font-weight:800;color:var(--ocean);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .path-level-count{margin-left:auto;font-size:.78rem;font-weight:800;color:var(--muted)}
+    .path-core-label,.path-extras-note{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:2px 4px 10px}
+    .path-extras{margin:6px 0 4px}
+    .path-extras>summary,.path-theme>summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--bg);border:1px dashed var(--border);border-radius:var(--radius);padding:12px 14px;font-weight:800;color:var(--ocean)}
+    .path-extras>summary::-webkit-details-marker,.path-theme>summary::-webkit-details-marker{display:none}
+    .path-extras>summary::after,.path-theme>summary::after{content:'▾';margin-left:auto;color:var(--muted);transition:transform .2s}
+    .path-extras:not([open])>summary::after,.path-theme:not([open])>summary::after{transform:rotate(-90deg)}
+    .path-extras-tag{font-size:.66rem;font-weight:800;color:var(--muted);background:var(--card);border-radius:99px;padding:2px 8px}
+    .path-extras-body{padding:10px 0 0 8px}
+    .path-theme{margin-bottom:10px}
+    .path-theme>summary{background:var(--card);border-style:solid;padding:10px 12px;font-size:.88rem}
+    .path-theme-body{padding:10px 0 0}
+    .path-unit.path-unit-extra .path-unit-head{background:var(--card)}
     .path-unit{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
     .path-unit-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
     .path-unit-icon{font-size:1.6rem}
@@ -2048,7 +2062,7 @@
     <h2 class="section-heading">Continue Learning</h2>
     <div class="lessons-grid" id="home-lessons-grid"></div>
     <div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text);margin-bottom:2px">Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from all lessons</div></div>
+      <div><div style="font-weight:800;font-size:.95rem;color:var(--accent-text);margin-bottom:2px">Mix & Review</div><div style="font-size:.8rem;color:var(--muted)">Practice words from the lessons you have studied</div></div>
       <button class="start-btn" onclick="startMixedSession()">Start →</button>
     </div>
   </div>
@@ -3163,7 +3177,7 @@ const PT_PRONOUNS = ['eu','tu','ele/ela','nós','eles/elas'];
 let LESSONS = [], LEARNING_PATH = [], GRAMMAR_SKILLS = [], GRAMMAR_SPOTLIGHTS = {}, LISTENING = [], SHADOW_SETS = [],
     SENTENCE_PATTERNS = {}, WRITING_TASKS = {}, DIALOGUES = [], READING_PASSAGES = [],
     STORIES = [], VERBS = [], EN_VERB_FORMS = {}, WRITING_PROMPTS = [],
-    LESSON_ALIASES = {}, CHECKPOINT_SOURCES = {}, WORD_RENAMES = {};
+    LESSON_ALIASES = {}, CHECKPOINT_SOURCES = {}, WORD_RENAMES = {}, LESSON_DIALOGUES = {};
 
 const LANGS = {
   kriolu:     { code:'kriolu',     label:'Kriolu',     flag:'🇨🇻', mark:'🌊', native:'Kriolu',    tutor:'Sôr António', avatar:'🧔🏾', ttsLang:'pt-PT',
@@ -3246,6 +3260,7 @@ function pointContentAt(lang) {
   SENTENCE_PATTERNS  = PT ? PT_SENTENCE_PATTERNS  : KR_SENTENCE_PATTERNS;
   WRITING_TASKS      = PT ? PT_WRITING_TASKS      : KR_WRITING_TASKS;
   DIALOGUES          = PT ? PT_DIALOGUES          : KR_DIALOGUES;
+  LESSON_DIALOGUES   = PT ? (typeof PT_LESSON_DIALOGUES !== 'undefined' ? PT_LESSON_DIALOGUES : {}) : (typeof KR_LESSON_DIALOGUES !== 'undefined' ? KR_LESSON_DIALOGUES : {});
   READING_PASSAGES   = PT ? PT_READING_PASSAGES   : KR_READING_PASSAGES;
   STORIES            = PT ? PT_STORIES            : KR_STORIES;
   VERBS              = PT ? PT_VERBS              : KR_VERBS;
@@ -3779,18 +3794,25 @@ function streakSubtitle() {
 // The path runs A1 → C1; every unit carries its CEFR level.
 const PATH_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
 let PATH_LEVEL_OF = {}, LEVEL_START_LESSON = {};
+// Each level has a REQUIRED core (units without track:'extra': in order, locks, progress) and OPTIONAL extras
+// (track:'extra': themed groups the learner can open any time once they reach the level).
+let PATH_EXTRA_ORDER = [], PATH_IS_EXTRA = new Set();
 function computePathOrder() {
   const seen = new Set(); const order = [];
-  PATH_LEVEL_OF = {}; LEVEL_START_LESSON = {};
+  PATH_LEVEL_OF = {}; LEVEL_START_LESSON = {}; PATH_EXTRA_ORDER = []; PATH_IS_EXTRA = new Set();
   LEARNING_PATH.forEach(u => u.lessons.forEach(id => {
     if (seen.has(id)) return;
-    seen.add(id); order.push(id);
+    seen.add(id);
     PATH_LEVEL_OF[id] = u.level;
+    if (u.track === 'extra') { PATH_EXTRA_ORDER.push(id); PATH_IS_EXTRA.add(id); return; }
+    order.push(id);
     if (u.level && !LEVEL_START_LESSON[u.level]) LEVEL_START_LESSON[u.level] = id;
   }));
   return order;
 }
 let PATH_ORDER = [];
+// Every lesson of a level, required first, then optional
+function pathIdsForLevel(lv) { return PATH_ORDER.filter(id => PATH_LEVEL_OF[id] === lv).concat(PATH_EXTRA_ORDER.filter(id => PATH_LEVEL_OF[id] === lv)); }
 // The placement test reports Beginner / Intermediate / Advanced; each maps to the level it starts you at.
 const PLACEMENT_START_LEVEL = { Beginner: 'A1', Intermediate: 'B1', Advanced: 'B2' };
 function placementLevelRank() { return Math.max(0, PATH_LEVELS.indexOf(PLACEMENT_START_LEVEL[state.placementLevel] || 'A1')); }
@@ -4498,7 +4520,7 @@ function playSound(type) {
 // ═══════════════════════════════════════════
 // Which build is actually running. Without this there is no way to tell a
 // fix that did not work from a fix that never arrived.
-const APP_BUILD = 'v174';
+const APP_BUILD = 'v178';
 // Compares the code that is running with the server's build. The version lives in
 // sw.js (CACHE_NAME), which is a few KB, and stamp-build.js copies it into APP_BUILD on
 // every deploy, so the two always agree. Runs on start-up, when the app returns to the
@@ -5238,7 +5260,7 @@ let lessonsOpenLevels = null;
 function lessonCardsForLevel(lv) {
   if (lv === 'more') return LESSONS.filter(l => !PATH_LEVEL_OF[l.id]).map(renderLessonCard).join('');
   const byId = new Map(LESSONS.map(l => [l.id, l]));
-  return PATH_ORDER.filter(id => PATH_LEVEL_OF[id] === lv).map(id => byId.get(id)).filter(Boolean).map(renderLessonCard).join('');
+  return pathIdsForLevel(lv).map(id => byId.get(id)).filter(Boolean).map(renderLessonCard).join('');
 }
 function renderAllLessonsGrid() {
   const grid = document.getElementById('all-lessons-grid');
@@ -5247,7 +5269,7 @@ function renderAllLessonsGrid() {
   if (!lessonsOpenLevels) lessonsOpenLevels = new Set([(nextId && PATH_LEVEL_OF[nextId]) || PATH_LEVELS[0]]);
   const sections = PATH_LEVELS.map(lv => {
     const info = CEFR_LEVELS.find(c => c.code === lv) || { name: lv, color: 'var(--ocean)' };
-    return { lv, ids: PATH_ORDER.filter(id => PATH_LEVEL_OF[id] === lv), name: info.name, color: info.color };
+    return { lv, ids: pathIdsForLevel(lv), name: info.name, color: info.color };
   });
   const unplaced = LESSONS.filter(l => !PATH_LEVEL_OF[l.id]).map(l => l.id);
   if (unplaced.length) sections.push({ lv: 'more', ids: unplaced, name: 'More lessons', color: 'var(--ocean)' });
@@ -5514,7 +5536,7 @@ function renderHomeExtras() {
     // Daily lesson card
     cards += `<div class="daily-card">
       <div><div class="d-title">${done ? '✅ Daily lesson done!' : '☀️ Today\'s Mix'}</div>
-        <div class="d-sub">${done ? 'Come back tomorrow to keep your streak.' : (due > 0 ? `${due} word${due===1?'':'s'} due for review + new words` : 'A fresh mix of words to learn')}</div></div>
+        <div class="d-sub">${done ? 'Come back tomorrow to keep your streak.' : (due > 0 ? `${due} word${due===1?'':'s'} due for review, plus words you have studied` : 'A mix of the words you have studied')}</div></div>
       ${done ? '' : '<button class="d-btn" onclick="startDailyLesson()">Start →</button>'}
     </div>`;
     pathSlot.innerHTML = cards;
@@ -5741,8 +5763,20 @@ function buildSession(lessonId) {
   return { questions, lessonId, lessonTitle: lesson.title };
 }
 
+// Words the learner has actually studied: anything they have practised, plus every word of a lesson they finished.
+function studiedVocab() {
+  const ws = state.wordScores || {}, lf = state.lessonsFinished || {};
+  return LESSONS.flatMap(l => lf[l.id] ? l.vocab : l.vocab.filter(v => ws[v.k]));
+}
+// Review sessions test with hearts, so they never bring in words the learner has not studied yet
+function noStudiedWordsYet() {
+  const next = getNextPathLesson();
+  showToast('Finish a lesson first: reviews only use words you have studied');
+  if (next) startLesson(next);
+}
 function buildMixedSession() {
-  const allVocab = LESSONS.flatMap(l => l.vocab);
+  const allVocab = studiedVocab();
+  if (!allVocab.length) return null;
   const items = buildSpacedSession(allVocab, 20);
   const types = assignExerciseTypes(items.length);
   const questions = items.map((item, i) => ({
@@ -5768,7 +5802,14 @@ function isPathLessonProgressed(id) {
 // the lesson before it is done, or if it opens a level at or below where the
 // placement test put you. Lessons you've progressed stay replayable even when an
 // earlier one is unfinished — ordering the path by difficulty can create that.
+// Optional extras are never locked in sequence: they open once the learner has reached their level.
+function pathCurrentLevelRank() {
+  const next = getNextPathLesson();
+  const reached = next ? PATH_LEVELS.indexOf(PATH_LEVEL_OF[next]) : PATH_LEVELS.length - 1;
+  return Math.max(reached, placementLevelRank());
+}
 function isPathLessonUnlocked(id) {
+  if (PATH_IS_EXTRA.has(id)) return isPathLessonProgressed(id) || PATH_LEVELS.indexOf(PATH_LEVEL_OF[id]) <= pathCurrentLevelRank();
   const idx = PATH_ORDER.indexOf(id);
   if (idx <= 0 || isPathLessonProgressed(id)) return true;
   if (isPathLessonProgressed(PATH_ORDER[idx - 1])) return true;
@@ -5803,14 +5844,15 @@ function renderPathUnit(unit, ui, nextId) {
       ${isNext ? '<span class="path-next-tag">Next</span>' : ''}
     </div>`;
   }).join('');
-  return `<div class="path-unit">
+  const extra = unit.track === 'extra';
+  return `<div class="path-unit${extra ? ' path-unit-extra' : ''}">
     <div class="path-unit-head">
       <span class="path-unit-icon">${art(unit.icon)}</span>
       <div><div class="path-unit-title">${unit.unit}</div><div class="path-unit-desc">${unit.desc}</div></div>
       <div class="path-unit-count">${unitDone}/${unitLessons.length}</div>
     </div>
     ${lessonsHTML}
-    ${GRAMMAR_SKILLS.filter(g => g.unit === unit.id).map(sk => {
+    ${extra ? '' : GRAMMAR_SKILLS.filter(g => g.unit === unit.id).map(sk => {
       const unlocked = unitLessons.some(id => (state.lessonsFinished?.[id] || 0) >= 80);
       const passed = ((state.grammarSkillsDone || {})[sk.id] || 0) >= 60;
       const status = passed ? '✅' : unlocked ? '👉' : '🔒';
@@ -5822,7 +5864,7 @@ function renderPathUnit(unit, ui, nextId) {
         ${unlocked && !passed ? '<span class="path-next-tag">Train</span>' : ''}
       </div>`;
     }).join('')}
-    ${(() => {
+    ${extra ? '' : (() => {
       const allDone = unitDone === unitLessons.length;
       const passed = (state.checkpointsPassed || {})[unit.id];
       const status = passed ? '🏆' : allDone ? '🎯' : '🔒';
@@ -5834,7 +5876,7 @@ function renderPathUnit(unit, ui, nextId) {
         ${allDone && !passed ? '<span class="path-next-tag">Test</span>' : ''}
       </div>`;
     })()}
-    ${(() => {
+    ${extra || unitLessons.every(id => id === 'alphabet') ? '' : (() => {   // letters are not role-play material: no mission for the alphabet unit
       const allDone = unitDone === unitLessons.length;
       const done = (state.missionsDone || {})[unit.id];
       const status = done ? '🏅' : allDone ? '🎭' : '🔒';
@@ -5852,8 +5894,47 @@ function renderPathUnit(unit, ui, nextId) {
 // Levels the learner has expanded on the Path screen; starts with the level of their next lesson.
 let pathOpenLevels = null;
 
+const PATH_THEME_NAMES = {everyday:'Everyday Life',family:'Family & People',home:'Home Life',food:'Food & Cooking',town:'Town & Errands',nature:'Nature & Animals',language:'Words & Expressions',play:'Games, Sport & Outdoors',culture:'Music, Arts & Culture',work:'Work & Trades',crafts:'Crafts & Making',school:'School & Learning',world:'World & Travel',health:'Health & Care',tech:'Technology & Media',society:'Society, Law & Money',science:'Science & Ideas',mixed:'Mixed Topics'};
+const PATH_THEME_ICONS = {everyday:'☀️',family:'👨‍👩‍👧',home:'🏠',food:'🍳',town:'🏙️',nature:'🌿',language:'💬',play:'⚽',culture:'🎶',work:'🛠️',crafts:'🧵',school:'📚',world:'🌍',health:'💊',tech:'📱',society:'⚖️',science:'🔬',mixed:'🧩'};
+let pathOpenExtras = new Set();   // 'A2' (a level's extras) and 'A2|food' (one theme) the learner has opened
+const pathExtraUnits = lv => LEARNING_PATH.map((u, ui) => ({ u, ui })).filter(x => x.u.level === lv && x.u.track === 'extra');
+const pathThemeUnits = (lv, th) => pathExtraUnits(lv).filter(x => x.u.theme === th);
 function pathLevelUnits(lv, nextId) {
-  return LEARNING_PATH.map((u, ui) => u.level === lv ? renderPathUnit(u, ui, nextId) : '').join('');
+  const core = LEARNING_PATH.map((u, ui) => u.level === lv && u.track !== 'extra' ? renderPathUnit(u, ui, nextId) : '').join('');
+  const extras = pathExtraUnits(lv);
+  if (!extras.length) return core;
+  const total = extras.reduce((a, x) => a + x.u.lessons.length, 0), done = extras.reduce((a, x) => a + x.u.lessons.filter(isLessonComplete).length, 0);
+  const open = pathOpenExtras.has(lv);
+  return `<div class="path-core-label">Required · in order</div>${core}
+    <details class="path-extras" data-level="${lv}" ${open ? 'open' : ''} ontoggle="onPathExtrasToggle(this)">
+      <summary>➕ Optional extras <span class="path-extras-tag">${done}/${total}</span></summary>
+      <div class="path-extras-body">${open ? pathThemesHTML(lv, nextId) : ''}</div>
+    </details>`;
+}
+function pathThemesHTML(lv, nextId) {
+  const themes = [...new Set(pathExtraUnits(lv).map(x => x.u.theme))];
+  return `<div class="path-extras-note">Not required: open any time, in any order. Your path above never waits for these.</div>` + themes.map(th => {
+    const us = pathThemeUnits(lv, th), total = us.reduce((a, x) => a + x.u.lessons.length, 0), done = us.reduce((a, x) => a + x.u.lessons.filter(isLessonComplete).length, 0);
+    const open = pathOpenExtras.has(lv + '|' + th);
+    return `<details class="path-theme" data-level="${lv}" data-theme="${th}" ${open ? 'open' : ''} ontoggle="onPathThemeToggle(this)">
+      <summary><span>${PATH_THEME_ICONS[th] || '📘'}</span> ${escapeHTML(PATH_THEME_NAMES[th] || th)} <span class="path-extras-tag">${done}/${total}</span></summary>
+      <div class="path-theme-body">${open ? us.map(x => renderPathUnit(x.u, x.ui, nextId)).join('') : ''}</div>
+    </details>`;
+  }).join('');
+}
+function onPathExtrasToggle(el) {
+  const lv = el.dataset.level;
+  if (!el.open) { pathOpenExtras.delete(lv); return; }
+  pathOpenExtras.add(lv);
+  const body = el.querySelector('.path-extras-body');
+  if (body && !body.children.length) body.innerHTML = pathThemesHTML(lv, getNextPathLesson());
+}
+function onPathThemeToggle(el) {
+  const key = el.dataset.level + '|' + el.dataset.theme;
+  if (!el.open) { pathOpenExtras.delete(key); return; }
+  pathOpenExtras.add(key);
+  const body = el.querySelector('.path-theme-body');
+  if (body && !body.children.length) body.innerHTML = pathThemeUnits(el.dataset.level, el.dataset.theme).map(x => renderPathUnit(x.u, x.ui, getNextPathLesson())).join('');
 }
 
 function renderPath() {
@@ -5861,17 +5942,19 @@ function renderPath() {
   if (!container) return;
   const nextId = getNextPathLesson();
   const doneCount = PATH_ORDER.filter(isLessonComplete).length;
+  const extraDone = PATH_EXTRA_ORDER.filter(isLessonComplete).length;
 
   // Overall progress header
   let html = `<div style="background:var(--card);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:18px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-      <div style="font-weight:800;color:var(--accent-text)">Path Progress</div>
+      <div style="font-weight:800;color:var(--accent-text)">Path Progress${PATH_EXTRA_ORDER.length ? ' · required' : ''}</div>
       <div style="font-size:.85rem;color:var(--muted);font-weight:700">${doneCount} / ${PATH_ORDER.length} lessons</div>
     </div>
     <div style="background:var(--border);border-radius:99px;height:10px;overflow:hidden">
       <div style="height:100%;width:${Math.round(doneCount/PATH_ORDER.length*100)}%;background:linear-gradient(90deg,var(--sky),var(--ocean));border-radius:99px;transition:width .5s"></div>
     </div>
-    ${nextId ? '' : '<div style="margin-top:10px;font-weight:700;color:var(--correct)">🎉 You\'ve completed the entire path! Bravo!</div>'}
+    ${PATH_EXTRA_ORDER.length ? `<div style="margin-top:9px;font-size:.74rem;color:var(--muted)">Optional extras: ${extraDone} of ${PATH_EXTRA_ORDER.length} done. Open them inside each level.</div>` : ''}
+    ${nextId ? '' : '<div style="margin-top:10px;font-weight:700;color:var(--correct)">🎉 You\'ve completed the required path! Bravo!</div>'}
   </div>`;
 
   const dueCount = countDueWords();
@@ -6929,7 +7012,7 @@ function typeEligible(t, item) {
   switch (t) {
     case 'fillBlank': case 'sentenceBuilder': return exN >= 3;
     case 'structureDrill': return exN >= 3 && !!structureDrillFor(item.ex);
-    case 'markerDrill': return !isPT() && !!findMarker(item.ex);
+    case 'markerDrill': { const m = !isPT() && findMarker(item.ex); return !!m && isTaught(m, lessonOfItem(item)); }
     case 'fixSentence': return !!makeFixSentence(item);
     case 'completeDialogue': return !!findDialogueFor(item);
     case 'listenMeaning': return exN >= 3 && exN <= 16 && !!sentenceMeaning(item);
@@ -7154,18 +7237,79 @@ function renderUnclip(q, container) {
     </div><div id="feedback-area"></div>`;
 }
 
-// 3. COMPLETE THE CONVERSATION — a dialogue line that uses this word.
+// ═══════════════════════════════════════════
+//  WHAT HAS BEEN TAUGHT
+// ═══════════════════════════════════════════
+// A learner is never asked to produce or choose words they have not met. "Taught" means: the word is (part of) a
+// vocabulary item of this lesson or of a required lesson that comes before it on the path. An optional lesson counts
+// its own words plus the required lessons of the levels below it.
+function teachTokens(text) {
+  const out = [];
+  String(text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/(\p{L}+)\/a\b/gu, (m, w) => w + ' ' + (/[uo]$/.test(w) ? w.slice(0, -1) + 'a' : w + 'a'))   // bunitu/a → bunitu bunita
+    .replace(/[\p{L}\d]+(?:[-'’][\p{L}]+)*/gu, t => { out.push(t); return t; });
+  return out;
+}
+let TAUGHT = null;
+function taughtIndex() {
+  if (TAUGHT && TAUGHT.lang === currentLang() && TAUGHT.size === LESSONS.length) return TAUGHT;
+  const first = new Map(), rank = new Map(), levelEnd = {}, byId = new Map(LESSONS.map(l => [l.id, l]));
+  const addAll = (set, v) => teachTokens(v.k + ' ' + (v.full || '')).forEach(t => { set(t); t.split(/[-'’]/).forEach(p => p && set(p)); });
+  PATH_ORDER.forEach((id, i) => {
+    rank.set(id, i); levelEnd[PATH_LEVEL_OF[id]] = i;
+    ((byId.get(id) || {}).vocab || []).forEach(v => addAll(t => { if (!first.has(t)) first.set(t, i); }, v));
+  });
+  TAUGHT = { lang: currentLang(), size: LESSONS.length, first, rank, levelEnd, own: new Map(), addAll };
+  return TAUGHT;
+}
+function taughtChecker(lesson) {
+  const T = taughtIndex();
+  if (!lesson) return () => false;
+  let r = T.rank.get(lesson.id);
+  if (r === undefined) {                               // optional lesson: the levels below it, plus its own words
+    const li = PATH_LEVELS.indexOf(PATH_LEVEL_OF[lesson.id]);
+    r = li > 0 && T.levelEnd[PATH_LEVELS[li - 1]] !== undefined ? T.levelEnd[PATH_LEVELS[li - 1]] : (li < 0 ? Infinity : -1);
+  }
+  let own = T.own.get(lesson.id);
+  if (!own) { own = new Set(); (lesson.vocab || []).forEach(v => T.addAll(t => own.add(t), v)); T.own.set(lesson.id, own); }
+  const known = t => own.has(t) || (T.first.has(t) && T.first.get(t) <= r) || /^\d+$/.test(t);
+  return text => teachTokens(text).every(t => known(t) || t.split(/[-'’]/).every(p => !p || known(p)));
+}
+// Is every word of this text taught by the time the learner does this lesson?
+function isTaught(text, lesson) { return taughtChecker(lesson)(text); }
+function lessonOfItemStrict(item) { item = (item && item._src) || item; return lessonOfItem(item); }
+
+// 3. COMPLETE THE CONVERSATION — the learner reads a short scene and picks the reply that fits.
+// Scenes come first from the lesson's own conversations (written with only the words taught so far, each reply tied
+// to the vocabulary it practises), then from the dialogue library when the scene is at or below the lesson's level
+// and every word of it has been taught. Otherwise this exercise is not offered for the word.
 const DIALOGUE_STOP = new Set(['txeu','kuma','kuze','pamodi','undi','kantu','tambe','também','kusa','mesmu','agora','ainda','muito','muita','para','como','quando','onde','isso','isto','esta','este','essa','esse','aqui','obrigadu','obrigado','obrigada','bon','boa','bom']);
 function findDialogueFor(item) {
+  item = (item && item._src) || item;
   if (item._dlg !== undefined) return item._dlg;
-  const toks = [...new Set((String(item.k || '').toLowerCase().normalize('NFC').match(/\p{L}{4,}/gu) || []))].filter(t => !DIALOGUE_STOP.has(t));
   let found = null;
-  for (const d of (DIALOGUES || [])) {
-    for (let i = 1; i < (d.lines || []).length && !found; i++) {
-      const line = d.lines[i].k.toLowerCase().normalize('NFC');
-      if (toks.some(t => new RegExp('(^|[^\\p{L}])' + t + '($|[^\\p{L}])', 'u').test(line))) found = { d, i };
+  const lesson = lessonOfItem(item);
+  // 1. the lesson's own conversations
+  for (const d of ((lesson && LESSON_DIALOGUES[lesson.id]) || [])) {
+    const a = (d.ask || []).find(a => (a.for || []).includes(item.k));
+    if (a && d.lines[a.i]) { found = { d, i: a.i, wrong: a.wrong, own: true }; break; }
+  }
+  // 2. a library scene the learner can fully read
+  if (!found && lesson) {
+    const ok = taughtChecker(lesson), lvRank = PATH_LEVELS.indexOf(PATH_LEVEL_OF[lesson.id]);
+    const toks = [...new Set((String(item.k || '').toLowerCase().normalize('NFC').match(/\p{L}{4,}/gu) || []))].filter(t => !DIALOGUE_STOP.has(t));
+    const fits = (DIALOGUES || []).filter(d => PATH_LEVELS.indexOf(d.level) <= lvRank);
+    for (const d of fits) {
+      for (let i = 1; i < (d.lines || []).length && !found; i++) {
+        const line = d.lines[i].k.toLowerCase().normalize('NFC');
+        if (!toks.some(t => new RegExp('(^|[^\\p{L}])' + t + '($|[^\\p{L}])', 'u').test(line))) continue;
+        if (!d.lines.slice(Math.max(0, i - 4), i + 1).every(l => ok(l.k))) continue;   // everything the learner will be shown
+        // wrong replies: lines from other scenes, long enough not to fit anywhere, all in taught words
+        const wrong = fits.filter(x => x !== d).flatMap(x => x.lines).map(l => l.k).filter(k => k !== d.lines[i].k && k.trim().split(/\s+/).length >= 3 && ok(k));
+        if (wrong.length >= 2) found = { d, i, pool: wrong };
+      }
+      if (found) break;
     }
-    if (found) break;
   }
   item._dlg = found;
   return found;
@@ -7174,17 +7318,21 @@ function renderCompleteDialogue(q, container) {
   const f = findDialogueFor(q.item);
   if (!f) { renderFillBlank(q, container); return; }
   const { d, i } = f, line = d.lines[i];
-  const others = shuffle((DIALOGUES || []).filter(x => x !== d).flatMap(x => x.lines)).filter(l => l.k !== line.k).slice(0, 2);
-  const prev = d.lines.slice(Math.max(0, i - 2), i);
-  const opts = shuffle([line, ...others]);
+  const wrong = f.wrong ? f.wrong.slice(0, 2) : shuffle([...new Set(f.pool)]).slice(0, 2);
+  const prev = d.lines.slice(Math.max(0, i - 4), i);
+  const after = d.lines[i + 1];
   q.correctText = line.k;
-  q.reveal = `<div class="odd-reveal"><div><b>${escapeHTML(line.sp)}:</b> ${escapeHTML(line.k)}</div><div style="color:var(--muted)">${escapeHTML(line.e)}</div></div>`;
+  q.reveal = `<div class="odd-reveal"><div><b>${escapeHTML(line.sp)}:</b> ${escapeHTML(line.k)}</div><div style="color:var(--muted)">${escapeHTML(line.e)}</div>`
+    + (after ? `<div style="margin-top:6px"><b>${escapeHTML(after.sp)}:</b> ${escapeHTML(after.k)}</div><div style="color:var(--muted)">${escapeHTML(after.e)}</div>` : '') + `</div>`;
+  const scene = d.scene || d.titleE || d.title || '';
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">💬 Complete the Conversation</div>
-    <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">${art(d.icon)} ${escapeHTML(d.titleE || d.title)}</div>
-    <div class="dlg-lines">${prev.map(l => `<div class="dlg-line"><b>${escapeHTML(l.sp)}:</b> ${escapeHTML(l.k)}<div class="dlg-e">${escapeHTML(l.e)}</div></div>`).join('')}
+    <div class="dlg-scene">${d.icon ? art(d.icon) + ' ' : ''}${escapeHTML(scene)}</div>
+    <div class="dlg-lines">${prev.map(l => `<div class="dlg-line"><b>${escapeHTML(l.sp)}:</b> ${escapeHTML(l.k)}
+        <button class="speak-btn dlg-say" title="Listen" aria-label="Listen" onclick="userHasInteracted=true;speakText(this.dataset.s,this)" data-s="${escapeHTML(l.k)}">🔊</button>
+        <div class="dlg-e">${escapeHTML(l.e)}</div></div>`).join('')}
       <div class="dlg-line dlg-next"><b>${escapeHTML(line.sp)}:</b> …</div></div>
     <div style="font-size:.85rem;font-weight:700;margin:10px 0 6px">What does ${escapeHTML(line.sp)} say next?</div>
-    <div class="choices-grid" style="grid-template-columns:1fr">${opts.map(l => choiceBtn(l.k, l === line)).join('')}</div>
+    <div class="choices-grid" style="grid-template-columns:1fr">${shuffle([line.k, ...wrong]).map(k => choiceBtn(k, k === line.k)).join('')}</div>
     <button class="skip-btn" onclick="skipQuestion()">Skip this one →</button>
     </div><div id="feedback-area"></div>`;
 }
@@ -7893,7 +8041,9 @@ async function fetchSmartPatterns(lesson, key) {
 }
 
 function startMixedSession() {
-  lessonPlan = null; state.session = buildMixedSession(); state.qIndex = 0; state.score = 0;
+  const built = buildMixedSession();
+  if (!built) { noStudiedWordsYet(); return; }
+  lessonPlan = null; state.session = built; state.qIndex = 0; state.score = 0;
   state.wrongItems = []; state.awaitingNext = false; state.lives = 3;
   state.mixedSessions++; saveState();
   showScreen('exercise'); renderQuestion();
@@ -8238,7 +8388,8 @@ function playListenWord(word, btn) {
 // — Dictation: hear a sentence, write it (listening + spelling + writing) —
 function renderDictation(q, container) {
   // Use the example sentence; fall back to the word if there isn't one
-  const sentence = (q.item.ex && q.item.ex.trim().split(/\s+/).length >= 2) ? q.item.ex.trim() : q.item.k;
+  // Use the example sentence when the learner has been taught every word of it; otherwise just the word itself
+  const sentence = (q.item.ex && q.item.ex.trim().split(/\s+/).length >= 2 && isTaught(q.item.ex, lessonOfItem(q.item))) ? q.item.ex.trim() : q.item.k;
   q._dictation = sentence; // stash for checking
   container.innerHTML = `<div class="exercise-card"><div class="exercise-type-badge">✍️ Dictation</div>
     <div style="font-size:.9rem;color:var(--muted);margin-bottom:14px">Listen carefully, then type exactly what you hear in ${courseName()}.</div>
@@ -14310,12 +14461,9 @@ function startDailyLesson() {
   // Mix of due SR words + new words from least-practiced lesson
   const due = getDueWords();
   let pool = [...due];
-  if (pool.length < 12) {
-    const allVocab = LESSONS.flatMap(l => l.vocab);
-    const unseen = shuffle(allVocab.filter(v => !state.wordScores[v.k]));
-    pool = pool.concat(unseen.slice(0, 12 - pool.length));
-  }
-  if (!pool.length) pool = shuffle(LESSONS.flatMap(l => l.vocab)).slice(0, 12);
+  // Top up with other words the learner has studied (hardest first), never with words they have not met
+  if (pool.length < 12) pool = pool.concat(buildSpacedSession(studiedVocab(), 24));
+  if (!pool.length) { noStudiedWordsYet(); return; }
   // Dedupe
   const seen = new Set(); const items = [];
   for (const v of pool) { if (!seen.has(v.k)) { seen.add(v.k); items.push(v); } if (items.length >= 12) break; }
